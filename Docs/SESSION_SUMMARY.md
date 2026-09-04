@@ -1,18 +1,19 @@
 # Session Summary
-- Fork: `ripDZL/dota2-minify`; active branch `v21.4-hardening`.
-- Baseline: `Minify-v1.14rc7` / `d4b4520c945a9e1f8f5facc52a76ac5903babe90`.
-- Branch policy: `main` upstream-tracking; `beta` frozen promotion target; `v21.4-hardening` development.
-- Beta ref at handoff: `af83bbb051edced195d5f55ba49ff060a8c76f3c`.
-- Pre-handoff hardening head snapshot: `ac7562f852d5c1f8ca14630a92f26018c328642a`; 31 commits ahead of exact rc7.
-- Local validated hardening-kit checkpoint: 133/133 tests + 9 subtests; Python compileall pass.
-- Materialized security, backup, prelaunch, compatibility, VPK/archive/download hardening, dependency architecture gating, recursive scanner/Collections backend, nested scripts, D2PFX build-hook/backend changes, CSS fix, and `mod_library.py` transfer.
-- Remove Foilage remains blacklist-only/map-free; restored exact `tree_oak_leaves_05.vmat_c` and `tree_oak_leaves_05.vmdl_c` entries from pre-`8afd759b` blacklist blob `1ea8db8b3f336609e67c2a924c8f6bf762e58cfd`.
-- `mod_library.py` requires reconciliation: remote blob `a5204ea1d5e0309d3c6a764ad9b974e7bdeb8268`; validated local blob `e95b2f6f59b3b96f7c19ed70ee514df02e500926`.
-- `mod_library.py` archive forensics: entry starts at ZIP offset 22023, is 17398 bytes deflated / 69949 uncompressed, and ends at offset 39589 exclusive; missing chunk `005` contains the final 2089 compressed bytes.
-- Exact validated source is unavailable in the repository and active workspace; do not reconstruct or fabricate it. Unblock with exact validated source/blob or exact missing archive bytes.
-- Temporary materialization bootstrap is incomplete; workflow expects ZIP SHA-256 `97b2810c1e0ed2a51a407dd895d93e0f53e95bb82e65824cd41536da799fdece`.
-- `.materialize/` snapshot has chunks `000`-`004`, `006`-`010`; missing `005`, `011`-`022`; `.materialize/READY` absent.
-- Do not trigger one-time workflow until exact payload is complete and verified.
-- Remaining: UI/theme/Settings/glue/profile/D2PFX UI/test/version materialization, full tests/static/security review, diff cleanup, Windows build, Dota smoke tests.
-- Do not fast-forward `beta`, merge, tag, release, or publish PR until all gates pass.
+- Fork: `ripDZL/dota2-minify`; active branch `v21.4-hardening`; exact baseline `Minify-v1.14rc7` / `d4b4520c945a9e1f8f5facc52a76ac5903babe90`.
+- Keep `main` untouched and `beta` frozen; beta ref remains `af83bbb051edced195d5f55ba49ff060a8c76f3c`.
+- Current tested code commit: `1c49475c59750d3669256885399c47efe06459db`.
+- User-supplied UI source of truth: `Minify-v1.14rc7-ModManager-v21.2-Beveled-UI.zip`; SHA-256 `92b75cd95434bbad0ef9eef0ddf2a67e0c6dc8b2730d08ff1bfeb3f7eed57b92`.
+- Exact v21.2 UI reference materialized from exact rc7 with its original patcher at `1d138d418fd823693260c4a9fddf039436daaca5`; ZIP hash gate and compileall passed.
+- Restored onto hardening without replacing newer core backends: `Minify/__main__.py`, `Minify/browsers/d2pfx/ui.py`, `Minify/ui/checkboxes.py`, `Minify/ui/gui.py`, `Minify/ui/settings.py`, `Minify/ui/theme.py`, `Minify/ui/window.py`.
+- Restored UI includes Obsidian + Ember/beveled shell, Mod Library workspace, Collections/profile presentation, redesigned Settings, D2PFX browser/import UI, nested mod-path behavior.
+- UI restore commit: `ae0c9e574b2afc05e78e7710e66f3d898b10c44f`; formatted/tested code commit: `1c49475c59750d3669256885399c47efe06459db`.
+- Hardening CI run `33928368807`: compileall PASS, Ruff format gate PASS, Ruff lint PASS, pytest 131/131 PASS in 0.79s, Windows PyInstaller/runtime copy/ZIP/upload PASS.
+- Corrected Windows test ZIP: `Minify-v21.4-hardening-1c49475c59750d3669256885399c47efe06459db-windows.zip`; 53600449 bytes; SHA-256 `3b86f34536ed1e0e0d3644bca64cdca51db33c03fb15311b69fb3fc744ce5aa3`.
+- Artifact contents verified: only normal portable layout; no `.materialize`, `READY`, `AI_REMOTE_TMP`; Remove Foilage remains blacklist-only/map-free with both oak-leaf blacklist entries.
+- Historical local hardening-kit checkpoint remains 133/133 tests + 9 subtests; do not conflate it with current GitHub 131/131 suite.
+- Preserve no-auto-prelaunch policy, recursive/nested mods, Collections, profiles, D2PFX, backups/conflict review, Dark Terrain collision behavior, Remove Main Menu Background CSS behavior, Remove Foilage blacklist-only behavior.
+- `core/mod_library.py` still requires reconciliation: remote blob `a5204ea1d5e0309d3c6a764ad9b974e7bdeb8268`; expected validated blob `e95b2f6f59b3b96f7c19ed70ee514df02e500926`, SHA-256 `552dbb7f98d5e0db2ad32c1b2888d8ad4ae8945fdf49ebc2853765e59c6c9e7a`, 69949 bytes.
+- Exact validated `mod_library.py` source is unavailable; missing bootstrap chunk removes final 2089 compressed bytes of its ZIP entry. Never fabricate; never create `.materialize/READY` while incomplete.
+- Remaining: user corrected-UI/Dota smoke tests, remaining fork regression-test materialization, patch/glue review, hostile-input/security sweep, complete diff review, `mod_library.py` reconciliation, cleanup/bootstrap removal.
+- Do not fast-forward `beta`, merge, tag, release, or publish PR until remaining gates and user smoke tests pass.
 - New chat must start with `Docs/HANDOFF_PROMPT.md` and all other `Docs/*.md` files.
