@@ -9,6 +9,7 @@ import sys
 import vdf
 
 from core import base, config, log, output, utils
+from core.prelaunch_policy import strip_minify_prelaunch_prefix
 
 
 def remove_lang_args(arg_string):
@@ -67,21 +68,20 @@ def remove_specific_lang_arg(arg_string, lang_to_remove):
 
 
 def add_prelaunch_to_launch_options(check_only=False):
-    "If frozen and patch_on_launch is enabled, prepend prelaunch command before %command% in launch options"
+    "Compatibility shim: automatic Steam prelaunch injection is disabled in this fork."
+    return False
 
-    if not base.FROZEN:
-        return False
 
-    if not config.get("patch_on_launch", False):
-        return False
-
+def remove_minify_prelaunch_from_launch_options(check_only=False):
+    "Remove only Minify-generated prelaunch command fragments from Steam options."
     steam_ids = []
     accounts = get_steam_accounts()
     if config.get("apply_for_all", True):
-        for account in accounts:
-            steam_ids.append(account["id"])
+        steam_ids.extend(account["id"] for account in accounts)
     else:
-        steam_ids.append(config.get("steam_id"))
+        steam_id = config.get("steam_id")
+        if steam_id:
+            steam_ids.append(steam_id)
 
     changed = False
     for steam_id in steam_ids:
@@ -93,35 +93,21 @@ def add_prelaunch_to_launch_options(check_only=False):
             data = vdf.load(file)
 
         try:
-            launch_options = data["UserLocalConfigStore"]["Software"]["Valve"]["Steam"]["apps"][base.STEAM_DOTA_ID][
-                "LaunchOptions"
-            ]
+            app = data["UserLocalConfigStore"]["Software"]["Valve"]["Steam"]["apps"][base.STEAM_DOTA_ID]
+            launch_options = app.get("LaunchOptions", "")
         except KeyError:
             continue
 
-        tokens = launch_options.split()
-
-        if base.is_win:
-            prefix = f'cmd /c "{sys.executable}" prelaunch &&'
-        else:
-            prefix = f'bash -c "{sys.executable} prelaunch" &&'
-
-        if launch_options.startswith(prefix):
+        cleaned, removed = strip_minify_prelaunch_prefix(launch_options)
+        if not removed:
             continue
+        if check_only:
+            return True
 
-        other_tokens = [t for t in tokens if t != "%command%"]
-        new_tokens = [prefix, "%command%"] + other_tokens
-        new_options = " ".join(new_tokens)
-
-        if new_options != launch_options:
-            if check_only:
-                return True
-            data["UserLocalConfigStore"]["Software"]["Valve"]["Steam"]["apps"][base.STEAM_DOTA_ID]["LaunchOptions"] = (
-                new_options
-            )
-            with utils.open_utf8R(vdf_path, "w") as file:
-                vdf.dump(data, file, pretty=True)
-            changed = True
+        app["LaunchOptions"] = cleaned
+        with utils.open_utf8R(vdf_path, "w") as file:
+            vdf.dump(data, file, pretty=True)
+        changed = True
 
     return changed
 
@@ -292,7 +278,6 @@ def find_library_from_vdf(steam_root):
             paths = []
             for folder_key in vdf_data.get("libraryfolders", {}):
                 folder = vdf_data["libraryfolders"][folder_key]
-                # brute
                 if "path" in folder:
                     paths.append(folder["path"])
 
@@ -323,7 +308,6 @@ def get_steam_root_path():
         return steam_root
 
     found_path = ""
-    # registry
     if base.is_win:
         with utils.try_pass():
             import winreg
@@ -333,13 +317,12 @@ def get_steam_root_path():
             if os.path.exists(steam_path):
                 found_path = steam_path
 
-    # defaults
     if not found_path and os.path.exists(base.STEAM_DEFAULT_INSTALLATION_PATH):
         found_path = base.STEAM_DEFAULT_INSTALLATION_PATH
 
     if found_path:
         config.set("steam_root", found_path)
-        config.set("steam_library", found_path)  # assume, will be checked anyway
+        config.set("steam_library", found_path)
         return found_path
 
     return ""
@@ -357,7 +340,6 @@ def handle_non_default_path(steam_root):
         find_library_from_vdf(steam_root)
         steam_library = config.get("steam_library", "")
 
-    # last line of defense
     while not steam_library or (
         not os.path.exists(os.path.join(steam_library, base.DOTA_EXECUTABLE_PATH))
         and not os.path.exists(os.path.join(steam_library, base.DOTA_EXECUTABLE_PATH_FALLBACK))
@@ -439,14 +421,12 @@ ROOT = get_steam_root_path()
 ROOT = handle_non_default_path(ROOT)
 LIBRARY = config.get("steam_library")
 
-# Auto-determine a steam_id if not set
 current_steam_id = config.get("steam_id")
 if not current_steam_id and ROOT:
     for account in get_steam_accounts():
         config.set("steam_id", account["id"])
         break
 
-# paths
 if base.is_win:
     steam_executable_path = os.path.join(ROOT, "steam.exe")
 elif base.is_linux:
