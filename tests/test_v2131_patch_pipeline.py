@@ -1,7 +1,7 @@
 from pathlib import Path
 
 
-PATCHER = Path("Minify/patch/__init__.py")
+PATCHER = Path(__file__).resolve().parents[1] / "Minify" / "patch" / "__init__.py"
 
 
 def _source() -> str:
