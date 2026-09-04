@@ -3,6 +3,7 @@
 - Baseline: `Minify-v1.14rc7` / `d4b4520c945a9e1f8f5facc52a76ac5903babe90`.
 - Branch policy: `main` upstream-tracking; `beta` frozen promotion target; `v21.4-hardening` development.
 - Beta ref at handoff: `af83bbb051edced195d5f55ba49ff060a8c76f3c`.
+- Pre-handoff hardening head snapshot: `ac7562f852d5c1f8ca14630a92f26018c328642a`; 31 commits ahead of exact rc7.
 - Local validated hardening-kit checkpoint: 133/133 tests + 9 subtests; Python compileall pass.
 - Materialized security, backup, prelaunch, compatibility, VPK/archive/download hardening, dependency architecture gating, recursive scanner/Collections backend, nested scripts, D2PFX build-hook/backend changes, CSS fix, and `mod_library.py` transfer.
 - Remove Foilage remains blacklist-only/map-free; restored exact `tree_oak_leaves_05.vmat_c` and `tree_oak_leaves_05.vmdl_c` entries from pre-`8afd759b` blacklist blob `1ea8db8b3f336609e67c2a924c8f6bf762e58cfd`.

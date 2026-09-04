@@ -4,6 +4,7 @@
 - Keep `main` upstream-tracking and untouched.
 - Keep `beta` frozen until the hardening/materialization/runtime gates pass; beta currently points to `af83bbb051edced195d5f55ba49ff060a8c76f3c`.
 - Exact upstream baseline is `Minify-v1.14rc7` commit `d4b4520c945a9e1f8f5facc52a76ac5903babe90`.
+- Pre-handoff hardening head snapshot was `ac7562f852d5c1f8ca14630a92f26018c328642a`, 31 commits ahead of exact rc7. Re-fetch branch refs before editing because the branch may advance after this handoff commit.
 - Local validated hardening-kit checkpoint: 133/133 regression tests + 9 subtests; Python compileall passed. Do not claim the fully materialized GitHub tree has passed that suite yet.
 - Materialized source already present includes security/archive/VPK hardening, transactional backups, collision-driven Dark Terrain compatibility, no-auto-prelaunch Steam policy, dependency hash verification/architecture gating, recursive/nested mod scanning, Collections backend, nested lifecycle scripts, D2PFX nested build-hook handling, Optimization exposure, Remove Main Menu Background CSS fix, and `core/mod_library.py`.
 - Rare dependency architecture issue is resolved: unsupported/nonexistent release assets are PATH-only; do not download a wrong architecture or unverified artifact.
