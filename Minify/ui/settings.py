@@ -4,7 +4,7 @@ import os
 
 import dearpygui.dearpygui as dpg
 import helper
-from core import base, config, constants, registry, steam, utils
+from core import base, config, constants, mods_shared, registry, steam, utils
 from patch import manifest_utils
 
 SETTINGS = [
@@ -136,7 +136,7 @@ def apply_preset(sender, app_data, user_data):
 def handle_button_click(sender, app_data, user_data):
     mod_name = user_data["mod_name"]
     function_name = user_data["key"]
-    script_path = os.path.join(base.mods_dir, mod_name, "script_utility.py")
+    script_path = os.path.join(mods_shared.get_mod_path(mod_name), "script_utility.py")
     helper.exec_script_function(script_path, mod_name, function_name)
 
 
@@ -236,8 +236,8 @@ def render_menu():
 
     mod_settings_found = False
     for mod in constants.mods_alphabetical:
-        mod_path = os.path.join(base.mods_dir, mod)
-        if mod.endswith(".vpk"):
+        mod_path = mods_shared.get_mod_path(mod)
+        if mod.lower().endswith(".vpk"):
             continue
 
         mod_config = manifest_utils.get_mod(mod_path)
@@ -256,7 +256,7 @@ def render_menu():
                     dpg.add_text("Mod Settings", parent="settings_content_group")
                     mod_settings_found = True
 
-                dpg.add_text(f"{mod}:", parent="settings_content_group")
+                dpg.add_text(f"{mods_shared.get_mod_label(mod)}:", parent="settings_content_group")
 
                 saved_mod_data = config.get_mod(mod)
 
@@ -293,123 +293,125 @@ def render_menu():
                     _text = opt.get("text") if opt["type"] == "checkbox" else f"{opt.get('text')}:"
                     _default_value = saved_mod_data.get(opt["key"], opt.get("default", ""))
 
-                with dpg.group(horizontal=True, parent="settings_content_group"):
-                    if opt["type"] == "checkbox":
-                        dpg.add_checkbox(
-                            tag=_tag,
-                            label=_text,
-                            default_value=_default_value,
-                        )
-                    elif opt["type"] == "combo":
-                        dpg.add_text(_text)
-                        items = opt.get("items", [])
-                        dpg.add_combo(
-                            tag=_tag,
-                            items=items,
-                            default_value=_default_value,
-                            width=-1,
-                        )
-                    elif opt["type"] == "number":
-                        dpg.add_text(_text)
-                        var_type = opt.get("var_type", "int")
-                        if var_type == "float":
-                            dpg.add_input_float(
+                    with dpg.group(horizontal=True, parent="settings_content_group"):
+                        if opt["type"] == "checkbox":
+                            dpg.add_checkbox(
                                 tag=_tag,
-                                default_value=float(_default_value) if _default_value else 0.0,
-                                step=opt.get("step", 0.1),
+                                label=_text,
+                                default_value=_default_value,
+                            )
+                        elif opt["type"] == "combo":
+                            dpg.add_text(_text)
+                            items = opt.get("items", [])
+                            dpg.add_combo(
+                                tag=_tag,
+                                items=items,
+                                default_value=_default_value,
+                                width=-1,
+                            )
+                        elif opt["type"] == "number":
+                            dpg.add_text(_text)
+                            var_type = opt.get("var_type", "int")
+                            if var_type == "float":
+                                dpg.add_input_float(
+                                    tag=_tag,
+                                    default_value=float(_default_value) if _default_value else 0.0,
+                                    step=opt.get("step", 0.1),
+                                    width=-1,
+                                )
+                            else:
+                                dpg.add_input_int(
+                                    tag=_tag,
+                                    default_value=int(_default_value) if _default_value else 0,
+                                    step=opt.get("step", 1),
+                                    width=-1,
+                                )
+                        elif opt["type"] == "slider":
+                            dpg.add_text(_text)
+                            var_type = opt.get("var_type", "int")
+                            min_val = opt.get("min", 0)
+                            max_val = opt.get("max", 100)
+                            step = opt.get("step")
+                            _callback = snap_slider if step else None
+                            _user_data = {"step": step} if step else None
+                            if var_type == "float":
+                                dpg.add_slider_float(
+                                    tag=_tag,
+                                    default_value=float(_default_value) if _default_value else 0.0,
+                                    min_value=float(min_val),
+                                    max_value=float(max_val),
+                                    width=-1,
+                                    callback=_callback,
+                                    user_data=_user_data,
+                                )
+                            else:
+                                dpg.add_slider_int(
+                                    tag=_tag,
+                                    default_value=int(_default_value) if _default_value else 0,
+                                    min_value=int(min_val),
+                                    max_value=int(max_val),
+                                    width=-1,
+                                    callback=_callback,
+                                    user_data=_user_data,
+                                )
+                        elif opt["type"] == "color":
+                            dpg.add_text(_text)
+                            with dpg.group(horizontal=True):
+                                dpg.add_input_text(
+                                    tag=_tag,
+                                    default_value=(
+                                        _default_value
+                                        if isinstance(_default_value, str)
+                                        else utils.rgba_to_hex(_default_value)
+                                    ),
+                                    width=-120,
+                                    callback=lambda s, a, u: dpg.set_value(u, utils.hex_to_rgba(a)),
+                                    user_data=f"{_tag}_preview",
+                                )
+                                dpg.add_color_button(
+                                    tag=f"{_tag}_preview",
+                                    default_value=utils.parse_color(_default_value),
+                                )
+                        elif opt["type"] == "list":
+                            with dpg.group(horizontal=False):
+                                dpg.add_text(_text)
+                                items = _default_value if isinstance(_default_value, list) else []
+                                dpg.add_listbox(tag=_tag, items=items, width=-1, num_items=5)
+                                with dpg.group(horizontal=True):
+                                    input_tag = f"{_tag}_input"
+                                    dpg.add_input_text(tag=input_tag, width=-130)
+                                    dpg.add_button(
+                                        label="Add",
+                                        width=60,
+                                        callback=add_to_list,
+                                        user_data={"listbox_tag": _tag, "input_tag": input_tag},
+                                    )
+                                    dpg.add_button(
+                                        label="Remove",
+                                        width=60,
+                                        callback=remove_from_list,
+                                        user_data={"listbox_tag": _tag},
+                                    )
+
+                        elif opt["type"] == "button":
+                            dpg.add_button(
+                                tag=_tag,
+                                label=opt.get("text", opt["key"]),
+                                callback=handle_button_click,
+                                user_data={"mod_name": mod, "key": opt["key"]},
                                 width=-1,
                             )
                         else:
-                            dpg.add_input_int(
-                                tag=_tag,
-                                default_value=int(_default_value) if _default_value else 0,
-                                step=opt.get("step", 1),
-                                width=-1,
-                            )
-                    elif opt["type"] == "slider":
-                        dpg.add_text(_text)
-                        var_type = opt.get("var_type", "int")
-                        min_val = opt.get("min", 0)
-                        max_val = opt.get("max", 100)
-                        step = opt.get("step")
-                        _callback = snap_slider if step else None
-                        _user_data = {"step": step} if step else None
-                        if var_type == "float":
-                            dpg.add_slider_float(
-                                tag=_tag,
-                                default_value=float(_default_value) if _default_value else 0.0,
-                                min_value=float(min_val),
-                                max_value=float(max_val),
-                                width=-1,
-                                callback=_callback,
-                                user_data=_user_data,
-                            )
-                        else:
-                            dpg.add_slider_int(
-                                tag=_tag,
-                                default_value=int(_default_value) if _default_value else 0,
-                                min_value=int(min_val),
-                                max_value=int(max_val),
-                                width=-1,
-                                callback=_callback,
-                                user_data=_user_data,
-                            )
-                    elif opt["type"] == "color":
-                        dpg.add_text(_text)
-                        with dpg.group(horizontal=True):
+                            dpg.add_text(_text)
                             dpg.add_input_text(
                                 tag=_tag,
-                                default_value=(
-                                    _default_value
-                                    if isinstance(_default_value, str)
-                                    else utils.rgba_to_hex(_default_value)
-                                ),
-                                width=-120,
-                                callback=lambda s, a, u: dpg.set_value(u, utils.hex_to_rgba(a)),
-                                user_data=f"{_tag}_preview",
+                                default_value=_default_value,
+                                width=-1,
                             )
-                            dpg.add_color_button(
-                                tag=f"{_tag}_preview",
-                                default_value=utils.parse_color(_default_value),
-                            )
-                    elif opt["type"] == "list":
-                        with dpg.group(horizontal=False):
-                            dpg.add_text(_text)
-                            items = _default_value if isinstance(_default_value, list) else []
-                            dpg.add_listbox(tag=_tag, items=items, width=-1, num_items=5)
-                            with dpg.group(horizontal=True):
-                                input_tag = f"{_tag}_input"
-                                dpg.add_input_text(tag=input_tag, width=-130)
-                                dpg.add_button(
-                                    label="Add",
-                                    width=60,
-                                    callback=add_to_list,
-                                    user_data={"listbox_tag": _tag, "input_tag": input_tag},
-                                )
-                                dpg.add_button(
-                                    label="Remove",
-                                    width=60,
-                                    callback=remove_from_list,
-                                    user_data={"listbox_tag": _tag},
-                                )
 
-                    elif opt["type"] == "button":
-                        dpg.add_button(
-                            tag=_tag,
-                            label=opt.get("text", opt["key"]),
-                            callback=handle_button_click,
-                            user_data={"mod_name": mod, "key": opt["key"]},
-                            width=-1,
-                        )
-                    else:
-                        dpg.add_text(_text)
-                        dpg.add_input_text(
-                            tag=_tag,
-                            default_value=_default_value,
-                            width=-1,
-                        )
-
-                MOD_SETTINGS_WIDGETS.append({"tag": _tag, "mod_name": mod, "key": opt["key"], "type": opt["type"]})
+                    MOD_SETTINGS_WIDGETS.append(
+                        {"tag": _tag, "mod_name": mod, "key": opt["key"], "type": opt["type"]}
+                    )
 
 
 def add_to_list(sender, app_data, user_data):

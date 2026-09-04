@@ -17,6 +17,7 @@
 - [ ] Materialize/adapt fork regression tests to normal source paths.
 - [x] Restore Remove Foilage oak-leaf blacklist entries; keep mod blacklist-only and map-free.
 - [x] Adapt mod-menu/details UI to stable nested-mod paths and collapsible collection/category groups.
+- [x] Adapt Settings/utility-script UI to stable nested-mod paths; render all declared mod settings.
 - [ ] Materialize UI/check boxes, beveled theme, Settings, patch/window/gui/__main__ glue, D2PFX browser UI, profile/import UI.
 - [ ] Run full upstream + fork test suite on materialized tree.
 - [ ] Run Python compileall and Ruff/static checks available in environment.

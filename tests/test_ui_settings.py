@@ -58,3 +58,23 @@ def test_apply_preset_not_found(mock_dpg, mock_config):
 
         mock_config.set_mod.assert_not_called()
         mock_refresh.assert_not_called()
+
+
+def test_handle_button_click_uses_discovered_mod_path():
+    from ui.settings import handle_button_click
+
+    mod_id = "nested-mod::Collection/Nested Mod"
+    resolved_path = os.path.join("mods", "Collection", "Nested Mod")
+
+    with (
+        patch("ui.settings.mods_shared.get_mod_path", return_value=resolved_path) as mock_get_path,
+        patch("ui.settings.helper.exec_script_function") as mock_exec,
+    ):
+        handle_button_click(None, None, {"mod_name": mod_id, "key": "rebuild"})
+
+    mock_get_path.assert_called_once_with(mod_id)
+    mock_exec.assert_called_once_with(
+        os.path.join(resolved_path, "script_utility.py"),
+        mod_id,
+        "rebuild",
+    )
