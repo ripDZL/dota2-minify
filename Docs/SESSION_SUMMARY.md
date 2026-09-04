@@ -1,12 +1,15 @@
 # Session Summary
-- User requested fork work remain separate from `main` and be labeled beta.
 - Fork target: `ripDZL/dota2-minify`.
 - Exact baseline: `Minify-v1.14rc7` / `d4b4520c945a9e1f8f5facc52a76ac5903babe90`.
-- GitHub branch-write access now works.
-- `v21.4-hardening` created from exact rc7 baseline.
-- `beta` created from `v21.4-hardening`; `main` untouched.
-- Current local hardening suite: 133/133 passing + 9 subtests.
-- Python compileall passes for transformer/overlay/tests.
-- Hardened features include VPK confinement, safe archives, bounded DEFLATE, dependency hashes, transactional backup restore, strict profiles, collision-driven Dark Terrain.
-- Next: persist Docs commit, materialize normal source files onto `v21.4-hardening`, rerun tests/static checks, second-pass audit, then promote validated commit to `beta`.
-- Do not merge/tag/release until Windows build + Dota smoke tests pass.
+- Branches: `main` upstream-tracking; `v21.4-hardening` active; `beta` promotion target.
+- `main` and `beta` not modified during current materialization slice.
+- Read all `Docs/*.md` before resuming.
+- Materialized on `v21.4-hardening`: `core/security.py`, `core/backup_manager.py`, `core/prelaunch_policy.py`, `core/mod_compat.py`.
+- Materialized VPK confinement in `patch/vpk_utils.py`.
+- Materialized SHA-256 verification in `conditions.py`.
+- Materialized bounded archive extraction in `core/fs.py`.
+- Partial diff against exact rc7 reviewed: only Docs + intended hardening files.
+- New second-pass finding: rc7 rare Linux ppc64/i686 ripgrep URLs are absent from ripgrep 15.2.0 release; Source2Viewer selector can fall through to x64 on non-x64 64-bit machines.
+- Next: fail unsupported dependency architectures clearly or use verified native assets; then materialize `mods_shared`, `mod_library`, UI/features/D2PFX/glue edits and regression tests.
+- Local handoff checkpoint before repo materialization remains 133/133 tests + 9 subtests; Python compileall pass.
+- Do not fast-forward `beta`, merge, tag, or release until full materialization + tests + Windows/Dota smoke validation pass.
