@@ -1,18 +1,21 @@
 # AI Context
-- Upstream baseline: `Egezenn/dota2-minify` tag `Minify-v1.14rc7`.
-- Exact baseline commit: `d4b4520c945a9e1f8f5facc52a76ac5903babe90`.
-- Fork target: `ripDZL/dota2-minify`.
-- Branch policy: `main` tracks upstream; `beta` is the fork beta line; `v21.4-hardening` is active integration/development.
-- Current custom release line: v21.x; last user-tested kit: v21.3.1 Safe Foliage Fix.
-- Current pre-publication hardening workspace: v21.4 work-in-progress; 133/133 tests + 9 subtests pass.
-- Preserve GPL-3.0 attribution/license and upstream history.
+- Upstream baseline: `Egezenn/dota2-minify` tag `Minify-v1.14rc7`; exact commit `d4b4520c945a9e1f8f5facc52a76ac5903babe90`.
+- Fork target: `ripDZL/dota2-minify`; `v21.4-hardening` is active integration/development; keep `main` upstream-tracking and `beta` frozen until validation/runtime gates pass.
+- Current tested code commit: `1c49475c59750d3669256885399c47efe06459db`.
+- Hardening CI run `33928368807`: compileall PASS, Ruff format gate PASS, Ruff lint PASS, 131/131 pytest PASS, Windows PyInstaller/runtime copy/portable ZIP/upload PASS.
+- Current Windows test ZIP: `Minify-v21.4-hardening-1c49475c59750d3669256885399c47efe06459db-windows.zip`; SHA-256 `3b86f34536ed1e0e0d3644bca64cdca51db33c03fb15311b69fb3fc744ce5aa3`; 53600449 bytes.
+- User-supplied UI source of truth: `Minify-v1.14rc7-ModManager-v21.2-Beveled-UI.zip`; SHA-256 `92b75cd95434bbad0ef9eef0ddf2a67e0c6dc8b2730d08ff1bfeb3f7eed57b92`.
+- Exact v21.2 UI reference materialized from rc7 by its original patcher at `1d138d418fd823693260c4a9fddf039436daaca5`; source ZIP hash gate + compileall passed.
+- Restored v21.2 UI/shell files onto hardening without replacing newer core backends: `Minify/__main__.py`, `Minify/browsers/d2pfx/ui.py`, `Minify/ui/checkboxes.py`, `Minify/ui/gui.py`, `Minify/ui/settings.py`, `Minify/ui/theme.py`, `Minify/ui/window.py`.
 - Preserve recursive/nested mods, markerless/collapsible Collections, profiles, D2PFX browser/imports, backups, conflict review, Obsidian + Ember/beveled UI, no-auto-prelaunch policy.
+- Historical local hardening-kit checkpoint: 133/133 tests + 9 subtests; current GitHub suite is 131/131 and does not yet include all fork regression tests.
+- Hardening format gate currently excludes `core/mod_compat.py`, `core/mod_library.py`, `core/security.py`, and `ui/settings.py`; compileall and full Ruff lint still run on CI.
 - Steam policy: manual rc7 `prelaunch` remains; automatic Minify prelaunch injection disabled; stale generated wrappers cleaned narrowly.
-- Remove Foilage: blacklist-only; never ship `Remove Foilage/manifest.json` or `Remove Foilage/maps/dota.vpk`; restore `tree_oak_leaves_05.vmat_c` and `tree_oak_leaves_05.vmdl_c` blacklist entries.
+- Remove Foilage: blacklist-only; never ship `Remove Foilage/manifest.json` or `Remove Foilage/maps/dota.vpk`; retain `tree_oak_leaves_05.vmat_c` and `tree_oak_leaves_05.vmdl_c` blacklist entries.
 - Remove Main Menu Background: retain dashboard manager + `#FrontpageContents` collapse rules.
 - Dark Terrain: yield `materials/dev/deferred_post_process.vmat_c` only when another selected mod actually owns the same virtual path; associated Dark fog is excluded only for that compatibility case.
 - Security boundaries: mod Python scripts are arbitrary-code trust boundary; VPK/archive/profile/backup/download/D2PFX inputs are untrusted.
-- Publication rule: materialized normal source files are canonical; giant source transformer is optional migration/repro tooling only.
-- `core/mod_library.py` reconciliation remains blocked: expected validated blob `e95b2f6f59b3b96f7c19ed70ee514df02e500926`, SHA-256 `552dbb7f98d5e0db2ad32c1b2888d8ad4ae8945fdf49ebc2853765e59c6c9e7a`, 69949 bytes; exact source is not present in GitHub or the active workspace.
-- Committed bootstrap cannot recover that source: the ZIP entry starts at offset 22023, is 17398 bytes deflated, ends at offset 39589 exclusive; missing chunk `005` spans offsets 37500-44999 and contains the final 2089 compressed bytes. Never fabricate them.
+- Publication rule: materialized normal source files are canonical; giant source transformer/bootstrap is optional migration/repro tooling only.
+- `core/mod_library.py` reconciliation remains blocked: remote blob `a5204ea1d5e0309d3c6a764ad9b974e7bdeb8268`; expected validated blob `e95b2f6f59b3b96f7c19ed70ee514df02e500926`, SHA-256 `552dbb7f98d5e0db2ad32c1b2888d8ad4ae8945fdf49ebc2853765e59c6c9e7a`, 69949 bytes; exact validated source is unavailable.
+- Committed bootstrap cannot recover that source: ZIP entry starts at offset 22023, is 17398 bytes deflated, ends at offset 39589 exclusive; missing chunk `005` contains the final 2089 compressed bytes. Never fabricate them; never create `.materialize/READY` while payload is incomplete.
 - Project-memory rule: read `Docs/*.md` at session start; update terse bullets at major milestones; include/stage them with repo commits.
