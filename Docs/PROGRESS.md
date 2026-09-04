@@ -17,6 +17,7 @@
 - [x] Restored Remove Foilage `tree_oak_leaves_05.vmat_c` and `tree_oak_leaves_05.vmdl_c` blacklist entries from exact pre-`8afd759b` blob `1ea8db8b3f336609e67c2a924c8f6bf762e58cfd`; mod remains blacklist-only/map-free.
 - [x] Adapted mod-menu/details UI to stable nested-mod paths; human labels and collapsible collection/category groups now use `mods_shared` metadata.
 - [x] Adapted Settings utility-script/mod manifest lookup to stable nested paths and fixed the loop so every declared setting widget is rendered/registered.
+- [x] Added hardening-only CI: compileall + Ruff + pytest gate, then unsigned Windows portable ZIP artifact; no tag/release/beta promotion.
 - [x] Transferred `core/mod_library.py`; remote file compiles and contains hardened paths inspected so far.
 - [x] Branch diff reviewed at multiple checkpoints; no intentional changes to `main` or `beta`.
 - [x] Temporary one-time materialization workflow staged; expected handoff ZIP SHA-256 is `97b2810c1e0ed2a51a407dd895d93e0f53e95bb82e65824cd41536da799fdece`.

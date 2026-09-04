@@ -1,0 +1,80 @@
+name: Hardening CI and Test Build
+
+on:
+  push:
+    branches: [v21.4-hardening]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v5
+        with:
+          enable-cache: true
+          python-version: "3.13"
+
+      - name: Install dependencies
+        run: uv sync --group dev
+
+      - name: Compile Python sources
+        run: uv run python -m compileall -q Minify tests
+
+      - name: Run Ruff format check
+        run: uv run ruff format --check Minify
+
+      - name: Run Ruff check
+        run: uv run ruff check Minify
+
+      - name: Run pytest
+        run: uv run pytest
+
+  build-windows-portable:
+    needs: validate
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v5
+        with:
+          enable-cache: true
+          python-version: "3.13"
+
+      - name: Install dependencies
+        run: uv sync
+
+      - name: Build executable
+        shell: pwsh
+        run: |
+          Set-Location scripts
+          uv run pyinstaller Minify.spec
+
+      - name: Copy runtime data
+        shell: pwsh
+        run: |
+          Copy-Item -Path "Minify\bin" -Destination "scripts\dist\Minify\bin" -Recurse
+          Copy-Item -Path "Minify\mods" -Destination "scripts\dist\Minify\mods" -Recurse
+          Copy-Item -Path "README.md" -Destination "scripts\dist\Minify\README.md"
+          Copy-Item -Path "LICENSE" -Destination "scripts\dist\Minify\LICENSE"
+
+      - name: Bundle portable test build
+        shell: pwsh
+        run: |
+          $zip = "Minify-v21.4-hardening-${{ github.sha }}-windows.zip"
+          Set-Location scripts\dist\Minify
+          7z a -tzip -mx=9 "..\..\..\$zip" .\*
+
+      - name: Upload portable test build
+        uses: actions/upload-artifact@v4
+        with:
+          name: Minify-v21.4-hardening-windows
+          path: Minify-v21.4-hardening-*-windows.zip
+          if-no-files-found: error
+          retention-days: 14
