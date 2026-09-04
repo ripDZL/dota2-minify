@@ -134,56 +134,57 @@ dota_tools_extraction_paths = [
 
 s2v_cli_ver = "20.0"
 rg_ver = "15.2.0"
+s2v_latest = None
+rg_latest = None
 
 try:
     if base.is_win:
         s2v_executable = "Source2Viewer-CLI.exe"
+        rg_executable = "rg.exe"
 
         if base.MACHINE in ["aarch64", "arm64"]:
             s2v_latest = f"https://github.com/ValveResourceFormat/ValveResourceFormat/releases/download/{s2v_cli_ver}/cli-windows-arm64.zip"
-        else:
+        elif base.MACHINE in ["amd64", "x86_64"]:
             s2v_latest = f"https://github.com/ValveResourceFormat/ValveResourceFormat/releases/download/{s2v_cli_ver}/cli-windows-x64.zip"
 
-        rg_executable = "rg.exe"
-        if base.ARCHITECTURE == "64bit":
+        # Keep rc7's x64 Windows ripgrep behavior, which is verified and works
+        # under Windows ARM64 emulation. Unknown architectures are PATH-only.
+        if base.ARCHITECTURE == "64bit" and base.MACHINE in ["amd64", "x86_64", "aarch64", "arm64"]:
             rg_latest = f"https://github.com/BurntSushi/ripgrep/releases/download/{rg_ver}/ripgrep-{rg_ver}-x86_64-pc-windows-msvc.zip"
-        else:
+        elif base.ARCHITECTURE == "32bit" and base.MACHINE in ["x86", "i386", "i686"]:
             rg_latest = f"https://github.com/BurntSushi/ripgrep/releases/download/{rg_ver}/ripgrep-{rg_ver}-i686-pc-windows-msvc.zip"
 
     elif base.is_linux:
         s2v_executable = "Source2Viewer-CLI"
+        rg_executable = "rg"
+
         if base.MACHINE in ["aarch64", "arm64"]:
             s2v_latest = f"https://github.com/ValveResourceFormat/ValveResourceFormat/releases/download/{s2v_cli_ver}/cli-linux-arm64.zip"
         elif base.MACHINE in ["armv7l", "arm"]:
             s2v_latest = f"https://github.com/ValveResourceFormat/ValveResourceFormat/releases/download/{s2v_cli_ver}/cli-linux-arm.zip"
-        elif base.ARCHITECTURE == "64bit":
+        elif base.MACHINE in ["amd64", "x86_64"]:
             s2v_latest = f"https://github.com/ValveResourceFormat/ValveResourceFormat/releases/download/{s2v_cli_ver}/cli-linux-x64.zip"
 
-        rg_executable = "rg"
         if base.MACHINE in ["aarch64", "arm64"]:
             rg_latest = f"https://github.com/BurntSushi/ripgrep/releases/download/{rg_ver}/ripgrep-{rg_ver}-aarch64-unknown-linux-gnu.tar.gz"
         elif base.MACHINE in ["armv7l", "arm"]:
             rg_latest = f"https://github.com/BurntSushi/ripgrep/releases/download/{rg_ver}/ripgrep-{rg_ver}-armv7-unknown-linux-gnueabihf.tar.gz"
-        elif base.MACHINE == "ppc64":  # unlikely
-            rg_latest = f"https://github.com/BurntSushi/ripgrep/releases/download/{rg_ver}/ripgrep-{rg_ver}-powerpc64-unknown-linux-gnu.tar.gz"
-        elif base.MACHINE == "s390x":  # unlikely
+        elif base.MACHINE == "s390x":
             rg_latest = f"https://github.com/BurntSushi/ripgrep/releases/download/{rg_ver}/ripgrep-{rg_ver}-s390x-unknown-linux-gnu.tar.gz"
-        elif base.ARCHITECTURE == "64bit":
+        elif base.MACHINE in ["amd64", "x86_64"]:
             rg_latest = f"https://github.com/BurntSushi/ripgrep/releases/download/{rg_ver}/ripgrep-{rg_ver}-x86_64-unknown-linux-musl.tar.gz"
-        elif base.ARCHITECTURE == "32bit":
-            rg_latest = f"https://github.com/BurntSushi/ripgrep/releases/download/{rg_ver}/ripgrep-{rg_ver}-i686-unknown-linux-gnu.tar.gz"
+        # ripgrep 15.2.0 does not publish the rc7 ppc64 or i686 Linux URLs.
+        # Those architectures are intentionally PATH-only instead of attempting
+        # an unverifiable/nonexistent download.
 
     elif base.is_mac:
         s2v_executable = "Source2Viewer-CLI"
-        if base.MACHINE in ["aarch64", "arm64"]:
-            s2v_latest = f"https://github.com/ValveResourceFormat/ValveResourceFormat/releases/download/{s2v_cli_ver}/cli-macos-arm64.zip"
-        elif base.ARCHITECTURE == "64bit":
-            s2v_latest = f"https://github.com/ValveResourceFormat/ValveResourceFormat/releases/download/{s2v_cli_ver}/cli-macos-x64.zip"
-
         rg_executable = "rg"
         if base.MACHINE in ["aarch64", "arm64"]:
+            s2v_latest = f"https://github.com/ValveResourceFormat/ValveResourceFormat/releases/download/{s2v_cli_ver}/cli-macos-arm64.zip"
             rg_latest = f"https://github.com/BurntSushi/ripgrep/releases/download/{rg_ver}/ripgrep-{rg_ver}-aarch64-apple-darwin.tar.gz"
-        else:
+        elif base.MACHINE in ["amd64", "x86_64"]:
+            s2v_latest = f"https://github.com/ValveResourceFormat/ValveResourceFormat/releases/download/{s2v_cli_ver}/cli-macos-x64.zip"
             rg_latest = f"https://github.com/BurntSushi/ripgrep/releases/download/{rg_ver}/ripgrep-{rg_ver}-x86_64-apple-darwin.tar.gz"
     else:
         raise Exception("Unsupported platform!")
