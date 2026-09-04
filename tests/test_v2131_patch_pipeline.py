@@ -13,7 +13,8 @@ def test_nested_mod_paths_use_discovered_ids():
     assert "mods_shared.get_mod_path(folder)" in source
     assert "mods_shared.get_mod_path(mod_name)" in source
     assert "mods_shared.resolve_mod_reference(dependency, relative_to=dependant)" in source
-    assert "mods_shared.resolve_mod_reference(conflicting_mod, relative_to=conflict_mod)" in source
+    assert "conflicting_id = mods_shared.resolve_mod_reference(" in source
+    assert "conflicting_mod, relative_to=conflict_mod" in source
 
 
 def test_patch_creates_transactional_restore_point():
