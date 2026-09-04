@@ -1,0 +1,16 @@
+# TODO
+- [x] Create `v21.4-hardening` from exact rc7 commit `d4b4520c945a9e1f8f5facc52a76ac5903babe90`.
+- [x] Create public `beta` branch separate from `main`.
+- [ ] Materialize current transformer/overlay output into normal repository source files.
+- [ ] Keep transformer optional; do not make it canonical fork architecture.
+- [ ] Run full upstream + fork test suite on materialized tree.
+- [ ] Run Ruff/static checks available in environment.
+- [ ] Perform second-pass security review on materialized code.
+- [ ] Check for direct `extractall`, unrestricted decompression, unsafe joins, predictable temp files, and unverified executable downloads.
+- [ ] Clean `.pyc`, `__pycache__`, `.pytest_cache`, temporary build artifacts.
+- [ ] Update versioning for fork beta without erasing upstream version/attribution.
+- [ ] Review generated Git diff against exact rc7.
+- [ ] Run Windows PowerShell/PyInstaller build.
+- [ ] Run Dota smoke tests: startup, lobby, demo/match load, patch rollback, profiles, D2PFX, Dark Terrain + shader, Remove Foilage.
+- [ ] Fast-forward `beta` only after hardening validation.
+- [ ] Create PR only after final diff/runtime review.

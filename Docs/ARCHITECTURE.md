@@ -1,0 +1,17 @@
+# Architecture
+- Baseline: exact upstream rc7 commit `d4b4520c945a9e1f8f5facc52a76ac5903babe90`; no current-main rebase during hardening.
+- Branches: `main` upstream-tracking; `v21.4-hardening` active development; `beta` user-facing beta promotion target.
+- Fork source: materialized files + ordinary commits; clone should run without source-rewrite bootstrap.
+- Build transformer: migration/reproducibility tooling only; not canonical source architecture.
+- Security primitives: shared `Minify/core/security.py` for path confinement, archive limits, bounded decompression, hashing, atomic writes.
+- Mod discovery: bounded recursive scanner; no symlink traversal; nested IDs stable.
+- Collections: organizational parents; selectable child mods; markerless heuristic retained.
+- Output: Minify-managed language/output paths only; never overwrite Valve source map VPKs.
+- Remove Foilage: blacklist-only; never ship its `manifest.json` or `maps/dota.vpk`.
+- D2PFX: trusted-host imports; bounded downloads/payloads/decompression; safe archive extraction; high/normal priority VPK behavior retained.
+- VPK extraction: virtual path must resolve inside extraction root before any directory/file write.
+- Compatibility: virtual-path collision index drives Dark Terrain yield decisions; no shader-name allowlist required.
+- Backups: managed-output allowlist; confined roots; preflight before mutation; rollback on commit failure.
+- Profiles: exact format/version; strict JSON booleans; bounded file/profile/state/string counts.
+- Downloads: pinned versions + pinned SHA-256 + safe extraction before executable use.
+- Steam: manual rc7 `prelaunch` retained; automatic launch-option injection disabled; stale Minify wrappers cleaned narrowly.

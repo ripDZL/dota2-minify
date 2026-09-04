@@ -1,0 +1,25 @@
+# Progress
+- [x] v21.3.1 Safe Foliage Fix validated: 116/116 inherited tests.
+- [x] Unsafe Remove Foilage full-map override removed.
+- [x] Pre-publication code review completed.
+- [x] Critical/High publication blockers identified.
+- [x] Local v21.4 hardening workspace created.
+- [x] Shared `core/security.py` hardening module added.
+- [x] VPK destination confinement implemented.
+- [x] ZIP/TAR path/count/size/ratio/symlink limits implemented.
+- [x] D2PFX DEFLATE output bounded before untrusted expansion.
+- [x] Source2Viewer/ripgrep release SHA-256 verification implemented.
+- [x] Backup restore confinement/preflight/transaction hardening implemented.
+- [x] Profile import strict validation/limits implemented.
+- [x] Dark Terrain deferred-post-process yielding made collision-driven.
+- [x] Hostile-input regression coverage added.
+- [x] Current hardening suite: 133/133 passing + 9 subtests.
+- [x] Python compileall passes for transformer/overlay/tests.
+- [x] GitHub branch-write access verified.
+- [x] `v21.4-hardening` created from exact rc7.
+- [x] `beta` created as separate fork beta line.
+- [ ] Perform final second-pass code/security review after materialization.
+- [ ] Materialize hardened source onto exact rc7 branch.
+- [ ] Review complete Git diff before promoting to `beta`.
+- [ ] Windows build/runtime validation complete.
+- [ ] Dota smoke test complete.

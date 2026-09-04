@@ -1,0 +1,16 @@
+# AI Context
+- Upstream baseline: `Egezenn/dota2-minify` tag `Minify-v1.14rc7`.
+- Exact baseline commit: `d4b4520c945a9e1f8f5facc52a76ac5903babe90`.
+- Fork target: `ripDZL/dota2-minify`.
+- Branch policy: `main` tracks upstream; `beta` is the fork beta line; `v21.4-hardening` is active integration/development.
+- Current custom release line: v21.x; last user-tested kit: v21.3.1 Safe Foliage Fix.
+- Current pre-publication hardening workspace: v21.4 work-in-progress; 133/133 tests + 9 subtests pass.
+- Preserve GPL-3.0 attribution/license and upstream history.
+- Preserve recursive/nested mods, markerless/collapsible Collections, profiles, D2PFX browser/imports, backups, conflict review, Obsidian + Ember/beveled UI, no-auto-prelaunch policy.
+- Steam policy: manual rc7 `prelaunch` remains; automatic Minify prelaunch injection disabled; stale generated wrappers cleaned narrowly.
+- Remove Foilage: blacklist-only; never ship `Remove Foilage/manifest.json` or `Remove Foilage/maps/dota.vpk`.
+- Remove Main Menu Background: retain dashboard manager + `#FrontpageContents` collapse rules.
+- Dark Terrain: yield `materials/dev/deferred_post_process.vmat_c` only when another selected mod actually owns the same virtual path; associated Dark fog is excluded only for that compatibility case.
+- Security boundaries: mod Python scripts are arbitrary-code trust boundary; VPK/archive/profile/backup/download/D2PFX inputs are untrusted.
+- Publication rule: materialized normal source files are canonical; giant source transformer is optional migration/repro tooling only.
+- Project-memory rule: read `Docs/*.md` at session start; update terse bullets at major milestones; include/stage them with repo commits.
