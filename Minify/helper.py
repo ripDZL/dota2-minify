@@ -2,6 +2,7 @@
 
 import importlib.util
 import os
+import re
 import shutil
 import subprocess
 import sys
@@ -52,7 +53,7 @@ def compile():
         rescomp = subprocess.run(
             command,
             stdout=subprocess.PIPE,
-            stderr=subprocess.PIPE,  # compiler complains if minify_dota_compile_input_path is empty
+            stderr=subprocess.PIPE,
             creationflags=subprocess.CREATE_NO_WINDOW if base.is_win else 0,
         )
         if rescomp.stdout != b"":
@@ -157,7 +158,8 @@ def exec_script(script_path, mod_name, order_name, _terminal_output=True):
         sys.path.insert(0, script_dir)
         sys.modules.pop("script", None)
 
-        module_name = mod_name.replace(" ", "").lower() + f"_{order_name}_script"
+        safe_mod_name = re.sub(r"[^a-zA-Z0-9_]+", "_", str(mod_name)).strip("_").lower() or "mod"
+        module_name = safe_mod_name + f"_{order_name}_script"
         spec = importlib.util.spec_from_file_location(module_name, script_path)
         module = importlib.util.module_from_spec(spec)
         spec.loader.exec_module(module)
@@ -177,36 +179,29 @@ def exec_script(script_path, mod_name, order_name, _terminal_output=True):
 
 
 def bulk_exec_script(order_name, terminal_output=True):
-    """
-    Injects required mod instructions in bulk
+    """Run lifecycle scripts for discovered directory-backed mods.
 
-    `script_initial.py`
-    `script_after_decompile.py`
-    `script_after_recompile.py`
-    `script_after_patch.py`
-    `script_prelaunch.py`
-    `script_uninstall.py`
+    rc7 uses the boolean return value for ``script_prelaunch.py`` so the CLI can
+    record whether a prelaunch action changed anything. Preserve that contract
+    while resolving nested/collection mods through their stable discovered IDs.
     """
     bulk_name = f"script_{order_name}.py"
     any_ran = False
-    for root, _, files in os.walk(base.mods_dir):
-        if bulk_name in files and not os.path.basename(root).startswith("_"):
-            cfg = manifest_utils.get_mod(root)
-
-            if "browser" in cfg:
-                continue
-
-            always = cfg.get("always", False)
-
-            # Uninstaller scripts should determine whether or not the mod is installed and safely quit
-            # if not installed. Determining whether or not a mod is installed is mostly undeterministic
-            if always or order_name in ["initial", "uninstall"] or mods_shared.get_state(os.path.basename(root)):
-                result = exec_script(
-                    os.path.join(root, bulk_name), os.path.basename(root), order_name, _terminal_output=terminal_output
-                )
-                if result:
-                    any_ran = True
-
+    for mod_name in list(mods_shared.mods_with_order):
+        mod_path = mods_shared.get_mod_path(mod_name)
+        if not os.path.isdir(mod_path):
+            continue
+        script_path = os.path.join(mod_path, bulk_name)
+        if not os.path.isfile(script_path):
+            continue
+        cfg = manifest_utils.get_mod(mod_path)
+        if "browser" in cfg:
+            continue
+        always = cfg.get("always", False)
+        if always or order_name in ["initial", "uninstall"] or mods_shared.get_state(mod_name):
+            result = exec_script(script_path, mod_name, order_name, _terminal_output=terminal_output)
+            if result:
+                any_ran = True
     return any_ran
 
 
@@ -227,7 +222,8 @@ def exec_script_function(script_path, mod_name, function_name="main"):
         sys.path.insert(0, script_dir)
         sys.modules.pop("script", None)
 
-        module_name = mod_name.replace(" ", "").lower() + "_utility"
+        safe_mod_name = re.sub(r"[^a-zA-Z0-9_]+", "_", str(mod_name)).strip("_").lower() or "mod"
+        module_name = safe_mod_name + "_utility"
         spec = importlib.util.spec_from_file_location(module_name, script_path)
         module = importlib.util.module_from_spec(spec)
         spec.loader.exec_module(module)
