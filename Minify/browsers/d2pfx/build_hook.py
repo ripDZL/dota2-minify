@@ -24,13 +24,15 @@ def run(mod_list, current_mod=None):
         if not (current_mod is not None or mods_shared.get_state(mod_name)):
             continue
 
-        mod_path = os.path.join(base.mods_dir, mod_name)
-        if not os.path.isdir(mod_path):
-            continue
+        mod_path = mods_shared.get_mod_path(mod_name)
 
         # 1. Identify Standard VPK mods (for pak65 metadata reconstruction)
         if mod_name.endswith(".vpk"):
-            all_active_vpk_mods.append(mod_name)
+            if os.path.isfile(mod_path):
+                all_active_vpk_mods.append(os.path.basename(mod_path))
+            continue
+
+        if not os.path.isdir(mod_path):
             continue
 
         # 2. Identify D2PFX mods via manifest/modcfg
