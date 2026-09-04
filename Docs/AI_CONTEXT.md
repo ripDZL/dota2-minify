@@ -8,7 +8,7 @@
 - Preserve GPL-3.0 attribution/license and upstream history.
 - Preserve recursive/nested mods, markerless/collapsible Collections, profiles, D2PFX browser/imports, backups, conflict review, Obsidian + Ember/beveled UI, no-auto-prelaunch policy.
 - Steam policy: manual rc7 `prelaunch` remains; automatic Minify prelaunch injection disabled; stale generated wrappers cleaned narrowly.
-- Remove Foilage: blacklist-only; never ship `Remove Foilage/manifest.json` or `Remove Foilage/maps/dota.vpk`.
+- Remove Foilage: blacklist-only; never ship `Remove Foilage/manifest.json` or `Remove Foilage/maps/dota.vpk`; restore `tree_oak_leaves_05.vmat_c` and `tree_oak_leaves_05.vmdl_c` blacklist entries.
 - Remove Main Menu Background: retain dashboard manager + `#FrontpageContents` collapse rules.
 - Dark Terrain: yield `materials/dev/deferred_post_process.vmat_c` only when another selected mod actually owns the same virtual path; associated Dark fog is excluded only for that compatibility case.
 - Security boundaries: mod Python scripts are arbitrary-code trust boundary; VPK/archive/profile/backup/download/D2PFX inputs are untrusted.

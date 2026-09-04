@@ -3,15 +3,15 @@
 - Baseline: `Minify-v1.14rc7` / `d4b4520c945a9e1f8f5facc52a76ac5903babe90`.
 - Branch policy: `main` upstream-tracking; `beta` frozen promotion target; `v21.4-hardening` development.
 - Beta ref at handoff: `af83bbb051edced195d5f55ba49ff060a8c76f3c`.
-- Pre-handoff hardening head snapshot: `ac7562f852d5c1f8ca14630a92f26018c328642a`; 31 commits ahead of exact rc7.
 - Local validated hardening-kit checkpoint: 133/133 tests + 9 subtests; Python compileall pass.
 - Materialized security, backup, prelaunch, compatibility, VPK/archive/download hardening, dependency architecture gating, recursive scanner/Collections backend, nested scripts, D2PFX build-hook/backend changes, CSS fix, and `mod_library.py` transfer.
+- Remove Foilage remains blacklist-only/map-free; restored exact `tree_oak_leaves_05.vmat_c` and `tree_oak_leaves_05.vmdl_c` entries from pre-`8afd759b` blacklist blob `1ea8db8b3f336609e67c2a924c8f6bf762e58cfd`.
 - `mod_library.py` requires reconciliation: remote blob `a5204ea1d5e0309d3c6a764ad9b974e7bdeb8268`; validated local blob `e95b2f6f59b3b96f7c19ed70ee514df02e500926`.
 - `mod_library.py` archive forensics: entry starts at ZIP offset 22023, is 17398 bytes deflated / 69949 uncompressed, and ends at offset 39589 exclusive; missing chunk `005` contains the final 2089 compressed bytes.
 - Exact validated source is unavailable in the repository and active workspace; do not reconstruct or fabricate it. Unblock with exact validated source/blob or exact missing archive bytes.
 - Temporary materialization bootstrap is incomplete; workflow expects ZIP SHA-256 `97b2810c1e0ed2a51a407dd895d93e0f53e95bb82e65824cd41536da799fdece`.
 - `.materialize/` snapshot has chunks `000`-`004`, `006`-`010`; missing `005`, `011`-`022`; `.materialize/READY` absent.
 - Do not trigger one-time workflow until exact payload is complete and verified.
-- Remaining: UI/theme/Settings/glue/profile/D2PFX UI/Remove Foilage blacklist/test/version materialization, full tests/static/security review, diff cleanup, Windows build, Dota smoke tests.
+- Remaining: UI/theme/Settings/glue/profile/D2PFX UI/test/version materialization, full tests/static/security review, diff cleanup, Windows build, Dota smoke tests.
 - Do not fast-forward `beta`, merge, tag, release, or publish PR until all gates pass.
 - New chat must start with `Docs/HANDOFF_PROMPT.md` and all other `Docs/*.md` files.

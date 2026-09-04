@@ -14,6 +14,7 @@
 - [x] Materialized nested lifecycle/utility script resolution in `helper.py`.
 - [x] Materialized D2PFX nested build-hook path handling and Optimization category exposure.
 - [x] Materialized Remove Main Menu Background two-rule CSS fix.
+- [x] Restored Remove Foilage `tree_oak_leaves_05.vmat_c` and `tree_oak_leaves_05.vmdl_c` blacklist entries from exact pre-`8afd759b` blob `1ea8db8b3f336609e67c2a924c8f6bf762e58cfd`; mod remains blacklist-only/map-free.
 - [x] Transferred `core/mod_library.py`; remote file compiles and contains hardened paths inspected so far.
 - [x] Branch diff reviewed at multiple checkpoints; no intentional changes to `main` or `beta`.
 - [x] Temporary one-time materialization workflow staged; expected handoff ZIP SHA-256 is `97b2810c1e0ed2a51a407dd895d93e0f53e95bb82e65824cd41536da799fdece`.
@@ -21,7 +22,7 @@
 - [ ] `core/mod_library.py` transfer not yet accepted: remote Git blob `a5204ea1d5e0309d3c6a764ad9b974e7bdeb8268` differs from validated local blob `e95b2f6f59b3b96f7c19ed70ee514df02e500926`.
 - [ ] Exact validated `mod_library.py` source/blob is unavailable in GitHub and active workspace; reconciliation remains blocked pending exact source or missing archive bytes.
 - [ ] Temporary `.materialize/` payload incomplete at snapshot: present `000`-`004`, `006`-`010`; missing `005`, `011`-`022`; no `READY`.
-- [ ] Remaining UI/profile/patch/glue/mod-fix/test materialization incomplete.
+- [ ] Remaining UI/profile/patch/glue/test materialization incomplete.
 - [ ] Full materialized-tree regression/static/security pass incomplete.
 - [ ] Complete Git diff review before beta promotion incomplete.
 - [ ] Windows build/runtime validation incomplete.

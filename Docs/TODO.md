@@ -15,7 +15,7 @@
 - [ ] Materialize remaining transformer/overlay output into normal repository source files.
 - [ ] Keep transformer/bootstrap optional migration tooling; do not make it canonical fork architecture.
 - [ ] Materialize/adapt fork regression tests to normal source paths.
-- [ ] Restore Remove Foilage oak-leaf blacklist entries; keep mod blacklist-only and map-free.
+- [x] Restore Remove Foilage oak-leaf blacklist entries; keep mod blacklist-only and map-free.
 - [ ] Materialize UI/check boxes, beveled theme, Settings, patch/window/gui/__main__ glue, D2PFX browser UI, profile/import UI.
 - [ ] Run full upstream + fork test suite on materialized tree.
 - [ ] Run Python compileall and Ruff/static checks available in environment.
