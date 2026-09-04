@@ -2,18 +2,28 @@
 - [x] Create `v21.4-hardening` from exact rc7 commit `d4b4520c945a9e1f8f5facc52a76ac5903babe90`.
 - [x] Create public `beta` branch separate from `main`.
 - [x] Start materialization with security/backup/prelaunch/compatibility/VPK/archive/download core.
-- [ ] Resolve dependency selection for unsupported rare architectures; do not download wrong/nonexistent binaries.
-- [ ] Materialize current transformer/overlay output into normal repository source files.
-- [ ] Keep transformer optional; do not make it canonical fork architecture.
+- [x] Resolve unsupported rare-architecture dependency selection; unsupported builds are PATH-only.
+- [x] Materialize `mods_shared.py` recursive/nested scanning + Collections backend.
+- [x] Materialize Steam no-auto-prelaunch cleanup policy.
+- [x] Materialize nested lifecycle/utility script resolution in `helper.py`.
+- [x] Materialize D2PFX nested VPK build-hook handling and Optimization exposure.
+- [x] Materialize Remove Main Menu Background two-rule CSS fix.
+- [x] Transfer `core/mod_library.py` to branch.
+- [ ] Reconcile `core/mod_library.py` remote blob drift vs validated local source before accepting transfer.
+- [ ] Complete or remove temporary `.materialize/` bootstrap; never create `READY` while chunks are incomplete.
+- [ ] Materialize remaining transformer/overlay output into normal repository source files.
+- [ ] Keep transformer/bootstrap optional migration tooling; do not make it canonical fork architecture.
 - [ ] Materialize/adapt fork regression tests to normal source paths.
+- [ ] Restore Remove Foilage oak-leaf blacklist entries; keep mod blacklist-only and map-free.
+- [ ] Materialize UI/check boxes, beveled theme, Settings, patch/window/gui/__main__ glue, D2PFX browser UI, profile/import UI.
 - [ ] Run full upstream + fork test suite on materialized tree.
-- [ ] Run Ruff/static checks available in environment.
-- [ ] Perform second-pass security review on materialized code.
-- [ ] Check for direct `extractall`, unrestricted decompression, unsafe joins, predictable temp files, and unverified executable downloads.
-- [ ] Clean `.pyc`, `__pycache__`, `.pytest_cache`, temporary build artifacts.
-- [ ] Update versioning for fork beta without erasing upstream version/attribution.
-- [ ] Review generated Git diff against exact rc7.
+- [ ] Run Python compileall and Ruff/static checks available in environment.
+- [ ] Perform second-pass security review on fully materialized code.
+- [ ] Check for direct `extractall`, unrestricted decompression, unsafe joins, predictable temp files, unverified executable downloads, weak redirect/provenance handling.
+- [ ] Clean `.pyc`, `__pycache__`, `.pytest_cache`, temporary build/materialization artifacts.
+- [ ] Update fork beta version identification without erasing upstream version/attribution.
+- [ ] Review complete Git diff against exact rc7.
 - [ ] Run Windows PowerShell/PyInstaller build.
 - [ ] Run Dota smoke tests: startup, lobby, demo/match load, patch rollback, profiles, D2PFX, Dark Terrain + shader, Remove Foilage.
 - [ ] Fast-forward `beta` only after hardening validation.
-- [ ] Create PR only after final diff/runtime review.
+- [ ] Create publication PR only after final diff/runtime review.

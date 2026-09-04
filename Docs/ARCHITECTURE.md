@@ -1,8 +1,9 @@
 # Architecture
 - Baseline: exact upstream rc7 commit `d4b4520c945a9e1f8f5facc52a76ac5903babe90`; no current-main rebase during hardening.
-- Branches: `main` upstream-tracking; `v21.4-hardening` active development; `beta` user-facing beta promotion target.
+- Branches: `main` upstream-tracking; `v21.4-hardening` active development; `beta` user-facing promotion target.
 - Fork source: materialized files + ordinary commits; clone should run without source-rewrite bootstrap.
-- Build transformer: migration/reproducibility tooling only; not canonical source architecture.
+- Build transformer and `.materialize/` workflow: temporary migration/reproducibility tooling only; not canonical source architecture.
+- Never trigger incomplete `.materialize/` input; reconstructed handoff ZIP must match pinned SHA-256 before use.
 - Security primitives: shared `Minify/core/security.py` for path confinement, archive limits, bounded decompression, hashing, atomic writes.
 - Mod discovery: bounded recursive scanner; no symlink traversal; nested IDs stable.
 - Collections: organizational parents; selectable child mods; markerless heuristic retained.
@@ -13,5 +14,5 @@
 - Compatibility: virtual-path collision index drives Dark Terrain yield decisions; no shader-name allowlist required.
 - Backups: managed-output allowlist; confined roots; preflight before mutation; rollback on commit failure.
 - Profiles: exact format/version; strict JSON booleans; bounded file/profile/state/string counts.
-- Downloads: pinned versions + pinned SHA-256 + safe extraction before executable use.
+- Downloads: pinned versions + pinned SHA-256 + safe extraction before executable use; unsupported release architectures are PATH-only.
 - Steam: manual rc7 `prelaunch` retained; automatic launch-option injection disabled; stale Minify wrappers cleaned narrowly.

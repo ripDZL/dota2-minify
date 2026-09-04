@@ -1,15 +1,15 @@
 # Session Summary
-- Fork target: `ripDZL/dota2-minify`.
-- Exact baseline: `Minify-v1.14rc7` / `d4b4520c945a9e1f8f5facc52a76ac5903babe90`.
-- Branches: `main` upstream-tracking; `v21.4-hardening` active; `beta` promotion target.
-- `main` and `beta` not modified during current materialization slice.
-- Read all `Docs/*.md` before resuming.
-- Materialized on `v21.4-hardening`: `core/security.py`, `core/backup_manager.py`, `core/prelaunch_policy.py`, `core/mod_compat.py`.
-- Materialized VPK confinement in `patch/vpk_utils.py`.
-- Materialized SHA-256 verification in `conditions.py`.
-- Materialized bounded archive extraction in `core/fs.py`.
-- Partial diff against exact rc7 reviewed: only Docs + intended hardening files.
-- New second-pass finding: rc7 rare Linux ppc64/i686 ripgrep URLs are absent from ripgrep 15.2.0 release; Source2Viewer selector can fall through to x64 on non-x64 64-bit machines.
-- Next: fail unsupported dependency architectures clearly or use verified native assets; then materialize `mods_shared`, `mod_library`, UI/features/D2PFX/glue edits and regression tests.
-- Local handoff checkpoint before repo materialization remains 133/133 tests + 9 subtests; Python compileall pass.
-- Do not fast-forward `beta`, merge, tag, or release until full materialization + tests + Windows/Dota smoke validation pass.
+- Fork: `ripDZL/dota2-minify`; active branch `v21.4-hardening`.
+- Baseline: `Minify-v1.14rc7` / `d4b4520c945a9e1f8f5facc52a76ac5903babe90`.
+- Branch policy: `main` upstream-tracking; `beta` frozen promotion target; `v21.4-hardening` development.
+- Beta ref at handoff: `af83bbb051edced195d5f55ba49ff060a8c76f3c`.
+- Pre-handoff hardening head snapshot: `ac7562f852d5c1f8ca14630a92f26018c328642a`; 31 commits ahead of exact rc7.
+- Local validated hardening-kit checkpoint: 133/133 tests + 9 subtests; Python compileall pass.
+- Materialized security, backup, prelaunch, compatibility, VPK/archive/download hardening, dependency architecture gating, recursive scanner/Collections backend, nested scripts, D2PFX build-hook/backend changes, CSS fix, and `mod_library.py` transfer.
+- `mod_library.py` requires reconciliation: remote blob `a5204ea1d5e0309d3c6a764ad9b974e7bdeb8268`; validated local blob `e95b2f6f59b3b96f7c19ed70ee514df02e500926`.
+- Temporary materialization bootstrap is incomplete; workflow expects ZIP SHA-256 `97b2810c1e0ed2a51a407dd895d93e0f53e95bb82e65824cd41536da799fdece`.
+- `.materialize/` snapshot has chunks `000`-`004`, `006`-`010`; missing `005`, `011`-`022`; `.materialize/READY` absent.
+- Do not trigger one-time workflow until exact payload is complete and verified.
+- Remaining: UI/theme/Settings/glue/profile/D2PFX UI/Remove Foilage blacklist/test/version materialization, full tests/static/security review, diff cleanup, Windows build, Dota smoke tests.
+- Do not fast-forward `beta`, merge, tag, release, or publish PR until all gates pass.
+- New chat must start with `Docs/HANDOFF_PROMPT.md` and all other `Docs/*.md` files.

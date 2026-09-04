@@ -1,32 +1,26 @@
 # Progress
 - [x] v21.3.1 Safe Foliage Fix validated: 116/116 inherited tests.
 - [x] Unsafe Remove Foilage full-map override removed.
-- [x] Pre-publication code review completed.
-- [x] Critical/High publication blockers identified.
-- [x] Local v21.4 hardening workspace created.
-- [x] Shared `core/security.py` hardening module added.
-- [x] VPK destination confinement implemented.
-- [x] ZIP/TAR path/count/size/ratio/symlink limits implemented.
-- [x] D2PFX DEFLATE output bounded before untrusted expansion.
-- [x] Source2Viewer/ripgrep release SHA-256 verification implemented.
-- [x] Backup restore confinement/preflight/transaction hardening implemented.
-- [x] Profile import strict validation/limits implemented locally.
-- [x] Dark Terrain deferred-post-process yielding made collision-driven.
-- [x] Hostile-input regression coverage added locally.
-- [x] Current local hardening suite: 133/133 passing + 9 subtests.
-- [x] Python compileall passes for transformer/overlay/tests.
-- [x] GitHub branch-write access verified.
-- [x] `v21.4-hardening` created from exact rc7.
-- [x] `beta` created as separate fork beta line.
+- [x] Pre-publication code review completed; Critical/High blockers identified.
+- [x] Local v21.4 hardening kit validated: 133/133 tests + 9 subtests; compileall pass.
+- [x] `v21.4-hardening` created from exact rc7; `beta` created separately; `main` untouched.
 - [x] Materialized `core/security.py`, `core/backup_manager.py`, `core/prelaunch_policy.py`, `core/mod_compat.py`.
-- [x] Materialized VPK path confinement in `patch/vpk_utils.py`.
-- [x] Materialized dependency digest verification in `conditions.py`.
-- [x] Materialized bounded archive extraction in `core/fs.py`.
-- [x] Partial branch diff reviewed: only Docs + intended hardening files.
-- [ ] Resolve rare-architecture dependency selection: rc7 nonexistent Linux ppc64/i686 ripgrep URLs and non-x64 Source2Viewer fallback.
-- [ ] Materialize `mods_shared.py`, `mod_library.py`, UI overlays, profiles/D2PFX/glue edits, mod fixes.
-- [ ] Materialize fork regression tests against normal source paths.
-- [ ] Perform final second-pass code/security review after full materialization.
-- [ ] Review complete Git diff before promoting to `beta`.
-- [ ] Windows build/runtime validation complete.
-- [ ] Dota smoke test complete.
+- [x] Materialized VPK destination confinement in `patch/vpk_utils.py`.
+- [x] Materialized bounded ZIP/TAR extraction in `core/fs.py`.
+- [x] Materialized dependency SHA-256 verification and supported-architecture gating.
+- [x] Unsupported/nonexistent dependency release assets changed to PATH-only behavior.
+- [x] Materialized `core/mods_shared.py` recursive/nested scanner, stable IDs, VPK metadata, Collections backend.
+- [x] Materialized Steam generated-prelaunch cleanup/no-auto-injection behavior.
+- [x] Materialized nested lifecycle/utility script resolution in `helper.py`.
+- [x] Materialized D2PFX nested build-hook path handling and Optimization category exposure.
+- [x] Materialized Remove Main Menu Background two-rule CSS fix.
+- [x] Transferred `core/mod_library.py`; remote file compiles and contains hardened paths inspected so far.
+- [x] Branch diff reviewed at multiple checkpoints; no intentional changes to `main` or `beta`.
+- [x] Temporary one-time materialization workflow staged; expected handoff ZIP SHA-256 is `97b2810c1e0ed2a51a407dd895d93e0f53e95bb82e65824cd41536da799fdece`.
+- [ ] `core/mod_library.py` transfer not yet accepted: remote Git blob `a5204ea1d5e0309d3c6a764ad9b974e7bdeb8268` differs from validated local blob `e95b2f6f59b3b96f7c19ed70ee514df02e500926`.
+- [ ] Temporary `.materialize/` payload incomplete at snapshot: present `000`-`004`, `006`-`010`; missing `005`, `011`-`022`; no `READY`.
+- [ ] Remaining UI/profile/patch/glue/mod-fix/test materialization incomplete.
+- [ ] Full materialized-tree regression/static/security pass incomplete.
+- [ ] Complete Git diff review before beta promotion incomplete.
+- [ ] Windows build/runtime validation incomplete.
+- [ ] Dota smoke test incomplete.
