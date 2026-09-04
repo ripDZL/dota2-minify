@@ -13,27 +13,23 @@ from typing import Optional
 import dearpygui.dearpygui as dpg
 import requests
 
-from core import base, log, output, utils
+from core import base, log, output, security, utils
 
 
 def open_thing(path: str, args: str = "") -> None:
     "Opens files or directories in their regsitered applications"
 
     try:
-        # If args are provided and target is executable, prefer launching directly
         if args:
             if base.is_win:
                 os.startfile(path, arguments=args)
                 return
-            # POSIX: launch executable directly when possible
             if os.access(path, os.X_OK) and os.path.isfile(path):
                 cmd = [path] + shlex.split(args)
                 subprocess.Popen(cmd, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
                 return
-            # Non-executables with args: fall back to opening container directory
             path = os.path.dirname(path) or "."
 
-        # No args path open
         if os.path.isdir(path):
             if base.is_win:
                 os.startfile(path)
@@ -45,7 +41,6 @@ def open_thing(path: str, args: str = "") -> None:
             if base.is_win:
                 os.startfile(path)
             elif base.is_mac:
-                # Reveal the file in Finder to avoid missing-app association errors
                 subprocess.run(["open", "-R", path])
             else:
                 subprocess.run(["xdg-open", path])
@@ -152,7 +147,7 @@ def restore_directory(source: str, backup: str) -> None:
 def download_file(url: str, target_path: str, progress_tag: Optional[str] = None) -> bool:
     """
     Downloads a file from url to target_path using requests.
-    Updates the UI progress_tag with \"Downloading: X.XX/Y.YY MB\" if provided.
+    Updates the UI progress_tag with "Downloading: X.XX/Y.YY MB" if provided.
     """
 
     try:
@@ -174,9 +169,6 @@ def download_file(url: str, target_path: str, progress_tag: Optional[str] = None
                             downloaded_mb = downloaded / (1024 * 1024)
                             total_size_mb = total_size / (1024 * 1024)
                             if total_size > 0:
-                                # TODO: localize texts, use single string for downloads
-                                #       \"Downloading {}\".format(item)
-                                #       \"Downloading {}\".format(progress)
                                 dpg.set_value(
                                     progress_tag,
                                     f"Downloading: {downloaded_mb:.2f}/{total_size_mb:.2f} MB",
@@ -200,45 +192,9 @@ def download_file(url: str, target_path: str, progress_tag: Optional[str] = None
 
 
 def extract_archive(archive_path: str, extract_dir: str = ".", target_file: Optional[str] = None) -> bool:
-    """
-    Extracts an archive (zip or tar.gz).
-    If target_file is provided, extracts only that file (or directory structure leading to it).
-    """
-
+    """Extract ZIP/tar.gz archives using shared path/size/symlink protections."""
     try:
-        if archive_path.endswith(".zip"):
-            with zipfile.ZipFile(archive_path) as zip_ref:
-                if target_file:
-                    zip_ref.extract(target_file, path=extract_dir)
-                else:
-                    zip_ref.extractall(extract_dir)
-        elif archive_path.endswith((".tar.gz", ".tgz")):
-            with tarfile.open(archive_path, "r:gz") as tar:
-                extract_dir_abs = os.path.abspath(extract_dir)
-                safe_members = []
-                for member in tar.getmembers():
-                    member_path = os.path.abspath(os.path.join(extract_dir_abs, member.name))
-                    if os.path.commonpath([extract_dir_abs, member_path]) == extract_dir_abs:
-                        safe_members.append(member)
-
-                if target_file:
-                    try:
-                        member = tar.getmember(target_file)
-                        if member in safe_members:
-                            if hasattr(tarfile, "data_filter"):
-                                tar.extract(member, path=extract_dir, filter="data")
-                            else:
-                                tar.extract(member, path=extract_dir)
-                    except KeyError:
-                        pass
-                else:
-                    if hasattr(tarfile, "data_filter"):
-                        tar.extractall(path=extract_dir, members=safe_members, filter="data")
-                    else:
-                        tar.extractall(path=extract_dir, members=safe_members)
-        else:
-            output.add_text(f"Unsupported archive format: {archive_path}", msg_type="error")
-            return False
+        security.safe_extract_archive(archive_path, extract_dir, target_file=target_file)
         return True
     except Exception as e:
         output.add_text(f"Extraction failed: {e}", msg_type="error")
@@ -250,7 +206,6 @@ def get_file_type(path: str) -> Optional[str]:
     Identifies the file type. It first checks magic bytes (e.g., '.png', '.jpg', '.webm'),
     and falls back to extracting the extension from the first dot in the filename if no known magic bytes are found.
     """
-    # can be extended by just handing it to a module
     with utils.try_pass():
         if not os.path.exists(path):
             return None
@@ -258,31 +213,24 @@ def get_file_type(path: str) -> Optional[str]:
         with open(path, "rb") as f:
             header = f.read(16)
 
-            # PNG: 89 50 4E 47 0D 0A 1A 0A
             if header.startswith(b"\x89PNG\r\n\x1a\n"):
                 return ".png"
 
-            # JPEG: FF D8 FF (Start of Image + specific marker)
             if header.startswith(b"\xff\xd8\xff"):
                 return ".jpg"
 
-            # WEBP: RIFF....WEBP
             if header.startswith(b"RIFF") and header[8:12] == b"WEBP":
                 return ".webp"
 
-            # WEBM/MKV: 1A 45 DF A3 (EBML)
             if header.startswith(b"\x1a\x45\xdf\xa3"):
                 return ".webm"
 
-            # MP4: ....ftyp
             if header[4:8] == b"ftyp":
                 return ".mp4"
 
-            # GIF
             if header.startswith(b"GIF87a") or header.startswith(b"GIF89a"):
                 return ".gif"
 
-    # Fallback: return extension from the first dot or the filename itself if no dot exists
     basename = os.path.basename(path)
     dot_index = basename.find(".")
     if dot_index != -1:
