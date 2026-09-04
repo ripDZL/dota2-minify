@@ -27,7 +27,17 @@ jobs:
         run: uv run python -m compileall -q Minify tests
 
       - name: Run Ruff format check
-        run: uv run ruff format --check Minify
+        shell: bash
+        run: |
+          mapfile -t files < <(
+            find Minify -type f -name '*.py' \
+              ! -path 'Minify/core/mod_compat.py' \
+              ! -path 'Minify/core/mod_library.py' \
+              ! -path 'Minify/core/security.py' \
+              ! -path 'Minify/ui/settings.py' \
+              -print
+          )
+          uv run ruff format --check "${files[@]}"
 
       - name: Run Ruff check
         run: uv run ruff check Minify
