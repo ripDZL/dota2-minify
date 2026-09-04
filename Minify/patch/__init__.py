@@ -4,6 +4,7 @@ import os
 import shutil
 import subprocess
 import time
+import traceback
 import webbrowser
 from concurrent.futures import ThreadPoolExecutor
 
@@ -16,7 +17,21 @@ import vpk
 
 import conditions
 import helper
-from core import base, config, constants, fs, log, mods_shared, output, registry, steam, utils
+from core import (
+    backup_manager,
+    base,
+    config,
+    constants,
+    fs,
+    log,
+    mod_compat,
+    mod_library,
+    mods_shared,
+    output,
+    registry,
+    steam,
+    utils,
+)
 
 from patch import blacklist, manifest_utils, replacer, styling, unins, vpk_utils, xml_utils
 
@@ -39,10 +54,40 @@ def patcher(mod=None, pakname=None):
                 output.add_text("&failure_terminal", msg_type="error")
                 return
 
+        restore_point = None
+        patch_completed = False
+
         try:
             mod_list = constants.mods_with_order if mod is None else [mod]
 
             mods_shared.enforce_locale_mod_states()
+            selected_for_backup = [item for item in mod_list if mod is not None or mods_shared.get_state(item)]
+            for compatibility_rule in mod_compat.active_rules(selected_for_backup):
+                output.add_text(
+                    "Compatibility active: {} — {}".format(compatibility_rule["title"], compatibility_rule["summary"]),
+                    msg_type="warning",
+                )
+            if mod is None:
+                restore_point = backup_manager.create_restore_point(
+                    helper.output_path, selected_for_backup, reason="pre-patch"
+                )
+                try:
+                    conflicts = mod_library.analyze_conflicts(selected_for_backup)
+                    report_path = mod_library.write_collision_report(selected_for_backup, conflicts)
+                    output.add_text("Compatibility report: {}".format(report_path))
+                    if conflicts:
+                        counts = mod_library.conflict_counts(conflicts)
+                        output.add_text(
+                            f"Preflight: {counts['pairs']} indexed conflict pair(s) "
+                            f"({counts.get('critical', 0)} critical).",
+                            msg_type="warning",
+                        )
+                except Exception:
+                    log.write_warning("VPK conflict preflight could not be completed.")
+                if not base.HEADLESS:
+                    from ui import checkboxes as _checkboxes
+
+                    _checkboxes.set_status("Restore point created. Patching...", "working")
 
             for item in os.listdir(base.logs_dir):
                 fs.remove_path(os.path.join(base.logs_dir, item))
@@ -92,19 +137,22 @@ def patcher(mod=None, pakname=None):
                     for dependant, dependencies in dependency_dict.items():
                         if mods_shared.get_state(dependant):
                             for dependency in dependencies:
+                                dependency_id = mods_shared.resolve_mod_reference(dependency, relative_to=dependant)
                                 try:
                                     if not conditions.workshop_installed:
                                         workshop = False
                                         for method_path in conditions.workshop_required_methods:
-                                            if os.path.exists(os.path.join(base.mods_dir, dependency, method_path)):
+                                            if os.path.exists(
+                                                os.path.join(mods_shared.get_mod_path(dependency_id), method_path)
+                                            ):
                                                 workshop = True
                                                 break
                                         if workshop:
-                                            mods_shared.set_state(dependency, False)
+                                            mods_shared.set_state(dependency_id, False)
                                         else:
-                                            mods_shared.set_state(dependency, True)
+                                            mods_shared.set_state(dependency_id, True)
                                     else:
-                                        mods_shared.set_state(dependency, True)
+                                        mods_shared.set_state(dependency_id, True)
                                 except Exception:
                                     log.write_warning(
                                         f"Mod dependency {dependency} for {mod} couldn't be resolved, might be that the mod doesn't exist."
@@ -121,8 +169,11 @@ def patcher(mod=None, pakname=None):
                         if conflict_mod in mod_list and mods_shared.get_state(conflict_mod):
                             active_conflicts = []
                             for conflicting_mod in conflicts:
-                                if conflicting_mod in mod_list and mods_shared.get_state(conflicting_mod):
-                                    active_conflicts.append(conflicting_mod)
+                                conflicting_id = mods_shared.resolve_mod_reference(
+                                    conflicting_mod, relative_to=conflict_mod
+                                )
+                                if conflicting_id in mod_list and mods_shared.get_state(conflicting_id):
+                                    active_conflicts.append(conflicting_id)
                             if active_conflicts:
                                 conflicts_found[conflict_mod] = active_conflicts
 
@@ -139,7 +190,7 @@ def patcher(mod=None, pakname=None):
 
             game_contents_file_init = False
             for folder in mod_list:
-                mod_path = os.path.join(base.mods_dir, folder)
+                mod_path = mods_shared.get_mod_path(folder)
                 mod_cfg = manifest_utils.get_mod(mod_path)
 
                 if mod is None:
@@ -171,11 +222,14 @@ def patcher(mod=None, pakname=None):
                                     dirs_exist_ok=True,
                                 )
                         if os.path.exists(files_dir):
-                            shutil.copytree(
-                                files_dir,
-                                constants.minify_dota_compile_output_path,
-                                dirs_exist_ok=True,
+                            excluded_compat_paths = mod_compat.copy_standard_files(
+                                folder, files_dir, constants.minify_dota_compile_output_path, selected_for_backup
                             )
+                            for excluded_path in excluded_compat_paths:
+                                output.add_text(
+                                    f"Compatibility: excluded {excluded_path} from {mods_shared.get_mod_label(folder)}.",
+                                    msg_type="warning",
+                                )
 
                         if conditions.workshop_installed and xml_file and os.path.exists(xml_file):
                             with utils.open_utf8(xml_file) as file:
@@ -315,10 +369,15 @@ def patcher(mod=None, pakname=None):
                 output.add_text("&merging_vpks")
 
                 for mod_name in vpk_mods_to_merge:
-                    mod_path = os.path.join(base.mods_dir, mod_name)
+                    mod_path = mods_shared.get_mod_path(mod_name)
                     try:
                         mod_vpk = vpk.open(mod_path)
-                        vpk_utils.dump(mod_vpk, base.merge_dir, check_exists=True)
+                        vpk_utils.dump(
+                            mod_vpk,
+                            base.merge_dir,
+                            check_exists=True,
+                            exclude_paths=mod_compat.exclusions_for_mod(mod_name, selected_for_backup),
+                        )
                         output.add_text("&merged_mod", mod_name)
                     except Exception:
                         log.write_warning("&failed_merge_mod", mod_name)
@@ -347,6 +406,13 @@ def patcher(mod=None, pakname=None):
                 if hasattr(browser_config, "on_build"):
                     browser_config.on_build(mod_list, mod)
 
+            compatibility_validation = mod_compat.validate_generated_output(helper.output_path, selected_for_backup)
+            if compatibility_validation.get("active"):
+                output.add_text(
+                    "Compatibility validation passed: Dark Terrain yields deferred post-process safely.",
+                    msg_type="success",
+                )
+
             # ---------------------------------- STEP 7 ---------------------------------- #
             # -------------------------- Clean paths and inform -------------------------- #
             # ---------------------------------------------------------------------------- #
@@ -359,49 +425,59 @@ def patcher(mod=None, pakname=None):
                 base.merge_dir,
             )
 
-            # handle language option automatically
-            if config.get("fix_options", True):
+            # Handle language options only when requested, but always clean up
+            # Minify's own stale rc7 prelaunch injection if an earlier fork wrote it.
+            fix_language_options = config.get("fix_options", True)
+            if fix_language_options:
                 steam.fix_boot_language()
-                launch_needs_fix = bool(steam.fix_launch_options(check_only=True))
-                prelaunch_needs_fix = bool(steam.add_prelaunch_to_launch_options(check_only=True))
 
-                if launch_needs_fix or prelaunch_needs_fix:
+            launch_needs_fix = bool(steam.fix_launch_options(check_only=True)) if fix_language_options else False
+            prelaunch_cleanup_needed = bool(steam.remove_minify_prelaunch_from_launch_options(check_only=True))
+
+            if launch_needs_fix or prelaunch_cleanup_needed:
+                if base.is_win:
+                    fs.open_thing(steam.steam_executable_path, "-exitsteam")
+                else:
+                    subprocess.Popen(
+                        ["bash", "-c", "steam -exitsteam"],
+                        stdout=subprocess.DEVNULL,
+                        stderr=subprocess.DEVNULL,
+                    )
+
+                steam_close_retries = 0
+                while any(
+                    p.info.get("name") == os.path.basename(steam.steam_executable_path)
+                    for p in psutil.process_iter(attrs=["name"])
+                ):
+                    if steam_close_retries >= 3:
+                        output.add_text("&failed_steam_close", 3, msg_type="error")
+                        break
+                    output.add_text("&waiting_steam_to_close")
+                    time.sleep(2)
+                    steam_close_retries += 1
+                time.sleep(1)
+
+                prelaunch_removed = steam.remove_minify_prelaunch_from_launch_options()
+                launch_fixed = bool(steam.fix_launch_options()) if fix_language_options else False
+
+                if launch_fixed or prelaunch_removed or steam_close_retries < 5:
                     if base.is_win:
-                        fs.open_thing(steam.steam_executable_path, "-exitsteam")
+                        fs.open_thing(steam.steam_executable_path)
                     else:
                         subprocess.Popen(
-                            ["bash", "-c", "steam -exitsteam"],
+                            ["bash", "-c", "steam"],
                             stdout=subprocess.DEVNULL,
                             stderr=subprocess.DEVNULL,
                         )
 
-                    steam_close_retries = 0
-                    while any(
-                        p.info.get("name") == os.path.basename(steam.steam_executable_path)
-                        for p in psutil.process_iter(attrs=["name"])
-                    ):
-                        if steam_close_retries >= 3:
-                            output.add_text("&failed_steam_close", 3, msg_type="error")
-                            break
-                        output.add_text("&waiting_steam_to_close")
-                        time.sleep(2)
-                        steam_close_retries += 1
-                    time.sleep(1)
-
-                    launch_fixed = bool(steam.fix_launch_options())
-                    prelaunch_added = steam.add_prelaunch_to_launch_options()
-
-                    if launch_fixed or prelaunch_added or steam_close_retries < 5:
-                        if base.is_win:
-                            fs.open_thing(steam.steam_executable_path)
-                        else:
-                            subprocess.Popen(
-                                ["bash", "-c", "steam"],
-                                stdout=subprocess.DEVNULL,
-                                stderr=subprocess.DEVNULL,
-                            )
-
             helper.bulk_exec_script("after_patch", False)
+            patch_completed = True
+            if restore_point:
+                backup_manager.mark_success(restore_point)
+            if not base.HEADLESS:
+                from ui import checkboxes as _checkboxes
+
+                _checkboxes.set_status("Patch completed successfully.", "success")
 
             output.add_separator()
             output.add_text("&success_terminal", msg_type="success")
@@ -417,14 +493,50 @@ def patcher(mod=None, pakname=None):
                 gui.close()
 
         # chimes are from pixabay.com/sound-effects/chime-74910/
-        except (PermissionError, playsound3.PlaysoundException):
+        except playsound3.PlaysoundException:
             log.write_warning()
 
-        except Exception:
+        except PermissionError as error:
+            error_details = traceback.format_exc()
             log.write_crashlog()
+            rollback_message = ""
+            if restore_point and not patch_completed:
+                try:
+                    backup_manager.restore_restore_point(restore_point, restore_selection=False)
+                    backup_manager.mark_rolled_back(restore_point, str(error))
+                    rollback_message = " Previous Minify output was restored automatically."
+                except Exception:
+                    rollback_message = " Automatic rollback also failed; check logs."
+            if not base.HEADLESS:
+                from ui import checkboxes as _checkboxes
+
+                _checkboxes.report_patch_error(error_details + rollback_message)
+            output.add_separator()
+            output.add_text("&failure_terminal", msg_type="error")
+            if rollback_message:
+                output.add_text(rollback_message.strip(), msg_type="warning")
+            output.add_text("&check_logs_terminal", msg_type="warning")
+
+        except Exception as error:
+            error_details = traceback.format_exc()
+            log.write_crashlog()
+            rollback_message = ""
+            if restore_point and not patch_completed:
+                try:
+                    backup_manager.restore_restore_point(restore_point, restore_selection=False)
+                    backup_manager.mark_rolled_back(restore_point, str(error))
+                    rollback_message = " Previous Minify output was restored automatically."
+                except Exception:
+                    rollback_message = " Automatic rollback also failed; check logs."
+            if not base.HEADLESS:
+                from ui import checkboxes as _checkboxes
+
+                _checkboxes.report_patch_error(error_details + rollback_message)
 
             output.add_separator()
             output.add_text("&failure_terminal", msg_type="error")
+            if rollback_message:
+                output.add_text(rollback_message.strip(), msg_type="warning")
             output.add_text("&check_logs_terminal", msg_type="warning")
             playsound3.playsound(os.path.join(base.sounds_dir, "fail.wav"), block=False)
 
