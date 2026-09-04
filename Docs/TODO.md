@@ -2,9 +2,13 @@
 - [x] Create `v21.4-hardening` from exact rc7 commit `d4b4520c945a9e1f8f5facc52a76ac5903babe90`.
 - [x] Create public `beta` branch separate from `main`.
 - [x] Adopt user-supplied v21.3.1 Safe Foliage Fix archive as canonical feature reference; SHA-256 `37755c4ee92e1847eef1a5a9c89aef6ba488f33accd0cb102c62a7db8780b5f8`; bundled 116/116 regression tests pass.
-- [ ] Compare/materialize the complete v21.3.1 patch/build output against current hardening and recover every missing feature/fix without regressing hardened security/backend changes.
-- [ ] Adapt the bundled 116-test v21.3.1 regression suite from archive-relative paths to canonical repository paths.
-- [x] Start materialization with security/backup/prelaunch/compatibility/VPK/archive/download core.
+- [x] Inventory all v21.3.1 transformer targets against current hardening; `cli.py`/`pyproject.toml` are guard-only and every actual write target is now materialized relative to exact rc7.
+- [x] Recover missing `Minify/patch/__init__.py` integration without replacing hardened core backends.
+- [x] Preserve nested dependency/conflict resolution, compatibility-filtered standard/VPK paths, restore-point creation, conflict preflight/reporting, output validation, rollback, and no-auto-prelaunch cleanup in the patch pipeline.
+- [x] Add permanent patch-pipeline regressions; current GitHub suite is 139/139 on tested code `24703387f959c0ed2634fcc2454a46c0aad3f224`.
+- [ ] Adapt/re-express remaining useful tests from the bundled 116-test v21.3.1 suite against canonical repository paths and materialized behavior.
+- [ ] Complete semantic feature-by-feature comparison of v21.3.1 overlay core files against hardened replacements; never wholesale overwrite newer security/backend changes.
+- [x] Materialize security/backup/prelaunch/compatibility/VPK/archive/download core.
 - [x] Resolve unsupported rare-architecture dependency selection; unsupported builds are PATH-only.
 - [x] Materialize `mods_shared.py` recursive/nested scanning + Collections backend.
 - [x] Materialize Steam no-auto-prelaunch cleanup policy.
@@ -13,19 +17,20 @@
 - [x] Materialize Remove Main Menu Background two-rule CSS fix.
 - [x] Restore Remove Foilage oak-leaf blacklist entries; keep mod blacklist-only and map-free.
 - [x] Restore/materialize beveled Mod Library/Settings/window/gui/__main__/D2PFX/profile UI surface.
-- [ ] Reconcile `core/mod_library.py` remote blob drift vs previously validated v21.4 local source before accepting transfer.
+- [ ] Reconcile `core/mod_library.py` remote blob drift vs previously validated v21.4 local source before accepting exact-source closure.
 - [ ] Do not substitute the v21.3.1 overlay `mod_library.py` for that missing v21.4 source; use it only as a feature reference.
 - [ ] Complete or remove temporary `.materialize/` bootstrap; never create `READY` while chunks are incomplete.
 - [ ] Keep transformer/bootstrap optional migration tooling; canonical fork architecture must remain normal source files.
 - [x] Add hardening-only CI + unsigned Windows portable artifact workflow; no tag/release/beta promotion.
-- [x] Current GitHub materialized-tree compileall + Ruff format gate + full Ruff lint PASS on tested code `1c49475c59750d3669256885399c47efe06459db`.
-- [ ] Run full upstream + all recovered fork regression tests on final materialized tree; current GitHub suite is 131/131.
+- [x] Current materialized-tree compileall + Ruff format gate + full Ruff lint PASS on tested code `24703387f959c0ed2634fcc2454a46c0aad3f224`.
+- [x] Current GitHub suite PASS: 139/139 in CI run `33930820670`.
+- [ ] Run all additionally recovered fork regressions after adaptation; archive 116/116, GitHub 139/139, and historical 133/133 + 9 subtests are distinct scopes.
 - [ ] Perform second-pass security review on fully materialized code.
 - [ ] Check for direct `extractall`, unrestricted decompression, unsafe joins, predictable temp files, unverified executable downloads, weak redirect/provenance handling.
 - [ ] Clean `.pyc`, `__pycache__`, `.pytest_cache`, temporary build/materialization artifacts before publication.
-- [ ] Review complete Git diff against exact rc7.
-- [x] Current Windows PyInstaller + portable ZIP build passed on tested code `1c49475c59750d3669256885399c47efe06459db`.
-- [ ] Build a new Windows test ZIP after v21.3.1 feature reconciliation is complete.
+- [ ] Review complete Git diff against exact rc7 for security and maintainability; transformer target-presence review is complete.
+- [x] Windows PyInstaller + portable ZIP passed on tested code `24703387f959c0ed2634fcc2454a46c0aad3f224`.
+- [x] Validate current Windows test artifact structure/hash and Safe Foliage invariants.
 - [ ] User/Dota smoke tests: startup/layout, Mod Library, Settings, Collections/profiles, D2PFX, lobby, demo/match load, patch rollback, Dark Terrain + shader, Remove Foilage.
 - [ ] Fast-forward `beta` only after hardening validation and user smoke tests.
 - [ ] Create publication PR only after final diff/runtime review.

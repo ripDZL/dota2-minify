@@ -1,17 +1,20 @@
 # Session Summary
 - Fork: `ripDZL/dota2-minify`; active branch `v21.4-hardening`; exact baseline `Minify-v1.14rc7` / `d4b4520c945a9e1f8f5facc52a76ac5903babe90`.
-- Keep `main` untouched and `beta` frozen; beta ref remains `af83bbb051edced195d5f55ba49ff060a8c76f3c`.
-- Current tested code commit: `1c49475c59750d3669256885399c47efe06459db`; CI run `33928368807` passed compileall, Ruff format/lint, 131/131 pytest, Windows PyInstaller/runtime copy/ZIP/upload.
-- Current Windows test ZIP: `Minify-v21.4-hardening-1c49475c59750d3669256885399c47efe06459db-windows.zip`; SHA-256 `3b86f34536ed1e0e0d3644bca64cdca51db33c03fb15311b69fb3fc744ce5aa3`.
-- Canonical user feature-reference is now uploaded `Minify-v1.14rc7-ModManager-v21.3.1-Safe-Foliage-Fix (1).zip`; SHA-256 `37755c4ee92e1847eef1a5a9c89aef6ba488f33accd0cb102c62a7db8780b5f8`.
-- Uploaded v21.3.1 archive contains source overlays, exact-rc7 build/patch script, and bundled regression suite; 116/116 tests pass locally.
-- v21.3.1 reference preserves beveled UI plus Collections, profiles/imports, D2PFX, Mod Library, backup/conflict UI, recursive/nested mods, no-auto-prelaunch behavior, Dark Terrain collision rules, Safe Foliage, and Main Menu Background CSS fixes.
-- Previous v21.2 UI ZIP is superseded as the target reference; its seven restored UI/shell files remain on hardening and are useful provenance only.
-- Do not wholesale copy v21.3.1 core overlay files over hardened backends. Its `core/mod_library.py` is 68521 bytes / Git blob `56df3e70990003cfd76f04cbacf7878bba6e65ec`, not the missing previously validated v21.4 hardening source.
-- Preserve Remove Foilage blacklist-only/map-free behavior and exact oak-leaf blacklist entries; never ship its manifest/map layer.
-- Historical local hardening-kit checkpoint remains 133/133 tests + 9 subtests; do not conflate it with current GitHub 131/131 suite or archive 116/116 suite.
-- Prior v21.4 `core/mod_library.py` reconciliation remains blocked: current blob `a5204ea1d5e0309d3c6a764ad9b974e7bdeb8268`; expected validated blob `e95b2f6f59b3b96f7c19ed70ee514df02e500926`, SHA-256 `552dbb7f98d5e0db2ad32c1b2888d8ad4ae8945fdf49ebc2853765e59c6c9e7a`, 69949 bytes.
+- Keep `main` untouched at `a26bc88a0d412e357965f29488b83a7f9093e11f`; keep `beta` frozen at `af83bbb051edced195d5f55ba49ff060a8c76f3c`.
+- Canonical user feature-reference: `Minify-v1.14rc7-ModManager-v21.3.1-Safe-Foliage-Fix (1).zip`; SHA-256 `37755c4ee92e1847eef1a5a9c89aef6ba488f33accd0cb102c62a7db8780b5f8`; bundled 116/116 tests pass locally.
+- Full v21.3.1 transformer target inventory compared against hardening. `cli.py` and `pyproject.toml` are exact-rc7 guard inputs only. Every actual write target is now materialized/modified relative exact rc7.
+- The sole actual transformer write target still left rc7 before this milestone was `Minify/patch/__init__.py`.
+- Patch-pipeline integration materialized at `b22133201e88d654859541f2c6be69cea8e3cb25`: nested path/reference resolution, compatibility-filtered loose/VPK copying, restore points, conflict preflight/report, compatibility output validation, rollback, no-auto-prelaunch cleanup.
+- Added 8 permanent regressions in `tests/test_v2131_patch_pipeline.py`; path/format-safe fixes completed at tested code commit `24703387f959c0ed2634fcc2454a46c0aad3f224`.
+- Hardening CI run `33930820670`: compileall PASS, Ruff format PASS, Ruff lint PASS, pytest 139/139 PASS in 0.79s, Windows PyInstaller/runtime copy/ZIP/upload PASS.
+- Current Windows test ZIP: `Minify-v21.4-hardening-24703387f959c0ed2634fcc2454a46c0aad3f224-windows.zip`; 53603285 bytes; SHA-256 `c0f207ca8d49a8227133dc1ec9e985727ed83b049634999f3648e843209b444a`.
+- GitHub artifact ID `9958480353`; outer ZIP 53063003 bytes; SHA-256 `8a18f097b31ef420ae23d92594b06b55bf6964314453feb4b03b5fa4a18b3fd8`.
+- Artifact verified: normal portable six-item layout; no `.materialize`, `READY`, `AI_REMOTE_TMP`; Remove Foilage remains blacklist-only/map-free with both oak-leaf blacklist entries.
+- Previous v21.2 UI ZIP is superseded as target reference; its restored UI files remain provenance.
+- Do not wholesale copy v21.3.1 core overlays over hardened backends. Its `core/mod_library.py` is 68521 bytes / blob `56df3e70990003cfd76f04cbacf7878bba6e65ec`, not the missing prior-v21.4 validated source.
+- Prior-v21.4 `core/mod_library.py` reconciliation remains blocked: current blob `a5204ea1d5e0309d3c6a764ad9b974e7bdeb8268`; expected validated blob `e95b2f6f59b3b96f7c19ed70ee514df02e500926`, SHA-256 `552dbb7f98d5e0db2ad32c1b2888d8ad4ae8945fdf49ebc2853765e59c6c9e7a`, 69949 bytes.
+- Archive 116/116, current GitHub 139/139, and historical local 133/133 + 9 subtests are distinct scopes; remaining useful archive regressions still need canonical adaptation.
 - Never fabricate missing bootstrap bytes or create `.materialize/READY` while payload is incomplete.
-- Next work: reconcile/materialize all v21.3.1 reference features/tests into hardening without security regressions, then rerun full CI/build and user/Dota smoke tests.
+- Remaining: adapt useful v21.3.1 regressions, semantic core-overlay reconciliation, hostile-input/security sweep, complete rc7 diff review, bootstrap cleanup, user/Dota smoke tests.
 - Do not fast-forward `beta`, merge, tag, release, or publish PR until remaining gates and user smoke tests pass.
 - New chat must start with `Docs/HANDOFF_PROMPT.md` and all other `Docs/*.md` files.
