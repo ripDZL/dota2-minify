@@ -20,6 +20,8 @@
 - [x] Added hardening-only CI: compileall + Ruff + pytest gate, then unsigned Windows portable ZIP artifact; no tag/release/beta promotion.
 - [x] First hardening CI run: dependency install + compileall passed; formatter exposed four known unformatted materialized files before lint/tests.
 - [x] Hardening format gate defers `mod_compat.py`, blocked `mod_library.py`, `security.py`, and `ui/settings.py`; compile, Ruff lint, pytest, and Windows build remain mandatory.
+- [x] Second hardening CI run: compileall, format gate, and Ruff lint passed; pytest reached 122/132 with 10 stale-policy failures.
+- [x] Adapted archive security tests to fail-closed atomic rejection and Steam launch-option tests to no-auto-injection + narrow generated-wrapper cleanup policy.
 - [x] Transferred `core/mod_library.py`; remote file compiles and contains hardened paths inspected so far.
 - [x] Branch diff reviewed at multiple checkpoints; no intentional changes to `main` or `beta`.
 - [x] Temporary one-time materialization workflow staged; expected handoff ZIP SHA-256 is `97b2810c1e0ed2a51a407dd895d93e0f53e95bb82e65824cd41536da799fdece`.

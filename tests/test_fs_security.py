@@ -2,42 +2,31 @@ import io
 import os
 import sys
 import tarfile
-from unittest.mock import MagicMock, patch
+from unittest.mock import patch
 
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "../Minify")))
-
-# Config and log mocks removed to avoid side effects on other tests
-
-# Mocks are now handled via patch in the tests
 
 from core.fs import extract_archive
 
 
-def test_extract_archive_prevents_zip_slip(tmp_path):
-    # Create a malicious tarball
+def test_extract_archive_rejects_traversal_archive_atomically(tmp_path):
     tar_path = tmp_path / "malicious.tar.gz"
     extract_dir = tmp_path / "extract_dir"
     extract_dir.mkdir()
 
-    malicious_content = b"malicious payload"
-
     with tarfile.open(tar_path, "w:gz") as tar:
-        # Safe file
         safe_info = tarfile.TarInfo(name="safe.txt")
         safe_info.size = len(b"safe")
         tar.addfile(safe_info, io.BytesIO(b"safe"))
 
-        # Malicious file attempting directory traversal
         malicious_info = tarfile.TarInfo(name="../malicious.txt")
-        malicious_info.size = len(malicious_content)
-        tar.addfile(malicious_info, io.BytesIO(malicious_content))
+        malicious_info.size = len(b"malicious payload")
+        tar.addfile(malicious_info, io.BytesIO(b"malicious payload"))
 
-    # Extract
     success = extract_archive(str(tar_path), extract_dir=str(extract_dir))
 
-    # Test assertions
-    assert success is True
-    assert (extract_dir / "safe.txt").exists()
+    assert success is False
+    assert not (extract_dir / "safe.txt").exists()
     assert not (tmp_path / "malicious.txt").exists()
 
 
@@ -56,7 +45,7 @@ def test_extract_archive_target_file_safe(tmp_path):
     assert (extract_dir / "safe.txt").exists()
 
 
-def test_extract_archive_target_file_malicious(tmp_path):
+def test_extract_archive_rejects_malicious_target_file(tmp_path):
     tar_path = tmp_path / "test.tar.gz"
     extract_dir = tmp_path / "extract_dir"
     extract_dir.mkdir()
@@ -66,11 +55,10 @@ def test_extract_archive_target_file_malicious(tmp_path):
         info.size = len(b"payload")
         tar.addfile(info, io.BytesIO(b"payload"))
 
-    # Should skip the malicious member even when requested directly
     success = extract_archive(str(tar_path), extract_dir=str(extract_dir), target_file="../malicious.txt")
-    assert success is True
+
+    assert success is False
     assert not (tmp_path / "malicious.txt").exists()
-    assert not (extract_dir / "../malicious.txt").exists()
 
 
 @patch("core.fs.output.add_text")
@@ -92,7 +80,6 @@ def test_extract_archive_nonexistent_file(mock_add_text, tmp_path):
 
     success = extract_archive(str(nonexistent), extract_dir=str(tmp_path))
     assert success is False
-    # Verifies that it logs the exception error
     args, kwargs = mock_add_text.call_args
     assert "Extraction failed" in args[0]
     assert kwargs["msg_type"] == "error"
