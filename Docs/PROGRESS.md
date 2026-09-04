@@ -1,30 +1,24 @@
 # Progress
-- [x] v21.3.1 Safe Foliage Fix validated: 116/116 inherited tests.
-- [x] Unsafe Remove Foilage full-map override removed.
-- [x] Pre-publication code review completed; Critical/High blockers identified.
+- [x] v21.3.1 Safe Foliage Fix validated: bundled 116/116 regression tests pass locally.
+- [x] Canonical user feature-reference archive adopted: `Minify-v1.14rc7-ModManager-v21.3.1-Safe-Foliage-Fix (1).zip`; SHA-256 `37755c4ee92e1847eef1a5a9c89aef6ba488f33accd0cb102c62a7db8780b5f8`.
+- [x] Archive verified to contain source overlays, exact-rc7 build/patch script, regression tests, Safe Foliage fix, beveled UI, Collections/profiles/D2PFX/Mod Library/backup/conflict/prelaunch feature guards.
+- [x] Unsafe Remove Foilage full-map override removed; oak-leaf blacklist entries retained; Main Menu Background CSS fix retained.
 - [x] Historical local v21.4 hardening kit validated: 133/133 tests + 9 subtests; compileall pass.
 - [x] `v21.4-hardening` created from exact rc7; `beta` created separately; `main` untouched.
 - [x] Materialized security/backup/prelaunch/compatibility/VPK/archive/download hardening, dependency architecture gating, recursive scanner/Collections backend, nested scripts, D2PFX backend/build-hook changes, and CSS fix.
-- [x] Restored Remove Foilage oak-leaf blacklist entries from exact historical blob; mod remains blacklist-only/map-free.
 - [x] Added hardening-only CI: compileall + Ruff + pytest gate, then unsigned Windows portable ZIP artifact; no tag/release/beta promotion.
-- [x] Adapted archive security tests to fail-closed atomic rejection and Steam tests to no-auto-injection + narrow generated-wrapper cleanup policy.
 - [x] Hardening test identity is `VERSION = "1.14rc7"`, `FORK_BUILD = "v21.4-hardening"`, title `Minify 1.14rc7 — v21.4-hardening`.
-- [x] Previous tested code `2b861d37ddb2c12fff877d120e55a7b5153859cf` passed 131/131 + Windows build, but its artifact was rejected by the user because their v21.2 UI surface was absent.
-- [x] User supplied `Minify-v1.14rc7-ModManager-v21.2-Beveled-UI.zip`; exact SHA-256 `92b75cd95434bbad0ef9eef0ddf2a67e0c6dc8b2730d08ff1bfeb3f7eed57b92`.
-- [x] Reconstructed/materialized the supplied v21.2 UI against exact rc7 with its original patcher at reference commit `1d138d418fd823693260c4a9fddf039436daaca5`; source hash gate + compileall passed.
-- [x] Restored seven UI/shell files onto hardening while preserving newer backend/core hardening: `__main__.py`, D2PFX UI, checkboxes/Mod Library, gui, Settings, theme, window.
-- [x] UI restore commit `ae0c9e574b2afc05e78e7710e66f3d898b10c44f`; subsequent Ruff formatting produced tested code commit `1c49475c59750d3669256885399c47efe06459db`.
-- [x] Hardening CI run `33928368807` on `1c49475c`: compileall PASS; Ruff format gate PASS (`66 files already formatted` with four known exclusions); Ruff lint PASS; pytest 131/131 PASS in 0.79s.
-- [x] Windows job on `1c49475c`: PyInstaller PASS; runtime data copy PASS; portable ZIP bundle PASS; artifact upload PASS.
-- [x] GitHub outer artifact ID `9957674454`; size 53060569; SHA-256 `fe90684bed967875164f09034d2fe831ded7ce1cec0cd1d1ca0314a5bf1e4b78`.
-- [x] Corrected UI inner test ZIP: `Minify-v21.4-hardening-1c49475c59750d3669256885399c47efe06459db-windows.zip`; 53600449 bytes; SHA-256 `3b86f34536ed1e0e0d3644bca64cdca51db33c03fb15311b69fb3fc744ce5aa3`.
-- [x] Corrected UI artifact layout verified: `LICENSE`, `Minify.exe`, `README.md`, `_internal`, `bin`, `mods`; no `.materialize`, `READY`, `AI_REMOTE_TMP`; no `Remove Foilage/manifest.json` or `Remove Foilage/maps/dota.vpk`; both oak-leaf blacklist entries present.
+- [x] Previous tested code `2b861d37ddb2c12fff877d120e55a7b5153859cf` passed 131/131 + Windows build but lacked the user feature/UI surface.
+- [x] Restored seven v21.2 UI/shell files onto hardening while preserving newer backend/core hardening; formatted/tested code commit is `1c49475c59750d3669256885399c47efe06459db`.
+- [x] Hardening CI run `33928368807` on `1c49475c`: compileall PASS; Ruff format gate PASS; Ruff lint PASS; pytest 131/131 PASS in 0.79s; Windows PyInstaller/runtime copy/ZIP/upload PASS.
+- [x] Current inner test ZIP: `Minify-v21.4-hardening-1c49475c59750d3669256885399c47efe06459db-windows.zip`; 53600449 bytes; SHA-256 `3b86f34536ed1e0e0d3644bca64cdca51db33c03fb15311b69fb3fc744ce5aa3`.
+- [x] Artifact layout verified; no `.materialize`, `READY`, `AI_REMOTE_TMP`; no forbidden Remove Foilage map/manifest payload; both oak-leaf blacklist entries present.
 - [x] Branch diff checkpoints preserved `main` and `beta`; no promotion made.
-- [x] `core/mod_library.py` transfer remains on branch and current backend APIs satisfy restored UI calls inspected so far.
-- [ ] `core/mod_library.py` transfer not accepted as reconciled: remote Git blob `a5204ea1d5e0309d3c6a764ad9b974e7bdeb8268` differs from validated local blob `e95b2f6f59b3b96f7c19ed70ee514df02e500926`.
-- [ ] Exact validated `mod_library.py` source/blob is unavailable; reconciliation remains blocked pending exact source or missing archive bytes.
+- [ ] Reconcile/materialize all v21.3.1 reference features and regression expectations not yet present in current hardening tree; do not wholesale overwrite hardened backends.
+- [ ] Adapt bundled v21.3.1 regression suite from archive-relative paths to canonical repository source paths.
+- [ ] `core/mod_library.py` prior v21.4 reconciliation remains blocked: current Git blob `a5204ea1d5e0309d3c6a764ad9b974e7bdeb8268` differs from expected validated blob `e95b2f6f59b3b96f7c19ed70ee514df02e500926`.
+- [ ] v21.3.1 overlay `mod_library.py` is a feature reference only: 68521 bytes / Git blob `56df3e70990003cfd76f04cbacf7878bba6e65ec`; it is not the missing validated v21.4 source.
 - [ ] Temporary `.materialize/` payload remains incomplete; no `READY`; never fabricate missing bytes.
-- [ ] Remaining fork regression-test materialization, patch/glue review, full hostile-input/security sweep, and complete rc7 diff review incomplete.
-- [ ] User corrected-UI smoke test incomplete.
-- [ ] Dota startup/lobby/demo-or-match/patch-rollback/profiles/D2PFX/Dark-Terrain/Remove-Foilage smoke test incomplete.
+- [ ] Full hostile-input/security sweep and complete exact-rc7 diff review incomplete.
+- [ ] User smoke test and Dota startup/lobby/demo-or-match/patch-rollback/profiles/D2PFX/Dark-Terrain/Remove-Foilage smoke tests incomplete.
 - [ ] `beta` promotion/publication remains blocked.
