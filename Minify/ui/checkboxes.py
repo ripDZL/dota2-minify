@@ -18,7 +18,19 @@ import conditions
 import dearpygui.dearpygui as dpg
 import helper
 import jsonc
-from core import backup_manager, base, config, constants, fs, mod_compat, mod_library, mods_shared, output, registry, utils
+from core import (
+    backup_manager,
+    base,
+    config,
+    constants,
+    fs,
+    mod_compat,
+    mod_library,
+    mods_shared,
+    output,
+    registry,
+    utils,
+)
 from patch import manifest_utils
 from ui import details, localization, settings, shared, theme
 
@@ -415,7 +427,6 @@ def _refresh_profile_combo(selected=None):
         dpg.set_value("profile_select", current if current in profile_cache else names[0])
     else:
         dpg.set_value("profile_select", "")
-
 
 
 def _profile_export_payload():
@@ -857,7 +868,9 @@ def collapse_all_sections(sender=None, app_data=None, user_data=None):
 
 
 def clear_filters(sender=None, app_data=None, user_data=None):
-    ui_state.update({"search": "", "state_filter": "All", "type_filter": "All Mods", "category_filter": "All Categories"})
+    ui_state.update(
+        {"search": "", "state_filter": "All", "type_filter": "All Mods", "category_filter": "All Categories"}
+    )
     for tag, value in (
         ("mod_search", ""),
         ("mod_state_filter", "All"),
@@ -1081,7 +1094,9 @@ def apply_filters(sender=None, app_data=None, user_data=None, *, capture_search=
                 category = _category(mod) or "Other"
                 visible_d2pfx_categories[category] = visible_d2pfx_categories.get(category, 0) + 1
 
-    active_filter = bool(query or state_filter != "All" or type_filter != "All Mods" or category_filter != "All Categories")
+    active_filter = bool(
+        query or state_filter != "All" or type_filter != "All Mods" or category_filter != "All Categories"
+    )
     for section, header_tag in SECTION_TAGS.items():
         if not dpg.does_item_exist(header_tag):
             continue
@@ -1125,7 +1140,9 @@ def apply_filters(sender=None, app_data=None, user_data=None, *, capture_search=
         if dpg.does_item_exist(header_tag):
             dpg.configure_item(header_tag, show=visible > 0)
         if dpg.does_item_exist(count_tag):
-            count_text = f"{visible}/{total_in_category} shown" if visible != total_in_category else f"{total_in_category} mods"
+            count_text = (
+                f"{visible}/{total_in_category} shown" if visible != total_in_category else f"{total_in_category} mods"
+            )
             dpg.set_value(count_tag, count_text)
 
     total = len(checkboxes)
@@ -1293,7 +1310,10 @@ def _open_actions_window(mod):
     active_action_mod = mod
     path = mods_shared.get_mod_path(mod)
     dpg.set_value("mod_action_title", _display_name(mod))
-    dpg.set_value("mod_action_file", f"File: {mods_shared.get_mod_filename(mod) if os.path.isfile(path) else os.path.basename(path)}")
+    dpg.set_value(
+        "mod_action_file",
+        f"File: {mods_shared.get_mod_filename(mod) if os.path.isfile(path) else os.path.basename(path)}",
+    )
     dpg.set_value("mod_action_name", _display_name(mod))
     dpg.set_value("mod_action_category", _category(mod))
     dpg.set_value("mod_action_source", _source(mod))
@@ -1301,7 +1321,10 @@ def _open_actions_window(mod):
     dpg.set_value("mod_action_hash", "")
     is_vpk = mod.lower().endswith(".vpk")
     dpg.configure_item("mod_action_identify_hint", show=is_vpk)
-    dpg.configure_item("mod_action_details_button", show=not is_vpk and f"{mod}_details_window_tag" in shared.tag_data_for_details_windows)
+    dpg.configure_item(
+        "mod_action_details_button",
+        show=not is_vpk and f"{mod}_details_window_tag" in shared.tag_data_for_details_windows,
+    )
     _center_window("mod_actions_window", 560, 360)
     dpg.configure_item("mod_actions_window", show=True)
     dpg.focus_item("mod_actions_window")
@@ -1419,7 +1442,9 @@ def show_patch_preview(sender=None, app_data=None, user_data=None):
     if has_conflicts:
         warning_bits.append("Review detected overlaps before patching.")
     if compatibility_rules:
-        warning_bits.append("Known compatibility rules will exclude only confirmed conflicting resources from generated output.")
+        warning_bits.append(
+            "Known compatibility rules will exclude only confirmed conflicting resources from generated output."
+        )
     if unknown:
         warning_bits.append(f"{unknown} enabled VPK(s) are still unidentified.")
     dpg.set_value("patch_preview_warning", " ".join(warning_bits))
@@ -1632,7 +1657,9 @@ def _format_d2pfx_preview(preview):
     lines.append("")
     if preview.get("stale_catalog"):
         lines.append("WARNING: The current catalog could not be refreshed; a cached copy is being used.")
-    lines.append("Minify installs VPK-compatible components as native D2PFX Browser mods. Terrain VPKs are supported; fonts, cursors, and other loose-file-only extras are reported and skipped.")
+    lines.append(
+        "Minify installs VPK-compatible components as native D2PFX Browser mods. Terrain VPKs are supported; fonts, cursors, and other loose-file-only extras are reported and skipped."
+    )
     return "\n".join(lines)
 
 
@@ -1693,7 +1720,9 @@ def fetch_d2pfx_url_preview(sender=None, app_data=None, user_data=None):
             preview = mod_library.preview_d2pfx_share(value)
             # Ignore a result if the user managed to change the field while the
             # request was running.
-            current = str(dpg.get_value("d2pfx_import_url") or "").strip() if dpg.does_item_exist("d2pfx_import_url") else ""
+            current = (
+                str(dpg.get_value("d2pfx_import_url") or "").strip() if dpg.does_item_exist("d2pfx_import_url") else ""
+            )
             if current != value:
                 d2pfx_url_preview = None
                 return
@@ -1701,7 +1730,10 @@ def fetch_d2pfx_url_preview(sender=None, app_data=None, user_data=None):
             if dpg.does_item_exist("d2pfx_import_preview"):
                 dpg.set_value("d2pfx_import_preview", _format_d2pfx_preview(preview))
             if dpg.does_item_exist("d2pfx_import_available_button"):
-                dpg.configure_item("d2pfx_import_available_button", enabled=preview.get("vpk_candidate_count", preview.get("resolved_count", 0)) > 0)
+                dpg.configure_item(
+                    "d2pfx_import_available_button",
+                    enabled=preview.get("vpk_candidate_count", preview.get("resolved_count", 0)) > 0,
+                )
             unavailable = int(preview.get("unavailable_count", 0) or 0)
             used_dns_fallback = bool(preview.get("dns_fallback_used"))
             if unavailable:
@@ -1788,7 +1820,10 @@ def import_d2pfx_url_pack(sender=None, app_data=None, user_data=None):
                 "They are now managed individually by the D2PFX Browser.",
                 msg_type="success" if not result.get("failures") else "warning",
             )
-            set_status(f"D2PFX Browser imported: {result['pack_name']}{suffix}", "success" if not result.get("failures") else "warning")
+            set_status(
+                f"D2PFX Browser imported: {result['pack_name']}{suffix}",
+                "success" if not result.get("failures") else "warning",
+            )
         except Exception:
             report_patch_error(traceback.format_exc())
             output.add_text("D2PFX URL import failed. Open Error Details for technical information.", msg_type="error")
@@ -1797,6 +1832,7 @@ def import_d2pfx_url_pack(sender=None, app_data=None, user_data=None):
             _set_d2pfx_import_busy(False)
 
     threading.Thread(target=worker, daemon=True).start()
+
 
 def _file_dialog_path(app_data):
     if isinstance(app_data, dict):
@@ -1837,7 +1873,10 @@ def import_d2pfx_callback(sender=None, app_data=None, user_data=None):
             "Each component can now be removed from the D2PFX Browser.",
             msg_type="success" if not result.get("failures") else "warning",
         )
-        set_status(f"Imported {result['pack_name']} into D2PFX Browser{suffix}.", "success" if not result.get("failures") else "warning")
+        set_status(
+            f"Imported {result['pack_name']} into D2PFX Browser{suffix}.",
+            "success" if not result.get("failures") else "warning",
+        )
     except Exception:
         report_patch_error(traceback.format_exc())
         output.add_text("D2PFX import failed. Open Error Details for technical information.", msg_type="error")
@@ -1855,7 +1894,9 @@ def _create_auxiliary_windows():
         if dpg.does_item_exist(tag):
             dpg.delete_item(tag)
 
-    dpg.add_window(tag="mod_actions_window", label="Mod information", modal=True, show=False, no_resize=True, no_move=True)
+    dpg.add_window(
+        tag="mod_actions_window", label="Mod information", modal=True, show=False, no_resize=True, no_move=True
+    )
     dpg.add_text("", parent="mod_actions_window", tag="mod_action_title")
     dpg.bind_item_font("mod_action_title", "large_font")
     dpg.add_text("", parent="mod_actions_window", tag="mod_action_file")
@@ -1879,10 +1920,14 @@ def _create_auxiliary_windows():
         dpg.add_button(label="Save changes", callback=save_mod_actions, width=100)
         dpg.add_button(label="Open folder", callback=open_active_mod_location, width=92)
         dpg.add_button(label="Verify file", callback=hash_active_mod, width=84)
-        dpg.add_button(tag="mod_action_details_button", label="Preview", callback=show_active_standard_details, width=72)
+        dpg.add_button(
+            tag="mod_action_details_button", label="Preview", callback=show_active_standard_details, width=72
+        )
         dpg.add_button(label="Close", callback=lambda: dpg.configure_item("mod_actions_window", show=False), width=70)
 
-    dpg.add_window(tag="patch_preview_window", label="Patch Preview", modal=True, show=False, no_resize=True, no_move=True)
+    dpg.add_window(
+        tag="patch_preview_window", label="Patch Preview", modal=True, show=False, no_resize=True, no_move=True
+    )
 
     dpg.add_group(parent="patch_preview_window", tag="patch_preview_main_view", show=True)
     dpg.add_text("Review your patch", parent="patch_preview_main_view", tag="patch_preview_title")
@@ -1892,9 +1937,13 @@ def _create_auxiliary_windows():
     dpg.bind_item_theme("patch_preview_warning", "mod_manager_warning_theme")
     dpg.add_spacer(parent="patch_preview_main_view", height=8)
     with dpg.group(parent="patch_preview_main_view", horizontal=True):
-        dpg.add_button(tag="patch_preview_conflicts_button", label="Check overlaps (0)", callback=show_conflicts, width=150)
+        dpg.add_button(
+            tag="patch_preview_conflicts_button", label="Check overlaps (0)", callback=show_conflicts, width=150
+        )
         dpg.add_button(label="Apply patch", callback=_start_patch, width=110)
-        dpg.add_button(label="Cancel", callback=lambda: dpg.configure_item("patch_preview_window", show=False), width=80)
+        dpg.add_button(
+            label="Cancel", callback=lambda: dpg.configure_item("patch_preview_window", show=False), width=80
+        )
 
     dpg.add_group(parent="patch_preview_window", tag="patch_preview_conflict_view", show=False)
     dpg.add_text("Shared files", parent="patch_preview_conflict_view", tag="conflict_report_title")
@@ -1909,19 +1958,35 @@ def _create_auxiliary_windows():
         dpg.add_button(label="Back to review", callback=close_conflicts, width=108)
         dpg.add_button(label="Apply anyway", callback=_start_patch, width=108)
 
-    dpg.add_window(tag="backup_manager_window", label="Restore a backup", modal=True, show=False, no_resize=True, no_move=True)
+    dpg.add_window(
+        tag="backup_manager_window", label="Restore a backup", modal=True, show=False, no_resize=True, no_move=True
+    )
     dpg.add_text("Restore a previous Minify state", parent="backup_manager_window", tag="backup_title")
     dpg.bind_item_font("backup_title", "large_font")
     dpg.add_text("", parent="backup_manager_window", tag="backup_summary", wrap=650)
     dpg.add_combo(parent="backup_manager_window", tag="backup_select", items=[], width=-1)
     with dpg.group(parent="backup_manager_window", horizontal=True):
         dpg.add_button(tag="backup_restore_button", label="Restore this backup", callback=restore_backup, width=120)
-        dpg.add_button(label="Close", callback=lambda: dpg.configure_item("backup_manager_window", show=False), width=80)
+        dpg.add_button(
+            label="Close", callback=lambda: dpg.configure_item("backup_manager_window", show=False), width=80
+        )
 
-    dpg.add_window(tag="error_details_window", label="Technical details", modal=True, show=False, no_resize=True, no_move=True)
-    dpg.add_text("These details are useful when reporting a problem or troubleshooting a failed patch.", parent="error_details_window")
-    dpg.add_input_text(parent="error_details_window", tag="error_details_text", multiline=True, readonly=True, width=-1, height=-45)
-    dpg.add_button(parent="error_details_window", label="Close", callback=lambda: dpg.configure_item("error_details_window", show=False), width=80)
+    dpg.add_window(
+        tag="error_details_window", label="Technical details", modal=True, show=False, no_resize=True, no_move=True
+    )
+    dpg.add_text(
+        "These details are useful when reporting a problem or troubleshooting a failed patch.",
+        parent="error_details_window",
+    )
+    dpg.add_input_text(
+        parent="error_details_window", tag="error_details_text", multiline=True, readonly=True, width=-1, height=-45
+    )
+    dpg.add_button(
+        parent="error_details_window",
+        label="Close",
+        callback=lambda: dpg.configure_item("error_details_window", show=False),
+        width=80,
+    )
 
     dpg.add_window(
         tag="d2pfx_import_window",
@@ -1949,11 +2014,24 @@ def _create_auxiliary_windows():
         callback=_clear_d2pfx_url_preview,
     )
     with dpg.group(parent="d2pfx_import_window", horizontal=True):
-        dpg.add_button(tag="d2pfx_import_link_button", label="Preview link", callback=fetch_d2pfx_url_preview, width=100)
-        dpg.add_button(tag="d2pfx_import_available_button", label="Install available", callback=import_d2pfx_url_pack, width=120, enabled=False)
+        dpg.add_button(
+            tag="d2pfx_import_link_button", label="Preview link", callback=fetch_d2pfx_url_preview, width=100
+        )
+        dpg.add_button(
+            tag="d2pfx_import_available_button",
+            label="Install available",
+            callback=import_d2pfx_url_pack,
+            width=120,
+            enabled=False,
+        )
         dpg.bind_item_theme("d2pfx_import_available_button", "mod_manager_primary_theme")
         dpg.add_button(tag="d2pfx_import_zip_button", label="Import ZIP", callback=choose_d2pfx_zip, width=90)
-        dpg.add_button(tag="d2pfx_import_close_button", label="Close", callback=lambda: dpg.configure_item("d2pfx_import_window", show=False), width=70)
+        dpg.add_button(
+            tag="d2pfx_import_close_button",
+            label="Close",
+            callback=lambda: dpg.configure_item("d2pfx_import_window", show=False),
+            width=70,
+        )
     dpg.add_input_text(
         parent="d2pfx_import_window",
         tag="d2pfx_import_preview",
@@ -1963,7 +2041,9 @@ def _create_auxiliary_windows():
         height=230,
         default_value="Paste a D2PFX share link, expanded ?pack= URL, or raw pack payload, then choose Preview link.\n\nMinify will show what it can install before anything changes. You can also import a downloaded pack with Import ZIP.",
     )
-    dpg.add_progress_bar(parent="d2pfx_import_window", tag="d2pfx_import_progress", width=-1, default_value=0.0, show=False)
+    dpg.add_progress_bar(
+        parent="d2pfx_import_window", tag="d2pfx_import_progress", width=-1, default_value=0.0, show=False
+    )
     dpg.add_text("", parent="d2pfx_import_window", tag="d2pfx_import_progress_text", wrap=660)
     dpg.bind_item_theme("d2pfx_import_progress_text", "mod_manager_muted_theme")
 
@@ -2020,8 +2100,12 @@ def _create_section(section, mods, default_open):
     dpg.add_group(parent=header_tag, tag=controls_tag, horizontal=True)
     dpg.add_text("Select in this section", parent=controls_tag)
     dpg.bind_item_theme(dpg.last_item(), "mod_manager_muted_theme")
-    dpg.add_button(parent=controls_tag, label="All", small=True, width=42, callback=set_section_mods, user_data=(section, True))
-    dpg.add_button(parent=controls_tag, label="None", small=True, width=48, callback=set_section_mods, user_data=(section, False))
+    dpg.add_button(
+        parent=controls_tag, label="All", small=True, width=42, callback=set_section_mods, user_data=(section, True)
+    )
+    dpg.add_button(
+        parent=controls_tag, label="None", small=True, width=48, callback=set_section_mods, user_data=(section, False)
+    )
 
 
 def _create_collection_section(group, mods, default_open=False):
@@ -2041,8 +2125,17 @@ def _create_collection_section(group, mods, default_open=False):
     dpg.add_text("Select in this collection", parent=controls_tag)
     dpg.bind_item_theme(dpg.last_item(), "mod_manager_muted_theme")
     section_key = _collection_section_key(group)
-    dpg.add_button(parent=controls_tag, label="All", small=True, width=42, callback=set_section_mods, user_data=(section_key, True))
-    dpg.add_button(parent=controls_tag, label="None", small=True, width=48, callback=set_section_mods, user_data=(section_key, False))
+    dpg.add_button(
+        parent=controls_tag, label="All", small=True, width=42, callback=set_section_mods, user_data=(section_key, True)
+    )
+    dpg.add_button(
+        parent=controls_tag,
+        label="None",
+        small=True,
+        width=48,
+        callback=set_section_mods,
+        user_data=(section_key, False),
+    )
     collection_headers[group] = header_tag
     return header_tag
 
@@ -2088,7 +2181,15 @@ def _create_mod_row(mod, section, enable_ticking, value, has_details, parent_tag
         callback=toggle_favorite,
         user_data=mod,
     )
-    dpg.add_button(parent=top_tag, tag=f"{mod}_manage_button", label="⋯", small=True, width=28, callback=show_mod_actions, user_data=mod)
+    dpg.add_button(
+        parent=top_tag,
+        tag=f"{mod}_manage_button",
+        label="⋯",
+        small=True,
+        width=28,
+        callback=show_mod_actions,
+        user_data=mod,
+    )
     _add_tooltip(fav_tag, "Add or remove this mod from Favorites")
     _add_tooltip(f"{mod}_manage_button", "Open information and actions for this mod")
 
@@ -2172,14 +2273,37 @@ def create():
     )
 
     with dpg.group(parent="mod_manager_toolbar", tag="library_filter_row", horizontal=True):
-        dpg.add_combo(tag="mod_state_filter", items=STATE_FILTER_ITEMS, default_value=ui_state["state_filter"], width=92, callback=apply_filters)
-        dpg.add_combo(tag="mod_category_filter", items=["All Categories"], default_value=ui_state["category_filter"], width=142, callback=apply_filters)
-        dpg.add_combo(tag="mod_sort", items=SORT_ITEMS, default_value=ui_state["sort"], width=118, callback=_sort_changed)
+        dpg.add_combo(
+            tag="mod_state_filter",
+            items=STATE_FILTER_ITEMS,
+            default_value=ui_state["state_filter"],
+            width=92,
+            callback=apply_filters,
+        )
+        dpg.add_combo(
+            tag="mod_category_filter",
+            items=["All Categories"],
+            default_value=ui_state["category_filter"],
+            width=142,
+            callback=apply_filters,
+        )
+        dpg.add_combo(
+            tag="mod_sort", items=SORT_ITEMS, default_value=ui_state["sort"], width=118, callback=_sort_changed
+        )
         dpg.add_button(tag="clear_mod_filters_button", label="Reset", callback=clear_filters, small=True, width=52)
         # State storage for source navigation; the rail is the visible control.
-        dpg.add_combo(tag="mod_type_filter", items=TYPE_FILTER_ITEMS, default_value=ui_state["type_filter"], callback=apply_filters, show=False)
+        dpg.add_combo(
+            tag="mod_type_filter",
+            items=TYPE_FILTER_ITEMS,
+            default_value=ui_state["type_filter"],
+            callback=apply_filters,
+            show=False,
+        )
 
-    _add_tooltip("mod_search", "Filter by mod name. Advanced search supports category:, source:, file:, type:, status:, selected:, and favorite:.")
+    _add_tooltip(
+        "mod_search",
+        "Filter by mod name. Advanced search supports category:, source:, file:, type:, status:, selected:, and favorite:.",
+    )
     _add_tooltip("mod_state_filter", "Show all, selected, or unselected mods.")
     _add_tooltip("mod_category_filter", "Limit the workspace to one metadata category.")
     _add_tooltip("mod_sort", "Sort Standard/VPK/Unknown sections. D2PFX remains category-first, then name.")
@@ -2187,7 +2311,15 @@ def create():
 
     dpg.add_group(parent="mod_menu", tag="library_body", horizontal=True, horizontal_spacing=6)
     body_height = max(196, _current_menu_height() - TOOLBAR_HEIGHT - STATUSBAR_HEIGHT - 36)
-    dpg.add_child_window(parent="library_body", tag="mod_source_rail", width=_source_rail_width(), height=body_height, border=False, no_scrollbar=True, no_scroll_with_mouse=True)
+    dpg.add_child_window(
+        parent="library_body",
+        tag="mod_source_rail",
+        width=_source_rail_width(),
+        height=body_height,
+        border=False,
+        no_scrollbar=True,
+        no_scroll_with_mouse=True,
+    )
     dpg.bind_item_theme("mod_source_rail", "mod_manager_source_rail_theme")
     dpg.add_text("BROWSE", parent="mod_source_rail", tag="source_rail_title")
     dpg.bind_item_theme("source_rail_title", "mod_manager_muted_theme")
@@ -2200,18 +2332,61 @@ def create():
         ("Needs setup", "Unknown", "source_nav_unknown"),
         ("Favorites", "Favorites", "source_nav_favorites"),
     ):
-        dpg.add_button(parent="mod_source_rail", tag=tag, label=label, width=-1, height=30, callback=set_type_filter, user_data=value)
+        dpg.add_button(
+            parent="mod_source_rail",
+            tag=tag,
+            label=label,
+            width=-1,
+            height=30,
+            callback=set_type_filter,
+            user_data=value,
+        )
     dpg.add_spacer(parent="mod_source_rail", height=8)
     dpg.add_separator(parent="mod_source_rail")
     dpg.add_text("SELECTION", parent="mod_source_rail")
     dpg.bind_item_theme(dpg.last_item(), "mod_manager_muted_theme")
-    dpg.add_button(parent="mod_source_rail", tag="check_all_mods_button", label="Select all", callback=check_all_mods, width=-1, height=28)
-    dpg.add_button(parent="mod_source_rail", tag="uncheck_all_mods_button", label="Clear", callback=uncheck_all_mods, width=-1, height=28)
-    dpg.add_button(parent="mod_source_rail", tag="invert_all_mods_button", label="Invert", callback=invert_all_mods, width=-1, height=28)
+    dpg.add_button(
+        parent="mod_source_rail",
+        tag="check_all_mods_button",
+        label="Select all",
+        callback=check_all_mods,
+        width=-1,
+        height=28,
+    )
+    dpg.add_button(
+        parent="mod_source_rail",
+        tag="uncheck_all_mods_button",
+        label="Clear",
+        callback=uncheck_all_mods,
+        width=-1,
+        height=28,
+    )
+    dpg.add_button(
+        parent="mod_source_rail",
+        tag="invert_all_mods_button",
+        label="Invert",
+        callback=invert_all_mods,
+        width=-1,
+        height=28,
+    )
     dpg.add_spacer(parent="mod_source_rail", height=8)
     dpg.add_separator(parent="mod_source_rail")
-    dpg.add_button(parent="mod_source_rail", tag="expand_sections_button", label="Expand all", callback=expand_all_sections, width=-1, height=28)
-    dpg.add_button(parent="mod_source_rail", tag="collapse_sections_button", label="Collapse all", callback=collapse_all_sections, width=-1, height=28)
+    dpg.add_button(
+        parent="mod_source_rail",
+        tag="expand_sections_button",
+        label="Expand all",
+        callback=expand_all_sections,
+        width=-1,
+        height=28,
+    )
+    dpg.add_button(
+        parent="mod_source_rail",
+        tag="collapse_sections_button",
+        label="Collapse all",
+        callback=collapse_all_sections,
+        width=-1,
+        height=28,
+    )
 
     list_height = body_height
     dpg.add_child_window(
@@ -2224,11 +2399,19 @@ def create():
     )
     dpg.bind_item_theme("mod_manager_list", "mod_manager_list_theme")
 
-    dpg.add_collapsing_header(parent="mod_manager_list", tag="profile_tools_header", label="Profiles & sharing", default_open=False)
+    dpg.add_collapsing_header(
+        parent="mod_manager_list", tag="profile_tools_header", label="Profiles & sharing", default_open=False
+    )
     dpg.bind_item_theme("profile_tools_header", "mod_manager_section_theme")
     dpg.add_text("Saved setups", parent="profile_tools_header")
     dpg.bind_item_theme(dpg.last_item(), "mod_manager_muted_theme")
-    dpg.add_combo(parent="profile_tools_header", tag="profile_select", items=sorted(profile_cache, key=str.casefold), width=-1, callback=profile_selected)
+    dpg.add_combo(
+        parent="profile_tools_header",
+        tag="profile_select",
+        items=sorted(profile_cache, key=str.casefold),
+        width=-1,
+        callback=profile_selected,
+    )
     dpg.add_group(parent="profile_tools_header", tag="profile_select_row", horizontal=True)
     dpg.add_button(parent="profile_select_row", label="Use setup", callback=load_profile, small=True, width=78)
     dpg.add_button(parent="profile_select_row", label="Update", callback=update_profile, small=True, width=62)
@@ -2240,15 +2423,46 @@ def create():
     dpg.add_group(parent="profile_tools_header", tag="profile_transfer_row", horizontal=True)
     dpg.add_text("Share or move", parent="profile_transfer_row")
     dpg.bind_item_theme(dpg.last_item(), "mod_manager_muted_theme")
-    dpg.add_button(parent="profile_transfer_row", tag="profile_export_button", label="Export profiles", callback=choose_profile_export_directory, small=True, width=104)
-    dpg.add_button(parent="profile_transfer_row", tag="profile_import_button", label="Import & apply", callback=choose_profile_import_file, small=True, width=104)
-    dpg.add_button(parent="profile_transfer_row", tag="profile_folder_button", label="Open folder", callback=open_profiles_folder, small=True, width=86)
-    _add_tooltip("profile_export_button", "Export every saved profile to a portable JSON bundle for another Minify build.")
-    _add_tooltip("profile_import_button", "Import a portable profile bundle and apply its first setup immediately. Selecting any saved setup applies it instantly.")
+    dpg.add_button(
+        parent="profile_transfer_row",
+        tag="profile_export_button",
+        label="Export profiles",
+        callback=choose_profile_export_directory,
+        small=True,
+        width=104,
+    )
+    dpg.add_button(
+        parent="profile_transfer_row",
+        tag="profile_import_button",
+        label="Import & apply",
+        callback=choose_profile_import_file,
+        small=True,
+        width=104,
+    )
+    dpg.add_button(
+        parent="profile_transfer_row",
+        tag="profile_folder_button",
+        label="Open folder",
+        callback=open_profiles_folder,
+        small=True,
+        width=86,
+    )
+    _add_tooltip(
+        "profile_export_button", "Export every saved profile to a portable JSON bundle for another Minify build."
+    )
+    _add_tooltip(
+        "profile_import_button",
+        "Import a portable profile bundle and apply its first setup immediately. Selecting any saved setup applies it instantly.",
+    )
     _add_tooltip("profile_folder_button", "Open Minify's persistent configuration folder.")
     _refresh_profile_combo()
 
-    dpg.add_text("No mods match this view. Clear a filter or choose Reset.", parent="mod_manager_list", tag="mod_empty_state", show=False)
+    dpg.add_text(
+        "No mods match this view. Clear a filter or choose Reset.",
+        parent="mod_manager_list",
+        tag="mod_empty_state",
+        show=False,
+    )
     dpg.bind_item_theme("mod_empty_state", "mod_manager_muted_theme")
 
     mod_details_cache = {}
@@ -2273,8 +2487,14 @@ def create():
     directory_mods = [m for m in constants.visually_available_mods if not m.lower().endswith(".vpk")]
     d2pfx_mods = [m for m in directory_mods if mod_library.is_d2pfx(m)]
     normal_mods = [m for m in directory_mods if not mod_library.is_d2pfx(m)]
-    identified_vpk_mods = [m for m in constants.visually_available_mods if m.lower().endswith(".vpk") and mods_shared.is_mod_identified(m)]
-    unknown_vpk_mods = [m for m in constants.visually_available_mods if m.lower().endswith(".vpk") and not mods_shared.is_mod_identified(m)]
+    identified_vpk_mods = [
+        m for m in constants.visually_available_mods if m.lower().endswith(".vpk") and mods_shared.is_mod_identified(m)
+    ]
+    unknown_vpk_mods = [
+        m
+        for m in constants.visually_available_mods
+        if m.lower().endswith(".vpk") and not mods_shared.is_mod_identified(m)
+    ]
 
     normal_mods = _sort_mods(normal_mods)
     collection_mods = [mod for mod in normal_mods if _collection_group(mod)]
@@ -2405,7 +2625,9 @@ def create():
                 try:
                     w, h, _, d = img_data
                     image_tag = f"{mod}_image_texture"
-                    dpg.add_static_texture(width=w, height=h, default_value=d, tag=image_tag, parent="mod_images_registry")
+                    dpg.add_static_texture(
+                        width=w, height=h, default_value=d, tag=image_tag, parent="mod_images_registry"
+                    )
                     shared.mod_details_image_cache[mod] = (w, h, image_tag)
                 except Exception as error:
                     print(f"Failed to display image for {mod}: {error}")
@@ -2416,19 +2638,45 @@ def create():
 
     # Persistent command strip: the message gets its own line so long status text
     # can wrap without pushing the action buttons outside the viewport.
-    dpg.add_child_window(parent="mod_menu", tag="mod_manager_statusbar", width=max(100, _current_menu_width() - 16), height=STATUSBAR_HEIGHT, border=False, no_scrollbar=True, no_scroll_with_mouse=True)
+    dpg.add_child_window(
+        parent="mod_menu",
+        tag="mod_manager_statusbar",
+        width=max(100, _current_menu_width() - 16),
+        height=STATUSBAR_HEIGHT,
+        border=False,
+        no_scrollbar=True,
+        no_scroll_with_mouse=True,
+    )
     dpg.bind_item_theme("mod_manager_statusbar", "mod_manager_statusbar_theme")
-    dpg.add_text("Ready • Your mod library is loaded.", parent="mod_manager_statusbar", tag="mod_manager_status_text", wrap=max(220, _current_menu_width() - 34))
+    dpg.add_text(
+        "Ready • Your mod library is loaded.",
+        parent="mod_manager_statusbar",
+        tag="mod_manager_status_text",
+        wrap=max(220, _current_menu_width() - 34),
+    )
     dpg.bind_item_theme("mod_manager_status_text", "mod_manager_muted_theme")
     with dpg.group(parent="mod_manager_statusbar", tag="mod_manager_status_actions", horizontal=True):
-        dpg.add_button(tag="status_error_details_button", label="Error details", callback=show_error_details, width=108, height=32, show=bool(last_error_text))
-        dpg.add_button(tag="open_vpk_folder_button", label="Open VPK folder", callback=open_vpk_folder, width=126, height=32)
+        dpg.add_button(
+            tag="status_error_details_button",
+            label="Error details",
+            callback=show_error_details,
+            width=108,
+            height=32,
+            show=bool(last_error_text),
+        )
+        dpg.add_button(
+            tag="open_vpk_folder_button", label="Open VPK folder", callback=open_vpk_folder, width=126, height=32
+        )
         dpg.add_button(tag="backups_button", label="Restore backups", callback=show_backups, width=132, height=32)
-        dpg.add_button(tag="review_patch_button", label="Review & Patch", callback=show_patch_preview, width=158, height=36)
+        dpg.add_button(
+            tag="review_patch_button", label="Review & Patch", callback=show_patch_preview, width=158, height=36
+        )
     dpg.bind_item_theme("review_patch_button", "mod_manager_primary_theme")
     _add_tooltip("open_vpk_folder_button", "Open the folder where Minify manages nested VPK files.")
     _add_tooltip("backups_button", "Restore Minify to an automatic backup from before a patch.")
-    _add_tooltip("review_patch_button", "Review selected mods, shared files, and safety information before applying the patch.")
+    _add_tooltip(
+        "review_patch_button", "Review selected mods, shared files, and safety information before applying the patch."
+    )
 
     conditions.disable_workshop_mods()
     apply_filters()

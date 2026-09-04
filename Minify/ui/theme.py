@@ -417,7 +417,19 @@ def apply():
         dpg.bind_item_theme("app_title", "dashboard_title_theme")
     if dpg.does_item_exist("app_product_name"):
         dpg.bind_item_theme("app_product_name", "dashboard_product_theme")
-    for tag in ("app_version", "header_context", "workspace_eyebrow", "dashboard_focus_hint", "dashboard_status_message", "nav_workspace_label", "nav_secondary_label", "activity_caption", "dashboard_step_1", "dashboard_step_2", "dashboard_step_3"):
+    for tag in (
+        "app_version",
+        "header_context",
+        "workspace_eyebrow",
+        "dashboard_focus_hint",
+        "dashboard_status_message",
+        "nav_workspace_label",
+        "nav_secondary_label",
+        "activity_caption",
+        "dashboard_step_1",
+        "dashboard_step_2",
+        "dashboard_step_3",
+    ):
         if dpg.does_item_exist(tag):
             dpg.bind_item_theme(tag, "dashboard_muted_theme")
     if dpg.does_item_exist("dashboard_focus_title"):
@@ -443,7 +455,11 @@ def apply():
     if dpg.does_item_exist("button_uninstall"):
         dpg.bind_item_theme("button_uninstall", "danger_button_theme")
 
-    for tag, theme_tag in (("d2pfx_browser_eyebrow", "dashboard_title_theme"), ("d2pfx_browser_heading", "dashboard_product_theme"), ("d2pfx_browser_subtitle", "dashboard_muted_theme")):
+    for tag, theme_tag in (
+        ("d2pfx_browser_eyebrow", "dashboard_title_theme"),
+        ("d2pfx_browser_heading", "dashboard_product_theme"),
+        ("d2pfx_browser_subtitle", "dashboard_muted_theme"),
+    ):
         if dpg.does_item_exist(tag):
             dpg.bind_item_theme(tag, theme_tag)
 

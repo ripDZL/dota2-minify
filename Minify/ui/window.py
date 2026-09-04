@@ -58,7 +58,6 @@ def stop_drag():
     is_moving_viewport = False
 
 
-
 def show_overlay(tag):
     """Show an app overlay fitted to the viewport client area."""
     if not dpg.does_item_exist(tag):
@@ -66,6 +65,7 @@ def show_overlay(tag):
     on_resize()
     dpg.configure_item(tag, pos=(0, 0), show=True)
     dpg.focus_item(tag)
+
 
 def focus():
     with utils.try_pass():
@@ -135,7 +135,9 @@ def on_resize():
         dpg.configure_item("settings_scroll", width=shared.window_width, height=max(220, shared.window_height - 78))
     if dpg.does_item_exist("settings_actions_bar"):
         dpg.configure_item("settings_actions_bar", width=shared.window_width, height=56)
-    terminal.wrap_size = base.main_window_width - 20 if dev_tools.dev_mode_state == 1 else min(max(360, shared.window_width - 30), 1180)
+    terminal.wrap_size = (
+        base.main_window_width - 20 if dev_tools.dev_mode_state == 1 else min(max(360, shared.window_width - 30), 1180)
+    )
 
     for item in shared.terminal_history:
         idx = item["id"]

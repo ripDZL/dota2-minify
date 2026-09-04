@@ -14,7 +14,6 @@ from browsers.d2pfx import config as browser_config
 from browsers.d2pfx.data import DataManager
 
 
-
 def _format_d2pfx_updated_date(mod):
     # Return a compact Updated label only when D2PFX supplies date metadata.
     if not isinstance(mod, dict):
@@ -144,10 +143,17 @@ class BrowserUI:
                                 with dpg.group():
                                     dpg.add_text("D2PFX LIBRARY", tag="d2pfx_browser_eyebrow")
                                     dpg.add_text("Browse community mods", tag="d2pfx_browser_heading")
-                                    dpg.add_text("Installable packs, resources, and community tools", tag="d2pfx_browser_subtitle")
+                                    dpg.add_text(
+                                        "Installable packs, resources, and community tools",
+                                        tag="d2pfx_browser_subtitle",
+                                    )
                                     if dpg.does_item_exist("large_font"):
                                         dpg.bind_item_font("d2pfx_browser_heading", "large_font")
-                                    for item_tag, theme_tag in (("d2pfx_browser_eyebrow", "dashboard_title_theme"), ("d2pfx_browser_heading", "dashboard_product_theme"), ("d2pfx_browser_subtitle", "dashboard_muted_theme")):
+                                    for item_tag, theme_tag in (
+                                        ("d2pfx_browser_eyebrow", "dashboard_title_theme"),
+                                        ("d2pfx_browser_heading", "dashboard_product_theme"),
+                                        ("d2pfx_browser_subtitle", "dashboard_muted_theme"),
+                                    ):
                                         if dpg.does_item_exist(theme_tag):
                                             dpg.bind_item_theme(item_tag, theme_tag)
                                     dpg.add_input_text(
@@ -166,7 +172,9 @@ class BrowserUI:
                                     if dpg.does_item_exist("main_primary_button_theme"):
                                         dpg.bind_item_theme(import_btn, "main_primary_button_theme")
                                     with dpg.tooltip(import_btn):
-                                        dpg.add_text("Import a D2PFX share link or downloaded pack ZIP. You can remove imported components individually later.")
+                                        dpg.add_text(
+                                            "Import a D2PFX share link or downloaded pack ZIP. You can remove imported components individually later."
+                                        )
                                     meta_btn = dpg.add_button(
                                         label="Refresh list",
                                         width=-1,
@@ -174,9 +182,7 @@ class BrowserUI:
                                         callback=lambda s, a: self.prune_metadata_cache(),
                                     )
                                     with dpg.tooltip(meta_btn):
-                                        dpg.add_text(
-                                            "Reload the D2PFX categories and mod list from fresh metadata."
-                                        )
+                                        dpg.add_text("Reload the D2PFX categories and mod list from fresh metadata.")
                                     imgs_btn = dpg.add_button(
                                         label="Reload images",
                                         width=-1,
@@ -184,10 +190,7 @@ class BrowserUI:
                                         callback=lambda s, a: self.prune_image_cache(),
                                     )
                                     with dpg.tooltip(imgs_btn):
-                                        dpg.add_text(
-                                            "Clear cached previews so D2PFX images are downloaded again."
-                                        )
-
+                                        dpg.add_text("Clear cached previews so D2PFX images are downloaded again.")
 
                         dpg.add_spacer(height=5)
 
@@ -245,7 +248,9 @@ class BrowserUI:
                 if not isinstance(link, dict) or link.get("type") != wanted:
                     continue
                 url = str(link.get("url", "")).strip()
-                if url.startswith(("https://", "http://")) and not url.lower().split("?", 1)[0].endswith((".vpk", ".zip")):
+                if url.startswith(("https://", "http://")) and not url.lower().split("?", 1)[0].endswith(
+                    (".vpk", ".zip")
+                ):
                     return url
         for link in links:
             if not isinstance(link, dict):
@@ -260,7 +265,9 @@ class BrowserUI:
         if not url:
             modal_shared.show(
                 "Not installable in Minify",
-                [f"'{mod.get('name', 'This item')}' is listed by D2PFX, but it is not a VPK/ZIP mod that Minify can install safely."],
+                [
+                    f"'{mod.get('name', 'This item')}' is listed by D2PFX, but it is not a VPK/ZIP mod that Minify can install safely."
+                ],
                 [{"label": "OK"}],
             )
             return
@@ -698,7 +705,9 @@ class BrowserUI:
                                 )
                                 dpg.bind_item_theme(remove_btn, "danger_button_theme")
                                 with dpg.tooltip(remove_btn):
-                                    dpg.add_text("Remove only this D2PFX component. Other imported pack components are left installed.")
+                                    dpg.add_text(
+                                        "Remove only this D2PFX component. Other imported pack components are left installed."
+                                    )
                             else:
                                 is_installable = self.is_installable_mod(mod, cat_id)
                                 if is_installable:
@@ -719,9 +728,13 @@ class BrowserUI:
                                     )
                                     with dpg.tooltip(action_btn):
                                         if browse_url:
-                                            dpg.add_text("D2PFX lists this as a resource/tool rather than an installable Minify mod. Open its linked page instead.")
+                                            dpg.add_text(
+                                                "D2PFX lists this as a resource/tool rather than an installable Minify mod. Open its linked page instead."
+                                            )
                                         else:
-                                            dpg.add_text("This D2PFX catalogue item has no VPK/ZIP payload that Minify can safely install.")
+                                            dpg.add_text(
+                                                "This D2PFX catalogue item has no VPK/ZIP payload that Minify can safely install."
+                                            )
                             dpg.add_spacer(height=10)
                     except (SystemError, Exception):
                         continue

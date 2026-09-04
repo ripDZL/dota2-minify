@@ -97,15 +97,52 @@ def create_ui():
             no_scroll_with_mouse=True,
         )
         dpg.add_text("NAVIGATION", parent="app_nav_rail", tag="nav_workspace_label")
-        dpg.add_button(parent="app_nav_rail", tag="nav_patch_button", label="Patch", callback=lambda: None, width=-1, height=34)
-        dpg.add_button(parent="app_nav_rail", tag="button_select_mods", label="Select Mods", callback=lambda: window.show_overlay("mod_menu"), width=-1, height=34)
-        dpg.add_button(parent="app_nav_rail", tag="nav_d2pfx_button", label="D2PFX Browser", callback=d2pfx_ui.toggle, width=-1, height=36)
-        dpg.add_button(parent="app_nav_rail", tag="nav_settings_button", label="Settings", callback=lambda: window.show_overlay("settings_menu"), width=-1, height=36)
+        dpg.add_button(
+            parent="app_nav_rail", tag="nav_patch_button", label="Patch", callback=lambda: None, width=-1, height=34
+        )
+        dpg.add_button(
+            parent="app_nav_rail",
+            tag="button_select_mods",
+            label="Select Mods",
+            callback=lambda: window.show_overlay("mod_menu"),
+            width=-1,
+            height=34,
+        )
+        dpg.add_button(
+            parent="app_nav_rail",
+            tag="nav_d2pfx_button",
+            label="D2PFX Browser",
+            callback=d2pfx_ui.toggle,
+            width=-1,
+            height=36,
+        )
+        dpg.add_button(
+            parent="app_nav_rail",
+            tag="nav_settings_button",
+            label="Settings",
+            callback=lambda: window.show_overlay("settings_menu"),
+            width=-1,
+            height=36,
+        )
         dpg.add_spacer(parent="app_nav_rail", height=7)
         dpg.add_separator(parent="app_nav_rail")
         dpg.add_text("RECOVERY", parent="app_nav_rail", tag="nav_secondary_label")
-        dpg.add_button(parent="app_nav_rail", tag="nav_restore_button", label="Restore backups", callback=checkboxes.show_backups, width=-1, height=32)
-        dpg.add_button(parent="app_nav_rail", tag="button_uninstall", label="Remove Minify", callback=modals.Uninstall.show, width=-1, height=32)
+        dpg.add_button(
+            parent="app_nav_rail",
+            tag="nav_restore_button",
+            label="Restore backups",
+            callback=checkboxes.show_backups,
+            width=-1,
+            height=32,
+        )
+        dpg.add_button(
+            parent="app_nav_rail",
+            tag="button_uninstall",
+            label="Remove Minify",
+            callback=modals.Uninstall.show,
+            width=-1,
+            height=32,
+        )
 
         dpg.add_child_window(
             parent="app_shell_body",
@@ -117,23 +154,61 @@ def create_ui():
             no_scroll_with_mouse=True,
         )
         with dpg.group(parent="app_workspace", tag="workspace_columns", horizontal=True, horizontal_spacing=10):
-            dpg.add_child_window(parent="workspace_columns", tag="app_workspace_main", width=-1, height=-1, border=False, no_scrollbar=True, no_scroll_with_mouse=True)
+            dpg.add_child_window(
+                parent="workspace_columns",
+                tag="app_workspace_main",
+                width=-1,
+                height=-1,
+                border=False,
+                no_scrollbar=True,
+                no_scroll_with_mouse=True,
+            )
             dpg.add_text("PATCH WORKSPACE", parent="app_workspace_main", tag="workspace_eyebrow")
             dpg.add_text("Build a clean patch", parent="app_workspace_main", tag="dashboard_focus_title")
             dpg.bind_item_font("dashboard_focus_title", "large_font")
             dpg.add_text("0 selected • 0 installed", parent="app_workspace_main", tag="dashboard_metric")
-            dpg.add_text("Choose your mods, review shared files, then let Minify create a restore point before changing Dota.", parent="app_workspace_main", tag="dashboard_focus_hint", wrap=420)
+            dpg.add_text(
+                "Choose your mods, review shared files, then let Minify create a restore point before changing Dota.",
+                parent="app_workspace_main",
+                tag="dashboard_focus_hint",
+                wrap=420,
+            )
             dpg.add_spacer(parent="app_workspace_main", height=5)
-            dpg.add_child_window(parent="app_workspace_main", tag="dashboard_status_panel", height=58, width=-1, border=True, no_scrollbar=True, no_scroll_with_mouse=True)
+            dpg.add_child_window(
+                parent="app_workspace_main",
+                tag="dashboard_status_panel",
+                height=58,
+                width=-1,
+                border=True,
+                no_scrollbar=True,
+                no_scroll_with_mouse=True,
+            )
             with dpg.group(parent="dashboard_status_panel", horizontal=True):
                 dpg.add_text("● READY", tag="dashboard_status_label")
                 dpg.add_text("Getting your mod library ready...", tag="dashboard_status_message", wrap=420)
             dpg.add_spacer(parent="app_workspace_main", height=6)
             with dpg.group(parent="app_workspace_main", horizontal=True):
-                dpg.add_button(tag="button_patch", label="Review & Patch", callback=checkboxes.show_patch_preview, enabled=False, width=196, height=40)
-                dpg.add_button(tag="button_refresh_main", label="Refresh", callback=checkboxes.refresh, width=132, height=40)
+                dpg.add_button(
+                    tag="button_patch",
+                    label="Review & Patch",
+                    callback=checkboxes.show_patch_preview,
+                    enabled=False,
+                    width=196,
+                    height=40,
+                )
+                dpg.add_button(
+                    tag="button_refresh_main", label="Refresh", callback=checkboxes.refresh, width=132, height=40
+                )
 
-            dpg.add_child_window(parent="workspace_columns", tag="app_workspace_side", width=260, height=-1, border=True, no_scrollbar=True, no_scroll_with_mouse=True)
+            dpg.add_child_window(
+                parent="workspace_columns",
+                tag="app_workspace_side",
+                width=260,
+                height=-1,
+                border=True,
+                no_scrollbar=True,
+                no_scroll_with_mouse=True,
+            )
             dpg.add_text("PATCH FLOW", parent="app_workspace_side", tag="dashboard_side_title")
             dpg.add_text("01  Review shared files", parent="app_workspace_side", tag="dashboard_step_1")
             dpg.add_text("02  Create restore point", parent="app_workspace_side", tag="dashboard_step_2")
@@ -141,19 +216,29 @@ def create_ui():
             dpg.add_spacer(parent="app_workspace_side", height=6)
             dpg.add_separator(parent="app_workspace_side")
             dpg.add_text("SAFETY", parent="app_workspace_side")
-            dpg.add_text("Automatic rollback protects the previous Minify output if a patch fails.", parent="app_workspace_side", wrap=220)
+            dpg.add_text(
+                "Automatic rollback protects the previous Minify output if a patch fails.",
+                parent="app_workspace_side",
+                wrap=220,
+            )
 
         dpg.add_spacer(height=8)
-        dpg.add_child_window(tag="activity_header", height=40, autosize_x=True, border=True, no_scrollbar=True, no_scroll_with_mouse=True)
+        dpg.add_child_window(
+            tag="activity_header", height=40, autosize_x=True, border=True, no_scrollbar=True, no_scroll_with_mouse=True
+        )
         with dpg.group(parent="activity_header", horizontal=True):
             dpg.add_text("ACTIVITY", tag="activity_label")
             dpg.add_text("Live setup, download and patch output", tag="activity_caption")
 
         dpg.add_spacer(height=4)
         with dpg.group(tag="terminal_and_footer_group"):
-            dpg.add_child_window(tag="terminal_window", no_scrollbar=False, show=True, autosize_x=True, height=-31, border=True)
+            dpg.add_child_window(
+                tag="terminal_window", no_scrollbar=False, show=True, autosize_x=True, height=-31, border=True
+            )
             dpg.bind_item_font("terminal_window", "small_font")
-            dpg.add_child_window(tag="footer", height=27, no_scrollbar=True, no_scroll_with_mouse=True, autosize_x=True, border=False)
+            dpg.add_child_window(
+                tag="footer", height=27, no_scrollbar=True, no_scroll_with_mouse=True, autosize_x=True, border=False
+            )
         dpg.add_group(tag="footer_main_group", parent="footer", horizontal=True, horizontal_spacing=0)
         dpg.add_group(tag="footer_left_group", parent="footer_main_group", horizontal=True, horizontal_spacing=0)
         dpg.add_combo(
@@ -322,9 +407,19 @@ def create_ui():
         no_saved_settings=True,
     )
 
-    dpg.add_child_window(parent="settings_menu", tag="settings_scroll", height=-64, width=-1, border=False, no_scrollbar=False)
+    dpg.add_child_window(
+        parent="settings_menu", tag="settings_scroll", height=-64, width=-1, border=False, no_scrollbar=False
+    )
     settings.render_menu(parent="settings_scroll")
-    dpg.add_child_window(parent="settings_menu", tag="settings_actions_bar", height=60, width=-1, border=False, no_scrollbar=True, no_scroll_with_mouse=True)
+    dpg.add_child_window(
+        parent="settings_menu",
+        tag="settings_actions_bar",
+        height=60,
+        width=-1,
+        border=False,
+        no_scrollbar=True,
+        no_scroll_with_mouse=True,
+    )
     with dpg.group(horizontal=True, parent="settings_actions_bar", tag="settings_buttons_group"):
         dpg.add_button(tag="settings_save_button", label="Save changes", callback=settings.save, width=132)
         dpg.add_button(tag="settings_refresh_button", label="Reload", callback=settings.refresh, width=96)
