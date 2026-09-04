@@ -3,6 +3,8 @@ name: Hardening CI and Test Build
 on:
   push:
     branches: [v21.4-hardening]
+    paths-ignore:
+      - "Docs/**"
   workflow_dispatch:
 
 permissions:

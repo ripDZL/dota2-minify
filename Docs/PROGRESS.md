@@ -22,6 +22,9 @@
 - [x] Hardening format gate defers `mod_compat.py`, blocked `mod_library.py`, `security.py`, and `ui/settings.py`; compile, Ruff lint, pytest, and Windows build remain mandatory.
 - [x] Second hardening CI run: compileall, format gate, and Ruff lint passed; pytest reached 122/132 with 10 stale-policy failures.
 - [x] Adapted archive security tests to fail-closed atomic rejection and Steam launch-option tests to no-auto-injection + narrow generated-wrapper cleanup policy.
+- [x] Third hardening CI run on `52fdb368`: compileall, Ruff format gate, Ruff lint, pytest, Windows PyInstaller, ZIP packaging, and artifact upload all passed.
+- [x] Verified first portable artifact layout: `Minify.exe`, `_internal`, `bin`, `mods`, README, LICENSE; no `.materialize`, `READY`, or migration workflow payload.
+- [x] Hardening test identity changed to `VERSION = "1.14rc7"`, `FORK_BUILD = "v21.4-hardening"`, title `Minify 1.14rc7 — v21.4-hardening`; manifest version compatibility retained.
 - [x] Transferred `core/mod_library.py`; remote file compiles and contains hardened paths inspected so far.
 - [x] Branch diff reviewed at multiple checkpoints; no intentional changes to `main` or `beta`.
 - [x] Temporary one-time materialization workflow staged; expected handoff ZIP SHA-256 is `97b2810c1e0ed2a51a407dd895d93e0f53e95bb82e65824cd41536da799fdece`.
@@ -32,5 +35,5 @@
 - [ ] Remaining UI/profile/patch/glue/test materialization incomplete.
 - [ ] Full materialized-tree regression/static/security pass incomplete.
 - [ ] Complete Git diff review before beta promotion incomplete.
-- [ ] Windows build/runtime validation incomplete.
+- [ ] Final identified Windows test artifact validation incomplete.
 - [ ] Dota smoke test incomplete.

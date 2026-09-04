@@ -25,7 +25,7 @@
 - [ ] Perform second-pass security review on fully materialized code.
 - [ ] Check for direct `extractall`, unrestricted decompression, unsafe joins, predictable temp files, unverified executable downloads, weak redirect/provenance handling.
 - [ ] Clean `.pyc`, `__pycache__`, `.pytest_cache`, temporary build/materialization artifacts.
-- [ ] Update fork beta version identification without erasing upstream version/attribution.
+- [x] Update hardening test-build identity to rc7 + `v21.4-hardening` without erasing upstream version/attribution.
 - [ ] Review complete Git diff against exact rc7.
 - [ ] Run Windows PowerShell/PyInstaller build.
 - [ ] Run Dota smoke tests: startup, lobby, demo/match load, patch rollback, profiles, D2PFX, Dark Terrain + shader, Remove Foilage.

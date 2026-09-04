@@ -5,8 +5,11 @@ import os
 import platform
 import sys
 
-VERSION = "1.13.1"
-TITLE = f"Minify {VERSION}"
+# Runtime compatibility stays tied to the exact upstream rc7 baseline while the
+# window title identifies this fork's hardening test line.
+VERSION = "1.14rc7"
+FORK_BUILD = "v21.4-hardening"
+TITLE = f"Minify {VERSION} — {FORK_BUILD}"
 
 OS = platform.system()
 MACHINE = platform.machine().lower()
