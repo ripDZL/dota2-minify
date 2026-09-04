@@ -10,16 +10,23 @@
 - [x] D2PFX DEFLATE output bounded before untrusted expansion.
 - [x] Source2Viewer/ripgrep release SHA-256 verification implemented.
 - [x] Backup restore confinement/preflight/transaction hardening implemented.
-- [x] Profile import strict validation/limits implemented.
+- [x] Profile import strict validation/limits implemented locally.
 - [x] Dark Terrain deferred-post-process yielding made collision-driven.
-- [x] Hostile-input regression coverage added.
-- [x] Current hardening suite: 133/133 passing + 9 subtests.
+- [x] Hostile-input regression coverage added locally.
+- [x] Current local hardening suite: 133/133 passing + 9 subtests.
 - [x] Python compileall passes for transformer/overlay/tests.
 - [x] GitHub branch-write access verified.
 - [x] `v21.4-hardening` created from exact rc7.
 - [x] `beta` created as separate fork beta line.
-- [ ] Perform final second-pass code/security review after materialization.
-- [ ] Materialize hardened source onto exact rc7 branch.
+- [x] Materialized `core/security.py`, `core/backup_manager.py`, `core/prelaunch_policy.py`, `core/mod_compat.py`.
+- [x] Materialized VPK path confinement in `patch/vpk_utils.py`.
+- [x] Materialized dependency digest verification in `conditions.py`.
+- [x] Materialized bounded archive extraction in `core/fs.py`.
+- [x] Partial branch diff reviewed: only Docs + intended hardening files.
+- [ ] Resolve rare-architecture dependency selection: rc7 nonexistent Linux ppc64/i686 ripgrep URLs and non-x64 Source2Viewer fallback.
+- [ ] Materialize `mods_shared.py`, `mod_library.py`, UI overlays, profiles/D2PFX/glue edits, mod fixes.
+- [ ] Materialize fork regression tests against normal source paths.
+- [ ] Perform final second-pass code/security review after full materialization.
 - [ ] Review complete Git diff before promoting to `beta`.
 - [ ] Windows build/runtime validation complete.
 - [ ] Dota smoke test complete.
