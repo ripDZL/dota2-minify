@@ -13,7 +13,7 @@ terminal_window_wrap = base.main_window_width - 10
 widths = []
 heights = []
 
-social_button_size = (18, 18)
+social_button_size = (16, 16)
 
 if not base.HEADLESS:
     for monitor in screeninfo.get_monitors():
@@ -45,6 +45,8 @@ def lock_interaction():
     dpg.configure_item("button_patch", enabled=False)
     dpg.configure_item("button_select_mods", enabled=False)
     dpg.configure_item("button_uninstall", enabled=False)
+    if dpg.does_item_exist("button_refresh_main"):
+        dpg.configure_item("button_refresh_main", enabled=False)
     dpg.configure_item("lang_select", enabled=False)
     dpg.configure_item("output_select", enabled=False)
 
@@ -57,6 +59,8 @@ def unlock_interaction():
     dpg.configure_item("button_patch", enabled=True)
     dpg.configure_item("button_select_mods", enabled=True)
     dpg.configure_item("button_uninstall", enabled=True)
+    if dpg.does_item_exist("button_refresh_main"):
+        dpg.configure_item("button_refresh_main", enabled=True)
     dpg.configure_item("lang_select", enabled=True)
     dpg.configure_item("output_select", enabled=True)
 

@@ -58,6 +58,15 @@ def stop_drag():
     is_moving_viewport = False
 
 
+
+def show_overlay(tag):
+    """Show an app overlay fitted to the viewport client area."""
+    if not dpg.does_item_exist(tag):
+        return
+    on_resize()
+    dpg.configure_item(tag, pos=(0, 0), show=True)
+    dpg.focus_item(tag)
+
 def focus():
     with utils.try_pass():
         if base.is_win:
@@ -81,9 +90,52 @@ def on_resize():
     shared.viewport_width = dpg.get_viewport_width()
     shared.viewport_height = dpg.get_viewport_height()
     # terminal wrap size
-    shared.window_width = dpg.get_item_width("primary_window")
-    shared.window_height = dpg.get_item_height("primary_window")
-    terminal.wrap_size = base.main_window_width - 20 if dev_tools.dev_mode_state == 1 else shared.window_width - 10
+    client_width_fn = getattr(dpg, "get_viewport_client_width", None)
+    client_height_fn = getattr(dpg, "get_viewport_client_height", None)
+    shared.window_width = int(client_width_fn() if client_width_fn else dpg.get_viewport_width())
+    shared.window_height = int(client_height_fn() if client_height_fn else dpg.get_viewport_height())
+
+    if dpg.does_item_exist("primary_window"):
+        dpg.configure_item(
+            "primary_window",
+            pos=(0, 0),
+            width=shared.window_width,
+            height=shared.window_height,
+        )
+
+    # v21.1 responsive shell. Give the landing workspace more vertical room
+    # and a wider navigation rail so text/buttons are not clipped on Windows.
+    nav_width = max(164, min(212, int(shared.window_width * 0.135)))
+    shell_body_height = max(292, min(388, int(shared.window_height * 0.36)))
+    workspace_width = max(400, shared.window_width - nav_width - 32)
+    wide_workspace = workspace_width >= 900
+    side_width = 260 if wide_workspace else 0
+    main_width = max(340, workspace_width - side_width - (18 if wide_workspace else 0) - 28)
+    inner_height = max(248, shell_body_height - 36)
+
+    if dpg.does_item_exist("app_shell_header"):
+        dpg.configure_item("app_shell_header", width=shared.window_width, height=60)
+    if dpg.does_item_exist("header_spacer"):
+        dpg.configure_item("header_spacer", width=max(12, shared.window_width - 520))
+    if dpg.does_item_exist("app_nav_rail"):
+        dpg.configure_item("app_nav_rail", width=nav_width, height=shell_body_height)
+    if dpg.does_item_exist("app_workspace"):
+        dpg.configure_item("app_workspace", width=workspace_width, height=shell_body_height)
+    if dpg.does_item_exist("app_workspace_main"):
+        dpg.configure_item("app_workspace_main", width=main_width, height=inner_height)
+    if dpg.does_item_exist("app_workspace_side"):
+        dpg.configure_item("app_workspace_side", show=wide_workspace, width=max(1, side_width), height=inner_height)
+    if dpg.does_item_exist("dashboard_focus_hint"):
+        dpg.configure_item("dashboard_focus_hint", wrap=max(240, main_width - 24))
+    if dpg.does_item_exist("dashboard_status_message"):
+        dpg.configure_item("dashboard_status_message", wrap=max(190, main_width - 120))
+    if dpg.does_item_exist("activity_header"):
+        dpg.configure_item("activity_header", width=shared.window_width, height=40)
+    if dpg.does_item_exist("settings_scroll"):
+        dpg.configure_item("settings_scroll", width=shared.window_width, height=max(220, shared.window_height - 78))
+    if dpg.does_item_exist("settings_actions_bar"):
+        dpg.configure_item("settings_actions_bar", width=shared.window_width, height=56)
+    terminal.wrap_size = base.main_window_width - 20 if dev_tools.dev_mode_state == 1 else min(max(360, shared.window_width - 30), 1180)
 
     for item in shared.terminal_history:
         idx = item["id"]
@@ -100,10 +152,23 @@ def on_resize():
 
     # menus resize
     if dpg.does_item_exist("mod_menu"):
-        dpg.configure_item("mod_menu", width=shared.window_width, height=shared.window_height)
+        dpg.configure_item(
+            "mod_menu",
+            pos=(0, 0),
+            width=shared.window_width,
+            height=shared.window_height,
+        )
+        from ui import checkboxes
+
+        checkboxes.on_resize(shared.window_width, shared.window_height)
 
     if dpg.does_item_exist("settings_menu"):
-        dpg.configure_item("settings_menu", width=shared.window_width, height=shared.window_height)
+        dpg.configure_item(
+            "settings_menu",
+            pos=(0, 0),
+            width=shared.window_width,
+            height=shared.window_height,
+        )
 
     # Browser discovery resizing
     for browser_config in get_browser_configs():

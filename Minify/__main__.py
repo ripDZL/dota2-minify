@@ -56,43 +56,104 @@ dpg.create_context()
 
 def create_ui():
     button_size_x, button_size_y = gui.social_button_size
-    with dpg.window(tag="primary_window"):
-        dpg.set_primary_window("primary_window", True)
-        with dpg.group(tag="center_group", horizontal=True):
-            dpg.group(tag="text_group")
-            dpg.add_text(
-                tag="banner_text",
-                default_value=r""" __    __    __    __   __    __    ______  __  __
-/\ "-./  \  /\ \  /\ "-.\ \  /\ \  /\  ___\/\ \_\ \  
-\ \ \-./\ \ \ \ \ \ \ \-.  \ \ \ \ \ \  __\\ \____ \ 
- \ \_\ \ \_\ \ \_\ \ \_\\"\_\ \ \_\ \ \_\_/ \/\_____\
-  \/_/  \/_/  \/_/  \/_/ \/_/  \/_/  \/_/    \/_____/""",
-                parent="text_group",
-                pos=(4, -12),
-            )
-            dpg.bind_item_font("banner_text", "banner_font")
-            # Creating log terminal
-            with dpg.group(parent="center_group", tag="button_group"):
-                dpg.add_spacer(height=6)
-                dpg.add_button(
-                    tag="button_patch",
-                    label="Patch",
-                    callback=lambda: threading.Thread(target=patch.patcher, daemon=True).start(),
-                    enabled=False,
-                    width=-1,
-                )
-                dpg.add_button(
-                    tag="button_select_mods",
-                    label="Select Mods",
-                    callback=lambda: dpg.configure_item("mod_menu", show=True),
-                    width=-1,
-                )
-                dpg.add_button(tag="button_uninstall", label="Uninstall", callback=modals.Uninstall.show, width=-1)
-        with dpg.group(tag="terminal_and_footer_group"):
-            dpg.add_child_window(tag="terminal_window", no_scrollbar=False, show=True, autosize_x=True, height=-27)
-            dpg.bind_item_font("terminal_window", "small_font")
+    with dpg.window(
+        tag="primary_window",
+        no_title_bar=True,
+        no_move=True,
+        no_resize=True,
+        no_collapse=True,
+        no_close=True,
+        no_saved_settings=True,
+        pos=(0, 0),
+    ):
+        # v21.1 layout-fit shell. Responsive child windows replace the
+        # fixed-height v19.7 shell so Windows font metrics cannot clip actions.
+        dpg.add_child_window(
+            tag="app_shell_header",
+            height=60,
+            autosize_x=True,
+            border=False,
+            no_scrollbar=True,
+            no_scroll_with_mouse=True,
+        )
+        with dpg.group(parent="app_shell_header", horizontal=True):
+            dpg.add_text("MINIFY", tag="app_title")
+            dpg.bind_item_font("app_title", "large_font")
+            dpg.add_text("Dota 2 Mod Manager", tag="app_product_name")
+            dpg.add_text(f"v{base.VERSION}", tag="app_version")
+            dpg.add_spacer(tag="header_spacer", width=10)
+            dpg.add_text("LOCAL MOD WORKSPACE", tag="header_context")
+            dpg.add_text("RC6", tag="header_badge")
 
-            dpg.add_child_window(tag="footer", no_scrollbar=True, no_scroll_with_mouse=True, autosize_x=True)
+        dpg.add_spacer(height=8)
+        dpg.add_group(tag="app_shell_body", horizontal=True, horizontal_spacing=8)
+        dpg.add_child_window(
+            parent="app_shell_body",
+            tag="app_nav_rail",
+            width=172,
+            height=304,
+            border=True,
+            no_scrollbar=True,
+            no_scroll_with_mouse=True,
+        )
+        dpg.add_text("NAVIGATION", parent="app_nav_rail", tag="nav_workspace_label")
+        dpg.add_button(parent="app_nav_rail", tag="nav_patch_button", label="Patch", callback=lambda: None, width=-1, height=34)
+        dpg.add_button(parent="app_nav_rail", tag="button_select_mods", label="Select Mods", callback=lambda: window.show_overlay("mod_menu"), width=-1, height=34)
+        dpg.add_button(parent="app_nav_rail", tag="nav_d2pfx_button", label="D2PFX Browser", callback=d2pfx_ui.toggle, width=-1, height=36)
+        dpg.add_button(parent="app_nav_rail", tag="nav_settings_button", label="Settings", callback=lambda: window.show_overlay("settings_menu"), width=-1, height=36)
+        dpg.add_spacer(parent="app_nav_rail", height=7)
+        dpg.add_separator(parent="app_nav_rail")
+        dpg.add_text("RECOVERY", parent="app_nav_rail", tag="nav_secondary_label")
+        dpg.add_button(parent="app_nav_rail", tag="nav_restore_button", label="Restore backups", callback=checkboxes.show_backups, width=-1, height=32)
+        dpg.add_button(parent="app_nav_rail", tag="button_uninstall", label="Remove Minify", callback=modals.Uninstall.show, width=-1, height=32)
+
+        dpg.add_child_window(
+            parent="app_shell_body",
+            tag="app_workspace",
+            width=-1,
+            height=304,
+            border=True,
+            no_scrollbar=True,
+            no_scroll_with_mouse=True,
+        )
+        with dpg.group(parent="app_workspace", tag="workspace_columns", horizontal=True, horizontal_spacing=10):
+            dpg.add_child_window(parent="workspace_columns", tag="app_workspace_main", width=-1, height=-1, border=False, no_scrollbar=True, no_scroll_with_mouse=True)
+            dpg.add_text("PATCH WORKSPACE", parent="app_workspace_main", tag="workspace_eyebrow")
+            dpg.add_text("Build a clean patch", parent="app_workspace_main", tag="dashboard_focus_title")
+            dpg.bind_item_font("dashboard_focus_title", "large_font")
+            dpg.add_text("0 selected • 0 installed", parent="app_workspace_main", tag="dashboard_metric")
+            dpg.add_text("Choose your mods, review shared files, then let Minify create a restore point before changing Dota.", parent="app_workspace_main", tag="dashboard_focus_hint", wrap=420)
+            dpg.add_spacer(parent="app_workspace_main", height=5)
+            dpg.add_child_window(parent="app_workspace_main", tag="dashboard_status_panel", height=58, width=-1, border=True, no_scrollbar=True, no_scroll_with_mouse=True)
+            with dpg.group(parent="dashboard_status_panel", horizontal=True):
+                dpg.add_text("● READY", tag="dashboard_status_label")
+                dpg.add_text("Getting your mod library ready...", tag="dashboard_status_message", wrap=420)
+            dpg.add_spacer(parent="app_workspace_main", height=6)
+            with dpg.group(parent="app_workspace_main", horizontal=True):
+                dpg.add_button(tag="button_patch", label="Review & Patch", callback=checkboxes.show_patch_preview, enabled=False, width=196, height=40)
+                dpg.add_button(tag="button_refresh_main", label="Refresh", callback=checkboxes.refresh, width=132, height=40)
+
+            dpg.add_child_window(parent="workspace_columns", tag="app_workspace_side", width=260, height=-1, border=True, no_scrollbar=True, no_scroll_with_mouse=True)
+            dpg.add_text("PATCH FLOW", parent="app_workspace_side", tag="dashboard_side_title")
+            dpg.add_text("01  Review shared files", parent="app_workspace_side", tag="dashboard_step_1")
+            dpg.add_text("02  Create restore point", parent="app_workspace_side", tag="dashboard_step_2")
+            dpg.add_text("03  Apply selected mods", parent="app_workspace_side", tag="dashboard_step_3")
+            dpg.add_spacer(parent="app_workspace_side", height=6)
+            dpg.add_separator(parent="app_workspace_side")
+            dpg.add_text("SAFETY", parent="app_workspace_side")
+            dpg.add_text("Automatic rollback protects the previous Minify output if a patch fails.", parent="app_workspace_side", wrap=220)
+
+        dpg.add_spacer(height=8)
+        dpg.add_child_window(tag="activity_header", height=40, autosize_x=True, border=True, no_scrollbar=True, no_scroll_with_mouse=True)
+        with dpg.group(parent="activity_header", horizontal=True):
+            dpg.add_text("ACTIVITY", tag="activity_label")
+            dpg.add_text("Live setup, download and patch output", tag="activity_caption")
+
+        dpg.add_spacer(height=4)
+        with dpg.group(tag="terminal_and_footer_group"):
+            dpg.add_child_window(tag="terminal_window", no_scrollbar=False, show=True, autosize_x=True, height=-31, border=True)
+            dpg.bind_item_font("terminal_window", "small_font")
+            dpg.add_child_window(tag="footer", height=27, no_scrollbar=True, no_scroll_with_mouse=True, autosize_x=True, border=False)
         dpg.add_group(tag="footer_main_group", parent="footer", horizontal=True, horizontal_spacing=0)
         dpg.add_group(tag="footer_left_group", parent="footer_main_group", horizontal=True, horizontal_spacing=0)
         dpg.add_combo(
@@ -131,9 +192,10 @@ def create_ui():
             "settings_texture_tag",
             tag="button_settings",
             parent="footer_left_group",
+            show=False,
             width=button_size_x,
             height=button_size_y,
-            callback=lambda: dpg.configure_item("settings_menu", show=True),
+            callback=lambda: window.show_overlay("settings_menu"),
         )
         dpg.add_image_button(
             "dev_texture_tag",
@@ -147,6 +209,7 @@ def create_ui():
             "refresh_texture_tag",
             tag="button_refresh",
             parent="footer_left_group",
+            show=False,
             width=button_size_x,
             height=button_size_y,
             callback=checkboxes.refresh,
@@ -155,6 +218,7 @@ def create_ui():
             "d2pfx_texture_tag",
             tag="button_browser_d2pfx",
             parent="footer_left_group",
+            show=False,
             width=button_size_x,
             height=button_size_y,
             callback=d2pfx_ui.toggle,
@@ -168,6 +232,34 @@ def create_ui():
             callback=helper.change_output_path,
             fit_width=True,
         )
+
+    # Register only after the complete primary window has been built.
+    dpg.set_primary_window("primary_window", True)
+
+    with dpg.tooltip(parent="nav_patch_button"):
+        dpg.add_text("Current workspace: review and apply your selected mods")
+    with dpg.tooltip(parent="button_patch"):
+        dpg.add_text("Review selected mods, overlaps, and restore safety before patching")
+    with dpg.tooltip(parent="button_select_mods"):
+        dpg.add_text("Open the Mod Library workspace")
+    with dpg.tooltip(parent="nav_d2pfx_button"):
+        dpg.add_text("Open the D2PFX browser")
+    with dpg.tooltip(parent="nav_settings_button"):
+        dpg.add_text("Open Minify settings")
+    with dpg.tooltip(parent="nav_restore_button"):
+        dpg.add_text("Restore an automatic pre-patch backup")
+    with dpg.tooltip(parent="button_refresh_main"):
+        dpg.add_text("Rescan mod folders for additions or changes")
+    with dpg.tooltip(parent="button_uninstall"):
+        dpg.add_text("Remove Minify-managed changes from Dota 2")
+    with dpg.tooltip(parent="button_git"):
+        dpg.add_text("Minify website")
+    with dpg.tooltip(parent="button_discord"):
+        dpg.add_text("Discord")
+    with dpg.tooltip(parent="button_telegram"):
+        dpg.add_text("Telegram")
+    with dpg.tooltip(parent="button_dev"):
+        dpg.add_text("Developer tools")
 
     # Combined Modal Popup
     dpg.add_window(
@@ -197,6 +289,7 @@ def create_ui():
     dpg.add_window(
         tag="mod_menu",
         label=localization.mod_selection_window_var,
+        pos=(0, 0),
         menubar=False,
         no_title_bar=False,
         no_move=True,
@@ -205,6 +298,7 @@ def create_ui():
         no_open_over_existing_popup=True,
         show=False,
         no_resize=True,
+        no_saved_settings=True,
         width=base.main_window_width,
         height=base.main_window_height,
         on_close=checkboxes.save,
@@ -225,15 +319,16 @@ def create_ui():
         width=base.main_window_width,
         show=False,
         no_resize=True,
+        no_saved_settings=True,
     )
 
-    settings.render_menu()
-
-    dpg.add_spacer(parent="settings_menu", height=10)
-    with dpg.group(horizontal=True, parent="settings_menu", tag="settings_buttons_group"):
-        dpg.add_button(label="Save", callback=settings.save, width=100)
-        dpg.add_button(label="Refresh", callback=settings.refresh, width=100)
-        dpg.add_button(label="Reset", callback=settings.reset, width=100)
+    dpg.add_child_window(parent="settings_menu", tag="settings_scroll", height=-64, width=-1, border=False, no_scrollbar=False)
+    settings.render_menu(parent="settings_scroll")
+    dpg.add_child_window(parent="settings_menu", tag="settings_actions_bar", height=60, width=-1, border=False, no_scrollbar=True, no_scroll_with_mouse=True)
+    with dpg.group(horizontal=True, parent="settings_actions_bar", tag="settings_buttons_group"):
+        dpg.add_button(tag="settings_save_button", label="Save changes", callback=settings.save, width=132)
+        dpg.add_button(tag="settings_refresh_button", label="Reload", callback=settings.refresh, width=96)
+        dpg.add_button(tag="settings_reset_button", label="Reset options", callback=settings.reset, width=138)
 
 
 def create_base_ui():
@@ -270,6 +365,16 @@ with dpg.handler_registry():
     dpg.add_mouse_release_handler(button=0, callback=window.stop_drag)
     dpg.add_key_release_handler(dpg.mvKey_Escape, callback=gui.close_active_window)
 
+    def focus_mod_search():
+        if dpg.does_item_exist("mod_menu") and dpg.is_item_shown("mod_menu") and dpg.does_item_exist("mod_search"):
+            dpg.focus_item("mod_search")
+
+    def maybe_focus_mod_search(sender, app_data, user_data):
+        if dpg.is_key_down(dpg.mvKey_Control):
+            focus_mod_search()
+
+    dpg.add_key_press_handler(dpg.mvKey_F, callback=maybe_focus_mod_search)
+
     def modal_accept():
         from ui import modal_shared
 
@@ -302,8 +407,8 @@ with dpg.texture_registry(show=False):
 
 # Creating_main_viewport
 
-viewport_width = max(base.main_window_width, config.get("window_width", base.main_window_width))
-viewport_height = max(base.main_window_height, config.get("window_height", base.main_window_height))
+viewport_width = max(760, base.main_window_width, config.get("window_width", base.main_window_width))
+viewport_height = max(580, base.main_window_height, config.get("window_height", base.main_window_height))
 
 shared.viewport_width = viewport_width
 shared.viewport_height = viewport_height
@@ -312,8 +417,8 @@ dpg.create_viewport(
     title=base.TITLE,
     width=viewport_width,
     height=viewport_height,
-    min_width=base.main_window_width,
-    min_height=base.main_window_height,
+    min_width=max(760, base.main_window_width),
+    min_height=max(580, base.main_window_height),
     x_pos=min(gui.widths) // 2 - viewport_width // 2,
     y_pos=max(0, min(gui.heights) // 2 - viewport_height // 2 - 120),
     resizable=True,

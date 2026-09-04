@@ -46,12 +46,6 @@ SETTINGS = [
         "type": "checkbox",
     },
     {
-        "key": "patch_on_launch",
-        "text": "Run patches upon launch if required",
-        "default": True,
-        "type": "checkbox",
-    },
-    {
         "key": "apply_for_all",
         "text": "Apply everything for all users",
         "default": True,
@@ -149,269 +143,145 @@ def reset(sender=None, app_data=None, user_data=None):
     render_menu()
 
 
-def render_menu():
+def render_menu(parent="settings_menu"):
     global MOD_SETTINGS_WIDGETS
     MOD_SETTINGS_WIDGETS.clear()
 
     if dpg.does_item_exist("settings_content_group"):
         dpg.delete_item("settings_content_group", children_only=True)
     else:
-        dpg.add_group(parent="settings_menu", tag="settings_content_group")
+        dpg.add_group(parent=parent, tag="settings_content_group")
 
-    for opt in SETTINGS:
-        with dpg.group(horizontal=True, parent="settings_content_group"):
-            _tag = f"opt_{opt['key']}"
-            _text = opt.get("text") if opt["type"] == "checkbox" else f"{opt.get('text')}:"
-            _default_value = config.get(opt["key"], opt["default"])
+    dpg.add_text("SETTINGS", parent="settings_content_group", tag="settings_eyebrow")
+    dpg.add_text("Minify preferences", parent="settings_content_group", tag="settings_title")
+    dpg.bind_item_font("settings_title", "large_font")
+    dpg.add_text(
+        "Everyday options are grouped by what they affect. Advanced mod settings stay below.",
+        parent="settings_content_group",
+        tag="settings_intro",
+        wrap=620,
+    )
 
-            if opt["type"] == "checkbox":
-                dpg.add_checkbox(
-                    tag=_tag,
-                    label=_text,
-                    default_value=_default_value,
-                )
-            elif opt["type"] == "combo":
-                dpg.add_text(_text)
-                raw_items = opt["items_getter"]() if "items_getter" in opt else []
-                if raw_items and isinstance(raw_items[0], dict):
-                    items = [f"{item['id']} - {item['name']}" for item in raw_items]
-                else:
-                    items = raw_items
+    groups = (
+        ("Paths & Steam", {"steam_root", "steam_library", "output_path", "steam_id"}),
+        ("Patch behavior", {"fix_options", "apply_for_all", "launch_dota_after_patch", "kill_self_after_patch"}),
+        ("Updates & privacy", {"opt_into_rcs", "opt_out_vpk_metadata"}),
+    )
 
-                if opt["key"] == "steam_id" and _default_value:
-                    for item in items:
-                        if item.startswith(f"{_default_value} - "):
-                            _default_value = item
-                            break
-
-                dpg.add_combo(
-                    tag=_tag,
-                    items=items,
-                    default_value=_default_value,
-                    width=-1,
-                )
+    def add_option(opt, parent):
+        _tag = f"opt_{opt['key']}"
+        _text = opt.get("text") if opt["type"] == "checkbox" else f"{opt.get('text')}:"
+        _default_value = config.get(opt["key"], opt["default"])
+        if opt["type"] == "checkbox":
+            dpg.add_checkbox(parent=parent, tag=_tag, label=_text, default_value=_default_value)
+        elif opt["type"] == "combo":
+            dpg.add_text(_text, parent=parent)
+            raw_items = opt["items_getter"]() if "items_getter" in opt else opt.get("items", [])
+            if raw_items and isinstance(raw_items[0], dict):
+                items = [f"{item['id']} - {item['name']}" for item in raw_items]
             else:
-                dpg.add_text(_text)
-                dpg.add_input_text(
-                    tag=_tag,
-                    default_value=_default_value,
-                    width=-1,
-                )
+                items = raw_items
+            if opt["key"] == "steam_id" and _default_value:
+                for item in items:
+                    if item.startswith(f"{_default_value} - "):
+                        _default_value = item
+                        break
+            dpg.add_combo(parent=parent, tag=_tag, items=items, default_value=_default_value, width=-1)
+        else:
+            dpg.add_text(_text, parent=parent)
+            dpg.add_input_text(parent=parent, tag=_tag, default_value=_default_value, width=-1)
 
-    browser_settings_found = False
-    for b_conf in registry.get_browser_configs():
-        for opt in getattr(b_conf, "SETTINGS", []):
-            if not browser_settings_found:
-                dpg.add_separator(parent="settings_content_group")
-                dpg.add_text("Browser Settings", parent="settings_content_group")
-                browser_settings_found = True
+    for title, keys in groups:
+        header = dpg.add_collapsing_header(parent="settings_content_group", label=title, default_open=True)
+        for opt in SETTINGS:
+            if opt["key"] in keys:
+                add_option(opt, header)
 
-            with dpg.group(horizontal=True, parent="settings_content_group"):
-                _tag = f"opt_{opt['key']}"
-                _text = opt.get("text") if opt["type"] == "checkbox" else f"{opt.get('text')}:"
-                _default_value = config.get(opt["key"], opt["default"])
-
-                if opt["type"] == "checkbox":
-                    dpg.add_checkbox(
-                        tag=_tag,
-                        label=_text,
-                        default_value=_default_value,
-                    )
-                elif opt["type"] == "combo":
-                    dpg.add_text(_text)
-                    items = opt.get("items", [])
-                    dpg.add_combo(
-                        tag=_tag,
-                        items=items,
-                        default_value=_default_value,
-                        width=-1,
-                    )
-                else:
-                    dpg.add_text(_text)
-                    dpg.add_input_text(
-                        tag=_tag,
-                        default_value=_default_value,
-                        width=-1,
-                    )
+    browser_settings = [
+        opt
+        for b_conf in registry.get_browser_configs()
+        for opt in getattr(b_conf, "SETTINGS", [])
+    ]
+    if browser_settings:
+        browser_header = dpg.add_collapsing_header(parent="settings_content_group", label="Browser integrations", default_open=False)
+        for opt in browser_settings:
+            add_option(opt, browser_header)
 
     mod_settings_found = False
     for mod in constants.mods_alphabetical:
         mod_path = mods_shared.get_mod_path(mod)
-        if mod.lower().endswith(".vpk"):
+        if mod.endswith(".vpk"):
             continue
-
         mod_config = manifest_utils.get_mod(mod_path)
-
         always = mod_config.get("always", False)
         mod_enabled = dpg.does_item_exist(mod) and dpg.get_value(mod)
+        settings_to_render = [
+            opt for opt in mod_config.get("settings", [])
+            if always or mod_enabled or opt.get("force", False)
+        ]
+        if not settings_to_render:
+            continue
+        if not mod_settings_found:
+            dpg.add_separator(parent="settings_content_group")
+            dpg.add_text("MOD OPTIONS", parent="settings_content_group")
+            mod_settings_found = True
+        mod_header = dpg.add_collapsing_header(parent="settings_content_group", label=mods_shared.get_mod_label(mod), default_open=False)
+        saved_mod_data = config.get_mod(mod)
+        presets = mod_config.get("presets", [])
+        if presets:
+            preset_names = [preset["name"] for preset in presets]
+            current_preset = ""
+            for preset in presets:
+                if all(saved_mod_data.get(k) == v for k, v in preset.get("values", {}).items()):
+                    current_preset = preset["name"]
+                    break
+            combo_tag = f"preset_combo_{mod}"
+            with dpg.group(parent=mod_header, horizontal=True):
+                dpg.add_combo(tag=combo_tag, items=preset_names, default_value=current_preset, width=180)
+                dpg.add_button(label="Apply preset", callback=apply_preset, user_data={"mod_name": mod, "presets": presets, "combo_tag": combo_tag})
 
-        if "settings" in mod_config:
-            settings_to_render = [
-                opt for opt in mod_config["settings"] if always or mod_enabled or opt.get("force", False)
-            ]
-
-            if settings_to_render:
-                if not mod_settings_found:
-                    dpg.add_separator(parent="settings_content_group")
-                    dpg.add_text("Mod Settings", parent="settings_content_group")
-                    mod_settings_found = True
-
-                dpg.add_text(f"{mods_shared.get_mod_label(mod)}:", parent="settings_content_group")
-
-                saved_mod_data = config.get_mod(mod)
-
-                presets = mod_config.get("presets", [])
-                if presets:
-                    with dpg.group(horizontal=True, parent="settings_content_group"):
-                        dpg.add_text("Presets:")
-
-                        preset_names = [p["name"] for p in presets]
-
-                        # Determine current preset
-                        current_preset = ""
-                        for p in presets:
-                            match = True
-                            for k, v in p.get("values", {}).items():
-                                if saved_mod_data.get(k) != v:
-                                    match = False
-                                    break
-                            if match:
-                                current_preset = p["name"]
-                                break
-
-                        combo_tag = f"preset_combo_{mod}"
-                        dpg.add_combo(tag=combo_tag, items=preset_names, default_value=current_preset, width=150)
-
-                        dpg.add_button(
-                            label="Apply",
-                            callback=apply_preset,
-                            user_data={"mod_name": mod, "presets": presets, "combo_tag": combo_tag},
-                        )
-
-                for opt in settings_to_render:
-                    _tag = f"mod_opt_{mod}_{opt['key']}"
-                    _text = opt.get("text") if opt["type"] == "checkbox" else f"{opt.get('text')}:"
-                    _default_value = saved_mod_data.get(opt["key"], opt.get("default", ""))
-
-                    with dpg.group(horizontal=True, parent="settings_content_group"):
-                        if opt["type"] == "checkbox":
-                            dpg.add_checkbox(
-                                tag=_tag,
-                                label=_text,
-                                default_value=_default_value,
-                            )
-                        elif opt["type"] == "combo":
-                            dpg.add_text(_text)
-                            items = opt.get("items", [])
-                            dpg.add_combo(
-                                tag=_tag,
-                                items=items,
-                                default_value=_default_value,
-                                width=-1,
-                            )
-                        elif opt["type"] == "number":
-                            dpg.add_text(_text)
-                            var_type = opt.get("var_type", "int")
-                            if var_type == "float":
-                                dpg.add_input_float(
-                                    tag=_tag,
-                                    default_value=float(_default_value) if _default_value else 0.0,
-                                    step=opt.get("step", 0.1),
-                                    width=-1,
-                                )
-                            else:
-                                dpg.add_input_int(
-                                    tag=_tag,
-                                    default_value=int(_default_value) if _default_value else 0,
-                                    step=opt.get("step", 1),
-                                    width=-1,
-                                )
-                        elif opt["type"] == "slider":
-                            dpg.add_text(_text)
-                            var_type = opt.get("var_type", "int")
-                            min_val = opt.get("min", 0)
-                            max_val = opt.get("max", 100)
-                            step = opt.get("step")
-                            _callback = snap_slider if step else None
-                            _user_data = {"step": step} if step else None
-                            if var_type == "float":
-                                dpg.add_slider_float(
-                                    tag=_tag,
-                                    default_value=float(_default_value) if _default_value else 0.0,
-                                    min_value=float(min_val),
-                                    max_value=float(max_val),
-                                    width=-1,
-                                    callback=_callback,
-                                    user_data=_user_data,
-                                )
-                            else:
-                                dpg.add_slider_int(
-                                    tag=_tag,
-                                    default_value=int(_default_value) if _default_value else 0,
-                                    min_value=int(min_val),
-                                    max_value=int(max_val),
-                                    width=-1,
-                                    callback=_callback,
-                                    user_data=_user_data,
-                                )
-                        elif opt["type"] == "color":
-                            dpg.add_text(_text)
-                            with dpg.group(horizontal=True):
-                                dpg.add_input_text(
-                                    tag=_tag,
-                                    default_value=(
-                                        _default_value
-                                        if isinstance(_default_value, str)
-                                        else utils.rgba_to_hex(_default_value)
-                                    ),
-                                    width=-120,
-                                    callback=lambda s, a, u: dpg.set_value(u, utils.hex_to_rgba(a)),
-                                    user_data=f"{_tag}_preview",
-                                )
-                                dpg.add_color_button(
-                                    tag=f"{_tag}_preview",
-                                    default_value=utils.parse_color(_default_value),
-                                )
-                        elif opt["type"] == "list":
-                            with dpg.group(horizontal=False):
-                                dpg.add_text(_text)
-                                items = _default_value if isinstance(_default_value, list) else []
-                                dpg.add_listbox(tag=_tag, items=items, width=-1, num_items=5)
-                                with dpg.group(horizontal=True):
-                                    input_tag = f"{_tag}_input"
-                                    dpg.add_input_text(tag=input_tag, width=-130)
-                                    dpg.add_button(
-                                        label="Add",
-                                        width=60,
-                                        callback=add_to_list,
-                                        user_data={"listbox_tag": _tag, "input_tag": input_tag},
-                                    )
-                                    dpg.add_button(
-                                        label="Remove",
-                                        width=60,
-                                        callback=remove_from_list,
-                                        user_data={"listbox_tag": _tag},
-                                    )
-
-                        elif opt["type"] == "button":
-                            dpg.add_button(
-                                tag=_tag,
-                                label=opt.get("text", opt["key"]),
-                                callback=handle_button_click,
-                                user_data={"mod_name": mod, "key": opt["key"]},
-                                width=-1,
-                            )
-                        else:
-                            dpg.add_text(_text)
-                            dpg.add_input_text(
-                                tag=_tag,
-                                default_value=_default_value,
-                                width=-1,
-                            )
-
-                    MOD_SETTINGS_WIDGETS.append(
-                        {"tag": _tag, "mod_name": mod, "key": opt["key"], "type": opt["type"]}
-                    )
+        for opt in settings_to_render:
+            _tag = f"mod_opt_{mod}_{opt['key']}"
+            _text = opt.get("text") if opt["type"] == "checkbox" else f"{opt.get('text')}:"
+            _default_value = saved_mod_data.get(opt["key"], opt.get("default", ""))
+            if opt["type"] == "checkbox":
+                dpg.add_checkbox(parent=mod_header, tag=_tag, label=_text, default_value=_default_value)
+            elif opt["type"] == "combo":
+                dpg.add_text(_text, parent=mod_header)
+                dpg.add_combo(parent=mod_header, tag=_tag, items=opt.get("items", []), default_value=_default_value, width=-1)
+            elif opt["type"] == "number":
+                dpg.add_text(_text, parent=mod_header)
+                if opt.get("var_type", "int") == "float":
+                    dpg.add_input_float(parent=mod_header, tag=_tag, default_value=float(_default_value) if _default_value else 0.0, step=opt.get("step", 0.1), width=-1)
+                else:
+                    dpg.add_input_int(parent=mod_header, tag=_tag, default_value=int(_default_value) if _default_value else 0, step=opt.get("step", 1), width=-1)
+            elif opt["type"] == "slider":
+                dpg.add_text(_text, parent=mod_header)
+                _callback = snap_slider if opt.get("step") else None
+                _user_data = {"step": opt.get("step")} if opt.get("step") else None
+                if opt.get("var_type", "int") == "float":
+                    dpg.add_slider_float(parent=mod_header, tag=_tag, default_value=float(_default_value) if _default_value else 0.0, min_value=float(opt.get("min", 0)), max_value=float(opt.get("max", 100)), width=-1, callback=_callback, user_data=_user_data)
+                else:
+                    dpg.add_slider_int(parent=mod_header, tag=_tag, default_value=int(_default_value) if _default_value else 0, min_value=int(opt.get("min", 0)), max_value=int(opt.get("max", 100)), width=-1, callback=_callback, user_data=_user_data)
+            elif opt["type"] == "color":
+                dpg.add_text(_text, parent=mod_header)
+                with dpg.group(parent=mod_header, horizontal=True):
+                    dpg.add_input_text(tag=_tag, default_value=_default_value if isinstance(_default_value, str) else utils.rgba_to_hex(_default_value), width=-120, callback=lambda s, a, u: dpg.set_value(u, utils.hex_to_rgba(a)), user_data=f"{_tag}_preview")
+                    dpg.add_color_button(tag=f"{_tag}_preview", default_value=utils.parse_color(_default_value))
+            elif opt["type"] == "list":
+                dpg.add_text(_text, parent=mod_header)
+                dpg.add_listbox(parent=mod_header, tag=_tag, items=_default_value if isinstance(_default_value, list) else [], width=-1, num_items=5)
+                input_tag = f"{_tag}_input"
+                with dpg.group(parent=mod_header, horizontal=True):
+                    dpg.add_input_text(tag=input_tag, width=-130)
+                    dpg.add_button(label="Add", width=60, callback=add_to_list, user_data={"listbox_tag": _tag, "input_tag": input_tag})
+                    dpg.add_button(label="Remove", width=60, callback=remove_from_list, user_data={"listbox_tag": _tag})
+            elif opt["type"] == "button":
+                dpg.add_button(parent=mod_header, tag=_tag, label=opt.get("text", opt["key"]), callback=handle_button_click, user_data={"mod_name": mod, "key": opt["key"]}, width=-1)
+            else:
+                dpg.add_text(_text, parent=mod_header)
+                dpg.add_input_text(parent=mod_header, tag=_tag, default_value=_default_value, width=-1)
+            MOD_SETTINGS_WIDGETS.append({"tag": _tag, "mod_name": mod, "key": opt["key"], "type": opt["type"]})
 
 
 def add_to_list(sender, app_data, user_data):
