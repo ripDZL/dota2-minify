@@ -16,7 +16,6 @@ BLACKLIST = [
     "guides",
     "item-sounds",
     "news",
-    "optimization",
     "tools",
     "sites",
     "packs",
