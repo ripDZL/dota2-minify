@@ -8,7 +8,7 @@ import webbrowser
 import dearpygui.dearpygui as dpg
 import psutil
 import vdf
-from core import base, constants, fs, log, output, steam
+from core import base, constants, fs, log, mods_shared, output, security, steam
 
 workshop_installed = False
 workshop_required_methods = ["styling.css", "xml.json", "files_uncompiled"]
@@ -75,6 +75,7 @@ def resolve_dependencies(retries=0):
                 tag = output.add_text("&downloading_cli_terminal")
                 zip_path = constants.s2v_latest.split("/")[-1]
                 if fs.download_file(constants.s2v_latest, zip_path, tag):
+                    security.verify_expected_download(zip_path, constants.s2v_latest)
                     output.add_text("&downloaded_cli_terminal", zip_path)
                     if fs.extract_archive(zip_path, "."):
                         fs.remove_path(zip_path)
@@ -102,6 +103,7 @@ def resolve_dependencies(retries=0):
             archive_name = archive_path[:-4] if archive_path[-4:] == ".zip" else archive_path[:-7]
 
             if fs.download_file(constants.rg_latest, archive_path, tag):
+                security.verify_expected_download(archive_path, constants.rg_latest)
                 output.add_text("&downloaded_cli_terminal", archive_path)
 
                 rg_binary_name = os.path.basename(constants.rg_executable)
@@ -174,7 +176,7 @@ def disable_workshop_mods():
         from patch import manifest_utils
 
         for folder in constants.mods_with_order:
-            mod_path = os.path.join(base.mods_dir, folder)
+            mod_path = mods_shared.get_mod_path(folder)
             manifest = manifest_utils.get_mod(mod_path)
 
             if manifest.get("skip_workshop_check"):
