@@ -54,6 +54,31 @@ def refresh(sender=None, app_data=None, user_data=None):
     output.add_text("&refreshed_mod_list")
 
 
+def _display_label(mod):
+    label = mods_shared.get_mod_label(mod)
+    return label or mod
+
+
+def _menu_parent_for_mod(mod, collection_parents):
+    group = str(mods_shared.get_mod_group(mod) or "").strip()
+    if not group:
+        return "mod_menu"
+
+    parent = collection_parents.get(group)
+    if parent and dpg.does_item_exist(parent):
+        return parent
+
+    parent = f"collection::{group}"
+    dpg.add_collapsing_header(
+        parent="mod_menu",
+        tag=parent,
+        label=group,
+        default_open=True,
+    )
+    collection_parents[group] = parent
+    return parent
+
+
 def create():
     # Cleanup for reinitialization
     if dpg.does_item_exist("mod_menu"):
@@ -77,7 +102,7 @@ def create():
     mod_details_cache = {}
 
     def scan_mod_details(mod_name):
-        mod_p = os.path.join(base.mods_dir, mod_name)
+        mod_p = mods_shared.get_mod_path(mod_name)
         img_p = os.path.join(mod_p, "preview.jpg")
         if not os.path.exists(img_p):
             img_p = os.path.join(mod_p, "preview.png")
@@ -97,17 +122,19 @@ def create():
 
         return mod_name, image_data, has_notes
 
-    mods_to_scan = [m for m in constants.visually_available_mods if not m.endswith(".vpk")]
+    mods_to_scan = [m for m in constants.visually_available_mods if not m.lower().endswith(".vpk")]
 
     with concurrent.futures.ThreadPoolExecutor() as executor:
         results = executor.map(scan_mod_details, mods_to_scan)
         for m_name, img_data, notes_exist in results:
             mod_details_cache[m_name] = (img_data, notes_exist)
 
+    collection_parents = {}
+
     for mod in constants.visually_available_mods:
-        mod_path = os.path.join(base.mods_dir, mod)
+        mod_path = mods_shared.get_mod_path(mod)
         unsupported_version = False
-        if is_vpk := mod.endswith(".vpk"):
+        if is_vpk := mod.lower().endswith(".vpk"):
             always_val = False
         else:
             cfg = manifest_utils.get_mod(mod_path)
@@ -127,7 +154,7 @@ def create():
             if checkboxes_state.get(mod, False):
                 checkboxes_state[mod] = False
                 save()
-            output.add_text(f"Disabled {mod} (Requires version {version_req})", msg_type="warning")
+            output.add_text(f"Disabled {_display_label(mod)} (Requires version {version_req})", msg_type="warning")
         elif always_val:
             enable_ticking = False
             value = True
@@ -135,10 +162,11 @@ def create():
             enable_ticking = True
             value = checkboxes_state.get(mod, False)
 
-        dpg.add_group(parent="mod_menu", tag=f"{mod}_group_tag", horizontal=True, width=base.main_window_width)
+        menu_parent = _menu_parent_for_mod(mod, collection_parents)
+        dpg.add_group(parent=menu_parent, tag=f"{mod}_group_tag", horizontal=True, width=base.main_window_width)
         dpg.add_checkbox(
             parent=f"{mod}_group_tag",
-            label=mod[:-4] if is_vpk else mod,
+            label=_display_label(mod),
             tag=mod,
             callback=setup_state,
             default_value=value,
@@ -165,7 +193,7 @@ def create():
                     modal=True,
                     pos=(0, 0),
                     show=False,
-                    label=mod,
+                    label=_display_label(mod),
                     no_resize=True,
                     no_move=True,
                     no_close=False,

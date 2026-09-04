@@ -1,9 +1,7 @@
 "Mod details window logic"
 
-import os
-
 import dearpygui.dearpygui as dpg
-from core import base
+from core import base, mods_shared
 
 from ui import localization, markdown, shared
 
@@ -35,7 +33,7 @@ def render_details_window(mod):
         dpg.add_image(image_tag, width=display_w, height=display_h, parent=content_group)
         dpg.add_separator(parent=content_group)
 
-    mod_path = os.path.join(base.mods_dir, mod)
+    mod_path = mods_shared.get_mod_path(mod)
     text = markdown.parse_notes(mod_path, localization.locale)
 
     container = f"{mod}_markdown_container"
