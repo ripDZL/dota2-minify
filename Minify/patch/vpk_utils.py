@@ -4,7 +4,7 @@ import threading
 from concurrent.futures import ThreadPoolExecutor
 
 import vpk
-from core import base, config, constants, fs, log, output, utils
+from core import base, config, constants, fs, log, output, security, utils
 
 
 def extract(vpk_to_extract_from, paths, path_to_extract_to=base.build_dir):
@@ -14,8 +14,9 @@ def extract(vpk_to_extract_from, paths, path_to_extract_to=base.build_dir):
     vpk_lock = threading.Lock()
 
     def extract_file(path):
-        if not os.path.exists(full_path := os.path.join(path_to_extract_to, path)):  # extract files from VPK only once
-            output.add_text("&extracting_terminal", path)
+        clean_path, full_path = security.confined_destination(path_to_extract_to, path)
+        if not os.path.exists(full_path):  # extract files from VPK only once
+            output.add_text("&extracting_terminal", clean_path)
             with vpk_lock:
                 pakfile = vpk_to_extract_from.get_file(path)
 
@@ -26,14 +27,15 @@ def extract(vpk_to_extract_from, paths, path_to_extract_to=base.build_dir):
                 log.write_warning(f"File not found in VPK: {path}")
 
     with ThreadPoolExecutor() as executor:
-        executor.map(extract_file, paths)
+        list(executor.map(extract_file, paths))
 
 
-def dump(vpk_obj, output_dir, check_exists=True):
+def dump(vpk_obj, output_dir, check_exists=True, exclude_paths=None):
+    excluded = {security.safe_relative_path(str(path)).casefold() for path in (exclude_paths or [])}
     for filepath in vpk_obj:
-        # Sanitize filepath to prevent invalid characters or quotes
-        clean_path = filepath.strip().strip('"').strip("'").replace("\\", "/").lstrip("/")
-        full_path = os.path.join(output_dir, clean_path)
+        clean_path, full_path = security.confined_destination(output_dir, filepath)
+        if clean_path.casefold() in excluded:
+            continue
         if check_exists and os.path.exists(full_path):
             continue
 
