@@ -4,9 +4,10 @@
 - Current tested code commit: `1c49475c59750d3669256885399c47efe06459db`.
 - Hardening CI run `33928368807`: compileall PASS, Ruff format gate PASS, Ruff lint PASS, 131/131 pytest PASS, Windows PyInstaller/runtime copy/portable ZIP/upload PASS.
 - Current Windows test ZIP: `Minify-v21.4-hardening-1c49475c59750d3669256885399c47efe06459db-windows.zip`; SHA-256 `3b86f34536ed1e0e0d3644bca64cdca51db33c03fb15311b69fb3fc744ce5aa3`; 53600449 bytes.
-- User-supplied UI source of truth: `Minify-v1.14rc7-ModManager-v21.2-Beveled-UI.zip`; SHA-256 `92b75cd95434bbad0ef9eef0ddf2a67e0c6dc8b2730d08ff1bfeb3f7eed57b92`.
-- Exact v21.2 UI reference materialized from rc7 by its original patcher at `1d138d418fd823693260c4a9fddf039436daaca5`; source ZIP hash gate + compileall passed.
-- Restored v21.2 UI/shell files onto hardening without replacing newer core backends: `Minify/__main__.py`, `Minify/browsers/d2pfx/ui.py`, `Minify/ui/checkboxes.py`, `Minify/ui/gui.py`, `Minify/ui/settings.py`, `Minify/ui/theme.py`, `Minify/ui/window.py`.
+- Canonical user-supplied feature reference is now `Minify-v1.14rc7-ModManager-v21.3.1-Safe-Foliage-Fix (1).zip`; SHA-256 `37755c4ee92e1847eef1a5a9c89aef6ba488f33accd0cb102c62a7db8780b5f8`; its bundled 116/116 v21.3.1 regression tests pass locally.
+- v21.3.1 reference contains source overlays plus the exact-rc7 build/patch script; use it to recover the complete fork feature set, not only the earlier v21.2 UI surface.
+- Previous `Minify-v1.14rc7-ModManager-v21.2-Beveled-UI.zip` UI-only reference is superseded as the target, but remains useful provenance for the restored UI files.
+- Do not blindly replace hardened core files with v21.3.1 overlay copies. In particular its `core/mod_library.py` is 68521 bytes / Git blob `56df3e70990003cfd76f04cbacf7878bba6e65ec`, which differs from both current hardening blob and the previously validated v21.4 hardening source.
 - Preserve recursive/nested mods, markerless/collapsible Collections, profiles, D2PFX browser/imports, backups, conflict review, Obsidian + Ember/beveled UI, no-auto-prelaunch policy.
 - Historical local hardening-kit checkpoint: 133/133 tests + 9 subtests; current GitHub suite is 131/131 and does not yet include all fork regression tests.
 - Hardening format gate currently excludes `core/mod_compat.py`, `core/mod_library.py`, `core/security.py`, and `ui/settings.py`; compileall and full Ruff lint still run on CI.
@@ -16,6 +17,6 @@
 - Dark Terrain: yield `materials/dev/deferred_post_process.vmat_c` only when another selected mod actually owns the same virtual path; associated Dark fog is excluded only for that compatibility case.
 - Security boundaries: mod Python scripts are arbitrary-code trust boundary; VPK/archive/profile/backup/download/D2PFX inputs are untrusted.
 - Publication rule: materialized normal source files are canonical; giant source transformer/bootstrap is optional migration/repro tooling only.
-- `core/mod_library.py` reconciliation remains blocked: remote blob `a5204ea1d5e0309d3c6a764ad9b974e7bdeb8268`; expected validated blob `e95b2f6f59b3b96f7c19ed70ee514df02e500926`, SHA-256 `552dbb7f98d5e0db2ad32c1b2888d8ad4ae8945fdf49ebc2853765e59c6c9e7a`, 69949 bytes; exact validated source is unavailable.
-- Committed bootstrap cannot recover that source: ZIP entry starts at offset 22023, is 17398 bytes deflated, ends at offset 39589 exclusive; missing chunk `005` contains the final 2089 compressed bytes. Never fabricate them; never create `.materialize/READY` while payload is incomplete.
+- `core/mod_library.py` reconciliation remains blocked for the prior v21.4 validated source: current blob `a5204ea1d5e0309d3c6a764ad9b974e7bdeb8268`; expected validated blob `e95b2f6f59b3b96f7c19ed70ee514df02e500926`, SHA-256 `552dbb7f98d5e0db2ad32c1b2888d8ad4ae8945fdf49ebc2853765e59c6c9e7a`, 69949 bytes.
+- Committed bootstrap cannot recover that exact source: ZIP entry starts at offset 22023, is 17398 bytes deflated, ends at offset 39589 exclusive; missing chunk `005` contains the final 2089 compressed bytes. Never fabricate them; never create `.materialize/READY` while payload is incomplete.
 - Project-memory rule: read `Docs/*.md` at session start; update terse bullets at major milestones; include/stage them with repo commits.
