@@ -1,8 +1,11 @@
 # TODO
 - [x] Create `v21.4-hardening` from exact rc7 commit `d4b4520c945a9e1f8f5facc52a76ac5903babe90`.
 - [x] Create public `beta` branch separate from `main`.
+- [x] Start materialization with security/backup/prelaunch/compatibility/VPK/archive/download core.
+- [ ] Resolve dependency selection for unsupported rare architectures; do not download wrong/nonexistent binaries.
 - [ ] Materialize current transformer/overlay output into normal repository source files.
 - [ ] Keep transformer optional; do not make it canonical fork architecture.
+- [ ] Materialize/adapt fork regression tests to normal source paths.
 - [ ] Run full upstream + fork test suite on materialized tree.
 - [ ] Run Ruff/static checks available in environment.
 - [ ] Perform second-pass security review on materialized code.
