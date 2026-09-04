@@ -17,7 +17,9 @@
 - [x] Transferred `core/mod_library.py`; remote file compiles and contains hardened paths inspected so far.
 - [x] Branch diff reviewed at multiple checkpoints; no intentional changes to `main` or `beta`.
 - [x] Temporary one-time materialization workflow staged; expected handoff ZIP SHA-256 is `97b2810c1e0ed2a51a407dd895d93e0f53e95bb82e65824cd41536da799fdece`.
+- [x] Reconciliation forensics: validated archive entry is 69949 bytes / 17398 deflated at ZIP offsets 22023-39588; missing chunk `005` covers 37500-44999 and removes the final 2089 compressed bytes.
 - [ ] `core/mod_library.py` transfer not yet accepted: remote Git blob `a5204ea1d5e0309d3c6a764ad9b974e7bdeb8268` differs from validated local blob `e95b2f6f59b3b96f7c19ed70ee514df02e500926`.
+- [ ] Exact validated `mod_library.py` source/blob is unavailable in GitHub and active workspace; reconciliation remains blocked pending exact source or missing archive bytes.
 - [ ] Temporary `.materialize/` payload incomplete at snapshot: present `000`-`004`, `006`-`010`; missing `005`, `011`-`022`; no `READY`.
 - [ ] Remaining UI/profile/patch/glue/mod-fix/test materialization incomplete.
 - [ ] Full materialized-tree regression/static/security pass incomplete.

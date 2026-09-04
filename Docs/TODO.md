@@ -10,6 +10,7 @@
 - [x] Materialize Remove Main Menu Background two-rule CSS fix.
 - [x] Transfer `core/mod_library.py` to branch.
 - [ ] Reconcile `core/mod_library.py` remote blob drift vs validated local source before accepting transfer.
+- [ ] Obtain exact validated `core/mod_library.py` source/blob or exact missing archive bytes before reconciliation; committed chunks omit the final 2089 compressed bytes of that ZIP entry.
 - [ ] Complete or remove temporary `.materialize/` bootstrap; never create `READY` while chunks are incomplete.
 - [ ] Materialize remaining transformer/overlay output into normal repository source files.
 - [ ] Keep transformer/bootstrap optional migration tooling; do not make it canonical fork architecture.

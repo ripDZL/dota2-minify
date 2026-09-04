@@ -7,6 +7,8 @@
 - Local validated hardening-kit checkpoint: 133/133 tests + 9 subtests; Python compileall pass.
 - Materialized security, backup, prelaunch, compatibility, VPK/archive/download hardening, dependency architecture gating, recursive scanner/Collections backend, nested scripts, D2PFX build-hook/backend changes, CSS fix, and `mod_library.py` transfer.
 - `mod_library.py` requires reconciliation: remote blob `a5204ea1d5e0309d3c6a764ad9b974e7bdeb8268`; validated local blob `e95b2f6f59b3b96f7c19ed70ee514df02e500926`.
+- `mod_library.py` archive forensics: entry starts at ZIP offset 22023, is 17398 bytes deflated / 69949 uncompressed, and ends at offset 39589 exclusive; missing chunk `005` contains the final 2089 compressed bytes.
+- Exact validated source is unavailable in the repository and active workspace; do not reconstruct or fabricate it. Unblock with exact validated source/blob or exact missing archive bytes.
 - Temporary materialization bootstrap is incomplete; workflow expects ZIP SHA-256 `97b2810c1e0ed2a51a407dd895d93e0f53e95bb82e65824cd41536da799fdece`.
 - `.materialize/` snapshot has chunks `000`-`004`, `006`-`010`; missing `005`, `011`-`022`; `.materialize/READY` absent.
 - Do not trigger one-time workflow until exact payload is complete and verified.

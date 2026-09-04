@@ -13,4 +13,6 @@
 - Dark Terrain: yield `materials/dev/deferred_post_process.vmat_c` only when another selected mod actually owns the same virtual path; associated Dark fog is excluded only for that compatibility case.
 - Security boundaries: mod Python scripts are arbitrary-code trust boundary; VPK/archive/profile/backup/download/D2PFX inputs are untrusted.
 - Publication rule: materialized normal source files are canonical; giant source transformer is optional migration/repro tooling only.
+- `core/mod_library.py` reconciliation remains blocked: expected validated blob `e95b2f6f59b3b96f7c19ed70ee514df02e500926`, SHA-256 `552dbb7f98d5e0db2ad32c1b2888d8ad4ae8945fdf49ebc2853765e59c6c9e7a`, 69949 bytes; exact source is not present in GitHub or the active workspace.
+- Committed bootstrap cannot recover that source: the ZIP entry starts at offset 22023, is 17398 bytes deflated, ends at offset 39589 exclusive; missing chunk `005` spans offsets 37500-44999 and contains the final 2089 compressed bytes. Never fabricate them.
 - Project-memory rule: read `Docs/*.md` at session start; update terse bullets at major milestones; include/stage them with repo commits.
