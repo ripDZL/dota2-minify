@@ -44,6 +44,13 @@ def test_profile_bundle_rejects_excessive_state_count(monkeypatch):
     assert profiles == {}
 
 
+def test_profile_bundle_rejects_oversized_mod_identifier(monkeypatch):
+    monkeypatch.setattr(checkboxes, "PROFILE_MAX_MOD_ID_CHARS", 3)
+    payload = {"profiles": {"P": {"mods": {"abcd": True}}}}
+    profiles, _ = checkboxes._normalized_import_profiles(payload)
+    assert profiles == {}
+
+
 def test_load_profiles_rejects_oversized_file(monkeypatch, tmp_path):
     monkeypatch.setattr(checkboxes.base, "config_dir", str(tmp_path))
     monkeypatch.setattr(checkboxes, "PROFILE_MAX_FILE_BYTES", 32)
