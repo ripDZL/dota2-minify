@@ -4,18 +4,18 @@
 - Branch model: exactly `v21.4-hardening` -> `beta` -> `main`; no temporary/reference/integration branches.
 - Keep `main` frozen at `a26bc88a0d412e357965f29488b83a7f9093e11f`; keep `beta` frozen at `af83bbb051edced195d5f55ba49ff060a8c76f3c` until remaining gates pass.
 - Exact upstream baseline: `Minify-v1.14rc7` / `d4b4520c945a9e1f8f5facc52a76ac5903babe90`.
-- Current tested product code: `66d6dd77bd216feb6ff67375d3803ed0be9e150e`.
-- Current UI baseline: **Crimson Slate**; materialized at `7bb3f4f9eb5194f429ae459ea20e8090b51f2c2f`; prior Obsidian Arc superseded.
-- Crimson Slate was inspired by user-provided Fab Flat Dark GUI reference: charcoal/plum panels, crimson/magenta focus/actions, compact rectangular controls, inset fields, thin modular borders, low radii, dense cards; no third-party artwork/assets copied.
-- Mod Library matched to Crimson Slate; D2PFX selected state/title uses crimson while teal remains metadata/status identity.
-- `LOCAL MOD WORKSPACE` + stale `RC6` widgets remain removed.
-- Current hardening CI run `33937575665`: compileall PASS; Ruff format/lint PASS; pytest 145/145 PASS; Windows PyInstaller/runtime copy/portable ZIP/upload PASS.
-- Current test ZIP: `Minify-v21.4-hardening-66d6dd77bd216feb6ff67375d3803ed0be9e150e-windows.zip`; SHA-256 `dee14f404eadede2e4e0b02f76620090ce04dc6c2cc1d87a6cf62c3525862e52`; 53603222 bytes.
-- GitHub artifact ID `9960698474`; outer SHA-256 `e98f68c8e990e63dfbc587dd51b7ab3f06df49ebbbbc1343cc99a645657434e7`; 53062983 bytes.
+- Current tested product code: `9aac26ee764de58f3c981fb1fbe873bbb9546c23`; Prismatic Foundry materialization commit `cdd22c9e88b58581bce5068e886543e5f8278810`.
+- Current UI baseline: **Prismatic Foundry**; Crimson Slate superseded.
+- Prismatic Foundry: navy-black layered shell, violet orchestration state, cyan telemetry/D2PFX, magenta accent rail, orange deployment actions, gold metadata, rounded depth geometry, dense command-console composition.
+- Landing additions: patch-engine chip, command deck, nav status card, metric strip, deployment sequence, guard matrix, fail-safe card, live activity stream header.
+- Mod Library and D2PFX visual states are reconciled to Prismatic Foundry; `LOCAL MOD WORKSPACE` + stale `RC6` remain removed.
+- Hardening CI run `33938518712`: compileall PASS; Ruff format/lint PASS; pytest 147/147 PASS; Windows PyInstaller/runtime copy/portable ZIP/upload PASS.
+- Current test ZIP: `Minify-v21.4-hardening-9aac26ee764de58f3c981fb1fbe873bbb9546c23-windows.zip`; SHA-256 `403f8371c5bc19062317edca208ac89a95cf835f030c1cc0b0ac944ebe65d937`; 53605596 bytes.
+- GitHub artifact ID `9960999815`; outer SHA-256 `e516ba78acbabf68ed2db1f444bc08bed6572e1ca7850ffaa09362db46bf2a51`; 53065805 bytes.
 - Artifact verified: 1650 entries; normal portable roots; no staging/materialize markers; no Remove Foilage map/manifest; both oak-leaf blacklist entries present.
 - Canonical feature reference: supplied v21.3.1 Safe Foliage Fix archive; SHA-256 `37755c4ee92e1847eef1a5a9c89aef6ba488f33accd0cb102c62a7db8780b5f8`; bundled 116/116 tests pass.
 - Preserve recursive/nested mods, Collections, profiles, D2PFX, backups/conflict review, Dark Terrain collision behavior, Safe Foliage, Main Menu Background CSS, manual rc7 prelaunch, and no-auto-prelaunch policy.
 - Never wholesale copy v21.3.1 core overlays over hardening; reconcile feature-by-feature.
 - Prior-v21.4 `core/mod_library.py` exact-source gap remains blocked; never fabricate missing bootstrap bytes or create `.materialize/READY` while incomplete.
-- Next: user review Crimson Slate, then adapt useful v21.3.1 regressions, semantic core reconciliation, hostile-input/security + exact-rc7 diff review, bootstrap cleanup, Dota smoke tests.
+- Next: user review Prismatic Foundry; then adapt useful v21.3.1 regressions, semantic core reconciliation, hostile-input/security + exact-rc7 diff review, bootstrap cleanup, Dota smoke tests.
 - Do not fast-forward beta, merge/tag/release, or publish until remaining gates and user approval.
