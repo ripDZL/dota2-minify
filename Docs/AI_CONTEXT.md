@@ -2,22 +2,23 @@
 - Upstream baseline: `Egezenn/dota2-minify` tag `Minify-v1.14rc7`; exact commit `d4b4520c945a9e1f8f5facc52a76ac5903babe90`.
 - Fork: `ripDZL/dota2-minify`; active branch `v21.4-hardening`; promotion path `v21.4-hardening` -> `beta` -> `main`.
 - Exactly three branches; `main` frozen at `a26bc88a0d412e357965f29488b83a7f9093e11f`; `beta` frozen at `af83bbb051edced195d5f55ba49ff060a8c76f3c`.
-- Current tested product code: `0737a6df85adfa39a6f006f9b521a22b5fd5c017`; network-hardening source commit: `9e674a794eb04d10572568287cc5c0dfcb404509`.
-- Current UI baseline: **Black-Plum Reactor**; screenshot-derived spatial roles over supplied JSON palette.
-- Palette roles: plum `#46335a` chrome; slate `#586c72` work surfaces; black strips; purple `#853894` controls; lime `#7ac143` selected/protected state with black text; red `#df503b` dividers/errors; gold `#ffc30f` telemetry; yellow `#ffff00` links; ivory `#f7f0e7` text.
-- Header: PATCH ENGINE chip removed; Minify brand centered with equal stretch gutters and a 340px fixed brand column.
-- Minimum viewport: 960x680; shell body reserves 330px for header/activity/terminal/footer; optional right deck and telemetry collapse before clipping.
-- Nav SYSTEM/PROTECTED card: 66px normal / 62px compact responsive height; Windows font clipping fixed.
+- Current tested product code: `a54c9259d5b1f45a1760f15f73e92f41460890d0`.
+- Current UI baseline: **Black-Plum Reactor**; plum `#46335a` chrome; slate `#586c72` work surfaces; black strips; purple `#853894` controls; lime `#7ac143` selected/protected; red `#df503b`; gold `#ffc30f`; yellow `#ffff00`; ivory `#f7f0e7`.
+- Header: PATCH ENGINE chip removed; Minify brand centered with equal stretch gutters + 340px center column.
+- Minimum viewport: 960x680; vertical shell budget preserves header/activity/terminal/footer; optional right deck/telemetry collapse before clipping.
+- Nav SYSTEM/PROTECTED card: 66px normal / 62px compact; Windows font clipping fixed.
 - `LOCAL MOD WORKSPACE` / stale `RC6` remains removed.
-- Incomplete `.materialize/` bootstrap and `materialize-v21.4.yml` removed; ordinary materialized source is the only canonical source path.
-- Network hardening: `fs.download_file()` uses `(10,60)` request timeout, a 2 GiB default ceiling via `ARCHIVE_MAX_FILE_BYTES`, temp-file writes, and atomic replace; partial/oversized downloads do not replace existing targets.
-- D2PFX catalogue hardening: streamed `(10,30)` requests; compressed + decompressed catalogue bounded by `D2PFX_MAX_MANIFEST_BYTES` (8 MiB); cached JSON size/type validation; atomic cache writes.
-- Hardening CI run `33946859076`: compileall PASS; Ruff format/lint PASS; pytest 158/158 PASS; Windows PyInstaller/runtime copy/portable ZIP/upload PASS.
-- Current Windows test ZIP: `Minify-v21.4-hardening-0737a6df85adfa39a6f006f9b521a22b5fd5c017-windows.zip`; 53,609,528 bytes; SHA-256 `d593ec70c5556a473ae8f9c7601faae7fd5d024f5feae7e876c1101ac464e2c4`.
-- GitHub artifact ID `9963613515`; outer ZIP 53,069,465 bytes; SHA-256 `fffb4441d74ce65b94072f03b8da9d9c0ab7ca781e59972ef74be1474f176f57`.
-- Artifact verified: 1650 entries; roots `LICENSE`, `Minify.exe`, `README.md`, `_internal`, `bin`, `mods`; no staging/materialize markers; no Remove Foilage map/manifest; both oak blacklist entries present; Main Menu Background keeps both collapse rules.
+- Incomplete `.materialize/` bootstrap + materialization workflow removed at `8097ef24b2354bdad9e2008907895fa679ecdb9e`; canonical source is ordinary materialized files only.
+- Network hardening source `9e674a794eb04d10572568287cc5c0dfcb404509`; bounded/atomic downloads + bounded D2PFX catalogue fetch/decompression/cache.
+- Backup hardening source `5a12fe465b8e9ce8e147a843f82240487ae8d9c6`; backup `manifest.json` must be a regular non-symlink file.
+- Profile hardening source `07733acd5c9b8e17e6473fd17fe4fcbee6aea868`; strict JSON booleans, format/version validation, bounded files/counts/states/strings/hints; legacy profile-file shape retained.
+- VPK metadata hardening through `a54c9259d5b1f45a1760f15f73e92f41460890d0`; single-mod markers are flat Windows-safe filenames with reserved-device/traversal handling.
+- Hardening CI run `33947470500`: compileall PASS; Ruff format/lint PASS; pytest 172/172 PASS; Windows PyInstaller/runtime copy/portable ZIP/upload PASS.
+- Current Windows test ZIP: `Minify-v21.4-hardening-a54c9259d5b1f45a1760f15f73e92f41460890d0-windows.zip`; 53,609,846 bytes; SHA-256 `a474cfa58c5f0b133b6438b64a3ddd90334a2d2d7b79f27863ddbda3f6e39c96`.
+- GitHub artifact ID `9963790021`; outer ZIP 53,069,921 bytes; SHA-256 `c7debe82df92e42553692cc32974fc5bdd942f690ca5f3e7c96e1a0f91d266f3`.
+- Artifact verified: 1650 entries; roots `LICENSE`, `Minify.exe`, `README.md`, `_internal`, `bin`, `mods`; no staging/materialize markers; no Remove Foilage map/manifest; both oak entries; both Main Menu Background collapse rules.
 - Canonical user feature reference: v21.3.1 Safe Foliage Fix archive; SHA-256 `37755c4ee92e1847eef1a5a9c89aef6ba488f33accd0cb102c62a7db8780b5f8`; bundled 116/116 tests pass locally.
-- v21.3.1 patch pipeline materialized at `b22133201e88d654859541f2c6be69cea8e3cb25`; preserve nested paths, compatibility filtering, restore points, conflict reporting, output validation, rollback, no-auto-prelaunch cleanup.
+- v21.3.1 patch pipeline materialized at `b22133201e88d654859541f2c6be69cea8e3cb25`; preserve nested paths, compatibility filtering, restore points, conflict reporting, validation, rollback, no-auto-prelaunch cleanup.
 - Preserve recursive/nested mods, Collections, profiles, D2PFX, backups/conflict review, Dark Terrain collision behavior, Safe Foliage, Main Menu Background fix, manual rc7 `prelaunch`, and no-auto-prelaunch policy.
 - Remove Foilage: blacklist-only; never ship `manifest.json` or `maps/dota.vpk`; retain both exact oak-leaf blacklist entries.
 - Security boundary: mod Python scripts trusted arbitrary code; VPK/archive/profile/backup/download/D2PFX inputs untrusted.

@@ -4,20 +4,17 @@
 - Branch model: exactly `v21.4-hardening` -> `beta` -> `main`; no temporary/reference/integration branches.
 - Keep `main` frozen at `a26bc88a0d412e357965f29488b83a7f9093e11f`; keep `beta` frozen at `af83bbb051edced195d5f55ba49ff060a8c76f3c` until remaining gates pass.
 - Exact upstream baseline: `Minify-v1.14rc7` / `d4b4520c945a9e1f8f5facc52a76ac5903babe90`.
-- Current tested product code: `cca977084a1f254e9e5a29078c798986b0dd4c7a`; centered-header product commit `f102aace15b1e8849cd11a85704eb5f495b09b23`.
-- Current UI baseline: **Black-Plum Reactor**; palette roles follow supplied JSON + original app screenshot spatial usage.
-- Palette: plum `#46335a` chrome; slate `#586c72` work areas; black strips; purple `#853894` controls; lime `#7ac143` selected/protected with black text; red `#df503b` dividers/errors; gold `#ffc30f` telemetry; yellow `#ffff00` links; ivory `#f7f0e7` text.
-- PATCH ENGINE header chip removed; Minify brand centered with equal stretch gutters around a 340px fixed center column.
-- Minimum viewport: 960x680; shell body reserves 330px for header/activity/terminal/footer; optional right deck/telemetry collapse before clipping.
-- Nav SYSTEM/PROTECTED card: 66px normal / 62px compact responsive height; user-reported clipping fixed.
-- `LOCAL MOD WORKSPACE` + stale `RC6` widgets remain removed.
-- Hardening CI run `33941654693`: compileall PASS; Ruff format/lint PASS; pytest 152/152 PASS; Windows PyInstaller/runtime copy/portable ZIP/upload PASS.
-- Current test ZIP: `Minify-v21.4-hardening-cca977084a1f254e9e5a29078c798986b0dd4c7a-windows.zip`; SHA-256 `2c5beb037ddef8a278092ee955826324e35ee75d4e0770b23940b42447abf62f`; 53,607,426 bytes.
-- GitHub artifact ID `9962033860`; outer SHA-256 `e05a3a27b78d4ed8ffbf4c823fac6b3d5503c4a9d7a93db403174153302926cc`; 53,067,459 bytes.
-- Artifact verified: 1650 entries; normal portable roots; no staging/materialize markers; no Remove Foilage map/manifest; both oak-leaf blacklist entries; both Main Menu Background collapse rules present.
+- Current tested product code: `a54c9259d5b1f45a1760f15f73e92f41460890d0`.
+- UI: **Black-Plum Reactor**; centered 340px brand column; 960x680 minimum; adaptive right deck/telemetry; 66/62px SYSTEM/PROTECTED card; stale RC6/PATCH ENGINE furniture removed.
+- Incomplete `.materialize/` bootstrap + materialization workflow removed; normal files are canonical source.
+- Hardening completed: bounded/atomic general downloads; bounded D2PFX catalogue fetch/decompression/cache; backup manifest symlink/non-file rejection; bounded strict profile import/storage; flat Windows-safe single-mod VPK metadata markers.
+- Hardening CI `33947470500`: compileall PASS; Ruff format/lint PASS; pytest 172/172 PASS; Windows PyInstaller/runtime copy/portable ZIP/upload PASS.
+- Current test ZIP: `Minify-v21.4-hardening-a54c9259d5b1f45a1760f15f73e92f41460890d0-windows.zip`; SHA-256 `a474cfa58c5f0b133b6438b64a3ddd90334a2d2d7b79f27863ddbda3f6e39c96`; 53,609,846 bytes.
+- Artifact ID `9963790021`; outer SHA-256 `c7debe82df92e42553692cc32974fc5bdd942f690ca5f3e7c96e1a0f91d266f3`.
+- Artifact verified: 1650 entries; normal portable roots; no staging/materialize markers; no Remove Foilage map/manifest; both oak entries; both Main Menu Background collapse rules.
 - Canonical feature reference: supplied v21.3.1 Safe Foliage Fix archive; SHA-256 `37755c4ee92e1847eef1a5a9c89aef6ba488f33accd0cb102c62a7db8780b5f8`; bundled 116/116 tests pass.
 - Preserve recursive/nested mods, Collections, profiles, D2PFX, backups/conflict review, Dark Terrain collision behavior, Safe Foliage, Main Menu Background CSS, manual rc7 prelaunch, and no-auto-prelaunch policy.
 - Never wholesale copy v21.3.1 core overlays over hardening; reconcile feature-by-feature.
-- Prior-v21.4 `core/mod_library.py` exact-source gap remains blocked; never fabricate missing bootstrap bytes or create `.materialize/READY` while incomplete.
-- Next: user review centered header at maximized/medium/minimum sizes, then adapt useful v21.3.1 regressions, semantic core reconciliation, hostile-input/security + exact-rc7 diff review, bootstrap cleanup, Dota smoke tests.
+- Prior-v21.4 `core/mod_library.py` exact-source gap remains blocked; never fabricate missing bytes.
+- Next: review D2PFX cursor backup/restore + browser/path-race surfaces; adapt remaining useful v21.3.1 regressions; semantic core-overlay reconciliation; exact-rc7 diff review; Dota smoke tests.
 - Do not fast-forward beta, merge/tag/release, or publish until remaining gates and user approval.

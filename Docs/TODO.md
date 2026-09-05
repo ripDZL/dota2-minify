@@ -1,20 +1,19 @@
 # TODO
-- [x] Create `v21.4-hardening` from exact rc7 commit `d4b4520c945a9e1f8f5facc52a76ac5903babe90`.
+- [x] Pin exact rc7 baseline `d4b4520c945a9e1f8f5facc52a76ac5903babe90`.
 - [x] Enforce exactly three branches: `v21.4-hardening`, `beta`, `main`.
-- [x] Preserve hardened security/backend behavior and v21.3.1 feature set without wholesale old-core replacement.
-- [x] Remove stale `LOCAL MOD WORKSPACE` / `RC6` header furniture.
-- [x] Build Black-Plum Reactor from supplied JSON tokens + original app screenshot spatial roles.
-- [x] Replace fragile space-padded status layouts with DPG table columns and adaptive visibility thresholds.
-- [x] Fix clipped SYSTEM/PROTECTED nav card; 66px normal / 62px compact height with resize wiring.
-- [x] Remove PATCH ENGINE header chip and center Minify brand with equal stretch gutters.
-- [x] Enforce 960x680 minimum viewport and reserve vertical layout budget so core UI cannot clip at minimum size.
-- [x] Remove incomplete `.materialize/` bootstrap + one-shot materialization workflow; canonical source is normal files only.
-- [x] Bound network downloads and D2PFX catalogue fetch/decompression/cache writes.
-- [x] Current tested code `0737a6df85adfa39a6f006f9b521a22b5fd5c017`; CI run `33946859076`; pytest 158/158 PASS; Windows build PASS.
-- [x] Current portable ZIP validated; SHA-256 `d593ec70c5556a473ae8f9c7601faae7fd5d024f5feae7e876c1101ac464e2c4`.
-- [ ] Continue second-pass hostile-input/security sweep: profiles/backups/VPK metadata/browser payloads/path races.
+- [x] Preserve hardened backend + v21.3.1 feature set without wholesale old-core replacement.
+- [x] Stabilize Black-Plum Reactor UI; centered header; 960x680 minimum; responsive collapse rules; fixed SYSTEM/PROTECTED clipping.
+- [x] Remove incomplete `.materialize/` bootstrap + one-shot materialization workflow.
+- [x] Bound/atomically write general downloads and D2PFX catalogue fetch/decompression/cache.
+- [x] Reject symlink/non-file backup manifests.
+- [x] Harden profiles: strict booleans; format/version checks; bounded files/profile/state/string/hint counts; legacy shape retained.
+- [x] Harden single-mod VPK metadata marker filenames for nested IDs, traversal-like names, and Windows reserved devices.
+- [x] Current tested code `a54c9259d5b1f45a1760f15f73e92f41460890d0`; CI `33947470500`; pytest 172/172 PASS; Windows build PASS.
+- [x] Current portable ZIP validated; SHA-256 `a474cfa58c5f0b133b6438b64a3ddd90334a2d2d7b79f27863ddbda3f6e39c96`.
+- [ ] Continue hostile-input/security sweep: D2PFX cursor backup/restore, browser metadata, path-race surfaces.
 - [ ] Adapt remaining useful v21.3.1 regressions directly on hardening.
 - [ ] Complete semantic core-overlay reconciliation; never wholesale copy old core.
+- [ ] Complete exact-rc7 diff review.
 - [ ] Reconcile prior-v21.4 `core/mod_library.py` only if authentic missing bytes become available.
 - [ ] Clean pycache/temp artifacts before publication.
 - [ ] User/Dota smoke tests: startup/layout, library, settings, Collections/profiles, D2PFX, lobby/match, rollback, Dark Terrain, Remove Foilage.

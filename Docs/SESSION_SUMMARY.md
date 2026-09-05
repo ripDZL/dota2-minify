@@ -2,18 +2,14 @@
 - Fork: `ripDZL/dota2-minify`; active `v21.4-hardening`; exact rc7 baseline `d4b4520c945a9e1f8f5facc52a76ac5903babe90`.
 - Branch model: exactly `v21.4-hardening` -> `beta` -> `main`; beta/main frozen.
 - Canonical feature reference: supplied v21.3.1 Safe Foliage Fix archive; bundled 116/116 tests pass.
-- Patch pipeline remains materialized at `b22133201e88d654859541f2c6be69cea8e3cb25`; preserve nested resolution, compatibility filtering, restore points, conflict reporting, validation, rollback, no-auto-prelaunch cleanup.
-- Current UI baseline: **Black-Plum Reactor**; uses supplied JSON palette according to original app screenshot spatial roles.
-- Palette grammar: plum chrome; slate work areas; black hard strips; purple controls; lime selected/protected state with black text; red dividers/errors; gold telemetry; yellow links; ivory text.
-- SYSTEM/PROTECTED nav status card uses 66px normal / 62px compact responsive height; clipping fixed.
-- PATCH ENGINE header chip removed; brand centered with equal stretch gutters and a 340px fixed center column.
-- Minimum viewport is 960x680; shell body reserves 330px for header/activity/terminal/footer; optional telemetry/right deck collapses before clipping.
-- `LOCAL MOD WORKSPACE` / stale `RC6` remains removed.
-- Current tested product code: `cca977084a1f254e9e5a29078c798986b0dd4c7a`; centered-header product commit `f102aace15b1e8849cd11a85704eb5f495b09b23`.
-- Hardening CI run `33941654693`: compileall PASS; Ruff format/lint PASS; pytest 152/152 PASS; Windows portable build PASS.
-- Current Windows ZIP: `Minify-v21.4-hardening-cca977084a1f254e9e5a29078c798986b0dd4c7a-windows.zip`; 53,607,426 bytes; SHA-256 `2c5beb037ddef8a278092ee955826324e35ee75d4e0770b23940b42447abf62f`.
-- Artifact ID `9962033860`; outer SHA-256 `e05a3a27b78d4ed8ffbf4c823fac6b3d5503c4a9d7a93db403174153302926cc`; 1650-entry portable layout verified; Safe Foliage and Main Menu Background invariants pass.
-- Exactly three branches verified after milestone; beta/main unchanged.
+- Patch pipeline materialized at `b22133201e88d654859541f2c6be69cea8e3cb25`; preserve nested resolution, compatibility filtering, restore points, conflict reporting, validation, rollback, no-auto-prelaunch cleanup.
+- UI baseline: **Black-Plum Reactor**; centered header; 960x680 minimum; adaptive telemetry/right deck; SYSTEM/PROTECTED fit fixed; stale RC6/PATCH ENGINE furniture removed.
+- Incomplete `.materialize/` bootstrap/workflow removed at `8097ef24b2354bdad9e2008907895fa679ecdb9e`.
+- Security sweep completed so far: bounded/atomic downloads + D2PFX catalogue; backup manifest symlink/non-file rejection; bounded strict profile inputs; safe VPK single-mod metadata marker filenames.
+- Current tested product code: `a54c9259d5b1f45a1760f15f73e92f41460890d0`.
+- Hardening CI `33947470500`: compileall PASS; Ruff format/lint PASS; pytest 172/172 PASS; Windows portable build PASS.
+- Current Windows ZIP: `Minify-v21.4-hardening-a54c9259d5b1f45a1760f15f73e92f41460890d0-windows.zip`; 53,609,846 bytes; SHA-256 `a474cfa58c5f0b133b6438b64a3ddd90334a2d2d7b79f27863ddbda3f6e39c96`.
+- Artifact `9963790021`; outer SHA-256 `c7debe82df92e42553692cc32974fc5bdd942f690ca5f3e7c96e1a0f91d266f3`; 1650-entry portable layout verified; Safe Foliage/Main Menu Background invariants pass.
 - `core/mod_library.py` prior-v21.4 exact-source gap remains unresolved; never fabricate missing bytes or substitute old overlay as exact source.
-- Remaining: user review centered/minimum-size UI, adapt useful v21.3.1 regressions, semantic core reconciliation, hostile-input/security sweep, exact-rc7 diff review, bootstrap cleanup, Dota smoke tests.
+- Next: continue cursor/browser/path-race security review; adapt useful v21.3.1 regressions; semantic core reconciliation + exact-rc7 diff review; Dota smoke tests.
 - Do not promote beta/main until remaining gates and user approval.
