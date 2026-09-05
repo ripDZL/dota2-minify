@@ -4,22 +4,17 @@
 - [x] Hardened security/backup/prelaunch/compatibility/VPK/archive/download paths materialized.
 - [x] Recursive/nested mods, Collections, profiles, D2PFX, backups/conflict review, Safe Foliage, Main Menu fix, Dark Terrain behavior preserved.
 - [x] v21.3.1 patch pipeline integrated at `b22133201e88d654859541f2c6be69cea8e3cb25` without overwriting hardened core backends.
-- [x] Removed `LOCAL MOD WORKSPACE` + stale `RC6` UI furniture.
-- [x] Black-Plum Reactor maps the supplied JSON palette using the original app screenshot's spatial roles.
-- [x] Header/metrics/deployment/guard layouts use DPG tables; optional telemetry/right deck collapse before clipping.
-- [x] SYSTEM/PROTECTED nav status card clipping fixed; 66px normal / 62px compact responsive height.
-- [x] PATCH ENGINE header chip removed; Minify brand centered with equal stretch gutters at `f102aace15b1e8849cd11a85704eb5f495b09b23`.
-- [x] Minimum viewport enforced at 960x680; shell body reserves vertical space so navigation/activity/terminal/footer fit without overlap.
-- [x] Current tested product commit `cca977084a1f254e9e5a29078c798986b0dd4c7a`.
-- [x] Hardening CI run `33941654693`: compileall PASS; Ruff format/lint PASS; pytest 152/152 PASS; Windows build/package/upload PASS.
-- [x] Current inner ZIP: `Minify-v21.4-hardening-cca977084a1f254e9e5a29078c798986b0dd4c7a-windows.zip`; 53,607,426 bytes; SHA-256 `2c5beb037ddef8a278092ee955826324e35ee75d4e0770b23940b42447abf62f`.
-- [x] Artifact ID `9962033860`; outer SHA-256 `e05a3a27b78d4ed8ffbf4c823fac6b3d5503c4a9d7a93db403174153302926cc`; portable layout/Safe Foliage/Main Menu Background checks PASS.
+- [x] Black-Plum Reactor UI stabilized: centered header, 960x680 minimum, adaptive telemetry/right deck, safe nav-card sizing.
+- [x] Incomplete `.materialize/` bootstrap and materialization workflow removed; rc7->hardening diff no longer contains bootstrap payloads.
+- [x] Network hostile-input pass: bounded/atomic `fs.download_file`; bounded streamed D2PFX catalogue download/decompression/cache validation.
+- [x] Current tested product commit `0737a6df85adfa39a6f006f9b521a22b5fd5c017`.
+- [x] Hardening CI run `33946859076`: compileall PASS; Ruff format/lint PASS; pytest 158/158 PASS; Windows build/package/upload PASS.
+- [x] Current inner ZIP: `Minify-v21.4-hardening-0737a6df85adfa39a6f006f9b521a22b5fd5c017-windows.zip`; 53,609,528 bytes; SHA-256 `d593ec70c5556a473ae8f9c7601faae7fd5d024f5feae7e876c1101ac464e2c4`.
+- [x] Artifact ID `9963613515`; outer SHA-256 `fffb4441d74ce65b94072f03b8da9d9c0ab7ca781e59972ef74be1474f176f57`; portable layout/Safe Foliage/Main Menu Background checks PASS.
 - [x] `main` and `beta` remain frozen.
-- [ ] User review centered header and minimum-size behavior across maximized/medium/minimum viewport sizes.
+- [ ] Continue hostile-input/security sweep across profiles/backups/VPK/browser metadata and path-race surfaces.
 - [ ] Adapt remaining useful v21.3.1 regressions directly on hardening.
 - [ ] Complete semantic core-overlay reconciliation; never wholesale overwrite hardened backends.
 - [ ] Resolve prior-v21.4 `core/mod_library.py` exact-source gap only if authentic bytes become available.
-- [ ] Complete/remove incomplete `.materialize/` bootstrap; never create `READY` while incomplete.
-- [ ] Full hostile-input/security sweep and exact-rc7 diff review.
 - [ ] Dota startup/lobby/match/rollback/profiles/D2PFX/Dark-Terrain/Remove-Foilage smoke tests.
 - [ ] Promote hardening -> beta only after remaining gates/user acceptance; beta -> main only after beta validation.
