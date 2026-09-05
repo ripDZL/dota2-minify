@@ -7,9 +7,9 @@
 - [x] Harden general downloads, D2PFX catalogue, backups, profiles, and VPK metadata.
 - [x] Harden D2PFX cursor backup/install/restore against symlinks, path escapes, oversized input, and partial unsafe restore.
 - [x] Bound/validate D2PFX browser catalogue/cache/category/mod/link/asset metadata.
-- [x] Current tested code `f946f1b70a0207b59b634cf4f0500a92ee9f349b`; CI `33949542003`; pytest 185/185 PASS; Windows build PASS.
-- [x] Current portable ZIP validated; SHA-256 `7de99bc4d9b9ef03ea5334c1f6943864f6c8d18e9eb989c4509337565e77eb9b`.
-- [ ] Harden D2PFX browser install/download URL redirects, external-host SSRF boundaries, safe URL basenames, preview limits, and staged publication.
+- [x] Harden D2PFX browser install/download redirects, external-host SSRF boundary, safe URL basenames, preview limits, and staged publication.
+- [x] Current tested code `53a358db219256187e21a40acc8ed45704c3589f`; CI `33971846026`; pytest 200/200 PASS; Windows build PASS.
+- [x] Current portable ZIP validated; SHA-256 `6a1874783d6d49b3e53d069577b90c14cd52a7aa618d3298c929fd863f2bd54a`.
 - [ ] Continue path-race/security review after browser install path.
 - [ ] Adapt remaining useful v21.3.1 regressions directly on hardening.
 - [ ] Complete semantic core-overlay reconciliation; never wholesale copy old core.
