@@ -38,7 +38,8 @@ jobs:
           uv run pytest tests/test_modern_ui.py
       - name: Commit materialized release UI
         run: |
-          git rm .github/workflows/release-ui-refresh.yml tools/apply_release_ui_once.py
+          git rm .github/workflows/release-ui-refresh.yml
+          git rm -f tools/apply_release_ui_once.py
           git add Minify/__main__.py Minify/ui/theme.py Minify/ui/checkboxes.py Minify/browsers/d2pfx/ui.py tests/test_modern_ui.py
           git diff --check --cached
           git config user.name "github-actions[bot]"
