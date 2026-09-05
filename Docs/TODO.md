@@ -3,12 +3,13 @@
 - [x] Enforce exactly three branches: `v21.4-hardening`, `beta`, `main`.
 - [x] Preserve hardened security/backend behavior and v21.3.1 feature set without wholesale old-core replacement.
 - [x] Remove stale `LOCAL MOD WORKSPACE` / `RC6` header furniture.
-- [x] Replace superseded Obsidian Arc styling with **Crimson Slate** inspired by the user-provided Flat Dark GUI reference.
-- [x] Materialize charcoal/plum panels, crimson focus/actions, compact rectangular controls, inset fields, low radii, thin borders, and matching Mod Library/D2PFX selected states.
-- [x] Add/update visual regressions; tested product code `66d6dd77bd216feb6ff67375d3803ed0be9e150e`.
-- [x] Current CI run `33937575665`: compileall/Ruff PASS; pytest 145/145 PASS; Windows build PASS.
-- [x] Current portable ZIP validated; SHA-256 `dee14f404eadede2e4e0b02f76620090ce04dc6c2cc1d87a6cf62c3525862e52`.
-- [ ] User review Crimson Slate across Patch, Mod Library, D2PFX, Settings, resizing.
+- [x] Supersede Crimson Slate with **Prismatic Foundry** release UI.
+- [x] Materialize complex command-console hierarchy: engine chip, command deck, nav status, metric strip, deployment sequence, guard matrix, fail-safe, live activity.
+- [x] Apply navy/violet/cyan/magenta/orange/gold visual system across shell, Mod Library, and D2PFX.
+- [x] Expand visual regressions; tested product code `9aac26ee764de58f3c981fb1fbe873bbb9546c23`.
+- [x] Current CI run `33938518712`: compileall/Ruff PASS; pytest 147/147 PASS; Windows build PASS.
+- [x] Current portable ZIP validated; SHA-256 `403f8371c5bc19062317edca208ac89a95cf835f030c1cc0b0ac944ebe65d937`.
+- [ ] User review Prismatic Foundry across Patch, Mod Library, D2PFX, Settings, resizing.
 - [ ] Adapt remaining useful v21.3.1 regressions directly on hardening.
 - [ ] Complete semantic core-overlay reconciliation; never wholesale copy old core.
 - [ ] Reconcile prior-v21.4 `core/mod_library.py` only if authentic missing bytes become available.
