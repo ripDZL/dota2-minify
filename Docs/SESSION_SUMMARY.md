@@ -3,15 +3,15 @@
 - Branch model: exactly `v21.4-hardening` -> `beta` -> `main`; beta/main frozen.
 - Canonical feature reference remains supplied v21.3.1 Safe Foliage Fix archive; bundled 116/116 tests pass.
 - Patch pipeline remains materialized at `b22133201e88d654859541f2c6be69cea8e3cb25`; preserve nested resolution, compatibility filtering, restore points, conflict reporting, validation, rollback, no-auto-prelaunch cleanup.
-- User requested a more complex, modern, flashy release UI; Crimson Slate is superseded by **Prismatic Foundry**.
-- Prismatic Foundry materialized at `cdd22c9e88b58581bce5068e886543e5f8278810`.
-- UI: navy-black layered substrate; violet orchestration state; cyan telemetry/D2PFX; magenta energy rail; orange deploy actions; gold metadata; rounded depth geometry.
-- Structural additions: patch-engine chip, command deck, nav status card, metric strip, deployment sequence, guard matrix, fail-safe card, live-activity stream header.
+- User reviewed Prismatic Foundry screenshot and requested resize/alignment fixes plus colors based on uploaded JSON theme file.
+- Current UI baseline: **Plumfire Reactor**; materialized at `36d59def98068862b247692580a23701df34358d`; Prismatic palette superseded but dense command-console structure retained.
+- JSON token anchors: `#df503b` divider, `#7ac143` highlight, `#ffff00` link, `#586c72` base, `#853894` button, `#ffc30f` bright text, `#a48f7b` disabled, `#d9c7b0` placeholder, `#f7f0e7` primary, `#46335a` window, `#000000` alt.
+- Alignment repair: header/metric/deployment/guard sections use DPG tables; right deck and optional telemetry collapse at explicit viewport thresholds; card heights/wrapping adjust dynamically.
 - `LOCAL MOD WORKSPACE` / stale `RC6` remains removed.
-- Current tested product code: `9aac26ee764de58f3c981fb1fbe873bbb9546c23`.
-- Hardening CI run `33938518712`: compileall PASS, Ruff format/lint PASS, pytest 147/147 PASS in 0.82s, Windows portable build PASS.
-- Current Windows ZIP: `Minify-v21.4-hardening-9aac26ee764de58f3c981fb1fbe873bbb9546c23-windows.zip`; 53605596 bytes; SHA-256 `403f8371c5bc19062317edca208ac89a95cf835f030c1cc0b0ac944ebe65d937`.
-- Artifact ID `9960999815`; outer SHA-256 `e516ba78acbabf68ed2db1f444bc08bed6572e1ca7850ffaa09362db46bf2a51`; artifact safety/layout verified.
+- Current tested product code: `44309ffbd752c3c9788b4371cd6daf271fe763e8`.
+- Hardening CI run `33939739722`: compileall PASS, Ruff format/lint PASS, pytest 148/148 PASS in 0.62s, Windows portable build PASS.
+- Current Windows ZIP: `Minify-v21.4-hardening-44309ffbd752c3c9788b4371cd6daf271fe763e8-windows.zip`; 53608076 bytes; SHA-256 `505b0d5421b83093518218a5ef7cf62a9a943e2515cd07eae3465f70c4820ac5`.
+- Artifact ID `9961412398`; outer SHA-256 `4760ea24c9912196b0da9323f00cf8d72fdb8ed33761a77907ae3083eb4d8ce2`; artifact safety/layout verified.
 - `core/mod_library.py` prior-v21.4 exact-source gap remains unresolved; never fabricate missing bytes or substitute old overlay as exact source.
-- Remaining: user review Prismatic Foundry, adapt useful v21.3.1 regressions, semantic core reconciliation, hostile-input/security sweep, exact-rc7 diff review, bootstrap cleanup, Dota smoke tests.
+- Remaining: user review Plumfire at multiple viewport sizes, adapt useful v21.3.1 regressions, semantic core reconciliation, hostile-input/security sweep, exact-rc7 diff review, bootstrap cleanup, Dota smoke tests.
 - Do not promote beta/main until remaining gates and user approval.
