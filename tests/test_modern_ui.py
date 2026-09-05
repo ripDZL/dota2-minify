@@ -9,6 +9,7 @@ WINDOW = (ROOT / "Minify" / "ui" / "window.py").read_text(encoding="utf-8")
 
 def test_stale_workspace_badge_removed():
     assert "LOCAL MOD WORKSPACE" not in MAIN
+    assert 'dpg.add_text("RC6"' not in MAIN
     assert 'tag="header_context"' not in MAIN
     assert 'tag="header_badge"' not in MAIN
     assert '"header_spacer"' not in WINDOW
