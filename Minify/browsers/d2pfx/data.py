@@ -1,5 +1,9 @@
+import hashlib
+import ipaddress
 import json
 import os
+import posixpath
+import socket
 import stat
 import tempfile
 import time
@@ -32,6 +36,11 @@ MAX_FLATTEN_NODES = 20_000
 MAX_MODS_PER_CATEGORY = 5_000
 MAX_LINKS_PER_MOD = 64
 MAX_ASSET_PATH_CHARS = 2048
+D2PFX_PREVIEW_MAX_BYTES = 32 * 1024 * 1024
+D2PFX_INSTALL_MAX_BYTES = 2 * 1024 * 1024 * 1024
+WINDOWS_RESERVED_STEMS = {"con", "prn", "aux", "nul"} | {f"com{i}" for i in range(1, 10)} | {
+    f"lpt{i}" for i in range(1, 10)
+}
 
 
 def _safe_category_id(value) -> str:
@@ -59,6 +68,88 @@ def _quoted_asset_url(base_url: str, category, filename) -> str:
     return f"{base_url}{encoded_category}/{encoded_filename}"
 
 
+def _public_ip(address: str) -> bool:
+    try:
+        return ipaddress.ip_address(address).is_global
+    except ValueError:
+        return False
+
+
+def validate_public_https_url(url: str) -> None:
+    """Allow D2PFX downloads only over HTTPS to globally routable endpoints."""
+    try:
+        parsed = urllib.parse.urlsplit(str(url or ""))
+        port = parsed.port
+    except ValueError as exc:
+        raise ValueError("D2PFX download URL is malformed.") from exc
+
+    if parsed.scheme.casefold() != "https":
+        raise ValueError("D2PFX downloads require HTTPS.")
+    if parsed.username is not None or parsed.password is not None:
+        raise ValueError("D2PFX download URLs cannot contain credentials.")
+    if parsed.fragment:
+        raise ValueError("D2PFX download URLs cannot contain fragments.")
+    if port not in (None, 443):
+        raise ValueError("D2PFX download URLs must use the standard HTTPS port.")
+
+    hostname = str(parsed.hostname or "").rstrip(".").casefold()
+    if not hostname:
+        raise ValueError("D2PFX download URL is missing a hostname.")
+    if hostname == "localhost" or hostname.endswith(".localhost") or hostname.endswith(".local"):
+        raise ValueError("D2PFX download URL cannot target a local hostname.")
+
+    try:
+        literal = ipaddress.ip_address(hostname)
+    except ValueError:
+        literal = None
+    if literal is not None:
+        if not literal.is_global:
+            raise ValueError("D2PFX download URL cannot target a private or non-global IP address.")
+        return
+
+    try:
+        answers = socket.getaddrinfo(hostname, 443, type=socket.SOCK_STREAM)
+    except OSError as exc:
+        raise ValueError("D2PFX download hostname could not be resolved safely.") from exc
+
+    addresses = {str(answer[4][0]).split("%", 1)[0] for answer in answers if answer and len(answer) >= 5 and answer[4]}
+    if not addresses:
+        raise ValueError("D2PFX download hostname did not resolve to an address.")
+    if any(not _public_ip(address) for address in addresses):
+        raise ValueError("D2PFX download hostname resolves to a private or non-global address.")
+
+
+def safe_download_filename(url: str, allowed_extensions=None) -> str:
+    """Derive a flat Windows-safe filename from a URL path, never its query string."""
+    parsed = urllib.parse.urlsplit(str(url or ""))
+    decoded_path = urllib.parse.unquote(parsed.path or "")
+    raw_name = posixpath.basename(decoded_path.rstrip("/"))
+    if not raw_name:
+        raise ValueError("D2PFX download URL does not contain a filename.")
+
+    invalid = '<>:"/\\|?*'
+    name = "".join("_" if char in invalid or ord(char) < 32 else char for char in raw_name).strip(" .")
+    if not name:
+        raise ValueError("D2PFX download filename is invalid.")
+
+    stem, extension = os.path.splitext(name)
+    extension = extension.casefold()
+    if allowed_extensions is not None:
+        allowed = {str(item).casefold() for item in allowed_extensions}
+        if extension not in allowed:
+            raise ValueError(f"D2PFX download filename has an unsupported extension: {extension or '(none)'}")
+
+    if stem.casefold() in WINDOWS_RESERVED_STEMS:
+        stem = f"_{stem}"
+        name = stem + extension
+
+    if len(name) > 180:
+        suffix = hashlib.sha256(str(url).encode("utf-8", errors="replace")).hexdigest()[:12]
+        keep = max(1, 180 - len(extension) - len(suffix) - 1)
+        name = f"{stem[:keep]}-{suffix}{extension}"
+    return name
+
+
 class DataManager:
     def __init__(self):
         self.cache_dir = CACHE_DIR
@@ -67,8 +158,21 @@ class DataManager:
         self.metadata = {}
         self.constants = {}
 
-    def download_file(self, url, dest, progress_tag=None, max_bytes=security.ARCHIVE_MAX_FILE_BYTES):
-        return fs.download_file(url, dest, progress_tag=progress_tag, max_bytes=max_bytes)
+    def download_file(
+        self,
+        url,
+        dest,
+        progress_tag=None,
+        max_bytes=D2PFX_INSTALL_MAX_BYTES,
+    ):
+        return fs.download_file(
+            url,
+            dest,
+            progress_tag=progress_tag,
+            max_bytes=max_bytes,
+            url_validator=validate_public_https_url,
+            max_redirects=5,
+        )
 
     def _catalogue_cache_path(self, filename):
         if filename not in CATALOGUE_FILES:
