@@ -23,6 +23,7 @@ jobs:
         run: uv sync --group dev
       - name: Apply Prismatic Foundry compositor
         run: |
+          sed -i 's/UI_COLLECTION = (231, 109, 137, 255)/UI_COLLECTION = (213, 174, 103, 255)/' tools/apply_prismatic_foundry_once.py
           python -m py_compile tools/apply_prismatic_foundry_once.py
           python tools/apply_prismatic_foundry_once.py
           uv run ruff format Minify/__main__.py Minify/ui/theme.py Minify/ui/window.py Minify/ui/checkboxes.py Minify/browsers/d2pfx/ui.py tests/test_modern_ui.py
@@ -31,7 +32,7 @@ jobs:
           uv run pytest tests/test_modern_ui.py
       - name: Commit materialized UI
         run: |
-          git rm .github/workflows/prismatic-foundry-once.yml tools/apply_prismatic_foundry_once.py
+          git rm -f .github/workflows/prismatic-foundry-once.yml tools/apply_prismatic_foundry_once.py
           git add Minify/__main__.py Minify/ui/theme.py Minify/ui/window.py Minify/ui/checkboxes.py Minify/browsers/d2pfx/ui.py tests/test_modern_ui.py
           git diff --check --cached
           git config user.name "github-actions[bot]"
