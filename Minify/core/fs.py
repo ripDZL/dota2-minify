@@ -9,6 +9,7 @@ import tempfile
 import tarfile
 import time
 import zipfile
+from collections.abc import Callable
 from typing import Optional
 
 import dearpygui.dearpygui as dpg
@@ -145,21 +146,72 @@ def restore_directory(source: str, backup: str) -> None:
     remove_path(backup)
 
 
+def _validated_stream_response(
+    url: str,
+    *,
+    url_validator: Callable[[str], None],
+    timeout: tuple[int, int],
+    max_redirects: int,
+):
+    """Open a streamed response while validating every redirect target."""
+    current = str(url)
+    redirect_codes = {301, 302, 303, 307, 308}
+    for redirect_count in range(max_redirects + 1):
+        url_validator(current)
+        response = requests.get(current, stream=True, timeout=timeout, allow_redirects=False)
+        if response.status_code not in redirect_codes:
+            try:
+                response.raise_for_status()
+                url_validator(str(getattr(response, "url", "") or current))
+                return response
+            except Exception:
+                response.close()
+                raise
+
+        location = response.headers.get("location")
+        response.close()
+        if not location:
+            raise ValueError("Download redirect is missing a Location header.")
+        if redirect_count >= max_redirects:
+            raise ValueError(f"Download exceeded the {max_redirects}-redirect safety limit.")
+        current = requests.compat.urljoin(current, location)
+
+    raise ValueError("Download redirect validation failed.")
+
+
 def download_file(
     url: str,
     target_path: str,
     progress_tag: Optional[str] = None,
     max_bytes: int | None = security.ARCHIVE_MAX_FILE_BYTES,
+    url_validator: Callable[[str], None] | None = None,
+    max_redirects: int = 5,
 ) -> bool:
-    """Download to a temporary file with bounded size and request timeouts."""
+    """Download to a temporary file with bounded size and request timeouts.
+
+    When ``url_validator`` is provided, automatic redirects are disabled and
+    every hop is validated before the next network request is sent.
+    """
     response = None
     temporary = None
     try:
         if max_bytes is not None and max_bytes < 1:
             raise ValueError("max_bytes must be positive or None")
+        if max_redirects < 0 or max_redirects > 20:
+            raise ValueError("max_redirects must be between 0 and 20")
 
-        response = requests.get(url, stream=True, timeout=(10, 60))
-        response.raise_for_status()
+        timeout = (10, 60)
+        if url_validator is None:
+            response = requests.get(url, stream=True, timeout=timeout)
+            response.raise_for_status()
+        else:
+            response = _validated_stream_response(
+                url,
+                url_validator=url_validator,
+                timeout=timeout,
+                max_redirects=max_redirects,
+            )
+
         try:
             total_size = int(response.headers.get("content-length", 0) or 0)
         except (TypeError, ValueError):
