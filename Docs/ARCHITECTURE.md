@@ -1,10 +1,11 @@
 # Architecture
 - Baseline: exact upstream rc7 commit `d4b4520c945a9e1f8f5facc52a76ac5903babe90`; no current-main rebase during hardening.
-- Branches: exactly three long-lived refs: `v21.4-hardening` active development -> `beta` validation/promotion -> `main` final publication.
-- Fork source: materialized files + ordinary commits; clone should run without source-rewrite bootstrap.
-- UI: responsive Obsidian Arc release shell; layered graphite surfaces; arc-blue state/navigation; ember identity/primary patch actions; gold metadata; teal D2PFX/safety; subtle opaque edge depth; nested hero/action/flow/safety cards; Mod Library and D2PFX private themes must stay visually coherent with the global system.
-- Build transformer and `.materialize/` workflow: optional migration/reproducibility tooling only; never canonical source.
-- Never trigger incomplete `.materialize/` input or create `READY` until the reconstructed payload matches its pinned hash.
+- Branches: exactly `v21.4-hardening` active -> `beta` validation -> `main` publication.
+- Fork source: materialized files + ordinary commits; clone runs without source-rewrite bootstrap.
+- UI: responsive workspace shell using **Crimson Slate** visual system: charcoal/plum surfaces, crimson focus/actions, compact rectangular controls, inset fields, thin modular borders, low radii; no stale workspace/RC badge furniture.
+- UI inspiration may follow external reference language, but repo must not copy third-party artwork/assets unless separately licensed and intentionally added.
+- Build transformer and `.materialize/` workflow: optional migration/repro tooling only; never canonical source.
+- Never trigger incomplete `.materialize/` input or create `READY` until reconstructed payload matches pinned hash.
 - Security primitives: shared `Minify/core/security.py` for path confinement, archive limits, bounded decompression, hashing, atomic writes.
 - Mod discovery: bounded recursive scanner; no symlink traversal; nested IDs stable.
 - Collections: organizational parents; selectable child mods; markerless heuristic retained.
