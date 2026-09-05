@@ -2,6 +2,7 @@ import datetime as dt
 import os
 import re
 import threading
+import tempfile
 import urllib.parse
 from concurrent.futures import ThreadPoolExecutor
 
@@ -11,7 +12,7 @@ from ui import modal_shared, window
 from ui import shared as shared
 
 from browsers.d2pfx import config as browser_config
-from browsers.d2pfx.data import DataManager
+from browsers.d2pfx.data import D2PFX_PREVIEW_MAX_BYTES, DataManager, safe_download_filename
 
 
 def _format_d2pfx_updated_date(mod):
@@ -813,11 +814,13 @@ class BrowserUI:
                     self.loading_previews.add(load_key)
 
                 try:
-                    if not fs.download_file(url, local_path):
+                    if not self.data_manager.download_file(url, local_path, max_bytes=D2PFX_PREVIEW_MAX_BYTES):
                         # Fallback: Try root previews folder if category-specific fails
                         root_url = url.replace(f"previews/{cat_id}/", "previews/")
                         if root_url != url:
-                            if not fs.download_file(root_url, local_path):
+                            if not self.data_manager.download_file(
+                                root_url, local_path, max_bytes=D2PFX_PREVIEW_MAX_BYTES
+                            ):
                                 return
                         else:
                             return
@@ -918,19 +921,28 @@ class BrowserUI:
         target_dir = os.path.join(base.mods_dir, utils.sanitize_win_path(mod_dir_name))
 
         def _task():
+            staging_root = None
             try:
                 modal_shared.show_progress([f"Installing {name}...", "Downloading mod files..."])
-                fs.create_dirs(target_dir)
+                fs.create_dirs(base.mods_dir)
+                if os.path.lexists(target_dir):
+                    raise ValueError(
+                        "A mod directory with this D2PFX name already exists. Refresh the library before installing again."
+                    )
+                staging_root = tempfile.mkdtemp(prefix=".d2pfx-install-", dir=base.mods_dir)
+                install_dir = os.path.join(staging_root, "payload")
+                fs.create_dirs(install_dir)
 
                 # 1. Download Mod File
-                mod_dest = os.path.join(target_dir, os.path.basename(mod_url))
+                mod_filename = safe_download_filename(mod_url, allowed_extensions={".vpk", ".zip"})
+                mod_dest = os.path.join(install_dir, mod_filename)
                 if not self.data_manager.download_file(mod_url, mod_dest, progress_tag="modal_progress_status"):
                     raise Exception("Failed to download mod file.")
 
                 # Handle extraction if zip
                 if is_zip:
                     modal_shared.set_progress(0.9, "Extracting mod files...")
-                    if not fs.extract_archive(mod_dest, target_dir):
+                    if not fs.extract_archive(mod_dest, install_dir):
                         raise Exception("Failed to extract mod archive.")
                     fs.remove_path(mod_dest)  # Clean up zip
 
@@ -941,8 +953,8 @@ class BrowserUI:
                     if not preview_url.startswith("http"):
                         preview_url = self.data_manager.get_preview_url(cat_id, preview_file)
 
-                    preview_dest = os.path.join(target_dir, "preview.jpg")
-                    self.data_manager.download_file(preview_url, preview_dest)
+                    preview_dest = os.path.join(install_dir, "preview.jpg")
+                    self.data_manager.download_file(preview_url, preview_dest, max_bytes=D2PFX_PREVIEW_MAX_BYTES)
 
                 # 3. Create manifest.json
                 modcfg = {
@@ -962,7 +974,7 @@ class BrowserUI:
                 if cat_id in browser_config.RENAME_CATEGORIES:
                     modcfg["order"] = 2
 
-                config.write_json_file(os.path.join(target_dir, "manifest.json"), modcfg)
+                config.write_json_file(os.path.join(install_dir, "manifest.json"), modcfg)
 
                 # 4. Create notes.md
                 version = modcfg["browser"]["version"]
@@ -998,8 +1010,17 @@ class BrowserUI:
                     if active_tags:
                         notes_content += f"Tags: {', '.join(active_tags)}\n"
 
-                with open(os.path.join(target_dir, "notes.md"), "w", encoding="utf-8") as f:
+                with open(os.path.join(install_dir, "notes.md"), "w", encoding="utf-8") as f:
                     f.write(notes_content)
+
+                # Publish only after download, extraction, preview, and metadata are complete.
+                if os.path.lexists(target_dir):
+                    raise ValueError(
+                        "The D2PFX target directory appeared during installation; refusing to overwrite it."
+                    )
+                os.replace(install_dir, target_dir)
+                fs.remove_path(staging_root)
+                staging_root = None
 
                 modal_shared.show(
                     "Installation Complete",
@@ -1016,6 +1037,8 @@ class BrowserUI:
                 self.render_mods(self.selected_category)
 
             except Exception as e:
+                if staging_root:
+                    fs.remove_path(staging_root)
                 modal_shared.show("Installation Failed", [str(e)], [{"label": "OK"}])
 
         threading.Thread(target=_task, daemon=True).start()
