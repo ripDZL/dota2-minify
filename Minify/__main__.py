@@ -66,49 +66,88 @@ def create_ui():
         no_saved_settings=True,
         pos=(0, 0),
     ):
-        # v21.1 layout-fit shell. Responsive child windows replace the
-        # fixed-height v19.7 shell so Windows font metrics cannot clip actions.
+        # v21.4 Prismatic Foundry command console. The shell is intentionally
+        # layered: brand rail -> command rail -> navigation/workspace -> live activity.
         dpg.add_child_window(
             tag="app_shell_header",
-            height=60,
+            height=72,
+            autosize_x=True,
+            border=True,
+            no_scrollbar=True,
+            no_scroll_with_mouse=True,
+        )
+        with dpg.group(parent="app_shell_header", horizontal=True, horizontal_spacing=10):
+            dpg.add_text("MINIFY", tag="app_title")
+            dpg.bind_item_font("app_title", "large_font")
+            with dpg.group():
+                dpg.add_text("DOTA 2 MOD ORCHESTRATION", tag="app_product_name")
+                dpg.add_text(f"RELEASE ENGINE  //  v{base.VERSION}", tag="app_version")
+            dpg.add_spacer(width=16)
+            dpg.add_child_window(
+                tag="header_engine_chip",
+                width=152,
+                height=42,
+                border=True,
+                no_scrollbar=True,
+                no_scroll_with_mouse=True,
+            )
+            dpg.add_text("PATCH ENGINE", parent="header_engine_chip", tag="header_engine_label")
+            dpg.add_text("READY / GUARDED", parent="header_engine_chip", tag="header_engine_state")
+
+        dpg.add_child_window(
+            tag="header_accent_rail",
+            height=5,
             autosize_x=True,
             border=False,
             no_scrollbar=True,
             no_scroll_with_mouse=True,
         )
-        with dpg.group(parent="app_shell_header", horizontal=True):
-            dpg.add_text("MINIFY", tag="app_title")
-            dpg.bind_item_font("app_title", "large_font")
-            dpg.add_text("Dota 2 Mod Manager", tag="app_product_name")
-            dpg.add_text(f"v{base.VERSION}", tag="app_version")
+        dpg.add_spacer(height=7)
 
-        dpg.add_spacer(height=8)
-        dpg.add_group(tag="app_shell_body", horizontal=True, horizontal_spacing=8)
+        dpg.add_group(tag="app_shell_body", horizontal=True, horizontal_spacing=9)
         dpg.add_child_window(
             parent="app_shell_body",
             tag="app_nav_rail",
-            width=172,
-            height=304,
+            width=188,
+            height=350,
             border=True,
             no_scrollbar=True,
             no_scroll_with_mouse=True,
         )
-        dpg.add_text("NAVIGATION", parent="app_nav_rail", tag="nav_workspace_label")
+        dpg.add_text("COMMAND DECK", parent="app_nav_rail", tag="nav_workspace_label")
+        dpg.add_child_window(
+            parent="app_nav_rail",
+            tag="nav_status_card",
+            width=-1,
+            height=54,
+            border=True,
+            no_scrollbar=True,
+            no_scroll_with_mouse=True,
+        )
+        dpg.add_text("SYSTEM", parent="nav_status_card", tag="nav_status_title")
+        dpg.add_text("● PROTECTED", parent="nav_status_card", tag="nav_status_value")
+
+        dpg.add_spacer(parent="app_nav_rail", height=7)
         dpg.add_button(
-            parent="app_nav_rail", tag="nav_patch_button", label="Patch", callback=lambda: None, width=-1, height=34
+            parent="app_nav_rail",
+            tag="nav_patch_button",
+            label="PATCH CORE",
+            callback=lambda: None,
+            width=-1,
+            height=36,
         )
         dpg.add_button(
             parent="app_nav_rail",
             tag="button_select_mods",
-            label="Select Mods",
+            label="MOD LIBRARY",
             callback=lambda: window.show_overlay("mod_menu"),
             width=-1,
-            height=34,
+            height=36,
         )
         dpg.add_button(
             parent="app_nav_rail",
             tag="nav_d2pfx_button",
-            label="D2PFX Browser",
+            label="D2PFX NETWORK",
             callback=d2pfx_ui.toggle,
             width=-1,
             height=36,
@@ -116,18 +155,18 @@ def create_ui():
         dpg.add_button(
             parent="app_nav_rail",
             tag="nav_settings_button",
-            label="Settings",
+            label="CONTROL PANEL",
             callback=lambda: window.show_overlay("settings_menu"),
             width=-1,
             height=36,
         )
-        dpg.add_spacer(parent="app_nav_rail", height=7)
+        dpg.add_spacer(parent="app_nav_rail", height=8)
         dpg.add_separator(parent="app_nav_rail")
         dpg.add_text("RECOVERY", parent="app_nav_rail", tag="nav_secondary_label")
         dpg.add_button(
             parent="app_nav_rail",
             tag="nav_restore_button",
-            label="Restore backups",
+            label="RESTORE POINTS",
             callback=checkboxes.show_backups,
             width=-1,
             height=32,
@@ -135,7 +174,7 @@ def create_ui():
         dpg.add_button(
             parent="app_nav_rail",
             tag="button_uninstall",
-            label="Remove Minify",
+            label="REMOVE MINIFY",
             callback=modals.Uninstall.show,
             width=-1,
             height=32,
@@ -145,7 +184,7 @@ def create_ui():
             parent="app_shell_body",
             tag="app_workspace",
             width=-1,
-            height=304,
+            height=350,
             border=True,
             no_scrollbar=True,
             no_scroll_with_mouse=True,
@@ -163,27 +202,41 @@ def create_ui():
             dpg.add_child_window(
                 parent="app_workspace_main",
                 tag="dashboard_hero_card",
-                height=118,
+                height=142,
                 width=-1,
                 border=True,
                 no_scrollbar=True,
                 no_scroll_with_mouse=True,
             )
-            dpg.add_text("PATCH WORKSPACE", parent="dashboard_hero_card", tag="workspace_eyebrow")
-            dpg.add_text("Build a clean patch", parent="dashboard_hero_card", tag="dashboard_focus_title")
+            dpg.add_text("PATCH MATRIX  /  RELEASE CONSOLE", parent="dashboard_hero_card", tag="workspace_eyebrow")
+            dpg.add_text("Orchestrate your Dota build", parent="dashboard_hero_card", tag="dashboard_focus_title")
             dpg.bind_item_font("dashboard_focus_title", "large_font")
-            dpg.add_text("0 selected • 0 installed", parent="dashboard_hero_card", tag="dashboard_metric")
             dpg.add_text(
-                "Choose your mods, review shared files, then let Minify create a restore point before changing Dota.",
+                "Select, inspect and deploy mods through a guarded patch transaction with collision review and rollback.",
                 parent="dashboard_hero_card",
                 tag="dashboard_focus_hint",
-                wrap=420,
+                wrap=460,
             )
+            dpg.add_spacer(parent="dashboard_hero_card", height=5)
+            dpg.add_child_window(
+                parent="dashboard_hero_card",
+                tag="dashboard_metric_strip",
+                height=39,
+                width=-1,
+                border=True,
+                no_scrollbar=True,
+                no_scroll_with_mouse=True,
+            )
+            with dpg.group(parent="dashboard_metric_strip", horizontal=True, horizontal_spacing=11):
+                dpg.add_text("0 selected • 0 installed", tag="dashboard_metric")
+                dpg.add_text("RESTORE // ARMED", tag="metric_restore_state")
+                dpg.add_text("COLLISION // INDEXED", tag="metric_collision_state")
+
             dpg.add_spacer(parent="app_workspace_main", height=6)
             dpg.add_child_window(
                 parent="app_workspace_main",
                 tag="dashboard_status_panel",
-                height=54,
+                height=58,
                 width=-1,
                 border=True,
                 no_scrollbar=True,
@@ -192,33 +245,39 @@ def create_ui():
             with dpg.group(parent="dashboard_status_panel", horizontal=True):
                 dpg.add_text("● READY", tag="dashboard_status_label")
                 dpg.add_text("Getting your mod library ready...", tag="dashboard_status_message", wrap=420)
+
             dpg.add_spacer(parent="app_workspace_main", height=6)
             dpg.add_child_window(
                 parent="app_workspace_main",
                 tag="dashboard_action_bar",
-                height=58,
+                height=66,
                 width=-1,
                 border=True,
                 no_scrollbar=True,
                 no_scroll_with_mouse=True,
             )
+            dpg.add_text("DEPLOYMENT COMMANDS", parent="dashboard_action_bar", tag="dashboard_action_label")
             with dpg.group(parent="dashboard_action_bar", horizontal=True):
                 dpg.add_button(
                     tag="button_patch",
-                    label="Review & Patch",
+                    label="REVIEW + DEPLOY",
                     callback=checkboxes.show_patch_preview,
                     enabled=False,
-                    width=196,
-                    height=38,
+                    width=210,
+                    height=34,
                 )
                 dpg.add_button(
-                    tag="button_refresh_main", label="Refresh", callback=checkboxes.refresh, width=132, height=38
+                    tag="button_refresh_main",
+                    label="RESCAN LIBRARY",
+                    callback=checkboxes.refresh,
+                    width=146,
+                    height=34,
                 )
 
             dpg.add_child_window(
                 parent="workspace_columns",
                 tag="app_workspace_side",
-                width=260,
+                width=286,
                 height=-1,
                 border=True,
                 no_scrollbar=True,
@@ -227,16 +286,38 @@ def create_ui():
             dpg.add_child_window(
                 parent="app_workspace_side",
                 tag="dashboard_flow_card",
-                height=126,
+                height=132,
                 width=-1,
                 border=True,
                 no_scrollbar=True,
                 no_scroll_with_mouse=True,
             )
-            dpg.add_text("PATCH FLOW", parent="dashboard_flow_card", tag="dashboard_side_title")
-            dpg.add_text("01  Review shared files", parent="dashboard_flow_card", tag="dashboard_step_1")
-            dpg.add_text("02  Create restore point", parent="dashboard_flow_card", tag="dashboard_step_2")
-            dpg.add_text("03  Apply selected mods", parent="dashboard_flow_card", tag="dashboard_step_3")
+            dpg.add_text("DEPLOYMENT SEQUENCE", parent="dashboard_flow_card", tag="dashboard_side_title")
+            dpg.add_text(
+                "01  ANALYZE      Shared-file collision scan", parent="dashboard_flow_card", tag="dashboard_step_1"
+            )
+            dpg.add_text(
+                "02  SNAPSHOT     Managed-output restore point", parent="dashboard_flow_card", tag="dashboard_step_2"
+            )
+            dpg.add_text(
+                "03  COMPOSE      Apply selected mod graph", parent="dashboard_flow_card", tag="dashboard_step_3"
+            )
+
+            dpg.add_spacer(parent="app_workspace_side", height=6)
+            dpg.add_child_window(
+                parent="app_workspace_side",
+                tag="dashboard_signal_card",
+                height=100,
+                width=-1,
+                border=True,
+                no_scrollbar=True,
+                no_scroll_with_mouse=True,
+            )
+            dpg.add_text("GUARD MATRIX", parent="dashboard_signal_card", tag="dashboard_signal_title")
+            dpg.add_text("ROLLBACK        AUTOMATIC", parent="dashboard_signal_card", tag="signal_rollback")
+            dpg.add_text("VALIDATION      ENFORCED", parent="dashboard_signal_card", tag="signal_validation")
+            dpg.add_text("PATH SAFETY     CONFINED", parent="dashboard_signal_card", tag="signal_paths")
+
             dpg.add_spacer(parent="app_workspace_side", height=6)
             dpg.add_child_window(
                 parent="app_workspace_side",
@@ -247,21 +328,27 @@ def create_ui():
                 no_scrollbar=True,
                 no_scroll_with_mouse=True,
             )
-            dpg.add_text("SAFETY / ROLLBACK", parent="dashboard_safety_card", tag="dashboard_safety_title")
+            dpg.add_text("FAIL-SAFE", parent="dashboard_safety_card", tag="dashboard_safety_title")
             dpg.add_text(
-                "Automatic rollback protects the previous Minify output if a patch fails.",
+                "If deployment validation fails, Minify rolls back the managed output to the previous restore point.",
                 parent="dashboard_safety_card",
                 tag="dashboard_safety_text",
-                wrap=220,
+                wrap=240,
             )
 
         dpg.add_spacer(height=8)
         dpg.add_child_window(
-            tag="activity_header", height=40, autosize_x=True, border=True, no_scrollbar=True, no_scroll_with_mouse=True
+            tag="activity_header",
+            height=44,
+            autosize_x=True,
+            border=True,
+            no_scrollbar=True,
+            no_scroll_with_mouse=True,
         )
         with dpg.group(parent="activity_header", horizontal=True):
-            dpg.add_text("ACTIVITY", tag="activity_label")
-            dpg.add_text("Live setup, download and patch output", tag="activity_caption")
+            dpg.add_text("LIVE ACTIVITY", tag="activity_label")
+            dpg.add_text("SETUP  /  DOWNLOAD  /  PATCH  /  VALIDATION", tag="activity_caption")
+            dpg.add_text("● STREAM ONLINE", tag="activity_stream_state")
 
         dpg.add_spacer(height=4)
         with dpg.group(tag="terminal_and_footer_group"):

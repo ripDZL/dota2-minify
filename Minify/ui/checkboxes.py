@@ -78,26 +78,26 @@ STATUSBAR_HEIGHT = 108
 SOURCE_RAIL_MIN_WIDTH = 144
 SOURCE_RAIL_MAX_WIDTH = 196
 MIN_SEARCH_WIDTH = 260
-UI_ACCENT = (190, 39, 77, 255)
-UI_ACCENT_HOVER = (224, 54, 94, 255)
-UI_EMBER = (207, 43, 79, 255)
-UI_EMBER_HOVER = (238, 60, 99, 255)
-UI_TEXT = (239, 239, 244, 255)
-UI_MUTED = (157, 157, 171, 255)
-UI_PANEL = (28, 28, 37, 255)
-UI_PANEL_ALT = (34, 34, 45, 255)
-UI_RAISED = (42, 42, 54, 255)
-UI_RECESSED = (22, 22, 30, 255)
-UI_PANEL_HOVER = (51, 50, 63, 255)
-UI_BORDER = (69, 68, 82, 255)
-UI_BEVEL_LIGHT = (91, 89, 104, 255)
-UI_BEVEL_DARK = (2, 2, 5, 170)
-UI_D2PFX = (82, 195, 184, 255)
-UI_COLLECTION = (213, 174, 103, 255)
-UI_VPK = (132, 188, 139, 255)
-UI_WARNING = (224, 175, 82, 255)
-UI_ERROR = (211, 62, 80, 255)
-UI_SUCCESS = (92, 188, 130, 255)
+UI_ACCENT = (121, 92, 255, 255)
+UI_ACCENT_HOVER = (158, 134, 255, 255)
+UI_EMBER = (255, 112, 70, 255)
+UI_EMBER_HOVER = (255, 145, 96, 255)
+UI_TEXT = (241, 245, 255, 255)
+UI_MUTED = (154, 165, 194, 255)
+UI_PANEL = (12, 16, 29, 255)
+UI_PANEL_ALT = (18, 23, 40, 255)
+UI_RAISED = (25, 32, 54, 255)
+UI_RECESSED = (8, 11, 21, 255)
+UI_PANEL_HOVER = (34, 43, 70, 255)
+UI_BORDER = (64, 74, 115, 255)
+UI_BEVEL_LIGHT = (105, 121, 177, 255)
+UI_BEVEL_DARK = (0, 1, 5, 230)
+UI_D2PFX = (59, 222, 205, 255)
+UI_COLLECTION = (255, 203, 94, 255)
+UI_VPK = (131, 216, 151, 255)
+UI_WARNING = (255, 190, 80, 255)
+UI_ERROR = (238, 72, 105, 255)
+UI_SUCCESS = (84, 225, 166, 255)
 
 ui_state = {
     "search": "",
@@ -145,9 +145,9 @@ def _ensure_ui_themes():
             dpg.add_theme_style(dpg.mvStyleVar_WindowPadding, x=8, y=6)
             dpg.add_theme_style(dpg.mvStyleVar_ItemSpacing, x=6, y=5)
             dpg.add_theme_style(dpg.mvStyleVar_FramePadding, x=6, y=3)
-            dpg.add_theme_style(dpg.mvStyleVar_FrameRounding, 2)
+            dpg.add_theme_style(dpg.mvStyleVar_FrameRounding, 6)
             dpg.add_theme_style(dpg.mvStyleVar_FrameBorderSize, 1)
-            dpg.add_theme_style(dpg.mvStyleVar_ChildRounding, 3)
+            dpg.add_theme_style(dpg.mvStyleVar_ChildRounding, 7)
             dpg.add_theme_style(dpg.mvStyleVar_ChildBorderSize, 1)
 
     with dpg.theme(tag="mod_manager_list_theme"):
@@ -170,9 +170,9 @@ def _ensure_ui_themes():
             dpg.add_theme_style(dpg.mvStyleVar_WindowPadding, x=8, y=7)
             dpg.add_theme_style(dpg.mvStyleVar_ItemSpacing, x=7, y=4)
             dpg.add_theme_style(dpg.mvStyleVar_FramePadding, x=5, y=3)
-            dpg.add_theme_style(dpg.mvStyleVar_FrameRounding, 2)
+            dpg.add_theme_style(dpg.mvStyleVar_FrameRounding, 6)
             dpg.add_theme_style(dpg.mvStyleVar_FrameBorderSize, 1)
-            dpg.add_theme_style(dpg.mvStyleVar_ChildRounding, 3)
+            dpg.add_theme_style(dpg.mvStyleVar_ChildRounding, 7)
 
     # Standard stays neutral; special source types get restrained identifiers.
     with dpg.theme(tag="mod_manager_section_theme"):
@@ -185,7 +185,7 @@ def _ensure_ui_themes():
             dpg.add_theme_color(dpg.mvThemeCol_BorderShadow, UI_BEVEL_DARK)
             dpg.add_theme_style(dpg.mvStyleVar_FrameBorderSize, 1)
             dpg.add_theme_style(dpg.mvStyleVar_FramePadding, x=7, y=5)
-            dpg.add_theme_style(dpg.mvStyleVar_FrameRounding, 2)
+            dpg.add_theme_style(dpg.mvStyleVar_FrameRounding, 6)
 
     with dpg.theme(tag="mod_manager_collection_section_theme"):
         with dpg.theme_component(dpg.mvAll):
@@ -197,7 +197,7 @@ def _ensure_ui_themes():
             dpg.add_theme_color(dpg.mvThemeCol_BorderShadow, UI_BEVEL_DARK)
             dpg.add_theme_style(dpg.mvStyleVar_FrameBorderSize, 1)
             dpg.add_theme_style(dpg.mvStyleVar_FramePadding, x=7, y=5)
-            dpg.add_theme_style(dpg.mvStyleVar_FrameRounding, 2)
+            dpg.add_theme_style(dpg.mvStyleVar_FrameRounding, 6)
 
     with dpg.theme(tag="mod_manager_d2pfx_section_theme"):
         with dpg.theme_component(dpg.mvAll):
@@ -209,7 +209,7 @@ def _ensure_ui_themes():
             dpg.add_theme_color(dpg.mvThemeCol_BorderShadow, UI_BEVEL_DARK)
             dpg.add_theme_style(dpg.mvStyleVar_FrameBorderSize, 1)
             dpg.add_theme_style(dpg.mvStyleVar_FramePadding, x=7, y=5)
-            dpg.add_theme_style(dpg.mvStyleVar_FrameRounding, 2)
+            dpg.add_theme_style(dpg.mvStyleVar_FrameRounding, 6)
 
     with dpg.theme(tag="mod_manager_vpk_section_theme"):
         with dpg.theme_component(dpg.mvAll):
@@ -221,7 +221,7 @@ def _ensure_ui_themes():
             dpg.add_theme_color(dpg.mvThemeCol_BorderShadow, UI_BEVEL_DARK)
             dpg.add_theme_style(dpg.mvStyleVar_FrameBorderSize, 1)
             dpg.add_theme_style(dpg.mvStyleVar_FramePadding, x=7, y=5)
-            dpg.add_theme_style(dpg.mvStyleVar_FrameRounding, 2)
+            dpg.add_theme_style(dpg.mvStyleVar_FrameRounding, 6)
 
     with dpg.theme(tag="mod_manager_unknown_theme"):
         with dpg.theme_component(dpg.mvAll):
@@ -238,7 +238,7 @@ def _ensure_ui_themes():
             dpg.add_theme_color(dpg.mvThemeCol_BorderShadow, UI_BEVEL_DARK)
             dpg.add_theme_style(dpg.mvStyleVar_FrameBorderSize, 1)
             dpg.add_theme_style(dpg.mvStyleVar_FramePadding, x=7, y=5)
-            dpg.add_theme_style(dpg.mvStyleVar_FrameRounding, 2)
+            dpg.add_theme_style(dpg.mvStyleVar_FrameRounding, 6)
 
     with dpg.theme(tag="mod_manager_d2pfx_category_theme"):
         with dpg.theme_component(dpg.mvAll):
@@ -273,7 +273,7 @@ def _ensure_ui_themes():
             dpg.add_theme_color(dpg.mvThemeCol_Border, UI_EMBER_HOVER)
             dpg.add_theme_color(dpg.mvThemeCol_BorderShadow, UI_BEVEL_DARK)
             dpg.add_theme_style(dpg.mvStyleVar_FrameBorderSize, 1)
-            dpg.add_theme_style(dpg.mvStyleVar_FrameRounding, 2)
+            dpg.add_theme_style(dpg.mvStyleVar_FrameRounding, 6)
 
     with dpg.theme(tag="mod_manager_card_theme"):
         with dpg.theme_component(dpg.mvChildWindow):
@@ -281,7 +281,7 @@ def _ensure_ui_themes():
             dpg.add_theme_color(dpg.mvThemeCol_Border, UI_BEVEL_LIGHT)
             dpg.add_theme_color(dpg.mvThemeCol_BorderShadow, UI_BEVEL_DARK)
             dpg.add_theme_style(dpg.mvStyleVar_ChildBorderSize, 1)
-            dpg.add_theme_style(dpg.mvStyleVar_ChildRounding, 3)
+            dpg.add_theme_style(dpg.mvStyleVar_ChildRounding, 7)
             dpg.add_theme_style(dpg.mvStyleVar_WindowPadding, x=10, y=7)
 
 

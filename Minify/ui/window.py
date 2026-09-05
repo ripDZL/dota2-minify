@@ -106,15 +106,15 @@ def on_resize():
     # v21.1 responsive shell. Give the landing workspace more vertical room
     # and a wider navigation rail so text/buttons are not clipped on Windows.
     nav_width = max(164, min(212, int(shared.window_width * 0.135)))
-    shell_body_height = max(292, min(388, int(shared.window_height * 0.36)))
+    shell_body_height = max(340, min(454, int(shared.window_height * 0.43)))
     workspace_width = max(400, shared.window_width - nav_width - 32)
     wide_workspace = workspace_width >= 900
-    side_width = 260 if wide_workspace else 0
+    side_width = 286 if wide_workspace else 0
     main_width = max(340, workspace_width - side_width - (18 if wide_workspace else 0) - 28)
     inner_height = max(248, shell_body_height - 36)
 
     if dpg.does_item_exist("app_shell_header"):
-        dpg.configure_item("app_shell_header", width=shared.window_width, height=60)
+        dpg.configure_item("app_shell_header", width=shared.window_width, height=72)
     if dpg.does_item_exist("app_nav_rail"):
         dpg.configure_item("app_nav_rail", width=nav_width, height=shell_body_height)
     if dpg.does_item_exist("app_workspace"):
@@ -128,7 +128,7 @@ def on_resize():
     if dpg.does_item_exist("dashboard_status_message"):
         dpg.configure_item("dashboard_status_message", wrap=max(190, main_width - 120))
     if dpg.does_item_exist("activity_header"):
-        dpg.configure_item("activity_header", width=shared.window_width, height=40)
+        dpg.configure_item("activity_header", width=shared.window_width, height=44)
     if dpg.does_item_exist("settings_scroll"):
         dpg.configure_item("settings_scroll", width=shared.window_width, height=max(220, shared.window_height - 78))
     if dpg.does_item_exist("settings_actions_bar"):
