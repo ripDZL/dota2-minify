@@ -33,6 +33,12 @@ def test_release_dashboard_uses_layered_cards():
         assert f'("{tag}",' in THEME
 
 
+def test_release_ui_uses_dual_accent_hierarchy():
+    assert "dpg.add_theme_color(dpg.mvThemeCol_Button, EMBER)" in THEME
+    assert "dpg.add_theme_color(dpg.mvThemeCol_Button, ACCENT_MUTED)" in THEME
+    assert 'tag="dashboard_safety_title_theme"' in THEME
+
+
 def test_d2pfx_uses_release_teal_instead_of_legacy_cyan():
     assert "color=(78, 208, 196)" in D2PFX
     assert "color=(0, 255, 255)" not in D2PFX
