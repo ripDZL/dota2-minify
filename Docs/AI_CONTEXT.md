@@ -2,18 +2,19 @@
 - Upstream baseline: `Egezenn/dota2-minify` tag `Minify-v1.14rc7`; exact commit `d4b4520c945a9e1f8f5facc52a76ac5903babe90`.
 - Fork: `ripDZL/dota2-minify`; active branch `v21.4-hardening`; promotion path `v21.4-hardening` -> `beta` -> `main`.
 - Exactly three branches must remain; `main` frozen at `a26bc88a0d412e357965f29488b83a7f9093e11f`; `beta` frozen at `af83bbb051edced195d5f55ba49ff060a8c76f3c`.
-- Current tested product code: `44309ffbd752c3c9788b4371cd6daf271fe763e8`; UI materialization commit: `36d59def98068862b247692580a23701df34358d`.
-- Current UI baseline: **Plumfire Reactor**; supersedes Prismatic Foundry palette while retaining the dense command-console structure.
-- Palette is grounded in user-supplied JSON roles: divider `#df503b`, highlight `#7ac143`, link `#ffff00`, base `#586c72`, button `#853894`, bright text `#ffc30f`, disabled `#a48f7b`, placeholder `#d9c7b0`, primary text `#f7f0e7`, window `#46335a`, alt `#000000`.
-- UI mapping: violet primary controls; ember divider/destructive accents; lime protected/success; gold telemetry; warm ivory text; plum-black surfaces; slate borders.
-- Alignment fix: header, metric strip, deployment sequence, and guard matrix use real DPG table columns instead of space-padded text; adaptive resize hides optional telemetry before clipping.
+- Current tested product code: `667be18dd0613098ad17f9c2eb8f66a4ee57bf8e`; Black-Plum UI materialization commit: `bfeca95d36b685ec38bb9ab9be9885089a8bf4d6`.
+- Current UI baseline: **Black-Plum Reactor**; supersedes Plumfire palette mapping while retaining the responsive command-console structure.
+- Theme source: user JSON + screenshot of its original application; spatial roles are plum chrome `#46335a`, slate work areas `#586c72`, black strips `#000000`, purple controls `#853894`, lime selected/safe `#7ac143` with black text, red dividers/errors `#df503b`, gold telemetry `#ffc30f`, yellow links `#ffff00`, warm ivory text `#f7f0e7`.
+- Screenshot-derived purple hover tone: `(169, 98, 183)`; primary patch/save controls stay purple while green is reserved for selection/protection state.
+- Mod Library uses broad slate fields + purple controls; D2PFX selected category uses lime fill/black text; D2PFX link emphasis uses JSON yellow.
+- Alignment fix retained: header, metric strip, deployment sequence, and guard matrix use real DPG table columns instead of space-padded text; adaptive resize hides optional telemetry/right deck before clipping.
 - Responsive thresholds: side deck requires workspace >=1080 and height >=720; metric strip requires inner height >=350/main >=560; restore/collision columns hide below 650/830 main width; engine column hides below 760 viewport width; activity caption hides below 900.
 - `LOCAL MOD WORKSPACE` / stale `RC6` UI remains removed.
-- Permanent visual regressions: `tests/test_modern_ui.py`; full hardening suite is 148/148.
-- Hardening CI run `33939739722`: compileall PASS; Ruff format PASS; Ruff lint PASS; pytest 148/148 PASS in 0.62s; Windows PyInstaller/runtime copy/portable ZIP/upload PASS.
-- Current Windows test ZIP: `Minify-v21.4-hardening-44309ffbd752c3c9788b4371cd6daf271fe763e8-windows.zip`; 53608076 bytes; SHA-256 `505b0d5421b83093518218a5ef7cf62a9a943e2515cd07eae3465f70c4820ac5`.
-- GitHub artifact ID `9961412398`; outer ZIP 53068102 bytes; SHA-256 `4760ea24c9912196b0da9323f00cf8d72fdb8ed33761a77907ae3083eb4d8ce2`.
-- Artifact verified: 1650 entries; roots `LICENSE`, `Minify.exe`, `README.md`, `_internal`, `bin`, `mods`; no `.materialize`, `READY`, `AI_REMOTE_TMP`; no forbidden Remove Foilage map/manifest; both oak blacklist entries present.
+- Permanent visual regressions: `tests/test_modern_ui.py`; full hardening suite is 149/149.
+- Hardening CI run `33940573117`: compileall PASS; Ruff format PASS; Ruff lint PASS; pytest 149/149 PASS in 0.78s; Windows PyInstaller/runtime copy/portable ZIP/upload PASS.
+- Current Windows test ZIP: `Minify-v21.4-hardening-667be18dd0613098ad17f9c2eb8f66a4ee57bf8e-windows.zip`; 53607407 bytes; SHA-256 `0fd863453cc8d2482682fbc5b41cc718870165cf06305f4535589fe673255408`.
+- GitHub artifact ID `9961687096`; outer ZIP 53067832 bytes; SHA-256 `ea94210af69e8dce1a35e9cb9d91c40e6f37146dc3316971e8e6cc08a414885f`.
+- Artifact verified: 1650 entries; roots `LICENSE`, `Minify.exe`, `README.md`, `_internal`, `bin`, `mods`; no `.materialize`, `READY`, `AI_REMOTE_TMP`; no forbidden Remove Foilage map/manifest; both oak blacklist entries present; Main Menu Background keeps both rules.
 - Canonical user feature reference: `Minify-v1.14rc7-ModManager-v21.3.1-Safe-Foliage-Fix (1).zip`; SHA-256 `37755c4ee92e1847eef1a5a9c89aef6ba488f33accd0cb102c62a7db8780b5f8`; bundled 116/116 tests pass locally.
 - v21.3.1 patch pipeline materialized at `b22133201e88d654859541f2c6be69cea8e3cb25`; preserve nested paths, compatibility filtering, restore points, conflict reporting, output validation, rollback, no-auto-prelaunch cleanup.
 - Never wholesale replace hardened core files with v21.3.1 overlays; use them as feature references only.
