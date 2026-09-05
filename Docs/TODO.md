@@ -8,14 +8,14 @@
 - [x] Fix clipped SYSTEM/PROTECTED nav card; 66px normal / 62px compact height with resize wiring.
 - [x] Remove PATCH ENGINE header chip and center Minify brand with equal stretch gutters.
 - [x] Enforce 960x680 minimum viewport and reserve vertical layout budget so core UI cannot clip at minimum size.
-- [x] Current tested code `cca977084a1f254e9e5a29078c798986b0dd4c7a`; CI run `33941654693`; pytest 152/152 PASS; Windows build PASS.
-- [x] Current portable ZIP validated; SHA-256 `2c5beb037ddef8a278092ee955826324e35ee75d4e0770b23940b42447abf62f`.
-- [ ] User review Black-Plum Reactor at maximized, medium, and minimum 960x680 sizes.
+- [x] Remove incomplete `.materialize/` bootstrap + one-shot materialization workflow; canonical source is normal files only.
+- [x] Bound network downloads and D2PFX catalogue fetch/decompression/cache writes.
+- [x] Current tested code `0737a6df85adfa39a6f006f9b521a22b5fd5c017`; CI run `33946859076`; pytest 158/158 PASS; Windows build PASS.
+- [x] Current portable ZIP validated; SHA-256 `d593ec70c5556a473ae8f9c7601faae7fd5d024f5feae7e876c1101ac464e2c4`.
+- [ ] Continue second-pass hostile-input/security sweep: profiles/backups/VPK metadata/browser payloads/path races.
 - [ ] Adapt remaining useful v21.3.1 regressions directly on hardening.
 - [ ] Complete semantic core-overlay reconciliation; never wholesale copy old core.
 - [ ] Reconcile prior-v21.4 `core/mod_library.py` only if authentic missing bytes become available.
-- [ ] Complete/remove incomplete `.materialize/` bootstrap; never create `READY` while incomplete.
-- [ ] Perform second-pass hostile-input/security sweep and complete exact-rc7 diff review.
 - [ ] Clean pycache/temp artifacts before publication.
 - [ ] User/Dota smoke tests: startup/layout, library, settings, Collections/profiles, D2PFX, lobby/match, rollback, Dark Terrain, Remove Foilage.
 - [ ] Promote hardening -> beta only after remaining gates/user approval; beta -> main only after beta validation.
