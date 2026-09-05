@@ -3,16 +3,19 @@
 - [x] Recursive/nested mods, Collections, profiles, D2PFX, backups/conflict review, Safe Foliage, Main Menu fix, Dark Terrain behavior preserved.
 - [x] v21.3.1 patch pipeline integrated without overwriting hardened core backends.
 - [x] Black-Plum Reactor UI stabilized; incomplete `.materialize/` bootstrap/workflow removed.
+- [x] `960x680` minimum-width fit pass: compact nav; telemetry/metrics collapse before clipping; compact action widths; Settings inner-width padding budget.
+- [x] D2PFX compact fit: 168px sidebar; 320px context/actions column; wrapped text; responsive 2-4 card grid.
+- [x] Mod Library metadata wraps to live list width; existing responsive source rail/search/status sizing preserved.
 - [x] Network/catalogue, profile, VPK metadata, D2PFX cursor/install, and backup hostile-input passes completed.
 - [x] Backup race pass: regular no-follow manifest open with identity check; managed live output confinement; parent symlink escapes fail before mutation.
-- [x] Restored v21.3.1 compatibility tests: Dark Terrain collision semantics, Safe Foliage invariants, Main Menu background fix.
-- [x] Restored v21.3.1 nested tests: Collections discovery, stable IDs, symlink avoidance, dependency resolution.
-- [x] Latest product hardening commit `3266a10ae4132201fcfc85c0adf0475b30416973`; exact validated head `2de55f97a4bbb8d0e127335cc4a2effc56fd105a`.
-- [x] Hardening CI `33972529166`: compileall PASS; Ruff format/lint PASS; pytest 228/228 PASS; Windows build/package/upload PASS.
-- [x] Inner ZIP 53,625,698 bytes; SHA-256 `28e084172e7c9a984288999b0e26b01b69359a51ed9c4221bb35f7ff2feae759`.
-- [x] Artifact `9971359063`; outer 53,085,215 bytes; SHA-256 `b774c5e257f19bd9d9d11e8d3b887fca39a58af6d3cdba1888182d98c9f35d6b`; 1650-entry portable/Safe-Foliage/Main-Menu checks PASS.
+- [x] Restored v21.3.1 compatibility/nested/semantic feature regressions directly on hardening.
+- [x] Minimum-width UI product commit `d647d7d84c8e0ddf429eab06529f49a2ecdaa448`; validated cleanup head `a27dfa368a56ec8be5d713594eb5506abc24ee06`.
+- [x] Hardening CI `33977097382`: compileall PASS; Ruff format/lint PASS; pytest 241/241 PASS; Windows build/package/upload PASS.
+- [x] Inner ZIP 53,623,858 bytes; SHA-256 `906284491ae285d7233887c1306a56dae2512264b097262ef28facbd18c831da`.
+- [x] Artifact `9972649232`; outer 53,084,155 bytes; SHA-256 `7df04164f5b97160f536d5c6fc1f9cfd36156e185f44d163ddba1fba407a2851`; 1650-entry portable/Safe-Foliage/Main-Menu checks PASS.
 - [x] `main` and `beta` remain frozen.
-- [ ] Continue path-race/hostile-input review and remaining semantic v21.3.1 regression adaptation.
+- [ ] User visual smoke-test all major surfaces at the minimum window size.
+- [ ] Continue path-race/hostile-input review.
 - [ ] Complete semantic core reconciliation + exact-rc7 diff review.
 - [ ] Resolve prior-v21.4 `core/mod_library.py` exact-source gap only if authentic bytes become available.
 - [ ] Dota startup/lobby/match/rollback/profiles/D2PFX/Dark-Terrain/Remove-Foilage smoke tests.
