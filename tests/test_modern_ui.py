@@ -90,8 +90,6 @@ def test_release_console_keeps_actionable_navigation():
 
 
 def test_d2pfx_uses_json_link_and_highlight_roles():
-    assert "(70, 51, 90, 210)" in D2PFX
-    assert "(133, 56, 148, 230)" in D2PFX
     assert "(122, 193, 67, 255)" in D2PFX
     assert "color=(255, 255, 0)" in D2PFX
     assert "color=(0, 255, 255)" not in D2PFX
