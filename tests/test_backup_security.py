@@ -30,3 +30,11 @@ def test_backup_manifest_reader_accepts_small_regular_object(tmp_path):
     (snapshot / "manifest.json").write_text(json.dumps(manifest))
 
     assert backup_manager._read_manifest(str(snapshot)) == manifest
+
+
+def test_backup_manifest_reader_rejects_non_file_manifest(tmp_path):
+    snapshot = tmp_path / "snapshot"
+    snapshot.mkdir()
+    (snapshot / "manifest.json").mkdir()
+
+    assert backup_manager._read_manifest(str(snapshot)) == {}
