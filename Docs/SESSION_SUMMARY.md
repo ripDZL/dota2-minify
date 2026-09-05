@@ -4,13 +4,14 @@
 - Canonical user feature reference: `Minify-v1.14rc7-ModManager-v21.3.1-Safe-Foliage-Fix (1).zip`; SHA-256 `37755c4ee92e1847eef1a5a9c89aef6ba488f33accd0cb102c62a7db8780b5f8`; bundled 116/116 tests pass.
 - Patch-pipeline integration materialized at `b22133201e88d654859541f2c6be69cea8e3cb25`; preserve nested resolution, compatibility filtering, restore points, conflict reporting, validation, rollback, no-auto-prelaunch cleanup.
 - User smoke-tested previous validated Windows build `24703387...` as generally good.
-- User requested removal of top-right `LOCAL MOD WORKSPACE RC6` and a more modern visual system.
-- Modern UI materialized at `f843585eca6fc6cbe412fd07c8707b528b7551d4`: stale header badge removed; graphite/blue flat palette, subtle borders, larger radii, transparent faux-bevel shadow.
-- Current tested code: `ed65e4c3ba317ac361f61835837a887784d1338c`; `tests/test_modern_ui.py` protects header/palette invariants.
-- Hardening CI run `33934696171`: compileall PASS, Ruff format/lint PASS, pytest 141/141 PASS in 0.82s, Windows PyInstaller/runtime copy/ZIP/upload PASS.
-- Current Windows ZIP: `Minify-v21.4-hardening-ed65e4c3ba317ac361f61835837a887784d1338c-windows.zip`; 53603001 bytes; SHA-256 `71e09b1fdcbc491b514f7ffc129b1319a19ae8dd3f9bb178df8af5c1de6a7fdc`.
-- GitHub artifact ID `9959784334`; outer ZIP 53063170 bytes; SHA-256 `0f8c7eb70a443b0e05cdb79a22c267bd031d0bfd8dbd801e391b5870327caa42`.
+- User rejected the first modern graphite/blue pass as too flat/minimal for release and requested a more complex/flavorful UI.
+- Obsidian Arc release UI materialized at `1af11a0bebe62b206f2ebf08fda01890b8766104`: layered graphite surfaces, arc-blue navigation/state, ember identity/patch actions, gold metadata, teal D2PFX/safety, opaque edge depth, nested hero/action/flow/safety cards.
+- Mod Library private palette/themes and D2PFX selected/title styling now match the release system; stale top-right workspace/RC6 furniture remains removed.
+- Current tested code: `c76956a953a3bdf7a42ca386c3879df8a053ed51`; `tests/test_modern_ui.py` protects release hierarchy/palette invariants.
+- Hardening CI run `33935960179`: compileall PASS, Ruff format/lint PASS, pytest 144/144 PASS in 0.78s, Windows PyInstaller/runtime copy/ZIP/upload PASS.
+- Current Windows ZIP: `Minify-v21.4-hardening-c76956a953a3bdf7a42ca386c3879df8a053ed51-windows.zip`; 53603844 bytes; SHA-256 `1b67a34cef9d1c66fa810691d031fc4afe2c2a069866e63d28634c4ac06569bc`.
+- GitHub artifact ID `9960183184`; outer ZIP 53063825 bytes; SHA-256 `a96af66909b872429b8d7b5965fca82732559c917319ba87342dd4b97039d997`.
 - Artifact verified: 1650 entries; normal portable roots; no staging/materialize markers; Remove Foilage remains blacklist-only/map-free with both oak entries.
 - `core/mod_library.py` prior-v21.4 exact-source gap remains unresolved; never substitute old v21.3.1 overlay or fabricate missing bytes.
-- Remaining: user review modern UI, adapt useful v21.3.1 regressions directly on hardening, semantic core-overlay reconciliation, hostile-input/security sweep, exact-rc7 diff review, bootstrap cleanup, Dota smoke tests.
+- Remaining: user review Obsidian Arc, adapt useful v21.3.1 regressions directly on hardening, semantic core-overlay reconciliation, hostile-input/security sweep, exact-rc7 diff review, bootstrap cleanup, Dota smoke tests.
 - Do not promote beta/main until remaining gates and user approval.

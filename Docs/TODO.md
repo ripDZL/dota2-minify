@@ -6,11 +6,12 @@
 - [x] Materialize recursive mods, Collections, profiles, D2PFX, backups/conflict review, Safe Foliage, Main Menu fix, Dark Terrain compatibility.
 - [x] Recover v21.3.1 patch pipeline without overwriting hardened backends.
 - [x] Remove stale `LOCAL MOD WORKSPACE` / `RC6` header furniture.
-- [x] Replace previous bevel palette with modern graphite/blue UI while preserving workspace/features.
-- [x] Add modern UI regressions; tested code `ed65e4c3ba317ac361f61835837a887784d1338c`.
-- [x] Current CI: run `33934696171`; compileall/Ruff PASS; pytest 141/141 PASS; Windows build PASS.
-- [x] Current portable ZIP validated; SHA-256 `71e09b1fdcbc491b514f7ffc129b1319a19ae8dd3f9bb178df8af5c1de6a7fdc`.
-- [ ] User review modern UI across Patch, Mod Library, D2PFX, Settings, resizing.
+- [x] Supersede flat beta-style UI with Obsidian Arc release identity: layered graphite, arc blue, ember, gold, teal, edge depth, nested dashboard cards.
+- [x] Reconcile Mod Library/D2PFX visual systems with Obsidian Arc.
+- [x] Expand UI regressions; tested code `c76956a953a3bdf7a42ca386c3879df8a053ed51`.
+- [x] Current CI: run `33935960179`; compileall/Ruff PASS; pytest 144/144 PASS; Windows build PASS.
+- [x] Current portable ZIP validated; SHA-256 `1b67a34cef9d1c66fa810691d031fc4afe2c2a069866e63d28634c4ac06569bc`.
+- [ ] User review Obsidian Arc across Patch, Mod Library, D2PFX, Settings, resizing.
 - [ ] Adapt remaining useful v21.3.1 regressions directly on hardening.
 - [ ] Complete semantic core-overlay reconciliation; never wholesale copy old core.
 - [ ] Reconcile prior-v21.4 `core/mod_library.py` only if authentic missing bytes become available.

@@ -2,7 +2,7 @@
 - Baseline: exact upstream rc7 commit `d4b4520c945a9e1f8f5facc52a76ac5903babe90`; no current-main rebase during hardening.
 - Branches: exactly three long-lived refs: `v21.4-hardening` active development -> `beta` validation/promotion -> `main` final publication.
 - Fork source: materialized files + ordinary commits; clone should run without source-rewrite bootstrap.
-- UI: responsive workspace shell with modern graphite/blue flat visual system, subtle borders, larger radii, and no stale workspace/RC badge furniture.
+- UI: responsive Obsidian Arc release shell; layered graphite surfaces; arc-blue state/navigation; ember identity/primary patch actions; gold metadata; teal D2PFX/safety; subtle opaque edge depth; nested hero/action/flow/safety cards; Mod Library and D2PFX private themes must stay visually coherent with the global system.
 - Build transformer and `.materialize/` workflow: optional migration/reproducibility tooling only; never canonical source.
 - Never trigger incomplete `.materialize/` input or create `READY` until the reconstructed payload matches its pinned hash.
 - Security primitives: shared `Minify/core/security.py` for path confinement, archive limits, bounded decompression, hashing, atomic writes.

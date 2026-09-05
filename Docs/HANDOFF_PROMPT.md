@@ -4,14 +4,16 @@
 - Branch model is exactly three long-lived refs: `v21.4-hardening` -> `beta` -> `main`; do not leave temporary/reference/integration branches.
 - Keep `main` untouched at `a26bc88a0d412e357965f29488b83a7f9093e11f`; keep `beta` frozen at `af83bbb051edced195d5f55ba49ff060a8c76f3c` until remaining gates pass.
 - Exact upstream baseline: `Minify-v1.14rc7` commit `d4b4520c945a9e1f8f5facc52a76ac5903babe90`.
-- Current tested code: `ed65e4c3ba317ac361f61835837a887784d1338c`.
-- Current hardening CI run `33934696171`: compileall PASS; Ruff format/lint PASS; pytest 141/141 PASS; Windows PyInstaller/runtime copy/portable ZIP/upload PASS.
-- Current test ZIP: `Minify-v21.4-hardening-ed65e4c3ba317ac361f61835837a887784d1338c-windows.zip`; SHA-256 `71e09b1fdcbc491b514f7ffc129b1319a19ae8dd3f9bb178df8af5c1de6a7fdc`; 53603001 bytes.
-- GitHub artifact ID `9959784334`; outer SHA-256 `0f8c7eb70a443b0e05cdb79a22c267bd031d0bfd8dbd801e391b5870327caa42`; 53063170 bytes.
-- Modern UI materialization commit: `f843585eca6fc6cbe412fd07c8707b528b7551d4`.
-- Current visual baseline: modern graphite/blue flat system, subtle borders, larger radii, transparent faux-bevel shadow. Previous Obsidian/Ember bevel style is superseded by user request.
-- Top-right `LOCAL MOD WORKSPACE` + stale `RC6` widgets were removed; `tests/test_modern_ui.py` protects this and the new palette.
-- User previously smoke-tested build `24703387...` as generally good; next user gate is review of the modern UI build across Patch, Mod Library, D2PFX, Settings, and resize states.
+- Current tested code: `c76956a953a3bdf7a42ca386c3879df8a053ed51`.
+- Current hardening CI run `33935960179`: compileall PASS; Ruff format/lint PASS; pytest 144/144 PASS; Windows PyInstaller/runtime copy/portable ZIP/upload PASS.
+- Current test ZIP: `Minify-v21.4-hardening-c76956a953a3bdf7a42ca386c3879df8a053ed51-windows.zip`; SHA-256 `1b67a34cef9d1c66fa810691d031fc4afe2c2a069866e63d28634c4ac06569bc`; 53603844 bytes.
+- GitHub artifact ID `9960183184`; outer SHA-256 `a96af66909b872429b8d7b5965fca82732559c917319ba87342dd4b97039d997`; 53063825 bytes.
+- Obsidian Arc materialization commit: `1af11a0bebe62b206f2ebf08fda01890b8766104`.
+- Current visual baseline: premium Obsidian Arc release UI; deep layered graphite; arc-blue navigation/state; ember Minify identity + patch actions; gold metadata; teal D2PFX/safety; subtle opaque edge shadow; nested hero/action/flow/safety cards.
+- The earlier flat graphite/blue beta-style pass is superseded by user request; do not regress to flat/minimal styling.
+- Mod Library private theme system and D2PFX legacy cyan selection/title were reconciled with Obsidian Arc.
+- Top-right `LOCAL MOD WORKSPACE` + stale `RC6` widgets remain removed; `tests/test_modern_ui.py` protects release hierarchy/palette invariants.
+- Next user gate: review Obsidian Arc build across Patch, Mod Library, D2PFX, Settings, and resize states.
 - Canonical feature reference: supplied `Minify-v1.14rc7-ModManager-v21.3.1-Safe-Foliage-Fix (1).zip`; SHA-256 `37755c4ee92e1847eef1a5a9c89aef6ba488f33accd0cb102c62a7db8780b5f8`; bundled 116/116 tests pass.
 - Preserve recursive/nested mods, Collections, profiles, D2PFX, backups/conflict review, Dark Terrain collision behavior, Safe Foliage, Main Menu Background CSS, and no-auto-prelaunch policy.
 - Remove Foilage must remain blacklist-only/map-free and retain both exact oak-leaf blacklist entries.
@@ -19,6 +21,6 @@
 - Do not wholesale copy v21.3.1 core overlays onto hardening; reconcile feature-by-feature so newer hardening survives.
 - Prior-v21.4 `core/mod_library.py` reconciliation remains blocked: current blob `a5204ea1d5e0309d3c6a764ad9b974e7bdeb8268`; expected validated blob `e95b2f6f59b3b96f7c19ed70ee514df02e500926`, SHA-256 `552dbb7f98d5e0db2ad32c1b2888d8ad4ae8945fdf49ebc2853765e59c6c9e7a`, 69949 bytes.
 - Never fabricate missing bootstrap bytes or create `.materialize/READY` while incomplete.
-- Test scopes remain distinct: current GitHub 141/141; uploaded v21.3.1 archive 116/116; historical local hardening 133/133 + 9 subtests.
+- Test scopes remain distinct: current GitHub 144/144; uploaded v21.3.1 archive 116/116; historical local hardening 133/133 + 9 subtests.
 - Next work after user UI feedback: adapt useful v21.3.1 regressions directly on hardening; semantic core-overlay reconciliation; hostile-input/security and exact-rc7 diff review; bootstrap cleanup; Dota smoke tests.
 - Do not fast-forward `beta`, merge/tag/release, or publish until remaining gates and user approval.

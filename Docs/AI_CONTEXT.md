@@ -3,19 +3,21 @@
 - Fork target: `ripDZL/dota2-minify`; `v21.4-hardening` is active development.
 - Branch policy: exactly three long-lived branches: `v21.4-hardening` -> `beta` -> `main`; do not retain temporary/reference/integration branches.
 - `main` remains `a26bc88a0d412e357965f29488b83a7f9093e11f`; `beta` remains `af83bbb051edced195d5f55ba49ff060a8c76f3c`.
-- Current tested code commit: `ed65e4c3ba317ac361f61835837a887784d1338c`.
-- Modern UI materialization commit: `f843585eca6fc6cbe412fd07c8707b528b7551d4`; stale `LOCAL MOD WORKSPACE` / `RC6` header widgets removed; graphite + blue flat visual system replaces the previous Obsidian/Ember bevel treatment.
-- Permanent UI regressions: `tests/test_modern_ui.py`; hardening suite now 141/141.
-- Hardening CI run `33934696171`: compileall PASS, Ruff format PASS, Ruff lint PASS, pytest 141/141 PASS in 0.82s, Windows PyInstaller/runtime copy/portable ZIP/upload PASS.
-- Current Windows test ZIP: `Minify-v21.4-hardening-ed65e4c3ba317ac361f61835837a887784d1338c-windows.zip`; SHA-256 `71e09b1fdcbc491b514f7ffc129b1319a19ae8dd3f9bb178df8af5c1de6a7fdc`; 53603001 bytes.
-- GitHub artifact ID `9959784334`; outer ZIP SHA-256 `0f8c7eb70a443b0e05cdb79a22c267bd031d0bfd8dbd801e391b5870327caa42`; 53063170 bytes.
+- Current tested code commit: `c76956a953a3bdf7a42ca386c3879df8a053ed51`.
+- Obsidian Arc materialization commit: `1af11a0bebe62b206f2ebf08fda01890b8766104`; the earlier flat graphite/blue pass is superseded.
+- UI release identity: deep layered graphite; arc-blue navigation/state; ember-orange Minify identity + patch actions; gold metadata; teal D2PFX/safety; subtle opaque edge shadow; nested hero/action/flow/safety cards.
+- Mod Library private palette/themes were reconciled to the same release system; D2PFX legacy bright-cyan selection/title styling was replaced with release teal.
+- Top-right `LOCAL MOD WORKSPACE` / stale `RC6` widgets remain removed.
+- Permanent UI regressions: `tests/test_modern_ui.py`; current GitHub suite is 144/144.
+- Hardening CI run `33935960179`: compileall PASS, Ruff format PASS, Ruff lint PASS, pytest 144/144 PASS in 0.78s, Windows PyInstaller/runtime copy/portable ZIP/upload PASS.
+- Current Windows test ZIP: `Minify-v21.4-hardening-c76956a953a3bdf7a42ca386c3879df8a053ed51-windows.zip`; SHA-256 `1b67a34cef9d1c66fa810691d031fc4afe2c2a069866e63d28634c4ac06569bc`; 53603844 bytes.
+- GitHub artifact ID `9960183184`; outer ZIP SHA-256 `a96af66909b872429b8d7b5965fca82732559c917319ba87342dd4b97039d997`; 53063825 bytes.
 - Artifact verified: 1650 entries; roots `LICENSE`, `Minify.exe`, `README.md`, `_internal`, `bin`, `mods`; no `.materialize`, `READY`, `AI_REMOTE_TMP`; no Remove Foilage manifest/map payload; both oak-leaf blacklist entries present.
-- Branch cleanup completed 2026-09-04: removed `v21.2-ui-reference`, `v21.4-ui-format`, `v21.4-v2131-integration`, `v21.4-v2131-regressions`; cleanup workflow was removed after successful run `33933941673`.
 - Canonical user feature reference: `Minify-v1.14rc7-ModManager-v21.3.1-Safe-Foliage-Fix (1).zip`; SHA-256 `37755c4ee92e1847eef1a5a9c89aef6ba488f33accd0cb102c62a7db8780b5f8`; bundled 116/116 tests pass locally.
 - v21.3.1 patch-pipeline integration is materialized at `b22133201e88d654859541f2c6be69cea8e3cb25`; preserve nested paths, compatibility filtering, restore points, conflict reporting, output validation, rollback, and no-auto-prelaunch cleanup.
 - Do not wholesale replace hardened core files with v21.3.1 overlays; use them as feature references only.
-- Archive 116/116, current GitHub 141/141, and historical local 133/133 + 9 subtests are distinct scopes.
-- Preserve recursive/nested mods, markerless/collapsible Collections, profiles, D2PFX browser/imports, backups/conflict review, current modern workspace structure, and no-auto-prelaunch policy.
+- Archive 116/116, current GitHub 144/144, and historical local 133/133 + 9 subtests are distinct scopes.
+- Preserve recursive/nested mods, markerless/collapsible Collections, profiles, D2PFX browser/imports, backups/conflict review, Obsidian Arc workspace structure, and no-auto-prelaunch policy.
 - Steam policy: manual rc7 `prelaunch` remains; automatic Minify prelaunch injection disabled; stale generated wrappers cleaned narrowly.
 - Remove Foilage: blacklist-only; never ship `Remove Foilage/manifest.json` or `Remove Foilage/maps/dota.vpk`; retain `tree_oak_leaves_05.vmat_c` and `tree_oak_leaves_05.vmdl_c` blacklist entries.
 - Remove Main Menu Background: retain dashboard-manager and `#FrontpageContents` collapse rules.
