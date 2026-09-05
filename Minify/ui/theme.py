@@ -5,9 +5,9 @@ import ctypes
 import dearpygui.dearpygui as dpg
 from core import base, utils
 
-# v21.4: Plumfire Reactor release visual system.
-# Exact role anchors from the user-supplied theme JSON. Derived dark shades only
-# extend those tokens for depth; primary interaction/state colors stay faithful.
+# v21.4: Black-Plum Reactor release visual system.
+# Spatial roles follow the user's original app screenshot: plum chrome, slate work
+# areas, black strips, purple controls, lime selection, red dividers, gold telemetry.
 JSON_ACCENT_DIVIDER = (223, 80, 59, 255)  # #df503b
 JSON_ACCENT_HIGHLIGHT = (122, 193, 67, 255)  # #7ac143
 JSON_ACCENT_LINK = (255, 255, 0, 255)  # #ffff00
@@ -20,36 +20,35 @@ JSON_TEXT_PLACEHOLDER = (217, 199, 176, 255)  # #d9c7b0
 JSON_TEXT_PRIMARY = (247, 240, 231, 255)  # #f7f0e7
 JSON_WINDOW_BG = (70, 51, 90, 255)  # #46335a
 
-BACKGROUND = (12, 9, 17, 255)
+BACKGROUND = JSON_WINDOW_BG
 BACKGROUND_DEEP = JSON_BASE_ALT
-SURFACE = (25, 19, 33, 255)
-SURFACE_ALT = (37, 27, 48, 255)
-SURFACE_RAISED = (50, 37, 64, 255)
-SURFACE_RECESSED = (17, 13, 23, 255)
-SURFACE_HOVER = JSON_WINDOW_BG
-SURFACE_ACTIVE = (58, 44, 70, 255)
-SURFACE_WARM = (45, 27, 31, 255)
-BORDER = JSON_BASE_BG
-BORDER_SOFT = (53, 61, 68, 255)
+SURFACE = JSON_BASE_BG
+SURFACE_ALT = (74, 92, 98, 255)
+SURFACE_RAISED = JSON_BUTTON_BG
+SURFACE_RECESSED = (72, 89, 94, 255)
+SURFACE_HOVER = (101, 122, 128, 255)
+SURFACE_ACTIVE = (111, 77, 121, 255)
+SURFACE_WARM = JSON_WINDOW_BG
+BORDER = (42, 38, 48, 255)
+BORDER_SOFT = (58, 52, 68, 255)
 BEVEL_LIGHT = JSON_TEXT_DISABLED
-BEVEL_DARK = (0, 0, 0, 220)
+BEVEL_DARK = (0, 0, 0, 210)
 BEVEL_EMBER = JSON_ACCENT_DIVIDER
 TEXT = JSON_TEXT_PRIMARY
 MUTED = JSON_TEXT_PLACEHOLDER
 MUTED_DARK = JSON_TEXT_DISABLED
 ACCENT = JSON_BUTTON_BG
-ACCENT_HOVER = (169, 83, 184, 255)
-ACCENT_ACTIVE = (104, 39, 118, 255)
-ACCENT_MUTED = JSON_WINDOW_BG
-# Compatibility aliases keep existing theme wiring stable while changing roles.
+ACCENT_HOVER = (169, 98, 183, 255)
+ACCENT_ACTIVE = (105, 44, 119, 255)
+ACCENT_MUTED = (104, 45, 117, 255)
 CYAN = JSON_ACCENT_HIGHLIGHT
-CYAN_MUTED = (49, 79, 33, 255)
+CYAN_MUTED = (71, 108, 47, 255)
 MAGENTA = JSON_ACCENT_DIVIDER
-MAGENTA_MUTED = (96, 38, 31, 255)
+MAGENTA_MUTED = (130, 52, 42, 255)
 EMBER = JSON_ACCENT_DIVIDER
 EMBER_HOVER = (244, 102, 82, 255)
 EMBER_ACTIVE = (180, 57, 43, 255)
-EMBER_MUTED = (96, 38, 31, 255)
+EMBER_MUTED = (130, 52, 42, 255)
 HIGHLIGHT = JSON_TEXT_BRIGHT
 LINK = JSON_ACCENT_LINK
 D2PFX = JSON_ACCENT_HIGHLIGHT
@@ -90,15 +89,15 @@ def apply():
             dpg.add_theme_color(dpg.mvThemeCol_FrameBg, SURFACE_RECESSED)
             dpg.add_theme_color(dpg.mvThemeCol_FrameBgHovered, SURFACE_HOVER)
             dpg.add_theme_color(dpg.mvThemeCol_FrameBgActive, SURFACE_ACTIVE)
-            dpg.add_theme_color(dpg.mvThemeCol_Button, SURFACE_RAISED)
-            dpg.add_theme_color(dpg.mvThemeCol_ButtonHovered, SURFACE_HOVER)
-            dpg.add_theme_color(dpg.mvThemeCol_ButtonActive, SURFACE_ACTIVE)
-            dpg.add_theme_color(dpg.mvThemeCol_CheckMark, ACCENT)
+            dpg.add_theme_color(dpg.mvThemeCol_Button, ACCENT)
+            dpg.add_theme_color(dpg.mvThemeCol_ButtonHovered, ACCENT_HOVER)
+            dpg.add_theme_color(dpg.mvThemeCol_ButtonActive, ACCENT_ACTIVE)
+            dpg.add_theme_color(dpg.mvThemeCol_CheckMark, SUCCESS)
             dpg.add_theme_color(dpg.mvThemeCol_SliderGrab, ACCENT)
             dpg.add_theme_color(dpg.mvThemeCol_SliderGrabActive, ACCENT_HOVER)
-            dpg.add_theme_color(dpg.mvThemeCol_Separator, BORDER_SOFT)
-            dpg.add_theme_color(dpg.mvThemeCol_SeparatorHovered, ACCENT_MUTED)
-            dpg.add_theme_color(dpg.mvThemeCol_SeparatorActive, ACCENT)
+            dpg.add_theme_color(dpg.mvThemeCol_Separator, MAGENTA_MUTED)
+            dpg.add_theme_color(dpg.mvThemeCol_SeparatorHovered, EMBER)
+            dpg.add_theme_color(dpg.mvThemeCol_SeparatorActive, EMBER_HOVER)
             dpg.add_theme_color(dpg.mvThemeCol_ScrollbarBg, BACKGROUND_DEEP)
             dpg.add_theme_color(dpg.mvThemeCol_ScrollbarGrab, (47, 55, 83, 255))
             dpg.add_theme_color(dpg.mvThemeCol_ScrollbarGrabHovered, (68, 79, 118, 255))
@@ -120,7 +119,7 @@ def apply():
 
     with dpg.theme(tag="app_nav_rail_theme"):
         with dpg.theme_component(dpg.mvChildWindow):
-            dpg.add_theme_color(dpg.mvThemeCol_ChildBg, SURFACE_RECESSED)
+            dpg.add_theme_color(dpg.mvThemeCol_ChildBg, SURFACE)
             dpg.add_theme_color(dpg.mvThemeCol_Border, BORDER_SOFT)
             dpg.add_theme_color(dpg.mvThemeCol_BorderShadow, BEVEL_DARK)
             dpg.add_theme_style(dpg.mvStyleVar_ChildBorderSize, 1)
@@ -129,7 +128,7 @@ def apply():
 
     with dpg.theme(tag="app_workspace_theme"):
         with dpg.theme_component(dpg.mvChildWindow):
-            dpg.add_theme_color(dpg.mvThemeCol_ChildBg, SURFACE)
+            dpg.add_theme_color(dpg.mvThemeCol_ChildBg, BACKGROUND)
             dpg.add_theme_color(dpg.mvThemeCol_Border, BORDER)
             dpg.add_theme_color(dpg.mvThemeCol_BorderShadow, BEVEL_DARK)
             dpg.add_theme_style(dpg.mvStyleVar_ChildBorderSize, 1)
@@ -184,7 +183,7 @@ def apply():
 
     with dpg.theme(tag="app_workspace_side_theme"):
         with dpg.theme_component(dpg.mvChildWindow):
-            dpg.add_theme_color(dpg.mvThemeCol_ChildBg, SURFACE_RECESSED)
+            dpg.add_theme_color(dpg.mvThemeCol_ChildBg, BACKGROUND)
             dpg.add_theme_color(dpg.mvThemeCol_Border, BORDER_SOFT)
             dpg.add_theme_color(dpg.mvThemeCol_BorderShadow, BEVEL_DARK)
             dpg.add_theme_style(dpg.mvStyleVar_ChildBorderSize, 1)
@@ -284,9 +283,9 @@ def apply():
     with dpg.theme(tag="app_nav_button_theme"):
         with dpg.theme_component(dpg.mvButton):
             dpg.add_theme_color(dpg.mvThemeCol_Text, MUTED)
-            dpg.add_theme_color(dpg.mvThemeCol_Button, SURFACE_RAISED)
-            dpg.add_theme_color(dpg.mvThemeCol_ButtonHovered, SURFACE_HOVER)
-            dpg.add_theme_color(dpg.mvThemeCol_ButtonActive, SURFACE_ACTIVE)
+            dpg.add_theme_color(dpg.mvThemeCol_Button, ACCENT)
+            dpg.add_theme_color(dpg.mvThemeCol_ButtonHovered, ACCENT_HOVER)
+            dpg.add_theme_color(dpg.mvThemeCol_ButtonActive, ACCENT_ACTIVE)
             dpg.add_theme_color(dpg.mvThemeCol_Border, BORDER)
             dpg.add_theme_color(dpg.mvThemeCol_BorderShadow, BEVEL_DARK)
             dpg.add_theme_style(dpg.mvStyleVar_FrameBorderSize, 1)
@@ -295,11 +294,11 @@ def apply():
 
     with dpg.theme(tag="app_nav_primary_theme"):
         with dpg.theme_component(dpg.mvButton):
-            dpg.add_theme_color(dpg.mvThemeCol_Text, TEXT)
-            dpg.add_theme_color(dpg.mvThemeCol_Button, ACCENT_MUTED)
-            dpg.add_theme_color(dpg.mvThemeCol_ButtonHovered, (75, 58, 160, 255))
-            dpg.add_theme_color(dpg.mvThemeCol_ButtonActive, ACCENT_MUTED)
-            dpg.add_theme_color(dpg.mvThemeCol_Border, BEVEL_EMBER)
+            dpg.add_theme_color(dpg.mvThemeCol_Text, JSON_BASE_ALT)
+            dpg.add_theme_color(dpg.mvThemeCol_Button, SUCCESS)
+            dpg.add_theme_color(dpg.mvThemeCol_ButtonHovered, (146, 211, 91, 255))
+            dpg.add_theme_color(dpg.mvThemeCol_ButtonActive, (104, 169, 53, 255))
+            dpg.add_theme_color(dpg.mvThemeCol_Border, BACKGROUND_DEEP)
             dpg.add_theme_color(dpg.mvThemeCol_BorderShadow, BEVEL_DARK)
             dpg.add_theme_style(dpg.mvStyleVar_FrameBorderSize, 1)
             dpg.add_theme_style(dpg.mvStyleVar_FrameRounding, 6)
@@ -362,9 +361,9 @@ def apply():
     with dpg.theme(tag="main_secondary_button_theme"):
         with dpg.theme_component(dpg.mvButton):
             dpg.add_theme_color(dpg.mvThemeCol_Text, TEXT)
-            dpg.add_theme_color(dpg.mvThemeCol_Button, SURFACE_RAISED)
-            dpg.add_theme_color(dpg.mvThemeCol_ButtonHovered, SURFACE_HOVER)
-            dpg.add_theme_color(dpg.mvThemeCol_ButtonActive, SURFACE_ACTIVE)
+            dpg.add_theme_color(dpg.mvThemeCol_Button, ACCENT)
+            dpg.add_theme_color(dpg.mvThemeCol_ButtonHovered, ACCENT_HOVER)
+            dpg.add_theme_color(dpg.mvThemeCol_ButtonActive, ACCENT_ACTIVE)
             dpg.add_theme_color(dpg.mvThemeCol_Border, BORDER)
             dpg.add_theme_color(dpg.mvThemeCol_BorderShadow, BEVEL_DARK)
             dpg.add_theme_style(dpg.mvStyleVar_FrameBorderSize, 1)
@@ -391,7 +390,7 @@ def apply():
             dpg.add_theme_color(dpg.mvThemeCol_Border, BORDER)
             dpg.add_theme_color(dpg.mvThemeCol_BorderShadow, BEVEL_DARK)
             dpg.add_theme_style(dpg.mvStyleVar_FrameBorderSize, 1)
-            dpg.add_theme_color(dpg.mvThemeCol_CheckMark, ACCENT)
+            dpg.add_theme_color(dpg.mvThemeCol_CheckMark, SUCCESS)
             dpg.add_theme_color(dpg.mvThemeCol_FrameBgHovered, SURFACE_HOVER)
             dpg.add_theme_color(dpg.mvThemeCol_FrameBgActive, SURFACE_ACTIVE)
         with dpg.theme_component(dpg.mvCheckbox, enabled_state=False):
@@ -406,11 +405,11 @@ def apply():
             dpg.add_theme_style(dpg.mvStyleVar_WindowPadding, x=4, y=2)
             dpg.add_theme_style(dpg.mvStyleVar_ItemSpacing, x=5, y=3)
             dpg.add_theme_color(dpg.mvThemeCol_Text, MUTED)
-            dpg.add_theme_color(dpg.mvThemeCol_Button, SURFACE_RAISED)
+            dpg.add_theme_color(dpg.mvThemeCol_Button, ACCENT)
             dpg.add_theme_color(dpg.mvThemeCol_Border, BORDER)
             dpg.add_theme_color(dpg.mvThemeCol_BorderShadow, BEVEL_DARK)
             dpg.add_theme_style(dpg.mvStyleVar_FrameBorderSize, 1)
-            dpg.add_theme_color(dpg.mvThemeCol_ButtonHovered, SURFACE_HOVER)
+            dpg.add_theme_color(dpg.mvThemeCol_ButtonHovered, ACCENT_HOVER)
             dpg.add_theme_color(dpg.mvThemeCol_ButtonActive, SURFACE_ALT)
             dpg.add_theme_color(dpg.mvThemeCol_FrameBg, SURFACE_RECESSED)
             dpg.add_theme_color(dpg.mvThemeCol_FrameBgHovered, SURFACE_HOVER)
@@ -431,9 +430,9 @@ def apply():
     with dpg.theme() as popup_theme:
         with dpg.theme_component():
             dpg.add_theme_color(dpg.mvThemeCol_Text, TEXT)
-            dpg.add_theme_color(dpg.mvThemeCol_Button, SURFACE_RAISED)
-            dpg.add_theme_color(dpg.mvThemeCol_ButtonHovered, SURFACE_HOVER)
-            dpg.add_theme_color(dpg.mvThemeCol_ButtonActive, SURFACE_ACTIVE)
+            dpg.add_theme_color(dpg.mvThemeCol_Button, ACCENT)
+            dpg.add_theme_color(dpg.mvThemeCol_ButtonHovered, ACCENT_HOVER)
+            dpg.add_theme_color(dpg.mvThemeCol_ButtonActive, ACCENT_ACTIVE)
             dpg.add_theme_color(dpg.mvThemeCol_FrameBg, SURFACE_RECESSED)
             dpg.add_theme_color(dpg.mvThemeCol_FrameBgHovered, SURFACE_HOVER)
             dpg.add_theme_color(dpg.mvThemeCol_FrameBgActive, SURFACE_ACTIVE)
@@ -453,7 +452,7 @@ def apply():
             dpg.add_theme_color(dpg.mvThemeCol_FrameBg, SURFACE_RECESSED)
             dpg.add_theme_color(dpg.mvThemeCol_FrameBgHovered, SURFACE_HOVER)
             dpg.add_theme_color(dpg.mvThemeCol_FrameBgActive, SURFACE_ACTIVE)
-            dpg.add_theme_color(dpg.mvThemeCol_CheckMark, ACCENT)
+            dpg.add_theme_color(dpg.mvThemeCol_CheckMark, SUCCESS)
             dpg.add_theme_color(dpg.mvThemeCol_Border, BORDER)
             dpg.add_theme_color(dpg.mvThemeCol_BorderShadow, BEVEL_DARK)
             dpg.add_theme_style(dpg.mvStyleVar_FrameBorderSize, 1)
@@ -474,9 +473,9 @@ def apply():
     with dpg.theme(tag="mod_manager_nav_theme"):
         with dpg.theme_component(dpg.mvButton):
             dpg.add_theme_color(dpg.mvThemeCol_Text, MUTED)
-            dpg.add_theme_color(dpg.mvThemeCol_Button, SURFACE_RAISED)
-            dpg.add_theme_color(dpg.mvThemeCol_ButtonHovered, SURFACE_HOVER)
-            dpg.add_theme_color(dpg.mvThemeCol_ButtonActive, SURFACE_ACTIVE)
+            dpg.add_theme_color(dpg.mvThemeCol_Button, ACCENT)
+            dpg.add_theme_color(dpg.mvThemeCol_ButtonHovered, ACCENT_HOVER)
+            dpg.add_theme_color(dpg.mvThemeCol_ButtonActive, ACCENT_ACTIVE)
             dpg.add_theme_color(dpg.mvThemeCol_Border, BORDER)
             dpg.add_theme_color(dpg.mvThemeCol_BorderShadow, BEVEL_DARK)
             dpg.add_theme_style(dpg.mvStyleVar_FrameBorderSize, 1)

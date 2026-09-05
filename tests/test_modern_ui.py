@@ -16,7 +16,7 @@ def test_stale_workspace_badge_removed():
 
 
 def test_user_json_palette_is_materialized():
-    assert "# v21.4: Plumfire Reactor release visual system." in THEME
+    assert "# v21.4: Black-Plum Reactor release visual system." in THEME
     for token in (
         "JSON_ACCENT_DIVIDER = (223, 80, 59, 255)",
         "JSON_ACCENT_HIGHLIGHT = (122, 193, 67, 255)",
@@ -93,3 +93,15 @@ def test_d2pfx_uses_json_link_and_highlight_roles():
     assert "(122, 193, 67, 255)" in D2PFX
     assert "color=(255, 255, 0)" in D2PFX
     assert "color=(0, 255, 255)" not in D2PFX
+
+
+def test_source_screenshot_spatial_color_roles_are_materialized():
+    assert "BACKGROUND = JSON_WINDOW_BG" in THEME
+    assert "SURFACE = JSON_BASE_BG" in THEME
+    assert "SURFACE_RAISED = JSON_BUTTON_BG" in THEME
+    assert "dpg.add_theme_color(dpg.mvThemeCol_Button, SUCCESS)" in THEME
+    assert "dpg.add_theme_color(dpg.mvThemeCol_Text, JSON_BASE_ALT)" in THEME
+    assert "UI_PANEL = (88, 108, 114, 255)" in CHECKBOXES
+    assert "UI_RAISED = (133, 56, 148, 255)" in CHECKBOXES
+    assert "dpg.add_theme_color(dpg.mvThemeCol_Header, (122, 193, 67, 230))" in D2PFX
+    assert "dpg.add_theme_color(dpg.mvThemeCol_Text, (0, 0, 0))" in D2PFX

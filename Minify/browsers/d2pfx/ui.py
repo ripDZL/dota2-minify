@@ -95,10 +95,10 @@ class BrowserUI:
         if not dpg.does_item_exist("selected_cat_theme"):
             with dpg.theme(tag="selected_cat_theme"):
                 with dpg.theme_component(dpg.mvSelectable):
-                    dpg.add_theme_color(dpg.mvThemeCol_Header, (70, 51, 90, 210))
-                    dpg.add_theme_color(dpg.mvThemeCol_HeaderHovered, (133, 56, 148, 230))
+                    dpg.add_theme_color(dpg.mvThemeCol_Header, (122, 193, 67, 230))
+                    dpg.add_theme_color(dpg.mvThemeCol_HeaderHovered, (146, 211, 91, 240))
                     dpg.add_theme_color(dpg.mvThemeCol_HeaderActive, (122, 193, 67, 255))
-                    dpg.add_theme_color(dpg.mvThemeCol_Text, (247, 240, 231, 255))
+                    dpg.add_theme_color(dpg.mvThemeCol_Text, (0, 0, 0))
 
     def render(self):
         if not dpg.does_item_exist("d2pfx_browser_window"):
