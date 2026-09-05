@@ -4,14 +4,14 @@
 - [x] Preserve hardened backend + v21.3.1 feature set without wholesale old-core replacement.
 - [x] Stabilize Black-Plum Reactor UI and minimum/responsive sizing.
 - [x] Remove incomplete `.materialize/` bootstrap + workflow.
-- [x] Harden general downloads, D2PFX catalogue, backups, profiles, and VPK metadata.
-- [x] Harden D2PFX cursor backup/install/restore against symlinks, path escapes, oversized input, and partial unsafe restore.
-- [x] Bound/validate D2PFX browser catalogue/cache/category/mod/link/asset metadata.
-- [x] Harden D2PFX browser install/download redirects, external-host SSRF boundary, safe URL basenames, preview limits, and staged publication.
-- [x] Current tested code `53a358db219256187e21a40acc8ed45704c3589f`; CI `33971846026`; pytest 200/200 PASS; Windows build PASS.
-- [x] Current portable ZIP validated; SHA-256 `6a1874783d6d49b3e53d069577b90c14cd52a7aa618d3298c929fd863f2bd54a`.
-- [ ] Continue path-race/security review after browser install path.
-- [ ] Adapt remaining useful v21.3.1 regressions directly on hardening.
+- [x] Harden general downloads, D2PFX catalogue/cursors/install, profiles, VPK metadata, and backup restore paths.
+- [x] Close backup manifest check/open race and managed-output parent symlink escape.
+- [x] Restore v21.3.1 Dark Terrain/Safe Foliage/Main Menu compatibility regressions directly on hardening.
+- [x] Restore v21.3.1 recursive/nested Collections/dependency regressions directly on hardening.
+- [x] Exact validated head `2de55f97a4bbb8d0e127335cc4a2effc56fd105a`; CI `33972529166`; pytest 228/228 PASS; Windows build PASS.
+- [x] Validated portable ZIP SHA-256 `28e084172e7c9a984288999b0e26b01b69359a51ed9c4221bb35f7ff2feae759`.
+- [ ] Continue hostile-input/path-race review; residual local filesystem race windows require explicit assessment.
+- [ ] Adapt remaining useful v21.3.1 feature/UI regressions semantically; do not restore stale exact layout constants.
 - [ ] Complete semantic core-overlay reconciliation; never wholesale copy old core.
 - [ ] Complete exact-rc7 diff review.
 - [ ] Reconcile prior-v21.4 `core/mod_library.py` only if authentic missing bytes become available.
