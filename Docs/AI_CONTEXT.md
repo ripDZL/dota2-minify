@@ -4,10 +4,12 @@
 - Exactly three branches; `main` frozen at `a26bc88a0d412e357965f29488b83a7f9093e11f`; `beta` frozen at `af83bbb051edced195d5f55ba49ff060a8c76f3c`.
 - Latest minimum-width UI product commit: `d647d7d84c8e0ddf429eab06529f49a2ecdaa448`; one-shot helper/workflow removed afterward.
 - Exact validated product head: `a27dfa368a56ec8be5d713594eb5506abc24ee06`.
+- Commits after `a27dfa368a56ec8be5d713594eb5506abc24ee06` are Docs-only at handoff; re-fetch branch head at new-chat start.
 - Current UI baseline: **Black-Plum Reactor**; `960x680` minimum; compact client-width mode at `<=1000`; optional telemetry collapses before clipping.
 - Minimum-width fit: narrower nav; single-metric fallback at compact width; compact deployment buttons; activity caption hidden before collision; Settings inner width reserved for padding.
 - D2PFX minimum fit: 168px sidebar; 320px action/context column; wrapped category/subtitle text; 2-4 responsive cards.
 - Mod Library minimum fit: metadata text wraps to live list width; source rail/search/status sizing remains responsive.
+- Immediate user-facing gate: visually verify **every element and text label fits at the minimum window size** on Home, Mod Library, Settings, D2PFX, patch preview/conflict report, and restore points; fix any clipping/overflow before further UI expansion.
 - Canonical source: ordinary materialized files only; no active one-shot transformer/workflow; `.materialize/READY` absent.
 - Security completed: bounded/atomic downloads; D2PFX catalogue/cache/metadata/cursors/install path; strict profiles; VPK metadata; backup restore confinement.
 - Backup hardening: manifest opened regular-file-only with no-follow/identity recheck; managed live outputs preflight through confined destinations; symlinked `maps` escape rejected before backup/restore mutation.
