@@ -5,6 +5,7 @@ on:
     branches: [v21.4-hardening]
     paths:
       - tools/apply_network_hardening.py
+      - .github/workflows/network-hardening-once.yml
 
 permissions:
   contents: write
