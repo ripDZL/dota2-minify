@@ -1,8 +1,12 @@
 # Architecture
 - Baseline: exact upstream rc7 commit `d4b4520c945a9e1f8f5facc52a76ac5903babe90`; no current-main rebase during hardening.
 - Branches: exactly `v21.4-hardening` active -> `beta` validation -> `main` publication.
-- Fork source: ordinary materialized files + commits; incomplete `.materialize/` bootstrap/workflow removed.
-- UI: responsive **Black-Plum Reactor**; centered header; 960x680 minimum; optional telemetry/right deck collapse before clipping.
+- Fork source: ordinary materialized files + commits; no active one-shot transformer/workflow; incomplete `.materialize/` bootstrap/workflow removed.
+- UI: responsive **Black-Plum Reactor**; centered header; `960x680` minimum; compact client-width mode at <=1000.
+- Minimum-width contract: optional telemetry/secondary metric columns collapse before clipping; compact nav/action widths preserve actionable controls; text-bearing surfaces wrap to their live content width.
+- D2PFX responsive contract: 168px category rail; 320px header context/actions column; wrapped category/subtitle text; card grid bounded to 2-4 columns.
+- Mod Library responsive contract: source rail remains bounded; search/list widths derive from live menu width; metadata wraps to list width; persistent status actions remain within the minimum viewport.
+- Settings responsive contract: scroll/action surfaces reserve parent padding; intro text wraps to live inner width.
 - Security primitives: `Minify/core/security.py` for path confinement, archive limits, bounded decompression, hashing, atomic writes.
 - General downloads: streamed with timeout + size ceiling into same-directory temp file; atomic replace on success; optional redirect-hop URL validator.
 - D2PFX catalogue: streamed bounded compressed/decompressed payload; dict/shape checks; confined regular-file cache; atomic replace.
