@@ -2,9 +2,9 @@
 - Baseline: exact upstream rc7 commit `d4b4520c945a9e1f8f5facc52a76ac5903babe90`; no current-main rebase during hardening.
 - Branches: exactly `v21.4-hardening` active -> `beta` validation -> `main` publication.
 - Fork source: materialized files + ordinary commits; clone runs without source-rewrite bootstrap.
-- UI: responsive **Prismatic Foundry** command-console shell with layered navy surfaces, violet state, cyan telemetry, magenta rail, orange deploy actions, gold metadata, rounded depth geometry, and dense modular status cards.
-- Landing hierarchy: brand/engine rail -> command deck + nav status -> hero/metric/status/action stack -> deployment/guard/fail-safe side stack -> live activity terminal.
-- UI reference work may inspire visual language, but repo must not copy third-party artwork/assets unless separately licensed and intentionally added.
+- UI: responsive command-console shell using **Plumfire Reactor** visual system grounded in user JSON role tokens; violet primary controls, ember dividers/destructive states, lime success/protection, gold telemetry, warm ivory text, plum-black surfaces, slate borders.
+- UI alignment: header, metric strip, deployment sequence, and guard matrix use DPG tables instead of space-padded strings; resize logic hides optional columns/right deck before clipping and adjusts card heights/wrapping.
+- UI inspiration/reference inputs may guide color roles and composition, but repo must not copy third-party artwork/assets unless separately licensed and intentionally added.
 - Build transformer and `.materialize/` workflow: optional migration/repro tooling only; never canonical source.
 - Never trigger incomplete `.materialize/` input or create `READY` until reconstructed payload matches pinned hash.
 - Security primitives: shared `Minify/core/security.py` for path confinement, archive limits, bounded decompression, hashing, atomic writes.
