@@ -60,6 +60,13 @@ SECTION_LABELS = {
 PROFILE_FILE_NAME = "mod-profiles.json"
 PROFILE_EXPORT_FORMAT = "minify-mod-profiles"
 PROFILE_EXPORT_VERSION = 1
+PROFILE_MAX_FILE_BYTES = 8 * 1024 * 1024
+PROFILE_MAX_COUNT = 256
+PROFILE_MAX_STATES_PER_PROFILE = 5000
+PROFILE_MAX_TOTAL_STATES = 20000
+PROFILE_MAX_NAME_CHARS = 128
+PROFILE_MAX_MOD_ID_CHARS = 512
+PROFILE_MAX_HINT_CHARS = 512
 STATE_FILTER_ITEMS = ["All", "Selected", "Unselected"]
 TYPE_FILTER_ITEMS = ["All Mods", "Standard", "Collections", "D2PFX", "VPK", "Unknown", "Favorites"]
 SORT_ITEMS = [
@@ -382,23 +389,83 @@ def _profile_path():
     return os.path.join(base.config_dir, PROFILE_FILE_NAME)
 
 
+def _normalize_profile_states(states):
+    if not isinstance(states, dict):
+        raise ValueError("Profile mod states must be a JSON object.")
+    if len(states) > PROFILE_MAX_STATES_PER_PROFILE:
+        raise ValueError("Profile contains too many mod states.")
+
+    normalized = {}
+    for mod, enabled in states.items():
+        if not isinstance(mod, str) or not mod or len(mod) > PROFILE_MAX_MOD_ID_CHARS:
+            raise ValueError("Profile contains an invalid mod identifier.")
+        if not isinstance(enabled, bool):
+            raise ValueError("Profile mod states must use JSON booleans.")
+        normalized[mod] = enabled
+    return normalized
+
+
+def _normalize_profiles_mapping(profiles):
+    if not isinstance(profiles, dict):
+        raise ValueError("Profiles must be a JSON object.")
+    if len(profiles) > PROFILE_MAX_COUNT:
+        raise ValueError("Profile bundle contains too many profiles.")
+
+    normalized = {}
+    total_states = 0
+    for name, value in profiles.items():
+        if not isinstance(name, str):
+            raise ValueError("Profile names must be strings.")
+        name = name.strip()
+        if not name or len(name) > PROFILE_MAX_NAME_CHARS or not isinstance(value, dict):
+            raise ValueError("Profile contains an invalid name or value.")
+        states = value.get("mods", value)
+        normalized_states = _normalize_profile_states(states)
+        total_states += len(normalized_states)
+        if total_states > PROFILE_MAX_TOTAL_STATES:
+            raise ValueError("Profile bundle contains too many total mod states.")
+        normalized[name] = normalized_states
+    return normalized
+
+
+def _normalize_profile_hints(hints, referenced):
+    if hints in (None, {}):
+        return {}
+    if not isinstance(hints, dict) or len(hints) > PROFILE_MAX_TOTAL_STATES:
+        raise ValueError("Profile mod hints are invalid or excessive.")
+
+    normalized = {}
+    for mod, hint in hints.items():
+        if mod not in referenced:
+            continue
+        if not isinstance(mod, str) or len(mod) > PROFILE_MAX_MOD_ID_CHARS or not isinstance(hint, dict):
+            raise ValueError("Profile contains an invalid mod hint.")
+        clean = {}
+        for key in ("display_name", "source", "stable_key"):
+            value = hint.get(key, "")
+            if value is None:
+                value = ""
+            if not isinstance(value, str) or len(value) > PROFILE_MAX_HINT_CHARS:
+                raise ValueError("Profile contains an invalid mod hint value.")
+            clean[key] = value
+        normalized[mod] = clean
+    return normalized
+
+
 def _load_profiles():
     global profile_cache
     try:
-        with open(_profile_path(), encoding="utf-8-sig") as file:
+        path = _profile_path()
+        if os.path.islink(path) or not os.path.isfile(path):
+            raise FileNotFoundError(path)
+        if os.path.getsize(path) > PROFILE_MAX_FILE_BYTES:
+            raise ValueError("Saved profile file exceeds the safety limit.")
+        with open(path, encoding="utf-8-sig") as file:
             data = json.load(file)
+        profiles = data.get("profiles", data) if isinstance(data, dict) else {}
+        profile_cache = _normalize_profiles_mapping(profiles)
     except Exception:
-        data = {}
-    profiles = data.get("profiles", data) if isinstance(data, dict) else {}
-    normalized = {}
-    if isinstance(profiles, dict):
-        for name, value in profiles.items():
-            if not isinstance(name, str) or not name.strip() or not isinstance(value, dict):
-                continue
-            states = value.get("mods", value)
-            if isinstance(states, dict):
-                normalized[name.strip()] = {str(mod): bool(enabled) for mod, enabled in states.items()}
-    profile_cache = normalized
+        profile_cache = {}
     return profile_cache
 
 
@@ -520,20 +587,19 @@ def choose_profile_import_file(sender=None, app_data=None, user_data=None):
 
 
 def _normalized_import_profiles(data):
-    if not isinstance(data, dict):
+    try:
+        if not isinstance(data, dict):
+            raise ValueError("Profile bundle must be a JSON object.")
+        if "format" in data:
+            if data.get("format") != PROFILE_EXPORT_FORMAT or data.get("version") != PROFILE_EXPORT_VERSION:
+                raise ValueError("Unsupported Minify profile export format/version.")
+        profiles = data.get("profiles", data)
+        normalized = _normalize_profiles_mapping(profiles)
+        referenced = {mod for states in normalized.values() for mod in states}
+        hints = _normalize_profile_hints(data.get("mod_hints", {}), referenced)
+        return normalized, hints
+    except ValueError:
         return {}, {}
-    profiles = data.get("profiles", data)
-    hints = data.get("mod_hints", {})
-    if not isinstance(profiles, dict):
-        return {}, {}
-    normalized = {}
-    for name, value in profiles.items():
-        if not isinstance(name, str) or not name.strip() or not isinstance(value, dict):
-            continue
-        states = value.get("mods", value)
-        if isinstance(states, dict):
-            normalized[name.strip()] = {str(mod): bool(enabled) for mod, enabled in states.items()}
-    return normalized, hints if isinstance(hints, dict) else {}
 
 
 def _current_profile_identity_indexes():
@@ -603,6 +669,10 @@ def import_profiles_callback(sender=None, app_data=None, user_data=None):
         return
 
     try:
+        if not os.path.isfile(path):
+            raise ValueError("Selected profile import is not a regular file.")
+        if os.path.getsize(path) > PROFILE_MAX_FILE_BYTES:
+            raise ValueError("Selected profile import exceeds the safety limit.")
         with open(path, encoding="utf-8-sig") as file:
             data = json.load(file)
         imported, hints = _normalized_import_profiles(data)
@@ -687,6 +757,9 @@ def save_profile(sender=None, app_data=None, user_data=None):
     name = str(dpg.get_value("profile_name") or "").strip() if dpg.does_item_exist("profile_name") else ""
     if not name:
         output.add_text("Enter a profile name before saving.", msg_type="warning")
+        return
+    if len(name) > PROFILE_MAX_NAME_CHARS:
+        output.add_text(f"Profile names are limited to {PROFILE_MAX_NAME_CHARS} characters.", msg_type="warning")
         return
     profile_cache[name] = _current_states()
     _write_profiles()
