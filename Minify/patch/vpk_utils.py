@@ -8,6 +8,10 @@ from concurrent.futures import ThreadPoolExecutor
 import vpk
 from core import base, config, constants, fs, log, output, security, utils
 
+_WINDOWS_RESERVED_STEMS = {"con", "prn", "aux", "nul"} | {f"com{i}" for i in range(1, 10)} | {
+    f"lpt{i}" for i in range(1, 10)
+}
+
 
 def extract(vpk_to_extract_from, paths, path_to_extract_to=base.build_dir):
     if isinstance(paths, str):
@@ -65,6 +69,8 @@ def _metadata_marker_filename(mod_name):
     """Return a flat Windows-safe marker filename for a single-mod patch."""
     raw = str(mod_name).strip()
     safe = re.sub(r'[<>:"/\\|?*\x00-\x1f]+', "_", raw).strip(" .") or "mod"
+    if safe.split(".", 1)[0].casefold() in _WINDOWS_RESERVED_STEMS:
+        safe = f"mod_{safe}"
     if len(safe) > 120:
         digest = hashlib.sha256(raw.encode("utf-8", errors="replace")).hexdigest()[:16]
         safe = f"{safe[:96]}-{digest}"
