@@ -3,13 +3,12 @@
 - Branch model: exactly `v21.4-hardening` -> `beta` -> `main`; beta/main frozen.
 - Canonical feature reference: supplied v21.3.1 Safe Foliage Fix archive; bundled 116/116 tests pass.
 - UI baseline: **Black-Plum Reactor**; centered header; 960x680 minimum; adaptive telemetry/right deck; stale RC6/PATCH ENGINE furniture removed.
-- Security sweep completed: network/catalogue, backup manifest, profiles, VPK metadata, D2PFX cursor filesystem handling, D2PFX catalogue/cache/metadata/path validation.
-- Cursor security commits: `927c2da60b08081609b497ca7e44ed6f611c2f91`, tests `6754fc076268651f345cf887612c59ac2007cf1c`; CI 179/179 + Windows PASS.
-- Metadata security commits: `e535d720ccd917aed74c225ae188d218a61c3777`, tests `f946f1b70a0207b59b634cf4f0500a92ee9f349b`.
-- Current tested product code: `f946f1b70a0207b59b634cf4f0500a92ee9f349b`.
-- Hardening CI `33949542003`: compileall PASS; Ruff format/lint PASS; pytest 185/185 PASS; Windows portable build PASS.
-- Current Windows ZIP: `Minify-v21.4-hardening-f946f1b70a0207b59b634cf4f0500a92ee9f349b-windows.zip`; 53,618,363 bytes; SHA-256 `7de99bc4d9b9ef03ea5334c1f6943864f6c8d18e9eb989c4509337565e77eb9b`.
-- Artifact `9964376842`; outer SHA-256 `b70c33b188f94a1fb8b24fe994270f56f527b06896a93bbcc9d3180a96242583`; 1650-entry portable layout/Safe-Foliage/Main-Menu checks pass.
+- Security sweep completed: network/catalogue, backup manifest, profiles, VPK metadata, D2PFX cursor filesystem handling, D2PFX catalogue/cache/metadata/path validation, D2PFX browser remote install path.
+- D2PFX install hardening: redirect-hop validation; HTTPS/public endpoint checks; flat safe URL filenames; 32 MiB preview cap; staged payload/extraction/metadata; atomic target publication; failure cleanup.
+- Current tested product code: `53a358db219256187e21a40acc8ed45704c3589f`.
+- Hardening CI `33971846026`: compileall PASS; Ruff format/lint PASS; pytest 200/200 PASS; Windows portable build PASS.
+- Current Windows ZIP: `Minify-v21.4-hardening-53a358db219256187e21a40acc8ed45704c3589f-windows.zip`; 53,625,172 bytes; SHA-256 `6a1874783d6d49b3e53d069577b90c14cd52a7aa618d3298c929fd863f2bd54a`.
+- Artifact `9971169200`; outer SHA-256 `14cd19c31edfcd4051a454ec73c12bd4fd383816783cde04d29785bcb5ad48ea`; 1650-entry portable layout/Safe-Foliage/Main-Menu checks pass.
 - `core/mod_library.py` prior-v21.4 exact-source gap remains unresolved; never fabricate missing bytes.
-- Next: harden D2PFX browser install/download redirect/SSRF/filename/staging; continue path-race review; then regressions/core diff/Dota smoke tests.
+- Next: continue path-race/security review; adapt remaining useful v21.3.1 regressions; semantic core/exact-rc7 diff review; Dota smoke tests.
 - Do not promote beta/main until remaining gates and user approval.
