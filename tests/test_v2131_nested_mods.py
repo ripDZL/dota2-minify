@@ -49,6 +49,8 @@ class RecursiveDirectoryModTests(unittest.TestCase):
         "_has_explicit_collection_marker",
         "_looks_like_directory_collection",
         "_discover_collection_child_roots",
+        "_directory_contains_vpk",
+        "_discover_vpk_collection_child_roots",
         "_nested_directory_mod_id",
         "_nested_directory_group",
         "_discover_nested_directory_roots",
