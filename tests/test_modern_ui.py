@@ -30,7 +30,9 @@ def test_user_json_palette_is_materialized():
         "JSON_WINDOW_BG = (70, 51, 90, 255)",
     ):
         assert token in THEME
+    assert "ACCENT_HOVER = (169, 98, 183, 255)" in THEME
     assert "UI_ACCENT = (133, 56, 148, 255)" in CHECKBOXES
+    assert "UI_ACCENT_HOVER = (169, 98, 183, 255)" in CHECKBOXES
     assert "UI_SUCCESS = (122, 193, 67, 255)" in CHECKBOXES
 
 
