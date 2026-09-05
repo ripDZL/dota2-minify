@@ -86,13 +86,18 @@ def test_extract_archive_nonexistent_file(mock_add_text, tmp_path):
 
 
 class _FakeResponse:
-    def __init__(self, chunks, content_length=0):
+    def __init__(self, chunks, content_length=0, status_code=200, headers=None, url=""):
         self._chunks = chunks
-        self.headers = {"content-length": str(content_length)} if content_length else {}
-        self.status_code = 200
+        self.headers = dict(headers or {})
+        if content_length:
+            self.headers["content-length"] = str(content_length)
+        self.status_code = status_code
         self.closed = False
+        self.url = url
 
     def raise_for_status(self):
+        if self.status_code >= 400:
+            raise RuntimeError(f"HTTP {self.status_code}")
         return None
 
     def iter_content(self, chunk_size=8192):
@@ -129,3 +134,68 @@ def test_download_file_aborts_stream_over_limit_without_replacing_target(mock_ge
     assert not list(tmp_path.glob(".minify-download-*"))
     assert response.closed is True
     assert "safety limit" in mock_add_text.call_args.args[0]
+
+
+@patch("core.fs.output.add_text")
+@patch("core.fs.requests.get")
+def test_download_file_validates_every_redirect_before_request(mock_get, mock_add_text, tmp_path):
+    redirect = _FakeResponse(
+        [],
+        status_code=302,
+        headers={"location": "https://blocked.invalid/file.bin"},
+        url="https://public.invalid/start",
+    )
+    mock_get.return_value = redirect
+    validated = []
+
+    def validator(url):
+        validated.append(url)
+        if "blocked.invalid" in url:
+            raise ValueError("blocked target")
+
+    target = tmp_path / "payload.bin"
+    assert download_file(
+        "https://public.invalid/start",
+        str(target),
+        url_validator=validator,
+    ) is False
+
+    assert validated == ["https://public.invalid/start", "https://blocked.invalid/file.bin"]
+    assert mock_get.call_count == 1
+    assert mock_get.call_args.kwargs["allow_redirects"] is False
+    assert redirect.closed is True
+    assert not target.exists()
+    assert "blocked target" in mock_add_text.call_args.args[0]
+
+
+@patch("core.fs.output.add_text")
+@patch("core.fs.requests.get")
+def test_download_file_accepts_validated_redirect_chain(mock_get, mock_add_text, tmp_path):
+    first = _FakeResponse(
+        [],
+        status_code=302,
+        headers={"location": "/final.bin"},
+        url="https://public.invalid/start",
+    )
+    final = _FakeResponse([b"payload"], status_code=200, url="https://public.invalid/final.bin")
+    mock_get.side_effect = [first, final]
+    validated = []
+
+    target = tmp_path / "payload.bin"
+    assert download_file(
+        "https://public.invalid/start",
+        str(target),
+        max_bytes=100,
+        url_validator=validated.append,
+    ) is True
+
+    assert target.read_bytes() == b"payload"
+    assert validated == [
+        "https://public.invalid/start",
+        "https://public.invalid/final.bin",
+        "https://public.invalid/final.bin",
+    ]
+    assert first.closed is True
+    assert final.closed is True
+    assert mock_get.call_count == 2
+    mock_add_text.assert_not_called()
