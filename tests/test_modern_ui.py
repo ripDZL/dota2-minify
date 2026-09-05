@@ -14,15 +14,16 @@ def test_stale_workspace_badge_removed():
     assert 'tag="header_badge"' not in MAIN
 
 
-def test_obsidian_arc_release_palette_is_materialized():
-    assert "# v21.4: Obsidian Arc release visual system." in THEME
-    assert "ACCENT = (84, 151, 255, 255)" in THEME
-    assert "EMBER = (240, 103, 70, 255)" in THEME
-    assert "BEVEL_DARK = (1, 2, 5, 220)" in THEME
-    assert "UI_EMBER = (240, 103, 70, 255)" in CHECKBOXES
+def test_crimson_slate_palette_is_materialized():
+    assert "# v21.4: Crimson Slate release visual system." in THEME
+    assert "BACKGROUND = (18, 18, 24, 255)" in THEME
+    assert "SURFACE = (28, 28, 37, 255)" in THEME
+    assert "ACCENT = (190, 39, 77, 255)" in THEME
+    assert "EMBER = (207, 43, 79, 255)" in THEME
+    assert "UI_ACCENT = (190, 39, 77, 255)" in CHECKBOXES
 
 
-def test_release_dashboard_uses_layered_cards():
+def test_release_dashboard_keeps_layered_cards():
     for tag in (
         "dashboard_hero_card",
         "dashboard_action_bar",
@@ -33,12 +34,13 @@ def test_release_dashboard_uses_layered_cards():
         assert f'("{tag}",' in THEME
 
 
-def test_release_ui_uses_dual_accent_hierarchy():
-    assert "dpg.add_theme_color(dpg.mvThemeCol_Button, EMBER)" in THEME
-    assert "dpg.add_theme_color(dpg.mvThemeCol_Button, ACCENT_MUTED)" in THEME
-    assert 'tag="dashboard_safety_title_theme"' in THEME
+def test_crimson_slate_uses_compact_geometry():
+    assert "dpg.add_theme_style(dpg.mvStyleVar_FrameRounding, 2)" in THEME
+    assert "dpg.add_theme_style(dpg.mvStyleVar_ChildRounding, 3)" in THEME
+    assert "dpg.add_theme_style(dpg.mvStyleVar_FrameRounding, 2)" in CHECKBOXES
 
 
-def test_d2pfx_uses_release_teal_instead_of_legacy_cyan():
-    assert "color=(78, 208, 196)" in D2PFX
+def test_d2pfx_selected_state_matches_release_accent():
+    assert "(184, 43, 79, 255)" in D2PFX
+    assert "color=(224, 54, 94)" in D2PFX
     assert "color=(0, 255, 255)" not in D2PFX

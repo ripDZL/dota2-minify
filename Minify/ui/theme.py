@@ -5,42 +5,41 @@ import ctypes
 import dearpygui.dearpygui as dpg
 from core import base, utils
 
-# v21.4: Obsidian Arc release visual system.
-# Deep layered graphite, luminous arc-blue state, ember-orange identity/actions,
-# and subtle physical edge lighting. Dense enough to feel authored, restrained
-# enough to keep long mod lists readable.
-BACKGROUND = (7, 9, 14, 255)
-BACKGROUND_DEEP = (3, 5, 9, 255)
-SURFACE = (14, 19, 27, 255)
-SURFACE_ALT = (21, 28, 39, 255)
-SURFACE_RAISED = (30, 39, 53, 255)
-SURFACE_RECESSED = (9, 13, 19, 255)
-SURFACE_HOVER = (43, 55, 73, 255)
-SURFACE_ACTIVE = (25, 33, 46, 255)
-SURFACE_WARM = (34, 24, 25, 255)
-BORDER = (65, 80, 103, 255)
-BORDER_SOFT = (32, 42, 57, 255)
-BEVEL_LIGHT = (100, 118, 145, 255)
-BEVEL_DARK = (1, 2, 5, 220)
-BEVEL_EMBER = (255, 132, 92, 255)
-TEXT = (241, 245, 250, 255)
-MUTED = (158, 171, 190, 255)
-MUTED_DARK = (88, 100, 119, 255)
-ACCENT = (84, 151, 255, 255)
-ACCENT_HOVER = (116, 176, 255, 255)
-ACCENT_ACTIVE = (62, 125, 232, 255)
-ACCENT_MUTED = (36, 69, 119, 255)
-EMBER = (240, 103, 70, 255)
-EMBER_HOVER = (255, 133, 91, 255)
-EMBER_ACTIVE = (204, 80, 55, 255)
-EMBER_MUTED = (103, 48, 40, 255)
-HIGHLIGHT = (239, 191, 105, 255)
-D2PFX = (78, 208, 196, 255)
-VPK = (132, 201, 145, 255)
-DANGER = (222, 82, 101, 255)
-DANGER_HOVER = (241, 104, 121, 255)
-WARNING = (239, 184, 78, 255)
-SUCCESS = (91, 204, 139, 255)
+# v21.4: Crimson Slate release visual system.
+# Inspired by dense flat-dark game UI: charcoal-plum panels, crimson focus,
+# inset controls, compact spacing, low radii, and thin modular borders.
+BACKGROUND = (18, 18, 24, 255)
+BACKGROUND_DEEP = (11, 11, 16, 255)
+SURFACE = (28, 28, 37, 255)
+SURFACE_ALT = (34, 34, 45, 255)
+SURFACE_RAISED = (42, 42, 54, 255)
+SURFACE_RECESSED = (22, 22, 30, 255)
+SURFACE_HOVER = (51, 50, 63, 255)
+SURFACE_ACTIVE = (39, 38, 49, 255)
+SURFACE_WARM = (38, 26, 33, 255)
+BORDER = (69, 68, 82, 255)
+BORDER_SOFT = (47, 46, 58, 255)
+BEVEL_LIGHT = (91, 89, 104, 255)
+BEVEL_DARK = (2, 2, 5, 170)
+BEVEL_EMBER = (225, 54, 92, 255)
+TEXT = (239, 239, 244, 255)
+MUTED = (157, 157, 171, 255)
+MUTED_DARK = (96, 95, 109, 255)
+ACCENT = (190, 39, 77, 255)
+ACCENT_HOVER = (224, 54, 94, 255)
+ACCENT_ACTIVE = (153, 29, 60, 255)
+ACCENT_MUTED = (91, 30, 50, 255)
+EMBER = (207, 43, 79, 255)
+EMBER_HOVER = (238, 60, 99, 255)
+EMBER_ACTIVE = (170, 31, 64, 255)
+EMBER_MUTED = (101, 31, 52, 255)
+HIGHLIGHT = (231, 109, 137, 255)
+D2PFX = (82, 195, 184, 255)
+VPK = (132, 188, 139, 255)
+DANGER = (211, 62, 80, 255)
+DANGER_HOVER = (236, 82, 101, 255)
+WARNING = (224, 175, 82, 255)
+SUCCESS = (92, 188, 130, 255)
 
 settings_theme = 0
 
@@ -53,11 +52,11 @@ def apply():
             dpg.add_theme_style(dpg.mvStyleVar_WindowPadding, x=10, y=9)
             dpg.add_theme_style(dpg.mvStyleVar_ItemSpacing, x=9, y=7)
             dpg.add_theme_style(dpg.mvStyleVar_FramePadding, x=9, y=5)
-            dpg.add_theme_style(dpg.mvStyleVar_FrameRounding, 7)
+            dpg.add_theme_style(dpg.mvStyleVar_FrameRounding, 2)
             dpg.add_theme_style(dpg.mvStyleVar_FrameBorderSize, 1)
             dpg.add_theme_style(dpg.mvStyleVar_WindowBorderSize, 1)
-            dpg.add_theme_style(dpg.mvStyleVar_ScrollbarRounding, 8)
-            dpg.add_theme_style(dpg.mvStyleVar_GrabRounding, 6)
+            dpg.add_theme_style(dpg.mvStyleVar_ScrollbarRounding, 2)
+            dpg.add_theme_style(dpg.mvStyleVar_GrabRounding, 2)
             dpg.add_theme_color(dpg.mvThemeCol_Text, TEXT)
             dpg.add_theme_color(dpg.mvThemeCol_TextDisabled, MUTED_DARK)
             dpg.add_theme_color(dpg.mvThemeCol_WindowBg, BACKGROUND)
@@ -83,8 +82,8 @@ def apply():
             dpg.add_theme_color(dpg.mvThemeCol_SeparatorHovered, ACCENT_MUTED)
             dpg.add_theme_color(dpg.mvThemeCol_SeparatorActive, ACCENT)
             dpg.add_theme_color(dpg.mvThemeCol_ScrollbarBg, BACKGROUND_DEEP)
-            dpg.add_theme_color(dpg.mvThemeCol_ScrollbarGrab, (47, 56, 70, 255))
-            dpg.add_theme_color(dpg.mvThemeCol_ScrollbarGrabHovered, (63, 75, 93, 255))
+            dpg.add_theme_color(dpg.mvThemeCol_ScrollbarGrab, (56, 55, 67, 255))
+            dpg.add_theme_color(dpg.mvThemeCol_ScrollbarGrabHovered, (76, 74, 89, 255))
             dpg.add_theme_color(dpg.mvThemeCol_ScrollbarGrabActive, ACCENT_MUTED)
             dpg.add_theme_color(dpg.mvThemeCol_TableBorderStrong, BORDER)
             dpg.add_theme_color(dpg.mvThemeCol_TableBorderLight, BORDER_SOFT)
@@ -92,8 +91,7 @@ def apply():
             dpg.add_theme_color(dpg.mvThemeCol_TableRowBgAlt, SURFACE)
     dpg.bind_theme(global_theme)
 
-    # Application shell: a slim identity bar, persistent navigation rail and
-    # one focused workspace. Flair comes from controlled contrast, not chrome.
+    # Application shell: compact flat-dark chrome with crimson focus and inset controls.
     with dpg.theme(tag="app_shell_header_theme"):
         with dpg.theme_component(dpg.mvChildWindow):
             dpg.add_theme_color(dpg.mvThemeCol_ChildBg, BACKGROUND_DEEP)
@@ -108,7 +106,7 @@ def apply():
             dpg.add_theme_color(dpg.mvThemeCol_Border, BORDER_SOFT)
             dpg.add_theme_color(dpg.mvThemeCol_BorderShadow, BEVEL_DARK)
             dpg.add_theme_style(dpg.mvStyleVar_ChildBorderSize, 1)
-            dpg.add_theme_style(dpg.mvStyleVar_ChildRounding, 9)
+            dpg.add_theme_style(dpg.mvStyleVar_ChildRounding, 3)
             dpg.add_theme_style(dpg.mvStyleVar_WindowPadding, x=9, y=10)
 
     with dpg.theme(tag="app_workspace_theme"):
@@ -117,7 +115,7 @@ def apply():
             dpg.add_theme_color(dpg.mvThemeCol_Border, BORDER)
             dpg.add_theme_color(dpg.mvThemeCol_BorderShadow, BEVEL_DARK)
             dpg.add_theme_style(dpg.mvStyleVar_ChildBorderSize, 1)
-            dpg.add_theme_style(dpg.mvStyleVar_ChildRounding, 9)
+            dpg.add_theme_style(dpg.mvStyleVar_ChildRounding, 3)
             dpg.add_theme_style(dpg.mvStyleVar_WindowPadding, x=16, y=14)
 
     with dpg.theme(tag="app_workspace_main_theme"):
@@ -132,7 +130,7 @@ def apply():
             dpg.add_theme_color(dpg.mvThemeCol_Border, ACCENT_MUTED)
             dpg.add_theme_color(dpg.mvThemeCol_BorderShadow, BEVEL_DARK)
             dpg.add_theme_style(dpg.mvStyleVar_ChildBorderSize, 1)
-            dpg.add_theme_style(dpg.mvStyleVar_ChildRounding, 8)
+            dpg.add_theme_style(dpg.mvStyleVar_ChildRounding, 3)
             dpg.add_theme_style(dpg.mvStyleVar_WindowPadding, x=14, y=11)
 
     with dpg.theme(tag="dashboard_action_bar_theme"):
@@ -141,16 +139,16 @@ def apply():
             dpg.add_theme_color(dpg.mvThemeCol_Border, BORDER_SOFT)
             dpg.add_theme_color(dpg.mvThemeCol_BorderShadow, BEVEL_DARK)
             dpg.add_theme_style(dpg.mvStyleVar_ChildBorderSize, 1)
-            dpg.add_theme_style(dpg.mvStyleVar_ChildRounding, 8)
+            dpg.add_theme_style(dpg.mvStyleVar_ChildRounding, 3)
             dpg.add_theme_style(dpg.mvStyleVar_WindowPadding, x=9, y=8)
 
     with dpg.theme(tag="dashboard_flow_card_theme"):
         with dpg.theme_component(dpg.mvChildWindow):
             dpg.add_theme_color(dpg.mvThemeCol_ChildBg, SURFACE_ALT)
-            dpg.add_theme_color(dpg.mvThemeCol_Border, (57, 79, 116, 255))
+            dpg.add_theme_color(dpg.mvThemeCol_Border, (92, 31, 52, 255))
             dpg.add_theme_color(dpg.mvThemeCol_BorderShadow, BEVEL_DARK)
             dpg.add_theme_style(dpg.mvStyleVar_ChildBorderSize, 1)
-            dpg.add_theme_style(dpg.mvStyleVar_ChildRounding, 8)
+            dpg.add_theme_style(dpg.mvStyleVar_ChildRounding, 3)
             dpg.add_theme_style(dpg.mvStyleVar_WindowPadding, x=11, y=10)
 
     with dpg.theme(tag="dashboard_safety_card_theme"):
@@ -159,7 +157,7 @@ def apply():
             dpg.add_theme_color(dpg.mvThemeCol_Border, (42, 91, 82, 255))
             dpg.add_theme_color(dpg.mvThemeCol_BorderShadow, BEVEL_DARK)
             dpg.add_theme_style(dpg.mvStyleVar_ChildBorderSize, 1)
-            dpg.add_theme_style(dpg.mvStyleVar_ChildRounding, 8)
+            dpg.add_theme_style(dpg.mvStyleVar_ChildRounding, 3)
             dpg.add_theme_style(dpg.mvStyleVar_WindowPadding, x=11, y=10)
 
     with dpg.theme(tag="dashboard_safety_title_theme"):
@@ -172,16 +170,16 @@ def apply():
             dpg.add_theme_color(dpg.mvThemeCol_Border, BORDER_SOFT)
             dpg.add_theme_color(dpg.mvThemeCol_BorderShadow, BEVEL_DARK)
             dpg.add_theme_style(dpg.mvStyleVar_ChildBorderSize, 1)
-            dpg.add_theme_style(dpg.mvStyleVar_ChildRounding, 9)
+            dpg.add_theme_style(dpg.mvStyleVar_ChildRounding, 3)
             dpg.add_theme_style(dpg.mvStyleVar_WindowPadding, x=12, y=11)
 
     with dpg.theme(tag="dashboard_status_panel_theme"):
         with dpg.theme_component(dpg.mvChildWindow):
-            dpg.add_theme_color(dpg.mvThemeCol_ChildBg, (14, 24, 34, 255))
-            dpg.add_theme_color(dpg.mvThemeCol_Border, (36, 74, 112, 255))
+            dpg.add_theme_color(dpg.mvThemeCol_ChildBg, (31, 25, 31, 255))
+            dpg.add_theme_color(dpg.mvThemeCol_Border, (104, 35, 58, 255))
             dpg.add_theme_color(dpg.mvThemeCol_BorderShadow, BEVEL_DARK)
             dpg.add_theme_style(dpg.mvStyleVar_ChildBorderSize, 1)
-            dpg.add_theme_style(dpg.mvStyleVar_ChildRounding, 8)
+            dpg.add_theme_style(dpg.mvStyleVar_ChildRounding, 3)
             dpg.add_theme_style(dpg.mvStyleVar_WindowPadding, x=10, y=8)
 
     with dpg.theme(tag="activity_header_theme"):
@@ -190,7 +188,7 @@ def apply():
             dpg.add_theme_color(dpg.mvThemeCol_Border, BORDER_SOFT)
             dpg.add_theme_color(dpg.mvThemeCol_BorderShadow, BEVEL_DARK)
             dpg.add_theme_style(dpg.mvStyleVar_ChildBorderSize, 1)
-            dpg.add_theme_style(dpg.mvStyleVar_ChildRounding, 8)
+            dpg.add_theme_style(dpg.mvStyleVar_ChildRounding, 3)
             dpg.add_theme_style(dpg.mvStyleVar_WindowPadding, x=10, y=6)
 
     with dpg.theme(tag="settings_scroll_theme"):
@@ -205,7 +203,7 @@ def apply():
             dpg.add_theme_color(dpg.mvThemeCol_Border, BORDER_SOFT)
             dpg.add_theme_color(dpg.mvThemeCol_BorderShadow, BEVEL_DARK)
             dpg.add_theme_style(dpg.mvStyleVar_ChildBorderSize, 1)
-            dpg.add_theme_style(dpg.mvStyleVar_ChildRounding, 8)
+            dpg.add_theme_style(dpg.mvStyleVar_ChildRounding, 3)
             dpg.add_theme_style(dpg.mvStyleVar_WindowPadding, x=10, y=7)
 
     with dpg.theme(tag="app_nav_button_theme"):
@@ -217,19 +215,19 @@ def apply():
             dpg.add_theme_color(dpg.mvThemeCol_Border, BORDER)
             dpg.add_theme_color(dpg.mvThemeCol_BorderShadow, BEVEL_DARK)
             dpg.add_theme_style(dpg.mvStyleVar_FrameBorderSize, 1)
-            dpg.add_theme_style(dpg.mvStyleVar_FrameRounding, 7)
+            dpg.add_theme_style(dpg.mvStyleVar_FrameRounding, 2)
             dpg.add_theme_style(dpg.mvStyleVar_FramePadding, x=9, y=6)
 
     with dpg.theme(tag="app_nav_primary_theme"):
         with dpg.theme_component(dpg.mvButton):
             dpg.add_theme_color(dpg.mvThemeCol_Text, TEXT)
             dpg.add_theme_color(dpg.mvThemeCol_Button, ACCENT_MUTED)
-            dpg.add_theme_color(dpg.mvThemeCol_ButtonHovered, (47, 88, 148, 255))
+            dpg.add_theme_color(dpg.mvThemeCol_ButtonHovered, (126, 37, 64, 255))
             dpg.add_theme_color(dpg.mvThemeCol_ButtonActive, ACCENT_MUTED)
             dpg.add_theme_color(dpg.mvThemeCol_Border, BEVEL_EMBER)
             dpg.add_theme_color(dpg.mvThemeCol_BorderShadow, BEVEL_DARK)
             dpg.add_theme_style(dpg.mvStyleVar_FrameBorderSize, 1)
-            dpg.add_theme_style(dpg.mvStyleVar_FrameRounding, 7)
+            dpg.add_theme_style(dpg.mvStyleVar_FrameRounding, 2)
 
     with dpg.theme(tag="dashboard_title_theme"):
         with dpg.theme_component(dpg.mvAll):
@@ -280,7 +278,7 @@ def apply():
             dpg.add_theme_color(dpg.mvThemeCol_Border, BEVEL_EMBER)
             dpg.add_theme_color(dpg.mvThemeCol_BorderShadow, BEVEL_DARK)
             dpg.add_theme_style(dpg.mvStyleVar_FrameBorderSize, 1)
-            dpg.add_theme_style(dpg.mvStyleVar_FrameRounding, 7)
+            dpg.add_theme_style(dpg.mvStyleVar_FrameRounding, 2)
             dpg.add_theme_style(dpg.mvStyleVar_FramePadding, x=14, y=8)
         with dpg.theme_component(dpg.mvButton, enabled_state=False):
             dpg.add_theme_color(dpg.mvThemeCol_Text, MUTED_DARK)
@@ -295,7 +293,7 @@ def apply():
             dpg.add_theme_color(dpg.mvThemeCol_Border, BORDER)
             dpg.add_theme_color(dpg.mvThemeCol_BorderShadow, BEVEL_DARK)
             dpg.add_theme_style(dpg.mvStyleVar_FrameBorderSize, 1)
-            dpg.add_theme_style(dpg.mvStyleVar_FrameRounding, 7)
+            dpg.add_theme_style(dpg.mvStyleVar_FrameRounding, 2)
             dpg.add_theme_style(dpg.mvStyleVar_FramePadding, x=12, y=7)
 
     # Destructive maintenance remains visually quiet until the user engages it.
@@ -308,7 +306,7 @@ def apply():
             dpg.add_theme_color(dpg.mvThemeCol_Border, (142, 70, 80, 255))
             dpg.add_theme_color(dpg.mvThemeCol_BorderShadow, BEVEL_DARK)
             dpg.add_theme_style(dpg.mvStyleVar_FrameBorderSize, 1)
-            dpg.add_theme_style(dpg.mvStyleVar_FrameRounding, 7)
+            dpg.add_theme_style(dpg.mvStyleVar_FrameRounding, 2)
 
     with dpg.theme() as mod_menu_theme:
         with dpg.theme_component():
@@ -353,7 +351,7 @@ def apply():
             dpg.add_theme_color(dpg.mvThemeCol_BorderShadow, BEVEL_DARK)
             dpg.add_theme_style(dpg.mvStyleVar_WindowPadding, x=10, y=9)
             dpg.add_theme_style(dpg.mvStyleVar_ChildBorderSize, 1)
-            dpg.add_theme_style(dpg.mvStyleVar_ChildRounding, 8)
+            dpg.add_theme_style(dpg.mvStyleVar_ChildRounding, 3)
 
     with dpg.theme() as popup_theme:
         with dpg.theme_component():
@@ -371,7 +369,7 @@ def apply():
             dpg.add_theme_style(dpg.mvStyleVar_WindowBorderSize, 1)
             dpg.add_theme_style(dpg.mvStyleVar_WindowPadding, x=18, y=16)
             dpg.add_theme_style(dpg.mvStyleVar_ItemSpacing, x=9, y=8)
-            dpg.add_theme_style(dpg.mvStyleVar_FrameRounding, 7)
+            dpg.add_theme_style(dpg.mvStyleVar_FrameRounding, 2)
 
     with dpg.theme(tag="settings_theme") as settings_theme:
         with dpg.theme_component():
@@ -386,7 +384,7 @@ def apply():
             dpg.add_theme_style(dpg.mvStyleVar_FrameBorderSize, 1)
             dpg.add_theme_style(dpg.mvStyleVar_WindowPadding, x=12, y=10)
             dpg.add_theme_style(dpg.mvStyleVar_ItemSpacing, x=8, y=8)
-            dpg.add_theme_style(dpg.mvStyleVar_FrameRounding, 7)
+            dpg.add_theme_style(dpg.mvStyleVar_FrameRounding, 2)
 
     # Library workspace rail and command strip.
     with dpg.theme(tag="mod_manager_source_rail_theme"):
@@ -395,7 +393,7 @@ def apply():
             dpg.add_theme_color(dpg.mvThemeCol_Border, BORDER)
             dpg.add_theme_color(dpg.mvThemeCol_BorderShadow, BEVEL_DARK)
             dpg.add_theme_style(dpg.mvStyleVar_ChildBorderSize, 1)
-            dpg.add_theme_style(dpg.mvStyleVar_ChildRounding, 8)
+            dpg.add_theme_style(dpg.mvStyleVar_ChildRounding, 3)
             dpg.add_theme_style(dpg.mvStyleVar_WindowPadding, x=7, y=8)
 
     with dpg.theme(tag="mod_manager_nav_theme"):
@@ -407,18 +405,18 @@ def apply():
             dpg.add_theme_color(dpg.mvThemeCol_Border, BORDER)
             dpg.add_theme_color(dpg.mvThemeCol_BorderShadow, BEVEL_DARK)
             dpg.add_theme_style(dpg.mvStyleVar_FrameBorderSize, 1)
-            dpg.add_theme_style(dpg.mvStyleVar_FrameRounding, 7)
+            dpg.add_theme_style(dpg.mvStyleVar_FrameRounding, 2)
 
     with dpg.theme(tag="mod_manager_nav_active_theme"):
         with dpg.theme_component(dpg.mvButton):
             dpg.add_theme_color(dpg.mvThemeCol_Text, TEXT)
             dpg.add_theme_color(dpg.mvThemeCol_Button, ACCENT_MUTED)
-            dpg.add_theme_color(dpg.mvThemeCol_ButtonHovered, (47, 88, 148, 255))
+            dpg.add_theme_color(dpg.mvThemeCol_ButtonHovered, (126, 37, 64, 255))
             dpg.add_theme_color(dpg.mvThemeCol_ButtonActive, ACCENT_MUTED)
             dpg.add_theme_color(dpg.mvThemeCol_Border, BEVEL_EMBER)
             dpg.add_theme_color(dpg.mvThemeCol_BorderShadow, BEVEL_DARK)
             dpg.add_theme_style(dpg.mvStyleVar_FrameBorderSize, 1)
-            dpg.add_theme_style(dpg.mvStyleVar_FrameRounding, 7)
+            dpg.add_theme_style(dpg.mvStyleVar_FrameRounding, 2)
 
     with dpg.theme(tag="mod_manager_statusbar_theme"):
         with dpg.theme_component(dpg.mvChildWindow):
@@ -436,7 +434,7 @@ def apply():
             dpg.add_theme_color(dpg.mvThemeCol_Border, BORDER)
             dpg.add_theme_color(dpg.mvThemeCol_BorderShadow, BEVEL_DARK)
             dpg.add_theme_style(dpg.mvStyleVar_ChildBorderSize, 1)
-            dpg.add_theme_style(dpg.mvStyleVar_ChildRounding, 8)
+            dpg.add_theme_style(dpg.mvStyleVar_ChildRounding, 3)
             dpg.add_theme_style(dpg.mvStyleVar_WindowPadding, x=10, y=7)
 
     with dpg.theme(tag="mod_manager_status_badge_theme"):
