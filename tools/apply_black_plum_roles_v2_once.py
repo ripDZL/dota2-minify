@@ -206,7 +206,7 @@ d2pfx = once(
 )
 d2pfx = once(
     d2pfx,
-    "dpg.add_theme_color(dpg.mvThemeCol_Text, (255, 255, 255))",
+    "dpg.add_theme_color(dpg.mvThemeCol_Text, (247, 240, 231, 255))",
     "dpg.add_theme_color(dpg.mvThemeCol_Text, (0, 0, 0))",
     "d2pfx selected black text",
 )
