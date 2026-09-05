@@ -55,6 +55,8 @@ def _write_manifest(snapshot: str, manifest: dict) -> None:
 def _read_manifest(snapshot: str) -> dict:
     try:
         path = _manifest_path(snapshot)
+        if os.path.islink(path) or not os.path.isfile(path):
+            return {}
         if os.path.getsize(path) > MAX_MANIFEST_BYTES:
             return {}
         with open(path, encoding="utf-8-sig") as file:
