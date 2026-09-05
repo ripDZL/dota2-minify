@@ -4,15 +4,13 @@
 - Branch model: exactly `v21.4-hardening` -> `beta` -> `main`; keep `beta` and `main` frozen.
 - Exact upstream baseline: `Minify-v1.14rc7` / `d4b4520c945a9e1f8f5facc52a76ac5903babe90`; do not rebase onto current upstream main.
 - Canonical source: ordinary materialized files only; no active one-shot transformer/workflow; incomplete `.materialize/` bootstrap is removed; `.materialize/READY` must remain absent.
-- Current UI: **Black-Plum Reactor**; `960x680` minimum viewport; compact client-width mode at `<=1000`; centered header; optional telemetry collapses before clipping.
-- Minimum-width UI product commit: `d647d7d84c8e0ddf429eab06529f49a2ecdaa448`.
-- Exact validated product head: `a27dfa368a56ec8be5d713594eb5506abc24ee06`; commits after it at handoff are Docs-only.
-- Minimum-width behavior already implemented: compact nav/metrics/actions; activity caption hides before collision; Settings inner-width padding budget; D2PFX 168px sidebar + 320px context/actions column + wrapped text + 2-4 card grid; Mod Library metadata wraps to live list width.
-- Immediate user request/gate: **all elements and text must fit at the minimum window size**. First test Home, Mod Library, Settings, D2PFX, patch preview/conflict report, restore points, terminal/footer at `960x680`; fix any clipping/overflow before further UI expansion.
-- Hardening CI `33977097382`: compileall PASS; Ruff format/lint PASS; pytest **241/241 PASS**; Windows PyInstaller/runtime copy/portable ZIP/upload PASS.
-- Validated ZIP: `Minify-v21.4-hardening-a27dfa368a56ec8be5d713594eb5506abc24ee06-windows.zip`; 53,623,858 bytes; SHA-256 `906284491ae285d7233887c1306a56dae2512264b097262ef28facbd18c831da`.
-- GitHub artifact ID `9972649232`; outer ZIP 53,084,155 bytes; SHA-256 `7df04164f5b97160f536d5c6fc1f9cfd36156e185f44d163ddba1fba407a2851`.
-- Artifact verified: 1650 entries; normal portable roots; no materialize/temp/pycache markers; no Remove Foilage `manifest.json` or `maps/dota.vpk`; both oak blacklist entries exactly once; both Main Menu Background collapse rules present.
+- Current UI: **Black-Plum Reactor**; outer viewport minimum `960x680`; compact client-width mode at `<=1000`; centered header; optional telemetry collapses before clipping.
+- Exact validated product head: `e1200a3f768529074a1ec31774e34085e3a717bb` (`fix(ui): harden 960x680 layout`).
+- Minimum-window behavior: layouts budget from Dear PyGui client dimensions with a 16px inset; Home and Mod Library navigation rails become scrollable when vertically constrained; terminal/footer widths are bounded; Settings remains vertically scrollable; D2PFX sidebar/card view get explicit height/scroll budgets; patch/conflict/restore/D2PFX-import inner regions are bounded/wrapped.
+- Regression coverage: `tests/test_modern_ui.py` asserts client-width budget, accessible navigation/source rails, D2PFX/auxiliary height bounds, and browser resize ordering.
+- Hardening CI `33980746532`: compileall PASS; Ruff format/lint PASS; pytest **244/244 PASS**; Windows PyInstaller/runtime copy/portable ZIP/upload PASS.
+- Current GitHub artifact ID `9973687312`; name `Minify-v21.4-hardening-windows`; size 53,087,750 bytes; digest `sha256:9fdb1837a712ae25b46b40f011249140a13c9969c8562f08e14545bc9255d607`.
+- Immediate remaining UI gate: human Windows visual smoke-test **every element and text label at exactly 960x680** on Home, Mod Library, Settings, D2PFX, patch preview/conflict report, restore points, terminal, and footer. Automated CI/source assertions are green but do not prove pixel-level rendering.
 - Canonical feature reference: user-supplied v21.3.1 Safe Foliage Fix archive; SHA-256 `37755c4ee92e1847eef1a5a9c89aef6ba488f33accd0cb102c62a7db8780b5f8`; bundled 116/116 tests pass.
 - Preserve: recursive/nested mods; markerless/collapsible Collections; profiles; D2PFX browser/imports; backups/conflict review; Dark Terrain collision behavior; Safe Foliage blacklist-only fix; Main Menu Background CSS fix; manual rc7 `prelaunch`; no automatic prelaunch injection.
 - Remove Foilage invariant: blacklist-only; never ship `manifest.json` or `maps/dota.vpk`; retain `materials/models/props_tree/tree_oak_leaves_05.vmat_c` and `models/props_tree/tree_oak_leaves_05.vmdl_c`.
@@ -20,5 +18,5 @@
 - Security boundary: local mod Python scripts are trusted arbitrary code; VPK/archive/profile/backup/download/D2PFX data are untrusted.
 - Restored v21.3.1 regression coverage directly on hardening: compatibility/Dark Terrain/Safe Foliage/Main Menu; recursive/nested Collections/dependencies; semantic feature coverage.
 - `core/mod_library.py` prior-v21.4 exact-source gap remains blocked; never fabricate missing bytes or substitute the v21.3.1 overlay wholesale.
-- After minimum-width visual acceptance: continue residual filesystem path-race/hostile-input review; semantic core-overlay reconciliation; exact-rc7 diff review; full Dota startup/lobby/match/rollback/profiles/D2PFX/Dark-Terrain/Remove-Foilage smoke tests.
+- After minimum-window visual acceptance: continue residual filesystem path-race/hostile-input review; semantic core-overlay reconciliation; exact-rc7 diff review; full Dota startup/lobby/match/rollback/profiles/D2PFX/Dark-Terrain/Remove-Foilage smoke tests.
 - Do not fast-forward `beta`, merge/tag/release, or publish until remaining gates pass and the user explicitly approves promotion.

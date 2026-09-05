@@ -2,11 +2,14 @@
 - Baseline: exact upstream rc7 commit `d4b4520c945a9e1f8f5facc52a76ac5903babe90`; no current-main rebase during hardening.
 - Branches: exactly `v21.4-hardening` active -> `beta` validation -> `main` publication.
 - Fork source: ordinary materialized files + commits; no active one-shot transformer/workflow; incomplete `.materialize/` bootstrap/workflow removed.
-- UI: responsive **Black-Plum Reactor**; centered header; `960x680` minimum; compact client-width mode at <=1000.
-- Minimum-width contract: optional telemetry/secondary metric columns collapse before clipping; compact nav/action widths preserve actionable controls; text-bearing surfaces wrap to their live content width.
-- D2PFX responsive contract: 168px category rail; 320px header context/actions column; wrapped category/subtitle text; card grid bounded to 2-4 columns.
-- Mod Library responsive contract: source rail remains bounded; search/list widths derive from live menu width; metadata wraps to list width; persistent status actions remain within the minimum viewport.
-- Settings responsive contract: scroll/action surfaces reserve parent padding; intro text wraps to live inner width.
+- UI: Dear PyGui responsive **Black-Plum Reactor** under `Minify/ui`; centered header; outer `960x680` minimum; compact client-width mode at <=1000.
+- Minimum-window contract: child layout budgets derive from Dear PyGui client width/height, with a 16px content inset for decorated-window padding; optional telemetry/secondary metrics collapse before clipping.
+- Home contract: compact nav/action widths preserve controls; navigation rail becomes vertically scrollable when the minimum-height body cannot contain every command; activity/terminal/footer stay within client width.
+- Mod Library contract: source rail/search/list/status widths derive from live menu dimensions; the source rail scrolls when constrained; list and metadata remain scrollable/wrapped.
+- Settings contract: content is vertically scrollable; action surface and intro wrap use live client width.
+- D2PFX contract: compact sidebar width at minimum; sidebar and card surface receive explicit client-height budgets and scrolling; 320px context/actions column retained; wrapped category/subtitle text; card grid bounded to 2-4 columns.
+- Auxiliary UI contract: conflict list, patch warning, restore summary, mod-action text, and D2PFX import preview/progress are bounded/wrapped from live client dimensions so action rows stay reachable.
+- Browser resize order: registered top-level browser windows are sized before module-specific `on_resize` hooks so child calculations see final client dimensions.
 - Security primitives: `Minify/core/security.py` for path confinement, archive limits, bounded decompression, hashing, atomic writes.
 - General downloads: streamed with timeout + size ceiling into same-directory temp file; atomic replace on success; optional redirect-hop URL validator.
 - D2PFX catalogue: streamed bounded compressed/decompressed payload; dict/shape checks; confined regular-file cache; atomic replace.

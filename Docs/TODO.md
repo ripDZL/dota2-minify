@@ -3,16 +3,17 @@
 - [x] Enforce exactly three branches: `v21.4-hardening`, `beta`, `main`.
 - [x] Preserve hardened backend + v21.3.1 feature set without wholesale old-core replacement.
 - [x] Stabilize Black-Plum Reactor UI and `960x680` minimum/responsive sizing.
-- [x] Make minimum-width layout a hard fit contract: compact nav/metrics/actions, wrapped Settings/D2PFX/library text, no optional telemetry collision.
+- [x] Harden the minimum-window layout contract in code: client-area width budgeting; scrollable constrained nav/source rails; bounded terminal/footer; explicit D2PFX child heights; bounded patch/conflict/restore/import regions.
+- [x] Add minimum-window regression assertions to `tests/test_modern_ui.py`.
 - [x] Remove incomplete `.materialize/` bootstrap + workflow.
 - [x] Harden general downloads, D2PFX catalogue/cursors/install, profiles, VPK metadata, and backup restore paths.
 - [x] Close backup manifest check/open race and managed-output parent symlink escape.
 - [x] Restore v21.3.1 Dark Terrain/Safe Foliage/Main Menu compatibility regressions directly on hardening.
 - [x] Restore v21.3.1 recursive/nested Collections/dependency regressions directly on hardening.
 - [x] Restore semantic v21.3.1 feature regressions without stale exact-layout constants.
-- [x] Exact validated product head `a27dfa368a56ec8be5d713594eb5506abc24ee06`; CI `33977097382`; pytest 241/241 PASS; Windows build PASS.
-- [x] Validated portable ZIP SHA-256 `906284491ae285d7233887c1306a56dae2512264b097262ef28facbd18c831da`.
-- [ ] User visual smoke-test minimum width on Home, Mod Library, Settings, D2PFX, patch preview/conflict report, restore points.
+- [x] Exact validated product head `e1200a3f768529074a1ec31774e34085e3a717bb`; CI `33980746532`; pytest **244/244 PASS**; Windows build PASS.
+- [x] Current Windows artifact `9973687312`; digest `sha256:9fdb1837a712ae25b46b40f011249140a13c9969c8562f08e14545bc9255d607`.
+- [ ] Human visual smoke-test exactly `960x680` on Home, Mod Library, Settings, D2PFX, patch preview/conflict report, restore points, terminal, and footer; verify every label/control with real Windows rendering.
 - [ ] Continue hostile-input/path-race review; residual local filesystem race windows require explicit assessment.
 - [ ] Complete semantic core-overlay reconciliation; never wholesale copy old core.
 - [ ] Complete exact-rc7 diff review.

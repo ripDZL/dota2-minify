@@ -2,22 +2,20 @@
 - Upstream baseline: `Egezenn/dota2-minify` tag `Minify-v1.14rc7`; exact commit `d4b4520c945a9e1f8f5facc52a76ac5903babe90`.
 - Fork: `ripDZL/dota2-minify`; active branch `v21.4-hardening`; promotion path `v21.4-hardening` -> `beta` -> `main`.
 - Exactly three branches; `main` frozen at `a26bc88a0d412e357965f29488b83a7f9093e11f`; `beta` frozen at `af83bbb051edced195d5f55ba49ff060a8c76f3c`.
-- Latest minimum-width UI product commit: `d647d7d84c8e0ddf429eab06529f49a2ecdaa448`; one-shot helper/workflow removed afterward.
-- Exact validated product head: `a27dfa368a56ec8be5d713594eb5506abc24ee06`.
-- Commits after `a27dfa368a56ec8be5d713594eb5506abc24ee06` are Docs-only at handoff; re-fetch branch head at new-chat start.
-- Current UI baseline: **Black-Plum Reactor**; `960x680` minimum; compact client-width mode at `<=1000`; optional telemetry collapses before clipping.
-- Minimum-width fit: narrower nav; single-metric fallback at compact width; compact deployment buttons; activity caption hidden before collision; Settings inner width reserved for padding.
-- D2PFX minimum fit: 168px sidebar; 320px action/context column; wrapped category/subtitle text; 2-4 responsive cards.
-- Mod Library minimum fit: metadata text wraps to live list width; source rail/search/status sizing remains responsive.
-- Immediate user-facing gate: visually verify **every element and text label fits at the minimum window size** on Home, Mod Library, Settings, D2PFX, patch preview/conflict report, and restore points; fix any clipping/overflow before further UI expansion.
+- Exact validated product head: `e1200a3f768529074a1ec31774e34085e3a717bb` (`fix(ui): harden 960x680 layout`).
+- Commits after `e1200a3f768529074a1ec31774e34085e3a717bb` are Docs-only at this handoff; re-fetch branch head at new-chat start.
+- Current UI baseline: **Black-Plum Reactor**; outer viewport minimum `960x680`; compact client-width mode at `<=1000`; optional telemetry collapses before clipping.
+- Minimum-window hardening now budgets from Dear PyGui client dimensions, reserves a 16px content inset, makes Home and Mod Library navigation rails scrollable when vertically constrained, bounds terminal/footer widths, gives D2PFX explicit client-height/scroll budgets, and clamps patch/conflict/restore/import text/scroll regions.
+- Settings keeps a vertically scrollable content surface and client-width action bar; Mod Library list/metadata/status sizing remains responsive.
+- Automated layout regression coverage is in `tests/test_modern_ui.py`; current suite is **244/244 PASS**.
+- Remaining user-facing gate: human visual smoke-test **every element and text label at exactly 960x680** across Home, Mod Library, Settings, D2PFX, patch preview/conflict report, restore points, terminal, and footer. CI/source assertions do not replace that visual check.
+- Hardening CI `33980746532`: compileall PASS; Ruff format/lint PASS; pytest **244/244 PASS**; Windows PyInstaller/runtime copy/portable ZIP/upload PASS.
+- Current GitHub artifact ID `9973687312`; name `Minify-v21.4-hardening-windows`; size 53,087,750 bytes; digest `sha256:9fdb1837a712ae25b46b40f011249140a13c9969c8562f08e14545bc9255d607`.
+- Previous fully inspected baseline product head: `a27dfa368a56ec8be5d713594eb5506abc24ee06`; CI `33977097382`; 241/241 PASS; Windows build PASS.
 - Canonical source: ordinary materialized files only; no active one-shot transformer/workflow; `.materialize/READY` absent.
 - Security completed: bounded/atomic downloads; D2PFX catalogue/cache/metadata/cursors/install path; strict profiles; VPK metadata; backup restore confinement.
 - Backup hardening: manifest opened regular-file-only with no-follow/identity recheck; managed live outputs preflight through confined destinations; symlinked `maps` escape rejected before backup/restore mutation.
 - v21.3.1 backend regressions restored directly on hardening: Dark Terrain/Safe Foliage/Main Menu compatibility + recursive/nested Collections/dependency resolution + semantic feature coverage.
-- Hardening CI `33977097382`: compileall PASS; Ruff format/lint PASS; pytest **241/241 PASS**; Windows PyInstaller/runtime copy/portable ZIP/upload PASS.
-- Validated Windows ZIP: `Minify-v21.4-hardening-a27dfa368a56ec8be5d713594eb5506abc24ee06-windows.zip`; 53,623,858 bytes; SHA-256 `906284491ae285d7233887c1306a56dae2512264b097262ef28facbd18c831da`.
-- GitHub artifact ID `9972649232`; outer ZIP 53,084,155 bytes; SHA-256 `7df04164f5b97160f536d5c6fc1f9cfd36156e185f44d163ddba1fba407a2851`.
-- Artifact verified: 1650 entries; normal portable roots; no materialize/temp/pycache markers; no Remove Foilage map/manifest; both oak entries exactly once; both Main Menu Background collapse rules.
 - Canonical user feature reference: v21.3.1 Safe Foliage Fix archive; SHA-256 `37755c4ee92e1847eef1a5a9c89aef6ba488f33accd0cb102c62a7db8780b5f8`; bundled 116/116 tests pass locally.
 - Preserve recursive/nested mods, Collections, profiles, D2PFX, backups/conflict review, Dark Terrain behavior, Safe Foliage, Main Menu Background fix, manual rc7 `prelaunch`, no-auto-prelaunch policy.
 - Remove Foilage: blacklist-only; never ship `manifest.json` or `maps/dota.vpk`; retain both exact oak-leaf blacklist entries.

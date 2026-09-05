@@ -2,16 +2,15 @@
 - Fork: `ripDZL/dota2-minify`; active `v21.4-hardening`; exact rc7 baseline `d4b4520c945a9e1f8f5facc52a76ac5903babe90`.
 - Branch model: exactly `v21.4-hardening` -> `beta` -> `main`; beta/main frozen.
 - Canonical feature reference: supplied v21.3.1 Safe Foliage Fix archive; bundled 116/116 tests pass.
-- UI baseline: **Black-Plum Reactor**; `960x680` minimum; compact layout at <=1000 client width; optional telemetry collapses before clipping.
-- Minimum-width pass covers Home nav/metrics/actions/activity, Settings padding/wrap, D2PFX sidebar/header/card grid, and Mod Library metadata wrapping.
-- User's next UI gate: verify every element/text label fits at the minimum window size across Home, Mod Library, Settings, D2PFX, patch preview/conflict report, and restore points.
+- UI baseline: **Black-Plum Reactor**; outer minimum `960x680`; compact layout at <=1000 client width; optional telemetry collapses before clipping.
+- This session hardened the minimum-window contract in `Minify/ui/window.py`: layout now budgets from client dimensions with a 16px content inset; Home/Mod Library constrained rails scroll; terminal/footer widths are bounded; D2PFX receives explicit child-height/scroll budgets; patch/conflict/restore/import inner regions are bounded/wrapped.
+- Added three minimum-window regression assertions in `tests/test_modern_ui.py`.
+- Exact validated product head: `e1200a3f768529074a1ec31774e34085e3a717bb`.
+- Hardening CI `33980746532`: compileall PASS; Ruff format/lint PASS; pytest **244/244 PASS**; Windows portable build PASS.
+- Current artifact `9973687312`; 53,087,750 bytes; digest `sha256:9fdb1837a712ae25b46b40f011249140a13c9969c8562f08e14545bc9255d607`.
+- The remaining UI gate is a human Windows visual smoke-test at exactly `960x680` across Home, Mod Library, Settings, D2PFX, patch preview/conflict report, restore points, terminal, and footer. CI/source assertions verify contracts but not pixel rendering.
 - Security sweep includes network/catalogue, profiles, VPK metadata, D2PFX cursors/catalogue/install, and backup live-output/manifest path races.
 - Restored v21.3.1 compatibility, nested Collections/dependency, and semantic feature regressions directly on hardening.
-- Minimum-width UI product commit: `d647d7d84c8e0ddf429eab06529f49a2ecdaa448`; one-shot helper/workflow removed.
-- Exact validated product head: `a27dfa368a56ec8be5d713594eb5506abc24ee06`; later handoff commits are Docs-only.
-- Hardening CI `33977097382`: compileall PASS; Ruff format/lint PASS; pytest 241/241 PASS; Windows portable build PASS.
-- Windows ZIP: `Minify-v21.4-hardening-a27dfa368a56ec8be5d713594eb5506abc24ee06-windows.zip`; 53,623,858 bytes; SHA-256 `906284491ae285d7233887c1306a56dae2512264b097262ef28facbd18c831da`.
-- Artifact `9972649232`; outer 53,084,155 bytes; SHA-256 `7df04164f5b97160f536d5c6fc1f9cfd36156e185f44d163ddba1fba407a2851`; portable/Safe-Foliage/Main-Menu checks pass.
 - `core/mod_library.py` prior-v21.4 exact-source gap remains unresolved; never fabricate missing bytes.
-- After minimum-width visual acceptance: remaining filesystem race/security review; semantic core/exact-rc7 diff review; Dota smoke tests.
+- After visual acceptance: remaining filesystem race/security review; semantic core/exact-rc7 diff review; Dota smoke tests.
 - Do not promote beta/main until remaining gates and user approval.

@@ -3,18 +3,18 @@
 - [x] Recursive/nested mods, Collections, profiles, D2PFX, backups/conflict review, Safe Foliage, Main Menu fix, Dark Terrain behavior preserved.
 - [x] v21.3.1 patch pipeline integrated without overwriting hardened core backends.
 - [x] Black-Plum Reactor UI stabilized; incomplete `.materialize/` bootstrap/workflow removed.
-- [x] `960x680` minimum-width fit pass: compact nav; telemetry/metrics collapse before clipping; compact action widths; Settings inner-width padding budget.
-- [x] D2PFX compact fit: 168px sidebar; 320px context/actions column; wrapped text; responsive 2-4 card grid.
-- [x] Mod Library metadata wraps to live list width; existing responsive source rail/search/status sizing preserved.
+- [x] `960x680` minimum-window code hardening: client-area width budget; compact nav/metrics/actions; Home and Mod Library rails scroll when height-constrained; terminal/footer bounded to client width.
+- [x] D2PFX minimum fit: compact sidebar; explicit sidebar/card-view height budgets; scrollable constrained surfaces; wrapped header/category text; responsive 2-4 card grid.
+- [x] Patch preview/conflict, restore, Mod actions, and D2PFX import inner text/scroll regions bounded to the live client area.
+- [x] Settings keeps a vertically scrollable content region and client-width action bar; Mod Library metadata/status sizing remains responsive.
+- [x] Minimum-window product commit `e1200a3f768529074a1ec31774e34085e3a717bb`.
+- [x] Hardening CI `33980746532`: compileall PASS; Ruff format/lint PASS; pytest **244/244 PASS**; Windows build/package/upload PASS.
+- [x] Current artifact `9973687312`; 53,087,750 bytes; digest `sha256:9fdb1837a712ae25b46b40f011249140a13c9969c8562f08e14545bc9255d607`.
 - [x] Network/catalogue, profile, VPK metadata, D2PFX cursor/install, and backup hostile-input passes completed.
 - [x] Backup race pass: regular no-follow manifest open with identity check; managed live output confinement; parent symlink escapes fail before mutation.
 - [x] Restored v21.3.1 compatibility/nested/semantic feature regressions directly on hardening.
-- [x] Minimum-width UI product commit `d647d7d84c8e0ddf429eab06529f49a2ecdaa448`; validated cleanup head `a27dfa368a56ec8be5d713594eb5506abc24ee06`.
-- [x] Hardening CI `33977097382`: compileall PASS; Ruff format/lint PASS; pytest 241/241 PASS; Windows build/package/upload PASS.
-- [x] Inner ZIP 53,623,858 bytes; SHA-256 `906284491ae285d7233887c1306a56dae2512264b097262ef28facbd18c831da`.
-- [x] Artifact `9972649232`; outer 53,084,155 bytes; SHA-256 `7df04164f5b97160f536d5c6fc1f9cfd36156e185f44d163ddba1fba407a2851`; 1650-entry portable/Safe-Foliage/Main-Menu checks PASS.
 - [x] `main` and `beta` remain frozen.
-- [ ] User visual smoke-test all major surfaces at the minimum window size.
+- [ ] Human visual smoke-test all major surfaces at exactly `960x680`; source assertions/CI are not a substitute for pixel-level verification.
 - [ ] Continue path-race/hostile-input review.
 - [ ] Complete semantic core reconciliation + exact-rc7 diff review.
 - [ ] Resolve prior-v21.4 `core/mod_library.py` exact-source gap only if authentic bytes become available.
