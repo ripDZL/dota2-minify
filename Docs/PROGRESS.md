@@ -5,16 +5,18 @@
 - [x] Recursive/nested mods, Collections, profiles, D2PFX, backups/conflict review, Safe Foliage, Main Menu fix, Dark Terrain behavior preserved.
 - [x] v21.3.1 patch pipeline integrated at `b22133201e88d654859541f2c6be69cea8e3cb25` without overwriting hardened core backends.
 - [x] Removed `LOCAL MOD WORKSPACE` + stale `RC6` UI furniture.
-- [x] Crimson Slate superseded by user-requested **Prismatic Foundry** command-console UI.
-- [x] Prismatic Foundry materialized at `cdd22c9e88b58581bce5068e886543e5f8278810`: layered command deck, engine/status chips, metric strip, deployment sequence, guard matrix, fail-safe card, live activity stream.
-- [x] Release palette: navy-black, violet, cyan, magenta, orange, gold; Mod Library and D2PFX reconciled.
-- [x] Current tested product commit `9aac26ee764de58f3c981fb1fbe873bbb9546c23`.
-- [x] Hardening CI run `33938518712`: compileall PASS; Ruff format/lint PASS; pytest 147/147 PASS in 0.82s; Windows build/package/upload PASS.
-- [x] Current inner ZIP: `Minify-v21.4-hardening-9aac26ee764de58f3c981fb1fbe873bbb9546c23-windows.zip`; 53605596 bytes; SHA-256 `403f8371c5bc19062317edca208ac89a95cf835f030c1cc0b0ac944ebe65d937`.
-- [x] GitHub artifact ID `9960999815`; 53065805 bytes; outer SHA-256 `e516ba78acbabf68ed2db1f444bc08bed6572e1ca7850ffaa09362db46bf2a51`.
+- [x] User reviewed Prismatic Foundry as promising but reported resize/alignment defects and requested colors based on supplied JSON theme tokens.
+- [x] **Plumfire Reactor** materialized at `36d59def98068862b247692580a23701df34358d`: plum-black surfaces, violet primary controls, ember dividers, lime state, gold telemetry, warm ivory text, slate borders.
+- [x] Replaced space-padded header/metrics/deployment/guard layouts with DPG table columns; added adaptive visibility thresholds for narrow/short viewports.
+- [x] Mod Library and D2PFX palette reconciled to JSON-derived roles; D2PFX selected states use plum/violet/lime and link text uses JSON yellow.
+- [x] Current tested product commit `44309ffbd752c3c9788b4371cd6daf271fe763e8`.
+- [x] Hardening CI run `33939739722`: compileall PASS; Ruff format/lint PASS; pytest 148/148 PASS in 0.62s; Windows build/package/upload PASS.
+- [x] Current inner ZIP: `Minify-v21.4-hardening-44309ffbd752c3c9788b4371cd6daf271fe763e8-windows.zip`; 53608076 bytes; SHA-256 `505b0d5421b83093518218a5ef7cf62a9a943e2515cd07eae3465f70c4820ac5`.
+- [x] GitHub artifact ID `9961412398`; 53068102 bytes; outer SHA-256 `4760ea24c9912196b0da9323f00cf8d72fdb8ed33761a77907ae3083eb4d8ce2`.
 - [x] Artifact verified: 1650 entries; normal portable roots; no staging/materialize markers; Safe Foliage map/manifest absent; both oak blacklist entries present.
+- [x] Temporary compositor/workflow removed; only three long-lived branches remain.
 - [x] `main` and `beta` remain frozen.
-- [ ] User review/smoke-test Prismatic Foundry across Patch, Mod Library, D2PFX, Settings, resize states.
+- [ ] User review/smoke-test Plumfire Reactor at maximized, medium, and narrow viewport sizes across Patch, Mod Library, D2PFX, Settings.
 - [ ] Adapt remaining useful v21.3.1 regressions directly on hardening.
 - [ ] Complete semantic core-overlay reconciliation; never wholesale overwrite hardened backends.
 - [ ] Resolve prior-v21.4 `core/mod_library.py` exact-source gap only if authentic bytes become available.
