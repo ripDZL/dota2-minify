@@ -8,16 +8,15 @@
 - D2PFX catalogue: streamed bounded compressed/decompressed payload; dict/shape checks; confined regular-file cache; atomic replace.
 - D2PFX metadata: allowed catalogue filenames; <=256 categories; bounded depth/nodes/mods/links/text; category/asset paths normalized and traversal-rejected.
 - D2PFX remote downloads: HTTPS only; credentials/fragments/nonstandard ports/local/private/non-global endpoints rejected; every redirect target revalidated.
-- D2PFX browser installs: URL path -> flat Windows-safe filename; preview download <=32 MiB; payload staged below `mods/`; ZIP extraction/manifest/notes/preview complete before atomic target publication; staging removed on failure.
-- D2PFX cursor handling: source/live/backup paths confined to trusted roots; no symlink traversal; regular files only; atomic publication; bounded file/count/total size; failed/unsafe restore retains backup.
-- Mod discovery: bounded recursive scanner; no symlink traversal; nested IDs stable.
-- Collections: organizational parents; selectable child mods; markerless heuristic retained.
+- D2PFX browser installs: URL path -> flat Windows-safe filename; preview <=32 MiB; payload staged below `mods/`; extraction/metadata complete before atomic publication; staging removed on failure.
+- D2PFX cursor handling: source/live/backup paths confined to trusted roots; no symlink traversal; regular files only; atomic publication; bounded file/count/total size; failed restore retains backup.
+- Mod discovery: bounded recursive scanner; no symlink traversal; nested IDs stable; Collections organizational parents preserved.
 - Patch transaction: resolve nested IDs, create restore point, conflict preflight/report, compatibility exclusions, output validation, rollback.
 - Output: Minify-managed language/output paths only; never overwrite Valve source map VPKs.
+- Backups: managed-output allowlist; manifest opened via regular-file/no-follow descriptor with pre/post identity check; live managed outputs pass confined-destination preflight; symlinked parent escape rejected before mutation; transactional rollback retained.
 - Remove Foilage: blacklist-only; never ship `manifest.json` or `maps/dota.vpk`.
 - VPK single-mod metadata: flat Windows-safe marker names; reserved devices/traversal guarded; long names hashed.
-- Backups: managed-output allowlist; confined roots; regular non-symlink manifest; preflight before mutation; rollback on failure.
 - Profiles: bounded 8 MiB files; <=256 profiles; <=5000 states/profile; <=20000 total states; bounded names/mod IDs/hints; strict booleans; format/version checked.
 - Downloads: pinned dependency versions + SHA-256 + safe extraction before executable use.
 - Steam: manual rc7 `prelaunch` retained; automatic launch-option injection disabled; stale Minify wrappers cleaned narrowly.
-- Security boundary: local mod Python scripts trusted code; archive/VPK/profile/backup/download/D2PFX data untrusted.
+- Security boundary: local mod Python scripts trusted code; archive/VPK/profile/backup/download/D2PFX data untrusted; local concurrent filesystem replacement remains a separate race class requiring explicit review.
