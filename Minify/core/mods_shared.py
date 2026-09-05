@@ -191,6 +191,62 @@ def _discover_collection_child_roots(container_path):
     return discovered
 
 
+def _directory_contains_vpk(path):
+    """Return True when a visible VPK exists below *path* without following links."""
+    seen = set()
+    visited = 0
+
+    def walk(current, depth=0):
+        nonlocal visited
+        if depth > MAX_NESTED_MOD_SCAN_DEPTH or visited >= MAX_NESTED_MOD_SCAN_DIRS:
+            return False
+        try:
+            real_current = os.path.normcase(os.path.realpath(current))
+        except (OSError, ValueError):
+            return False
+        if real_current in seen:
+            return False
+        seen.add(real_current)
+        visited += 1
+
+        try:
+            names = sorted(os.listdir(current), key=str.casefold)
+        except OSError:
+            return False
+        for name in names:
+            child_path = os.path.join(current, name)
+            if os.path.isdir(child_path):
+                if _is_hidden_or_reserved_dir(name) or os.path.islink(child_path):
+                    continue
+                if walk(child_path, depth + 1):
+                    return True
+            elif name.lower().endswith(".vpk") and os.path.isfile(child_path):
+                return True
+        return False
+
+    return walk(path)
+
+
+def _discover_vpk_collection_child_roots(container_path):
+    """Return child mod folders when a small custom container holds embedded VPKs."""
+    if not os.path.isdir(container_path) or _looks_like_directory_mod(container_path):
+        return []
+
+    children = _visible_child_directories(container_path)
+    if not children:
+        return []
+
+    vpk_children = [child_path for child_path in children if _directory_contains_vpk(child_path)]
+    if not vpk_children:
+        return []
+
+    # Keep recognized directory mods alongside VPK-backed siblings, while
+    # ignoring unrelated organizational folders that contain neither payload.
+    selected = set(vpk_children)
+    selected.update(child_path for child_path in children if _looks_like_directory_mod(child_path))
+    return [child_path for child_path in children if child_path in selected]
+
+
 def _nested_directory_mod_id(path):
     relative = os.path.relpath(path, base.mods_dir).replace(os.sep, "/")
     if "/" not in relative:
@@ -247,7 +303,8 @@ def _discover_directory_mod_entries():
 
     Existing top-level behavior is preserved. A top-level directory becomes an
     organizational collection when explicitly marked, when it is a large
-    markerless sibling collection, or when recognized nested mod roots exist.
+    markerless sibling collection, when immediate child mods contain VPKs, or
+    when recognized nested mod roots exist.
     """
     entries = []
     try:
@@ -269,6 +326,11 @@ def _discover_directory_mod_entries():
         if _looks_like_directory_collection(path):
             children = _discover_collection_child_roots(path)
             entries.extend((_nested_directory_mod_id(mod_path), mod_path) for mod_path in children)
+            continue
+
+        vpk_children = _discover_vpk_collection_child_roots(path)
+        if vpk_children:
+            entries.extend((_nested_directory_mod_id(mod_path), mod_path) for mod_path in vpk_children)
             continue
 
         nested = _discover_nested_directory_roots(path)
