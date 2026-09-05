@@ -1,0 +1,42 @@
+name: Apply D2PFX Install Hardening
+
+on:
+  push:
+    branches: [v21.4-hardening]
+    paths:
+      - tools/apply_d2pfx_install_hardening.py
+      - .github/workflows/d2pfx-install-hardening-once.yml
+
+permissions:
+  contents: write
+
+jobs:
+  apply:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: v21.4-hardening
+      - uses: astral-sh/setup-uv@v5
+        with:
+          python-version: "3.13"
+      - run: uv sync --group dev
+      - name: Apply install hardening
+        run: uv run python tools/apply_d2pfx_install_hardening.py
+      - name: Format and validate
+        run: |
+          uv run ruff format Minify/browsers/d2pfx/ui.py
+          uv run python -m compileall -q Minify tests
+          uv run ruff check Minify
+          uv run pytest
+      - name: Commit materialized hardening
+        run: |
+          if git diff --quiet -- Minify/browsers/d2pfx/ui.py; then
+            echo "No materialized change required"
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add Minify/browsers/d2pfx/ui.py
+          git commit -m "security: stage and bound D2PFX browser installs"
+          git push origin HEAD:v21.4-hardening
