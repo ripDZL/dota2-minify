@@ -72,6 +72,11 @@ def test_prismatic_ui_uses_modern_depth_geometry():
     assert "shell_body_height = max(340, min(454, int(shared.window_height * 0.43)))" in WINDOW
 
 
+def test_prismatic_command_deck_keeps_actionable_navigation():
+    for label in ("PATCH CORE", "MOD LIBRARY", "D2PFX NETWORK", "CONTROL PANEL", "RESTORE POINTS"):
+        assert f'label="{label}"' in MAIN
+
+
 def test_d2pfx_uses_prismatic_network_cyan():
     assert "(48, 178, 211, 255)" in D2PFX
     assert "color=(48, 218, 255)" in D2PFX
