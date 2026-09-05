@@ -8,9 +8,9 @@ from concurrent.futures import ThreadPoolExecutor
 import vpk
 from core import base, config, constants, fs, log, output, security, utils
 
-_WINDOWS_RESERVED_STEMS = {"con", "prn", "aux", "nul"} | {f"com{i}" for i in range(1, 10)} | {
-    f"lpt{i}" for i in range(1, 10)
-}
+_WINDOWS_RESERVED_STEMS = (
+    {"con", "prn", "aux", "nul"} | {f"com{i}" for i in range(1, 10)} | {f"lpt{i}" for i in range(1, 10)}
+)
 
 
 def extract(vpk_to_extract_from, paths, path_to_extract_to=base.build_dir):
