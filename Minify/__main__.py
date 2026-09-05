@@ -76,26 +76,25 @@ def create_ui():
             no_scrollbar=True,
             no_scroll_with_mouse=True,
         )
-        with dpg.table(parent="app_shell_header", tag="header_layout", header_row=False, width=-1):
-            dpg.add_table_column(tag="header_brand_column")
-            dpg.add_table_column(tag="header_engine_column", width_fixed=True, init_width_or_weight=174)
+        with dpg.table(
+            parent="app_shell_header",
+            tag="header_layout",
+            header_row=False,
+            width=-1,
+            policy=dpg.mvTable_SizingStretchProp,
+        ):
+            dpg.add_table_column(tag="header_left_gutter", width_stretch=True, init_width_or_weight=1.0)
+            dpg.add_table_column(tag="header_brand_column", width_fixed=True, init_width_or_weight=340)
+            dpg.add_table_column(tag="header_right_gutter", width_stretch=True, init_width_or_weight=1.0)
             with dpg.table_row():
-                with dpg.group(horizontal=True, horizontal_spacing=10):
+                dpg.add_spacer(width=1)
+                with dpg.group(tag="header_brand_group", horizontal=True, horizontal_spacing=10):
                     dpg.add_text("MINIFY", tag="app_title")
                     dpg.bind_item_font("app_title", "large_font")
                     with dpg.group():
                         dpg.add_text("DOTA 2 MOD ORCHESTRATION", tag="app_product_name")
                         dpg.add_text(f"RELEASE ENGINE  //  v{base.VERSION}", tag="app_version")
-                with dpg.child_window(
-                    tag="header_engine_chip",
-                    width=-1,
-                    height=44,
-                    border=True,
-                    no_scrollbar=True,
-                    no_scroll_with_mouse=True,
-                ):
-                    dpg.add_text("PATCH ENGINE", tag="header_engine_label")
-                    dpg.add_text("READY / GUARDED", tag="header_engine_state")
+                dpg.add_spacer(width=1)
 
         dpg.add_child_window(
             tag="header_accent_rail",
@@ -645,8 +644,13 @@ with dpg.texture_registry(show=False):
 
 # Creating_main_viewport
 
-viewport_width = max(760, base.main_window_width, config.get("window_width", base.main_window_width))
-viewport_height = max(580, base.main_window_height, config.get("window_height", base.main_window_height))
+MIN_VIEWPORT_WIDTH = 960
+MIN_VIEWPORT_HEIGHT = 680
+
+viewport_width = max(MIN_VIEWPORT_WIDTH, base.main_window_width, config.get("window_width", base.main_window_width))
+viewport_height = max(
+    MIN_VIEWPORT_HEIGHT, base.main_window_height, config.get("window_height", base.main_window_height)
+)
 
 shared.viewport_width = viewport_width
 shared.viewport_height = viewport_height
@@ -655,8 +659,8 @@ dpg.create_viewport(
     title=base.TITLE,
     width=viewport_width,
     height=viewport_height,
-    min_width=max(760, base.main_window_width),
-    min_height=max(580, base.main_window_height),
+    min_width=MIN_VIEWPORT_WIDTH,
+    min_height=MIN_VIEWPORT_HEIGHT,
     x_pos=min(gui.widths) // 2 - viewport_width // 2,
     y_pos=max(0, min(gui.heights) // 2 - viewport_height // 2 - 120),
     resizable=True,

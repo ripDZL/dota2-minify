@@ -106,7 +106,9 @@ def on_resize():
     # v21.4 adaptive shell. Width and height breakpoints intentionally remove
     # optional telemetry before any card or label can collide or clip.
     nav_width = max(176, min(220, int(shared.window_width * 0.13)))
-    shell_body_height = max(350, min(500, int(shared.window_height * 0.47)))
+    # Reserve enough vertical space for the activity stream, terminal, and footer.
+    # The viewport minimum guarantees this body never has to clip navigation controls.
+    shell_body_height = max(350, min(500, shared.window_height - 330))
     nav_status_height = 66 if shell_body_height >= 370 else 62
     workspace_width = max(430, shared.window_width - nav_width - 34)
     wide_workspace = workspace_width >= 1080 and shared.window_height >= 720
@@ -122,8 +124,6 @@ def on_resize():
 
     if dpg.does_item_exist("app_shell_header"):
         dpg.configure_item("app_shell_header", width=shared.window_width, height=76)
-    if dpg.does_item_exist("header_engine_column"):
-        dpg.configure_item("header_engine_column", show=shared.window_width >= 760)
     if dpg.does_item_exist("app_nav_rail"):
         dpg.configure_item("app_nav_rail", width=nav_width, height=shell_body_height)
     if dpg.does_item_exist("nav_status_card"):

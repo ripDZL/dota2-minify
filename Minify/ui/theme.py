@@ -208,15 +208,6 @@ def apply():
             dpg.add_theme_style(dpg.mvStyleVar_ChildRounding, 7)
             dpg.add_theme_style(dpg.mvStyleVar_WindowPadding, x=10, y=6)
 
-    with dpg.theme(tag="header_engine_chip_theme"):
-        with dpg.theme_component(dpg.mvChildWindow):
-            dpg.add_theme_color(dpg.mvThemeCol_ChildBg, SURFACE_ALT)
-            dpg.add_theme_color(dpg.mvThemeCol_Border, CYAN_MUTED)
-            dpg.add_theme_color(dpg.mvThemeCol_BorderShadow, ACCENT_MUTED)
-            dpg.add_theme_style(dpg.mvStyleVar_ChildBorderSize, 1)
-            dpg.add_theme_style(dpg.mvStyleVar_ChildRounding, 8)
-            dpg.add_theme_style(dpg.mvStyleVar_WindowPadding, x=10, y=6)
-
     with dpg.theme(tag="header_accent_rail_theme"):
         with dpg.theme_component(dpg.mvChildWindow):
             dpg.add_theme_color(dpg.mvThemeCol_ChildBg, MAGENTA)
@@ -527,7 +518,6 @@ def apply():
         ("dashboard_flow_card", "dashboard_flow_card_theme"),
         ("dashboard_safety_card", "dashboard_safety_card_theme"),
         ("dashboard_status_panel", "dashboard_status_panel_theme"),
-        ("header_engine_chip", "header_engine_chip_theme"),
         ("header_accent_rail", "header_accent_rail_theme"),
         ("nav_status_card", "nav_status_card_theme"),
         ("dashboard_metric_strip", "dashboard_metric_strip_theme"),
@@ -555,7 +545,6 @@ def apply():
         "dashboard_step_3",
         "dashboard_action_label",
         "nav_status_title",
-        "header_engine_label",
         "dashboard_step_1_detail",
         "dashboard_step_2_detail",
         "dashboard_step_3_detail",
@@ -579,7 +568,7 @@ def apply():
             dpg.bind_item_theme(tag, "dashboard_highlight_theme")
     if dpg.does_item_exist("dashboard_status_label"):
         dpg.bind_item_theme("dashboard_status_label", "dashboard_status_ready_theme")
-    for tag in ("header_engine_state", "activity_stream_state", "signal_validation", "signal_paths"):
+    for tag in ("activity_stream_state", "signal_validation", "signal_paths"):
         if dpg.does_item_exist(tag):
             dpg.bind_item_theme(tag, "prismatic_cyan_text_theme")
     for tag in ("metric_restore_state", "nav_status_value", "signal_rollback"):

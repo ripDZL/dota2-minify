@@ -48,13 +48,15 @@ def test_primary_action_uses_json_button_role():
 def test_release_console_uses_real_alignment_tables():
     for tag in ("header_layout", "dashboard_metric_table", "dashboard_flow_table", "dashboard_guard_table"):
         assert f'tag="{tag}"' in MAIN
-    for tag in ("header_engine_column", "metric_restore_column", "metric_collision_column"):
+    for tag in ("header_left_gutter", "header_brand_column", "header_right_gutter"):
+        assert f'tag="{tag}"' in MAIN
+    for tag in ("metric_restore_column", "metric_collision_column"):
         assert f'tag="{tag}"' in MAIN
 
 
 def test_release_console_has_dense_command_hierarchy():
     for tag in (
-        "header_engine_chip",
+        "header_brand_group",
         "header_accent_rail",
         "nav_status_card",
         "dashboard_hero_card",
@@ -79,7 +81,6 @@ def test_responsive_shell_collapses_before_clipping():
     assert "wide_workspace = workspace_width >= 1080 and shared.window_height >= 720" in WINDOW
     assert "side_width = min(360, max(320, int(workspace_width * 0.25))) if wide_workspace else 0" in WINDOW
     assert "metric_visible = inner_height >= 350 and main_width >= 560" in WINDOW
-    assert 'dpg.configure_item("header_engine_column", show=shared.window_width >= 760)' in WINDOW
     assert 'dpg.configure_item("metric_restore_column", show=main_width >= 650)' in WINDOW
     assert 'dpg.configure_item("metric_collision_column", show=main_width >= 830)' in WINDOW
     assert 'dpg.configure_item("dashboard_hero_card", height=hero_height)' in WINDOW
@@ -117,3 +118,21 @@ def test_nav_status_card_has_safe_vertical_budget():
     assert 'dpg.add_text("● PROTECTED", parent="nav_status_card"' in card
     assert "nav_status_height = 66 if shell_body_height >= 370 else 62" in WINDOW
     assert 'dpg.configure_item("nav_status_card", height=nav_status_height)' in WINDOW
+
+
+def test_header_brand_is_centered_and_engine_chip_removed():
+    assert 'tag="header_brand_group"' in MAIN
+    assert 'tag="header_left_gutter"' in MAIN
+    assert 'tag="header_right_gutter"' in MAIN
+    assert MAIN.count("width_stretch=True, init_width_or_weight=1.0") >= 2
+    assert 'tag="header_engine_chip"' not in MAIN
+    assert 'tag="header_engine_column"' not in MAIN
+    assert 'dpg.add_text("PATCH ENGINE"' not in MAIN
+
+
+def test_viewport_has_safe_minimum_layout_budget():
+    assert "MIN_VIEWPORT_WIDTH = 960" in MAIN
+    assert "MIN_VIEWPORT_HEIGHT = 680" in MAIN
+    assert "min_width=MIN_VIEWPORT_WIDTH" in MAIN
+    assert "min_height=MIN_VIEWPORT_HEIGHT" in MAIN
+    assert "shell_body_height = max(350, min(500, shared.window_height - 330))" in WINDOW
