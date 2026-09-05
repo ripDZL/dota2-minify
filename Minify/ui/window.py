@@ -103,18 +103,26 @@ def on_resize():
             height=shared.window_height,
         )
 
-    # v21.1 responsive shell. Give the landing workspace more vertical room
-    # and a wider navigation rail so text/buttons are not clipped on Windows.
-    nav_width = max(164, min(212, int(shared.window_width * 0.135)))
-    shell_body_height = max(340, min(454, int(shared.window_height * 0.43)))
-    workspace_width = max(400, shared.window_width - nav_width - 32)
-    wide_workspace = workspace_width >= 900
-    side_width = 286 if wide_workspace else 0
-    main_width = max(340, workspace_width - side_width - (18 if wide_workspace else 0) - 28)
-    inner_height = max(248, shell_body_height - 36)
+    # v21.4 adaptive shell. Width and height breakpoints intentionally remove
+    # optional telemetry before any card or label can collide or clip.
+    nav_width = max(176, min(220, int(shared.window_width * 0.13)))
+    shell_body_height = max(350, min(500, int(shared.window_height * 0.47)))
+    workspace_width = max(430, shared.window_width - nav_width - 34)
+    wide_workspace = workspace_width >= 1080 and shared.window_height >= 720
+    side_width = min(360, max(320, int(workspace_width * 0.25))) if wide_workspace else 0
+    main_width = max(360, workspace_width - side_width - (18 if wide_workspace else 0) - 30)
+    inner_height = max(300, shell_body_height - 34)
+    metric_visible = inner_height >= 350 and main_width >= 560
+    hero_height = 168 if metric_visible else 124
+    status_height = 60 if inner_height >= 350 else 56
+    action_height = 76 if inner_height >= 350 else 66
+    flow_height = 136 if inner_height >= 390 else 128
+    signal_height = 110 if inner_height >= 390 else 102
 
     if dpg.does_item_exist("app_shell_header"):
-        dpg.configure_item("app_shell_header", width=shared.window_width, height=72)
+        dpg.configure_item("app_shell_header", width=shared.window_width, height=76)
+    if dpg.does_item_exist("header_engine_column"):
+        dpg.configure_item("header_engine_column", show=shared.window_width >= 760)
     if dpg.does_item_exist("app_nav_rail"):
         dpg.configure_item("app_nav_rail", width=nav_width, height=shell_body_height)
     if dpg.does_item_exist("app_workspace"):
@@ -123,12 +131,34 @@ def on_resize():
         dpg.configure_item("app_workspace_main", width=main_width, height=inner_height)
     if dpg.does_item_exist("app_workspace_side"):
         dpg.configure_item("app_workspace_side", show=wide_workspace, width=max(1, side_width), height=inner_height)
+    if dpg.does_item_exist("dashboard_hero_card"):
+        dpg.configure_item("dashboard_hero_card", height=hero_height)
+    if dpg.does_item_exist("dashboard_metric_strip"):
+        dpg.configure_item("dashboard_metric_strip", show=metric_visible, height=42)
+    if dpg.does_item_exist("metric_restore_column"):
+        dpg.configure_item("metric_restore_column", show=main_width >= 650)
+    if dpg.does_item_exist("metric_collision_column"):
+        dpg.configure_item("metric_collision_column", show=main_width >= 830)
+    if dpg.does_item_exist("dashboard_status_panel"):
+        dpg.configure_item("dashboard_status_panel", height=status_height)
+    if dpg.does_item_exist("dashboard_action_bar"):
+        dpg.configure_item("dashboard_action_bar", height=action_height)
+    if dpg.does_item_exist("dashboard_flow_card"):
+        dpg.configure_item("dashboard_flow_card", height=flow_height)
+    if dpg.does_item_exist("dashboard_signal_card"):
+        dpg.configure_item("dashboard_signal_card", height=signal_height)
     if dpg.does_item_exist("dashboard_focus_hint"):
-        dpg.configure_item("dashboard_focus_hint", wrap=max(240, main_width - 24))
+        dpg.configure_item("dashboard_focus_hint", wrap=max(240, main_width - 28))
     if dpg.does_item_exist("dashboard_status_message"):
         dpg.configure_item("dashboard_status_message", wrap=max(190, main_width - 120))
+    if dpg.does_item_exist("dashboard_safety_text") and wide_workspace:
+        dpg.configure_item("dashboard_safety_text", wrap=max(180, side_width - 30))
     if dpg.does_item_exist("activity_header"):
         dpg.configure_item("activity_header", width=shared.window_width, height=44)
+    if dpg.does_item_exist("activity_caption"):
+        dpg.configure_item("activity_caption", show=shared.window_width >= 900)
+    if dpg.does_item_exist("activity_stream_state"):
+        dpg.configure_item("activity_stream_state", show=shared.window_width >= 620)
     if dpg.does_item_exist("settings_scroll"):
         dpg.configure_item("settings_scroll", width=shared.window_width, height=max(220, shared.window_height - 78))
     if dpg.does_item_exist("settings_actions_bar"):

@@ -15,14 +15,30 @@ def test_stale_workspace_badge_removed():
     assert 'tag="header_badge"' not in MAIN
 
 
-def test_prismatic_foundry_palette_is_materialized():
-    assert "# v21.4: Prismatic Foundry release visual system." in THEME
-    assert "BACKGROUND = (6, 8, 16, 255)" in THEME
-    assert "ACCENT = (121, 92, 255, 255)" in THEME
-    assert "CYAN = (48, 218, 255, 255)" in THEME
-    assert "MAGENTA = (239, 68, 168, 255)" in THEME
-    assert "EMBER = (255, 112, 70, 255)" in THEME
-    assert "UI_ACCENT = (121, 92, 255, 255)" in CHECKBOXES
+def test_user_json_palette_is_materialized():
+    assert "# v21.4: Plumfire Reactor release visual system." in THEME
+    for token in (
+        "JSON_ACCENT_DIVIDER = (223, 80, 59, 255)",
+        "JSON_ACCENT_HIGHLIGHT = (122, 193, 67, 255)",
+        "JSON_ACCENT_LINK = (255, 255, 0, 255)",
+        "JSON_BASE_BG = (88, 108, 114, 255)",
+        "JSON_BUTTON_BG = (133, 56, 148, 255)",
+        "JSON_TEXT_BRIGHT = (255, 195, 15, 255)",
+        "JSON_TEXT_DISABLED = (164, 143, 123, 255)",
+        "JSON_TEXT_PLACEHOLDER = (217, 199, 176, 255)",
+        "JSON_TEXT_PRIMARY = (247, 240, 231, 255)",
+        "JSON_WINDOW_BG = (70, 51, 90, 255)",
+    ):
+        assert token in THEME
+    assert "UI_ACCENT = (133, 56, 148, 255)" in CHECKBOXES
+    assert "UI_SUCCESS = (122, 193, 67, 255)" in CHECKBOXES
+
+
+def test_release_console_uses_real_alignment_tables():
+    for tag in ("header_layout", "dashboard_metric_table", "dashboard_flow_table", "dashboard_guard_table"):
+        assert f'tag="{tag}"' in MAIN
+    for tag in ("header_engine_column", "metric_restore_column", "metric_collision_column"):
+        assert f'tag="{tag}"' in MAIN
 
 
 def test_release_console_has_dense_command_hierarchy():
@@ -41,43 +57,32 @@ def test_release_console_has_dense_command_hierarchy():
         assert f'tag="{tag}"' in MAIN
 
 
-def test_release_console_has_multichannel_status_language():
-    for label in (
-        "PATCH MATRIX  /  RELEASE CONSOLE",
-        "RESTORE // ARMED",
-        "COLLISION // INDEXED",
-        "DEPLOYMENT SEQUENCE",
-        "GUARD MATRIX",
-        "LIVE ACTIVITY",
-        "STREAM ONLINE",
-    ):
+def test_alignment_labels_do_not_depend_on_space_padding():
+    for label in ("Shared files", "Restore point", "Selected graph", "AUTOMATIC", "ENFORCED", "CONFINED"):
         assert label in MAIN
+    assert "Shared-file collision scan" not in MAIN
+    assert "ROLLBACK        AUTOMATIC" not in MAIN
 
 
-def test_prismatic_theme_binds_new_surfaces():
-    for pair in (
-        '("header_engine_chip", "header_engine_chip_theme")',
-        '("header_accent_rail", "header_accent_rail_theme")',
-        '("nav_status_card", "nav_status_card_theme")',
-        '("dashboard_metric_strip", "dashboard_metric_strip_theme")',
-        '("dashboard_signal_card", "dashboard_signal_card_theme")',
-    ):
-        assert pair in THEME
+def test_responsive_shell_collapses_before_clipping():
+    assert "wide_workspace = workspace_width >= 1080 and shared.window_height >= 720" in WINDOW
+    assert "side_width = min(360, max(320, int(workspace_width * 0.25))) if wide_workspace else 0" in WINDOW
+    assert "metric_visible = inner_height >= 350 and main_width >= 560" in WINDOW
+    assert 'dpg.configure_item("header_engine_column", show=shared.window_width >= 760)' in WINDOW
+    assert 'dpg.configure_item("metric_restore_column", show=main_width >= 650)' in WINDOW
+    assert 'dpg.configure_item("metric_collision_column", show=main_width >= 830)' in WINDOW
+    assert 'dpg.configure_item("dashboard_hero_card", height=hero_height)' in WINDOW
+    assert 'dpg.configure_item("dashboard_safety_text", wrap=max(180, side_width - 30))' in WINDOW
 
 
-def test_prismatic_ui_uses_modern_depth_geometry():
-    assert "dpg.add_theme_style(dpg.mvStyleVar_FrameRounding, 6)" in THEME
-    assert "dpg.add_theme_style(dpg.mvStyleVar_ChildRounding, 7)" in THEME
-    assert "dpg.add_theme_style(dpg.mvStyleVar_FrameRounding, 6)" in CHECKBOXES
-    assert "shell_body_height = max(340, min(454, int(shared.window_height * 0.43)))" in WINDOW
-
-
-def test_prismatic_command_deck_keeps_actionable_navigation():
+def test_release_console_keeps_actionable_navigation():
     for label in ("PATCH CORE", "MOD LIBRARY", "D2PFX NETWORK", "CONTROL PANEL", "RESTORE POINTS"):
         assert f'label="{label}"' in MAIN
 
 
-def test_d2pfx_uses_prismatic_network_cyan():
-    assert "(48, 178, 211, 255)" in D2PFX
-    assert "color=(48, 218, 255)" in D2PFX
+def test_d2pfx_uses_json_link_and_highlight_roles():
+    assert "(70, 51, 90, 210)" in D2PFX
+    assert "(133, 56, 148, 230)" in D2PFX
+    assert "(122, 193, 67, 255)" in D2PFX
+    assert "color=(255, 255, 0)" in D2PFX
     assert "color=(0, 255, 255)" not in D2PFX

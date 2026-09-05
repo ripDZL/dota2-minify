@@ -66,33 +66,36 @@ def create_ui():
         no_saved_settings=True,
         pos=(0, 0),
     ):
-        # v21.4 Prismatic Foundry command console. The shell is intentionally
-        # layered: brand rail -> command rail -> navigation/workspace -> live activity.
+        # v21.4 responsive command console. Layout uses real columns and adaptive
+        # visibility so Windows font metrics cannot break alignment.
         dpg.add_child_window(
             tag="app_shell_header",
-            height=72,
+            height=76,
             autosize_x=True,
             border=True,
             no_scrollbar=True,
             no_scroll_with_mouse=True,
         )
-        with dpg.group(parent="app_shell_header", horizontal=True, horizontal_spacing=10):
-            dpg.add_text("MINIFY", tag="app_title")
-            dpg.bind_item_font("app_title", "large_font")
-            with dpg.group():
-                dpg.add_text("DOTA 2 MOD ORCHESTRATION", tag="app_product_name")
-                dpg.add_text(f"RELEASE ENGINE  //  v{base.VERSION}", tag="app_version")
-            dpg.add_spacer(width=16)
-            dpg.add_child_window(
-                tag="header_engine_chip",
-                width=152,
-                height=42,
-                border=True,
-                no_scrollbar=True,
-                no_scroll_with_mouse=True,
-            )
-            dpg.add_text("PATCH ENGINE", parent="header_engine_chip", tag="header_engine_label")
-            dpg.add_text("READY / GUARDED", parent="header_engine_chip", tag="header_engine_state")
+        with dpg.table(parent="app_shell_header", tag="header_layout", header_row=False, width=-1):
+            dpg.add_table_column(tag="header_brand_column")
+            dpg.add_table_column(tag="header_engine_column", width_fixed=True, init_width_or_weight=174)
+            with dpg.table_row():
+                with dpg.group(horizontal=True, horizontal_spacing=10):
+                    dpg.add_text("MINIFY", tag="app_title")
+                    dpg.bind_item_font("app_title", "large_font")
+                    with dpg.group():
+                        dpg.add_text("DOTA 2 MOD ORCHESTRATION", tag="app_product_name")
+                        dpg.add_text(f"RELEASE ENGINE  //  v{base.VERSION}", tag="app_version")
+                with dpg.child_window(
+                    tag="header_engine_chip",
+                    width=-1,
+                    height=44,
+                    border=True,
+                    no_scrollbar=True,
+                    no_scroll_with_mouse=True,
+                ):
+                    dpg.add_text("PATCH ENGINE", tag="header_engine_label")
+                    dpg.add_text("READY / GUARDED", tag="header_engine_state")
 
         dpg.add_child_window(
             tag="header_accent_rail",
@@ -109,7 +112,7 @@ def create_ui():
             parent="app_shell_body",
             tag="app_nav_rail",
             width=188,
-            height=350,
+            height=380,
             border=True,
             no_scrollbar=True,
             no_scroll_with_mouse=True,
@@ -184,7 +187,7 @@ def create_ui():
             parent="app_shell_body",
             tag="app_workspace",
             width=-1,
-            height=350,
+            height=380,
             border=True,
             no_scrollbar=True,
             no_scroll_with_mouse=True,
@@ -202,7 +205,7 @@ def create_ui():
             dpg.add_child_window(
                 parent="app_workspace_main",
                 tag="dashboard_hero_card",
-                height=142,
+                height=168,
                 width=-1,
                 border=True,
                 no_scrollbar=True,
@@ -221,22 +224,26 @@ def create_ui():
             dpg.add_child_window(
                 parent="dashboard_hero_card",
                 tag="dashboard_metric_strip",
-                height=39,
+                height=42,
                 width=-1,
                 border=True,
                 no_scrollbar=True,
                 no_scroll_with_mouse=True,
             )
-            with dpg.group(parent="dashboard_metric_strip", horizontal=True, horizontal_spacing=11):
-                dpg.add_text("0 selected • 0 installed", tag="dashboard_metric")
-                dpg.add_text("RESTORE // ARMED", tag="metric_restore_state")
-                dpg.add_text("COLLISION // INDEXED", tag="metric_collision_state")
+            with dpg.table(parent="dashboard_metric_strip", tag="dashboard_metric_table", header_row=False, width=-1):
+                dpg.add_table_column(tag="metric_primary_column")
+                dpg.add_table_column(tag="metric_restore_column")
+                dpg.add_table_column(tag="metric_collision_column")
+                with dpg.table_row():
+                    dpg.add_text("0 selected • 0 installed", tag="dashboard_metric")
+                    dpg.add_text("RESTORE // ARMED", tag="metric_restore_state")
+                    dpg.add_text("COLLISION // INDEXED", tag="metric_collision_state")
 
             dpg.add_spacer(parent="app_workspace_main", height=6)
             dpg.add_child_window(
                 parent="app_workspace_main",
                 tag="dashboard_status_panel",
-                height=58,
+                height=60,
                 width=-1,
                 border=True,
                 no_scrollbar=True,
@@ -250,7 +257,7 @@ def create_ui():
             dpg.add_child_window(
                 parent="app_workspace_main",
                 tag="dashboard_action_bar",
-                height=66,
+                height=76,
                 width=-1,
                 border=True,
                 no_scrollbar=True,
@@ -277,7 +284,7 @@ def create_ui():
             dpg.add_child_window(
                 parent="workspace_columns",
                 tag="app_workspace_side",
-                width=286,
+                width=320,
                 height=-1,
                 border=True,
                 no_scrollbar=True,
@@ -286,37 +293,53 @@ def create_ui():
             dpg.add_child_window(
                 parent="app_workspace_side",
                 tag="dashboard_flow_card",
-                height=132,
+                height=136,
                 width=-1,
                 border=True,
                 no_scrollbar=True,
                 no_scroll_with_mouse=True,
             )
             dpg.add_text("DEPLOYMENT SEQUENCE", parent="dashboard_flow_card", tag="dashboard_side_title")
-            dpg.add_text(
-                "01  ANALYZE      Shared-file collision scan", parent="dashboard_flow_card", tag="dashboard_step_1"
-            )
-            dpg.add_text(
-                "02  SNAPSHOT     Managed-output restore point", parent="dashboard_flow_card", tag="dashboard_step_2"
-            )
-            dpg.add_text(
-                "03  COMPOSE      Apply selected mod graph", parent="dashboard_flow_card", tag="dashboard_step_3"
-            )
+            with dpg.table(parent="dashboard_flow_card", tag="dashboard_flow_table", header_row=False, width=-1):
+                dpg.add_table_column(width_fixed=True, init_width_or_weight=28)
+                dpg.add_table_column(width_fixed=True, init_width_or_weight=72)
+                dpg.add_table_column()
+                with dpg.table_row():
+                    dpg.add_text("01", tag="dashboard_step_1_index")
+                    dpg.add_text("ANALYZE", tag="dashboard_step_1")
+                    dpg.add_text("Shared files", tag="dashboard_step_1_detail")
+                with dpg.table_row():
+                    dpg.add_text("02", tag="dashboard_step_2_index")
+                    dpg.add_text("SNAPSHOT", tag="dashboard_step_2")
+                    dpg.add_text("Restore point", tag="dashboard_step_2_detail")
+                with dpg.table_row():
+                    dpg.add_text("03", tag="dashboard_step_3_index")
+                    dpg.add_text("COMPOSE", tag="dashboard_step_3")
+                    dpg.add_text("Selected graph", tag="dashboard_step_3_detail")
 
             dpg.add_spacer(parent="app_workspace_side", height=6)
             dpg.add_child_window(
                 parent="app_workspace_side",
                 tag="dashboard_signal_card",
-                height=100,
+                height=110,
                 width=-1,
                 border=True,
                 no_scrollbar=True,
                 no_scroll_with_mouse=True,
             )
             dpg.add_text("GUARD MATRIX", parent="dashboard_signal_card", tag="dashboard_signal_title")
-            dpg.add_text("ROLLBACK        AUTOMATIC", parent="dashboard_signal_card", tag="signal_rollback")
-            dpg.add_text("VALIDATION      ENFORCED", parent="dashboard_signal_card", tag="signal_validation")
-            dpg.add_text("PATH SAFETY     CONFINED", parent="dashboard_signal_card", tag="signal_paths")
+            with dpg.table(parent="dashboard_signal_card", tag="dashboard_guard_table", header_row=False, width=-1):
+                dpg.add_table_column()
+                dpg.add_table_column()
+                with dpg.table_row():
+                    dpg.add_text("ROLLBACK", tag="signal_rollback_label")
+                    dpg.add_text("AUTOMATIC", tag="signal_rollback")
+                with dpg.table_row():
+                    dpg.add_text("VALIDATION", tag="signal_validation_label")
+                    dpg.add_text("ENFORCED", tag="signal_validation")
+                with dpg.table_row():
+                    dpg.add_text("PATH SAFETY", tag="signal_paths_label")
+                    dpg.add_text("CONFINED", tag="signal_paths")
 
             dpg.add_spacer(parent="app_workspace_side", height=6)
             dpg.add_child_window(
