@@ -1,26 +1,21 @@
 # New Chat Handoff Prompt
-- Work only in `ripDZL/dota2-minify` branch `v21.4-hardening` unless the user explicitly changes the plan.
-- First read all `Docs/*.md` context files.
-- Branch model is exactly three long-lived refs: `v21.4-hardening` -> `beta` -> `main`; do not leave temporary/reference/integration branches.
-- Keep `main` untouched at `a26bc88a0d412e357965f29488b83a7f9093e11f`; keep `beta` frozen at `af83bbb051edced195d5f55ba49ff060a8c76f3c` until remaining gates pass.
-- Exact upstream baseline: `Minify-v1.14rc7` commit `d4b4520c945a9e1f8f5facc52a76ac5903babe90`.
-- Current tested code: `c76956a953a3bdf7a42ca386c3879df8a053ed51`.
-- Current hardening CI run `33935960179`: compileall PASS; Ruff format/lint PASS; pytest 144/144 PASS; Windows PyInstaller/runtime copy/portable ZIP/upload PASS.
-- Current test ZIP: `Minify-v21.4-hardening-c76956a953a3bdf7a42ca386c3879df8a053ed51-windows.zip`; SHA-256 `1b67a34cef9d1c66fa810691d031fc4afe2c2a069866e63d28634c4ac06569bc`; 53603844 bytes.
-- GitHub artifact ID `9960183184`; outer SHA-256 `a96af66909b872429b8d7b5965fca82732559c917319ba87342dd4b97039d997`; 53063825 bytes.
-- Obsidian Arc materialization commit: `1af11a0bebe62b206f2ebf08fda01890b8766104`.
-- Current visual baseline: premium Obsidian Arc release UI; deep layered graphite; arc-blue navigation/state; ember Minify identity + patch actions; gold metadata; teal D2PFX/safety; subtle opaque edge shadow; nested hero/action/flow/safety cards.
-- The earlier flat graphite/blue beta-style pass is superseded by user request; do not regress to flat/minimal styling.
-- Mod Library private theme system and D2PFX legacy cyan selection/title were reconciled with Obsidian Arc.
-- Top-right `LOCAL MOD WORKSPACE` + stale `RC6` widgets remain removed; `tests/test_modern_ui.py` protects release hierarchy/palette invariants.
-- Next user gate: review Obsidian Arc build across Patch, Mod Library, D2PFX, Settings, and resize states.
-- Canonical feature reference: supplied `Minify-v1.14rc7-ModManager-v21.3.1-Safe-Foliage-Fix (1).zip`; SHA-256 `37755c4ee92e1847eef1a5a9c89aef6ba488f33accd0cb102c62a7db8780b5f8`; bundled 116/116 tests pass.
-- Preserve recursive/nested mods, Collections, profiles, D2PFX, backups/conflict review, Dark Terrain collision behavior, Safe Foliage, Main Menu Background CSS, and no-auto-prelaunch policy.
-- Remove Foilage must remain blacklist-only/map-free and retain both exact oak-leaf blacklist entries.
-- Manual rc7 `prelaunch` remains; automatic Minify prelaunch injection disabled; stale generated wrappers cleaned narrowly.
-- Do not wholesale copy v21.3.1 core overlays onto hardening; reconcile feature-by-feature so newer hardening survives.
-- Prior-v21.4 `core/mod_library.py` reconciliation remains blocked: current blob `a5204ea1d5e0309d3c6a764ad9b974e7bdeb8268`; expected validated blob `e95b2f6f59b3b96f7c19ed70ee514df02e500926`, SHA-256 `552dbb7f98d5e0db2ad32c1b2888d8ad4ae8945fdf49ebc2853765e59c6c9e7a`, 69949 bytes.
-- Never fabricate missing bootstrap bytes or create `.materialize/READY` while incomplete.
-- Test scopes remain distinct: current GitHub 144/144; uploaded v21.3.1 archive 116/116; historical local hardening 133/133 + 9 subtests.
-- Next work after user UI feedback: adapt useful v21.3.1 regressions directly on hardening; semantic core-overlay reconciliation; hostile-input/security and exact-rc7 diff review; bootstrap cleanup; Dota smoke tests.
-- Do not fast-forward `beta`, merge/tag/release, or publish until remaining gates and user approval.
+- Work only in `ripDZL/dota2-minify` branch `v21.4-hardening` unless user explicitly changes plan.
+- Read all `Docs/*.md` context files first.
+- Branch model: exactly `v21.4-hardening` -> `beta` -> `main`; no temporary/reference/integration branches.
+- Keep `main` frozen at `a26bc88a0d412e357965f29488b83a7f9093e11f`; keep `beta` frozen at `af83bbb051edced195d5f55ba49ff060a8c76f3c` until remaining gates pass.
+- Exact upstream baseline: `Minify-v1.14rc7` / `d4b4520c945a9e1f8f5facc52a76ac5903babe90`.
+- Current tested product code: `66d6dd77bd216feb6ff67375d3803ed0be9e150e`.
+- Current UI baseline: **Crimson Slate**; materialized at `7bb3f4f9eb5194f429ae459ea20e8090b51f2c2f`; prior Obsidian Arc superseded.
+- Crimson Slate was inspired by user-provided Fab Flat Dark GUI reference: charcoal/plum panels, crimson/magenta focus/actions, compact rectangular controls, inset fields, thin modular borders, low radii, dense cards; no third-party artwork/assets copied.
+- Mod Library matched to Crimson Slate; D2PFX selected state/title uses crimson while teal remains metadata/status identity.
+- `LOCAL MOD WORKSPACE` + stale `RC6` widgets remain removed.
+- Current hardening CI run `33937575665`: compileall PASS; Ruff format/lint PASS; pytest 145/145 PASS; Windows PyInstaller/runtime copy/portable ZIP/upload PASS.
+- Current test ZIP: `Minify-v21.4-hardening-66d6dd77bd216feb6ff67375d3803ed0be9e150e-windows.zip`; SHA-256 `dee14f404eadede2e4e0b02f76620090ce04dc6c2cc1d87a6cf62c3525862e52`; 53603222 bytes.
+- GitHub artifact ID `9960698474`; outer SHA-256 `e98f68c8e990e63dfbc587dd51b7ab3f06df49ebbbbc1343cc99a645657434e7`; 53062983 bytes.
+- Artifact verified: 1650 entries; normal portable roots; no staging/materialize markers; no Remove Foilage map/manifest; both oak-leaf blacklist entries present.
+- Canonical feature reference: supplied v21.3.1 Safe Foliage Fix archive; SHA-256 `37755c4ee92e1847eef1a5a9c89aef6ba488f33accd0cb102c62a7db8780b5f8`; bundled 116/116 tests pass.
+- Preserve recursive/nested mods, Collections, profiles, D2PFX, backups/conflict review, Dark Terrain collision behavior, Safe Foliage, Main Menu Background CSS, manual rc7 prelaunch, and no-auto-prelaunch policy.
+- Never wholesale copy v21.3.1 core overlays over hardening; reconcile feature-by-feature.
+- Prior-v21.4 `core/mod_library.py` exact-source gap remains blocked; never fabricate missing bootstrap bytes or create `.materialize/READY` while incomplete.
+- Next: user review Crimson Slate, then adapt useful v21.3.1 regressions, semantic core reconciliation, hostile-input/security + exact-rc7 diff review, bootstrap cleanup, Dota smoke tests.
+- Do not fast-forward beta, merge/tag/release, or publish until remaining gates and user approval.
