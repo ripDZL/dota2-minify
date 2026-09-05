@@ -2,17 +2,20 @@
 - Upstream baseline: `Egezenn/dota2-minify` tag `Minify-v1.14rc7`; exact commit `d4b4520c945a9e1f8f5facc52a76ac5903babe90`.
 - Fork: `ripDZL/dota2-minify`; active branch `v21.4-hardening`; promotion path `v21.4-hardening` -> `beta` -> `main`.
 - Exactly three branches; `main` frozen at `a26bc88a0d412e357965f29488b83a7f9093e11f`; `beta` frozen at `af83bbb051edced195d5f55ba49ff060a8c76f3c`.
-- Latest product-code hardening commit: `3266a10ae4132201fcfc85c0adf0475b30416973`.
-- Exact validated head: `2de55f97a4bbb8d0e127335cc4a2effc56fd105a`.
-- Current UI baseline: **Black-Plum Reactor**; centered header; 960x680 minimum; adaptive telemetry/right deck; SYSTEM/PROTECTED 66px normal / 62px compact.
+- Latest minimum-width UI product commit: `d647d7d84c8e0ddf429eab06529f49a2ecdaa448`; one-shot helper/workflow removed afterward.
+- Exact validated product head: `a27dfa368a56ec8be5d713594eb5506abc24ee06`.
+- Current UI baseline: **Black-Plum Reactor**; `960x680` minimum; compact client-width mode at `<=1000`; optional telemetry collapses before clipping.
+- Minimum-width fit: narrower nav; single-metric fallback at compact width; compact deployment buttons; activity caption hidden before collision; Settings inner width reserved for padding.
+- D2PFX minimum fit: 168px sidebar; 320px action/context column; wrapped category/subtitle text; 2-4 responsive cards.
+- Mod Library minimum fit: metadata text wraps to live list width; source rail/search/status sizing remains responsive.
 - Canonical source: ordinary materialized files only; no active one-shot transformer/workflow; `.materialize/READY` absent.
 - Security completed: bounded/atomic downloads; D2PFX catalogue/cache/metadata/cursors/install path; strict profiles; VPK metadata; backup restore confinement.
 - Backup hardening: manifest opened regular-file-only with no-follow/identity recheck; managed live outputs preflight through confined destinations; symlinked `maps` escape rejected before backup/restore mutation.
-- v21.3.1 backend regressions restored directly on hardening: Dark Terrain/Safe Foliage/Main Menu compatibility + recursive/nested Collections/dependency resolution.
-- Hardening CI `33972529166`: compileall PASS; Ruff format/lint PASS; pytest **228/228 PASS**; Windows PyInstaller/runtime copy/portable ZIP/upload PASS.
-- Validated Windows ZIP: `Minify-v21.4-hardening-2de55f97a4bbb8d0e127335cc4a2effc56fd105a-windows.zip`; 53,625,698 bytes; SHA-256 `28e084172e7c9a984288999b0e26b01b69359a51ed9c4221bb35f7ff2feae759`.
-- GitHub artifact ID `9971359063`; outer ZIP 53,085,215 bytes; SHA-256 `b774c5e257f19bd9d9d11e8d3b887fca39a58af6d3cdba1888182d98c9f35d6b`.
-- Artifact verified: 1650 entries; normal portable roots; no materialize/temp markers; no Remove Foilage map/manifest; both oak entries exactly once; both Main Menu Background collapse rules.
+- v21.3.1 backend regressions restored directly on hardening: Dark Terrain/Safe Foliage/Main Menu compatibility + recursive/nested Collections/dependency resolution + semantic feature coverage.
+- Hardening CI `33977097382`: compileall PASS; Ruff format/lint PASS; pytest **241/241 PASS**; Windows PyInstaller/runtime copy/portable ZIP/upload PASS.
+- Validated Windows ZIP: `Minify-v21.4-hardening-a27dfa368a56ec8be5d713594eb5506abc24ee06-windows.zip`; 53,623,858 bytes; SHA-256 `906284491ae285d7233887c1306a56dae2512264b097262ef28facbd18c831da`.
+- GitHub artifact ID `9972649232`; outer ZIP 53,084,155 bytes; SHA-256 `7df04164f5b97160f536d5c6fc1f9cfd36156e185f44d163ddba1fba407a2851`.
+- Artifact verified: 1650 entries; normal portable roots; no materialize/temp/pycache markers; no Remove Foilage map/manifest; both oak entries exactly once; both Main Menu Background collapse rules.
 - Canonical user feature reference: v21.3.1 Safe Foliage Fix archive; SHA-256 `37755c4ee92e1847eef1a5a9c89aef6ba488f33accd0cb102c62a7db8780b5f8`; bundled 116/116 tests pass locally.
 - Preserve recursive/nested mods, Collections, profiles, D2PFX, backups/conflict review, Dark Terrain behavior, Safe Foliage, Main Menu Background fix, manual rc7 `prelaunch`, no-auto-prelaunch policy.
 - Remove Foilage: blacklist-only; never ship `manifest.json` or `maps/dota.vpk`; retain both exact oak-leaf blacklist entries.
