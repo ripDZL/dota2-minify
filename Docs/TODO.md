@@ -1,17 +1,14 @@
 # TODO
 - [x] Create `v21.4-hardening` from exact rc7 commit `d4b4520c945a9e1f8f5facc52a76ac5903babe90`.
-- [x] Enforce exactly three long-lived branches: `v21.4-hardening`, `beta`, `main`.
-- [x] Adopt supplied v21.3.1 Safe Foliage Fix as canonical feature reference; bundled 116/116 tests pass.
-- [x] Materialize hardened security/backup/prelaunch/compatibility/VPK/archive/download paths.
-- [x] Materialize recursive mods, Collections, profiles, D2PFX, backups/conflict review, Safe Foliage, Main Menu fix, Dark Terrain compatibility.
-- [x] Recover v21.3.1 patch pipeline without overwriting hardened backends.
+- [x] Enforce exactly three branches: `v21.4-hardening`, `beta`, `main`.
+- [x] Preserve hardened security/backend behavior and v21.3.1 feature set without wholesale old-core replacement.
 - [x] Remove stale `LOCAL MOD WORKSPACE` / `RC6` header furniture.
-- [x] Supersede flat beta-style UI with Obsidian Arc release identity: layered graphite, arc blue, ember, gold, teal, edge depth, nested dashboard cards.
-- [x] Reconcile Mod Library/D2PFX visual systems with Obsidian Arc.
-- [x] Expand UI regressions; tested code `c76956a953a3bdf7a42ca386c3879df8a053ed51`.
-- [x] Current CI: run `33935960179`; compileall/Ruff PASS; pytest 144/144 PASS; Windows build PASS.
-- [x] Current portable ZIP validated; SHA-256 `1b67a34cef9d1c66fa810691d031fc4afe2c2a069866e63d28634c4ac06569bc`.
-- [ ] User review Obsidian Arc across Patch, Mod Library, D2PFX, Settings, resizing.
+- [x] Replace superseded Obsidian Arc styling with **Crimson Slate** inspired by the user-provided Flat Dark GUI reference.
+- [x] Materialize charcoal/plum panels, crimson focus/actions, compact rectangular controls, inset fields, low radii, thin borders, and matching Mod Library/D2PFX selected states.
+- [x] Add/update visual regressions; tested product code `66d6dd77bd216feb6ff67375d3803ed0be9e150e`.
+- [x] Current CI run `33937575665`: compileall/Ruff PASS; pytest 145/145 PASS; Windows build PASS.
+- [x] Current portable ZIP validated; SHA-256 `dee14f404eadede2e4e0b02f76620090ce04dc6c2cc1d87a6cf62c3525862e52`.
+- [ ] User review Crimson Slate across Patch, Mod Library, D2PFX, Settings, resizing.
 - [ ] Adapt remaining useful v21.3.1 regressions directly on hardening.
 - [ ] Complete semantic core-overlay reconciliation; never wholesale copy old core.
 - [ ] Reconcile prior-v21.4 `core/mod_library.py` only if authentic missing bytes become available.
