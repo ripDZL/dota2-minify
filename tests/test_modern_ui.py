@@ -125,6 +125,7 @@ def test_header_brand_is_centered_and_engine_chip_removed():
     assert 'tag="header_left_gutter"' in MAIN
     assert 'tag="header_right_gutter"' in MAIN
     assert MAIN.count("width_stretch=True, init_width_or_weight=1.0") >= 2
+    assert 'tag="header_brand_column", width_fixed=True, init_width_or_weight=340' in MAIN
     assert 'tag="header_engine_chip"' not in MAIN
     assert 'tag="header_engine_column"' not in MAIN
     assert 'dpg.add_text("PATCH ENGINE"' not in MAIN
