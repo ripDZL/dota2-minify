@@ -40,6 +40,12 @@ def test_crimson_slate_uses_compact_geometry():
     assert "dpg.add_theme_style(dpg.mvStyleVar_FrameRounding, 2)" in CHECKBOXES
 
 
+def test_previous_arc_blue_palette_is_not_primary_anymore():
+    assert "ACCENT = (84, 151, 255, 255)" not in THEME
+    assert "UI_ACCENT = (84, 151, 255, 255)" not in CHECKBOXES
+    assert "(47, 88, 148, 255)" not in THEME
+
+
 def test_d2pfx_selected_state_matches_release_accent():
     assert "(184, 43, 79, 255)" in D2PFX
     assert "color=(224, 54, 94)" in D2PFX
