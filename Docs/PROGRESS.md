@@ -7,12 +7,12 @@
 - [x] Network/catalogue, backup-manifest, profile, and VPK-metadata hostile-input passes completed.
 - [x] D2PFX cursor pass: confined regular-file-only atomic copy; no symlink traversal; bounded files/bytes; safe restore retention.
 - [x] D2PFX metadata pass: confined non-symlink cache; catalogue allowlist/shape checks; bounded flattening; safe category/asset paths.
-- [x] Current tested product commit `f946f1b70a0207b59b634cf4f0500a92ee9f349b`.
-- [x] Hardening CI `33949542003`: compileall PASS; Ruff format/lint PASS; pytest 185/185 PASS; Windows build/package/upload PASS.
-- [x] Inner ZIP: `Minify-v21.4-hardening-f946f1b70a0207b59b634cf4f0500a92ee9f349b-windows.zip`; 53,618,363 bytes; SHA-256 `7de99bc4d9b9ef03ea5334c1f6943864f6c8d18e9eb989c4509337565e77eb9b`.
-- [x] Artifact ID `9964376842`; outer SHA-256 `b70c33b188f94a1fb8b24fe994270f56f527b06896a93bbcc9d3180a96242583`; portable/Safe-Foliage/Main-Menu checks PASS.
+- [x] D2PFX install pass: redirect-hop validation; HTTPS/public-network boundary; safe URL filenames; 32 MiB preview cap; staged atomic publication; failure cleanup.
+- [x] Current tested product commit `53a358db219256187e21a40acc8ed45704c3589f`.
+- [x] Hardening CI `33971846026`: compileall PASS; Ruff format/lint PASS; pytest 200/200 PASS; Windows build/package/upload PASS.
+- [x] Inner ZIP: `Minify-v21.4-hardening-53a358db219256187e21a40acc8ed45704c3589f-windows.zip`; 53,625,172 bytes; SHA-256 `6a1874783d6d49b3e53d069577b90c14cd52a7aa618d3298c929fd863f2bd54a`.
+- [x] Artifact ID `9971169200`; outer SHA-256 `14cd19c31edfcd4051a454ec73c12bd4fd383816783cde04d29785bcb5ad48ea`; portable/Safe-Foliage/Main-Menu checks PASS.
 - [x] `main` and `beta` remain frozen.
-- [ ] Harden D2PFX browser install/download redirect, SSRF, filename, preview-size, and staged-publish surfaces.
 - [ ] Continue hostile-input/path-race review.
 - [ ] Adapt remaining useful v21.3.1 regressions; complete semantic core reconciliation + exact-rc7 diff review.
 - [ ] Resolve prior-v21.4 `core/mod_library.py` exact-source gap only if authentic bytes become available.
