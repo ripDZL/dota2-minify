@@ -111,7 +111,9 @@ def test_source_screenshot_spatial_color_roles_are_materialized():
 
 def test_nav_status_card_has_safe_vertical_budget():
     start = MAIN.index('tag="nav_status_card"')
-    card = MAIN[start : start + 240]
+    card = MAIN[start : start + 320]
     assert "height=66" in card
+    assert 'dpg.add_text("SYSTEM", parent="nav_status_card"' in card
+    assert 'dpg.add_text("● PROTECTED", parent="nav_status_card"' in card
     assert "nav_status_height = 66 if shell_body_height >= 370 else 62" in WINDOW
     assert 'dpg.configure_item("nav_status_card", height=nav_status_height)' in WINDOW
