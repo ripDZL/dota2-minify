@@ -1,26 +1,22 @@
 # Progress
-- [x] v21.3.1 Safe Foliage Fix validated: bundled 116/116 regression tests pass locally.
-- [x] Canonical feature-reference archive adopted: `Minify-v1.14rc7-ModManager-v21.3.1-Safe-Foliage-Fix (1).zip`; SHA-256 `37755c4ee92e1847eef1a5a9c89aef6ba488f33accd0cb102c62a7db8780b5f8`.
-- [x] Unsafe Remove Foilage full-map override removed; oak-leaf blacklist entries retained; Main Menu Background CSS fix retained.
-- [x] Historical local v21.4 hardening kit validated: 133/133 tests + 9 subtests; compileall pass.
-- [x] `v21.4-hardening` created from exact rc7; `beta` created separately; `main` untouched.
-- [x] Repository branch model reduced to exactly `v21.4-hardening`, `beta`, and `main`; one-time cleanup run `33933941673` removed four temporary branches and cleanup workflow was removed at `d10920c2192c45dbb701071e5149bfa16c6208c5`.
-- [x] Deleted `v21.4-v2131-regressions` had only unvalidated adapted tests/workflow ahead of hardening and no production-source changes; canonical archive remains source for re-adaptation directly on hardening.
-- [x] Materialized security/backup/prelaunch/compatibility/VPK/archive/download hardening, dependency architecture gating, recursive scanner/Collections backend, nested scripts, D2PFX backend/build-hook changes, and CSS fix.
-- [x] Restored/materialized beveled Mod Library/Settings/window/gui/__main__/D2PFX/profile UI surface.
-- [x] Compared the complete v21.3.1 transformer target inventory against hardening. `cli.py` and `pyproject.toml` are guard-only inputs; the only actual write target still left at rc7 was `Minify/patch/__init__.py`.
-- [x] Materialized v21.3.1 patch-pipeline integration at `b22133201e88d654859541f2c6be69cea8e3cb25`: nested paths/references, compatibility copying/exclusions, restore points, conflict preflight/report, output validation, rollback, no-auto-prelaunch cleanup.
-- [x] Temporary integration workflow validated the one-file port: compileall PASS, Ruff PASS, 131/131 pytest PASS; temporary workflow/script not retained on hardening.
-- [x] Added 8 permanent patch-pipeline regressions; fixed path/format-safe assertions; final tested code `24703387f959c0ed2634fcc2454a46c0aad3f224`.
-- [x] Hardening CI run `33930820670`: compileall PASS; Ruff format gate PASS; Ruff lint PASS; pytest 139/139 PASS in 0.79s; Windows PyInstaller/runtime copy/ZIP/upload PASS.
-- [x] Current inner test ZIP: `Minify-v21.4-hardening-24703387f959c0ed2634fcc2454a46c0aad3f224-windows.zip`; 53603285 bytes; SHA-256 `c0f207ca8d49a8227133dc1ec9e985727ed83b049634999f3648e843209b444a`.
-- [x] GitHub outer artifact ID `9958480353`; 53063003 bytes; SHA-256 `8a18f097b31ef420ae23d92594b06b55bf6964314453feb4b03b5fa4a18b3fd8`.
-- [x] Artifact layout verified: no `.materialize`, `READY`, `AI_REMOTE_TMP`; no forbidden Remove Foilage map/manifest payload; both oak-leaf blacklist entries present.
-- [x] Branch refs rechecked before cleanup: `main` `a26bc88a0d412e357965f29488b83a7f9093e11f`; `beta` `af83bbb051edced195d5f55ba49ff060a8c76f3c`; no promotion made.
-- [ ] Adapt/re-express the remaining useful bundled v21.3.1 regressions directly on `v21.4-hardening`; archive 116/116 and GitHub 139/139 scopes remain distinct.
-- [ ] Feature-by-feature semantic reconciliation of differing v21.3.1 core overlays remains, especially `core/mod_library.py`; do not wholesale overwrite hardened backends.
-- [ ] `core/mod_library.py` prior-v21.4 exact-source reconciliation remains blocked: current Git blob `a5204ea1d5e0309d3c6a764ad9b974e7bdeb8268` differs from expected validated blob `e95b2f6f59b3b96f7c19ed70ee514df02e500926`.
-- [ ] Temporary `.materialize/` payload remains incomplete; no `READY`; never fabricate missing bytes.
-- [ ] Full hostile-input/security sweep and complete exact-rc7 diff review incomplete.
-- [ ] User smoke test and Dota startup/lobby/demo-or-match/patch-rollback/profiles/D2PFX/Dark-Terrain/Remove-Foilage smoke tests incomplete.
-- [ ] `beta` promotion/publication remains blocked.
+- [x] v21.3.1 Safe Foliage Fix validated: bundled 116/116 regressions pass locally.
+- [x] Repository branch model reduced to exactly `v21.4-hardening`, `beta`, and `main`.
+- [x] Materialized security/backup/prelaunch/compatibility/VPK/archive/download hardening and recursive/nested mod/Collections/profile/D2PFX behavior.
+- [x] Materialized v21.3.1 patch pipeline at `b22133201e88d654859541f2c6be69cea8e3cb25` without replacing hardened core backends.
+- [x] Prior validated build `24703387...` passed 139/139 + Windows build and user reported it generally good.
+- [x] Removed top-right `LOCAL MOD WORKSPACE` + stale `RC6` UI at `f843585eca6fc6cbe412fd07c8707b528b7551d4`.
+- [x] Replaced previous Obsidian/Ember bevel styling with modern graphite surfaces, blue accents, subtle borders, transparent faux-bevel shadow, and larger control/card radii.
+- [x] Added `tests/test_modern_ui.py`; current tested code `ed65e4c3ba317ac361f61835837a887784d1338c`.
+- [x] Hardening CI run `33934696171`: compileall PASS; Ruff format/lint PASS; pytest 141/141 PASS in 0.82s; Windows PyInstaller/runtime copy/ZIP/upload PASS.
+- [x] Current inner ZIP: `Minify-v21.4-hardening-ed65e4c3ba317ac361f61835837a887784d1338c-windows.zip`; 53603001 bytes; SHA-256 `71e09b1fdcbc491b514f7ffc129b1319a19ae8dd3f9bb178df8af5c1de6a7fdc`.
+- [x] GitHub artifact ID `9959784334`; 53063170 bytes; outer SHA-256 `0f8c7eb70a443b0e05cdb79a22c267bd031d0bfd8dbd801e391b5870327caa42`.
+- [x] Artifact verified: 1650 entries; normal portable roots; no staging/materialize markers; no forbidden Remove Foilage map/manifest; both oak blacklist entries present.
+- [x] `main` and `beta` remain frozen; no promotion made.
+- [ ] User review/smoke-test modern UI build across Patch, Mod Library, D2PFX, Settings, resize states.
+- [ ] Adapt/re-express remaining useful bundled v21.3.1 regressions directly on hardening.
+- [ ] Feature-by-feature semantic reconciliation of differing v21.3.1 core overlays; never wholesale overwrite hardened backends.
+- [ ] Resolve prior-v21.4 `core/mod_library.py` exact-source gap only if authentic missing bytes become available.
+- [ ] Complete/remove incomplete `.materialize/` bootstrap; never create `READY` while incomplete.
+- [ ] Full hostile-input/security sweep and complete exact-rc7 diff review.
+- [ ] Dota startup/lobby/demo-or-match/patch-rollback/profiles/D2PFX/Dark-Terrain/Remove-Foilage smoke tests.
+- [ ] Promote `v21.4-hardening` -> `beta` only after remaining validation/user acceptance; promote `beta` -> `main` only after beta validation.

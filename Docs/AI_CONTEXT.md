@@ -1,32 +1,27 @@
 # AI Context
 - Upstream baseline: `Egezenn/dota2-minify` tag `Minify-v1.14rc7`; exact commit `d4b4520c945a9e1f8f5facc52a76ac5903babe90`.
-- Fork target: `ripDZL/dota2-minify`; `v21.4-hardening` is active integration/development; keep `main` upstream-tracking and `beta` frozen until runtime gates pass.
-- Branch policy: exactly three long-lived branches only: `v21.4-hardening` -> `beta` -> `main`. Temporary/reference/integration branches must not remain in the repository.
-- Branch cleanup completed 2026-09-04: removed `v21.2-ui-reference`, `v21.4-ui-format`, `v21.4-v2131-integration`, and `v21.4-v2131-regressions`; one-time cleanup workflow run `33933941673` succeeded and the workflow was then removed at `d10920c2192c45dbb701071e5149bfa16c6208c5`.
+- Fork target: `ripDZL/dota2-minify`; `v21.4-hardening` is active development.
+- Branch policy: exactly three long-lived branches: `v21.4-hardening` -> `beta` -> `main`; do not retain temporary/reference/integration branches.
 - `main` remains `a26bc88a0d412e357965f29488b83a7f9093e11f`; `beta` remains `af83bbb051edced195d5f55ba49ff060a8c76f3c`.
-- Current tested code commit: `24703387f959c0ed2634fcc2454a46c0aad3f224`.
-- v21.3.1 patch-pipeline materialization commit: `b22133201e88d654859541f2c6be69cea8e3cb25`; only `Minify/patch/__init__.py` changed there.
-- Permanent patch-pipeline regression coverage added/fixed through `24703387`; current GitHub suite is 139/139.
-- Hardening CI run `33930820670`: compileall PASS, Ruff format gate PASS, Ruff lint PASS, 139/139 pytest PASS in 0.79s, Windows PyInstaller/runtime copy/portable ZIP/upload PASS.
-- Current Windows test ZIP: `Minify-v21.4-hardening-24703387f959c0ed2634fcc2454a46c0aad3f224-windows.zip`; SHA-256 `c0f207ca8d49a8227133dc1ec9e985727ed83b049634999f3648e843209b444a`; 53603285 bytes.
-- GitHub artifact ID `9958480353`; outer ZIP SHA-256 `8a18f097b31ef420ae23d92594b06b55bf6964314453feb4b03b5fa4a18b3fd8`; 53063003 bytes.
-- Artifact layout verified: `LICENSE`, `Minify.exe`, `README.md`, `_internal`, `bin`, `mods`; no `.materialize`, `READY`, or `AI_REMOTE_TMP`; no Remove Foilage manifest/map payload; both oak-leaf blacklist entries present.
-- Canonical user-supplied feature reference: `Minify-v1.14rc7-ModManager-v21.3.1-Safe-Foliage-Fix (1).zip`; SHA-256 `37755c4ee92e1847eef1a5a9c89aef6ba488f33accd0cb102c62a7db8780b5f8`; bundled 116/116 v21.3.1 regression tests pass locally.
-- Full v21.3.1 transformer target inventory was compared against hardening. `cli.py` and `pyproject.toml` are rc7 guard inputs only; every actual transformer write target is now materialized/modified relative to exact rc7. The sole actual write target still left rc7 before this milestone was `Minify/patch/__init__.py`.
-- Recovered patch pipeline now uses discovered nested paths/references, compatibility-filtered standard/VPK copying, transactional restore points, conflict preflight/reporting, generated-output validation, automatic managed-output rollback, and no-auto-prelaunch cleanup.
-- Previous v21.2 UI-only reference is superseded as target but remains provenance for the restored UI surface; its deleted branch is not required because the reference archive/provenance is preserved outside that ref.
-- Deleted `v21.4-v2131-regressions` contained only unvalidated adapted tests/workflow ahead of hardening, no production-source changes; re-adapt useful coverage directly on `v21.4-hardening` from the canonical v21.3.1 archive.
-- Do not blindly replace hardened core files with v21.3.1 overlay copies. Its `core/mod_library.py` is 68521 bytes / Git blob `56df3e70990003cfd76f04cbacf7878bba6e65ec`, which differs from both current hardening and the previously validated v21.4 source.
-- Archive 116-test suite is not yet fully adapted into canonical repository tests; current GitHub 139/139 and archive 116/116 scopes remain distinct.
-- Historical local hardening-kit checkpoint: 133/133 tests + 9 subtests; do not conflate with current GitHub or archive suites.
-- Hardening format gate excludes `core/mod_compat.py`, `core/mod_library.py`, `core/security.py`, and `ui/settings.py`; compileall and full Ruff lint still run.
-- Preserve recursive/nested mods, markerless/collapsible Collections, profiles, D2PFX browser/imports, backups/conflict review, Obsidian + Ember/beveled UI, and no-auto-prelaunch policy.
+- Current tested code commit: `ed65e4c3ba317ac361f61835837a887784d1338c`.
+- Modern UI materialization commit: `f843585eca6fc6cbe412fd07c8707b528b7551d4`; stale `LOCAL MOD WORKSPACE` / `RC6` header widgets removed; graphite + blue flat visual system replaces the previous Obsidian/Ember bevel treatment.
+- Permanent UI regressions: `tests/test_modern_ui.py`; hardening suite now 141/141.
+- Hardening CI run `33934696171`: compileall PASS, Ruff format PASS, Ruff lint PASS, pytest 141/141 PASS in 0.82s, Windows PyInstaller/runtime copy/portable ZIP/upload PASS.
+- Current Windows test ZIP: `Minify-v21.4-hardening-ed65e4c3ba317ac361f61835837a887784d1338c-windows.zip`; SHA-256 `71e09b1fdcbc491b514f7ffc129b1319a19ae8dd3f9bb178df8af5c1de6a7fdc`; 53603001 bytes.
+- GitHub artifact ID `9959784334`; outer ZIP SHA-256 `0f8c7eb70a443b0e05cdb79a22c267bd031d0bfd8dbd801e391b5870327caa42`; 53063170 bytes.
+- Artifact verified: 1650 entries; roots `LICENSE`, `Minify.exe`, `README.md`, `_internal`, `bin`, `mods`; no `.materialize`, `READY`, `AI_REMOTE_TMP`; no Remove Foilage manifest/map payload; both oak-leaf blacklist entries present.
+- Branch cleanup completed 2026-09-04: removed `v21.2-ui-reference`, `v21.4-ui-format`, `v21.4-v2131-integration`, `v21.4-v2131-regressions`; cleanup workflow was removed after successful run `33933941673`.
+- Canonical user feature reference: `Minify-v1.14rc7-ModManager-v21.3.1-Safe-Foliage-Fix (1).zip`; SHA-256 `37755c4ee92e1847eef1a5a9c89aef6ba488f33accd0cb102c62a7db8780b5f8`; bundled 116/116 tests pass locally.
+- v21.3.1 patch-pipeline integration is materialized at `b22133201e88d654859541f2c6be69cea8e3cb25`; preserve nested paths, compatibility filtering, restore points, conflict reporting, output validation, rollback, and no-auto-prelaunch cleanup.
+- Do not wholesale replace hardened core files with v21.3.1 overlays; use them as feature references only.
+- Archive 116/116, current GitHub 141/141, and historical local 133/133 + 9 subtests are distinct scopes.
+- Preserve recursive/nested mods, markerless/collapsible Collections, profiles, D2PFX browser/imports, backups/conflict review, current modern workspace structure, and no-auto-prelaunch policy.
 - Steam policy: manual rc7 `prelaunch` remains; automatic Minify prelaunch injection disabled; stale generated wrappers cleaned narrowly.
 - Remove Foilage: blacklist-only; never ship `Remove Foilage/manifest.json` or `Remove Foilage/maps/dota.vpk`; retain `tree_oak_leaves_05.vmat_c` and `tree_oak_leaves_05.vmdl_c` blacklist entries.
-- Remove Main Menu Background: retain dashboard manager + `#FrontpageContents` collapse rules.
-- Dark Terrain: yield `materials/dev/deferred_post_process.vmat_c` only when another selected mod actually owns the same virtual path; associated Dark fog is excluded only for that compatibility case.
+- Remove Main Menu Background: retain dashboard-manager and `#FrontpageContents` collapse rules.
+- Dark Terrain: yield `materials/dev/deferred_post_process.vmat_c` only when another selected mod owns the same virtual path; associated Dark fog is excluded only for that collision case.
 - Security boundaries: mod Python scripts are arbitrary-code trust boundary; VPK/archive/profile/backup/download/D2PFX inputs are untrusted.
-- Publication rule: materialized normal source files are canonical; transformer/bootstrap is optional migration/repro tooling only.
+- Publication rule: materialized normal source is canonical; transformer/bootstrap is optional migration/repro tooling only.
 - `core/mod_library.py` prior-v21.4 reconciliation remains blocked: current blob `a5204ea1d5e0309d3c6a764ad9b974e7bdeb8268`; expected validated blob `e95b2f6f59b3b96f7c19ed70ee514df02e500926`, SHA-256 `552dbb7f98d5e0db2ad32c1b2888d8ad4ae8945fdf49ebc2853765e59c6c9e7a`, 69949 bytes.
-- Committed bootstrap cannot recover that source; missing chunk `005` contains the final 2089 compressed bytes of its ZIP entry. Never fabricate; never create `.materialize/READY` while incomplete.
-- Project-memory rule: read `Docs/*.md` at session start; update terse bullets at major milestones; include/stage them with repo commits.
+- Missing bootstrap chunk `005` contains the final 2089 compressed bytes of that ZIP entry; never fabricate missing bytes or create `.materialize/READY` while incomplete.
+- Project-memory rule: read `Docs/*.md` at session start; update terse bullets at major milestones.

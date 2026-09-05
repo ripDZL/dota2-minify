@@ -1,18 +1,19 @@
 # Architecture
 - Baseline: exact upstream rc7 commit `d4b4520c945a9e1f8f5facc52a76ac5903babe90`; no current-main rebase during hardening.
-- Branches: exactly three long-lived refs: `v21.4-hardening` active development -> `beta` validation/promotion -> `main` final publication. Do not retain temporary/reference/integration branches.
+- Branches: exactly three long-lived refs: `v21.4-hardening` active development -> `beta` validation/promotion -> `main` final publication.
 - Fork source: materialized files + ordinary commits; clone should run without source-rewrite bootstrap.
-- Build transformer and `.materialize/` workflow: temporary migration/reproducibility tooling only; not canonical source architecture.
-- Never trigger incomplete `.materialize/` input; reconstructed handoff ZIP must match pinned SHA-256 before use.
+- UI: responsive workspace shell with modern graphite/blue flat visual system, subtle borders, larger radii, and no stale workspace/RC badge furniture.
+- Build transformer and `.materialize/` workflow: optional migration/reproducibility tooling only; never canonical source.
+- Never trigger incomplete `.materialize/` input or create `READY` until the reconstructed payload matches its pinned hash.
 - Security primitives: shared `Minify/core/security.py` for path confinement, archive limits, bounded decompression, hashing, atomic writes.
 - Mod discovery: bounded recursive scanner; no symlink traversal; nested IDs stable.
 - Collections: organizational parents; selectable child mods; markerless heuristic retained.
-- Patch transaction: resolve discovered nested IDs, create managed-output restore point, run conflict preflight/report, apply compatibility exclusions consistently to loose/VPK inputs, validate generated compatibility output, mark success or roll back managed output on failure.
+- Patch transaction: resolve nested IDs, create managed-output restore point, conflict preflight/report, apply compatibility exclusions to loose/VPK inputs, validate output, rollback on failure.
 - Output: Minify-managed language/output paths only; never overwrite Valve source map VPKs.
 - Remove Foilage: blacklist-only; never ship its `manifest.json` or `maps/dota.vpk`.
 - D2PFX: trusted-host imports; bounded downloads/payloads/decompression; safe archive extraction; high/normal priority VPK behavior retained.
-- VPK extraction: virtual path must resolve inside extraction root before any directory/file write.
-- Compatibility: virtual-path collision index drives Dark Terrain yield decisions; no shader-name allowlist required.
+- VPK extraction: virtual path must resolve inside extraction root before directory/file writes.
+- Compatibility: virtual-path collision index drives Dark Terrain yield decisions.
 - Backups: managed-output allowlist; confined roots; preflight before mutation; rollback on patch failure.
 - Profiles: exact format/version; strict JSON booleans; bounded file/profile/state/string counts.
 - Downloads: pinned versions + pinned SHA-256 + safe extraction before executable use; unsupported release architectures are PATH-only.

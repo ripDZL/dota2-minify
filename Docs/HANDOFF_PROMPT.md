@@ -1,34 +1,24 @@
 # New Chat Handoff Prompt
 - Work only in `ripDZL/dota2-minify` branch `v21.4-hardening` unless the user explicitly changes the plan.
-- First read `Docs/AI_CONTEXT.md`, `Docs/TODO.md`, `Docs/PROGRESS.md`, `Docs/ARCHITECTURE.md`, `Docs/SESSION_SUMMARY.md`, and this file.
-- Branch model is exactly three long-lived refs: `v21.4-hardening` -> `beta` -> `main`; do not leave temporary/reference/integration branches in the repository.
-- Branch cleanup completed 2026-09-04 via successful one-time run `33933941673`; temporary branches removed and cleanup workflow removed at `d10920c2192c45dbb701071e5149bfa16c6208c5`.
-- Keep `main` upstream-tracking and untouched at `a26bc88a0d412e357965f29488b83a7f9093e11f`; keep `beta` frozen at `af83bbb051edced195d5f55ba49ff060a8c76f3c` until remaining runtime gates pass.
+- First read all `Docs/*.md` context files.
+- Branch model is exactly three long-lived refs: `v21.4-hardening` -> `beta` -> `main`; do not leave temporary/reference/integration branches.
+- Keep `main` untouched at `a26bc88a0d412e357965f29488b83a7f9093e11f`; keep `beta` frozen at `af83bbb051edced195d5f55ba49ff060a8c76f3c` until remaining gates pass.
 - Exact upstream baseline: `Minify-v1.14rc7` commit `d4b4520c945a9e1f8f5facc52a76ac5903babe90`.
-- Current tested code commit: `24703387f959c0ed2634fcc2454a46c0aad3f224`; later branch commits may be Docs/ops-only.
-- Hardening CI run `33930820670`: compileall PASS; Ruff format gate PASS; Ruff lint PASS; pytest 139/139 PASS; Windows PyInstaller/runtime copy/portable ZIP/upload PASS.
-- Current test ZIP: `Minify-v21.4-hardening-24703387f959c0ed2634fcc2454a46c0aad3f224-windows.zip`; SHA-256 `c0f207ca8d49a8227133dc1ec9e985727ed83b049634999f3648e843209b444a`; 53603285 bytes.
-- GitHub artifact ID `9958480353`; outer SHA-256 `8a18f097b31ef420ae23d92594b06b55bf6964314453feb4b03b5fa4a18b3fd8`; 53063003 bytes.
-- Canonical user feature-reference: uploaded `Minify-v1.14rc7-ModManager-v21.3.1-Safe-Foliage-Fix (1).zip`; SHA-256 `37755c4ee92e1847eef1a5a9c89aef6ba488f33accd0cb102c62a7db8780b5f8`; bundled 116/116 tests pass locally.
-- Deleted `v21.4-v2131-regressions` held only unvalidated adapted tests/workflow, no production-source changes; continue test adaptation directly on hardening from the canonical archive.
-- Full v21.3.1 transformer target inventory has been checked. `cli.py` and `pyproject.toml` are rc7 guards only; every actual write target is now materialized/modified relative exact rc7.
-- Before this milestone the only actual transformer write target still rc7 was `Minify/patch/__init__.py`; materialized integration commit is `b22133201e88d654859541f2c6be69cea8e3cb25`.
-- Recovered patch pipeline includes nested dependency/conflict resolution, `get_mod_path` usage, compatibility-filtered standard/VPK paths, transactional restore points, conflict preflight/report, generated-output compatibility validation, managed-output rollback on failure, and no-auto-prelaunch cleanup.
-- `tests/test_v2131_patch_pipeline.py` adds 8 permanent regressions protecting that integration; final path/format-safe test commit is `24703387...`.
-- Artifact verification: normal six-item portable layout; no `.materialize`, `READY`, `AI_REMOTE_TMP`; no `Remove Foilage/manifest.json` or `Remove Foilage/maps/dota.vpk`; both exact oak-leaf blacklist entries present.
-- Previous v21.2 beveled-UI ZIP is superseded as target reference; its restored UI files remain useful provenance.
-- Preserve beveled Obsidian + Ember UI, Mod Library, recursive/nested mods, markerless/collapsible Collections, profiles/import flow, D2PFX, backups/conflict review, Dark Terrain collision behavior, Safe Foliage, Main Menu Background CSS, and no-auto-prelaunch policy.
-- Do not wholesale copy v21.3.1 core overlays onto hardening. Reconcile feature-by-feature so newer security/backend changes survive.
-- v21.3.1 overlay `core/mod_library.py` is 68521 bytes / Git blob `56df3e70990003cfd76f04cbacf7878bba6e65ec`; it is feature reference only.
-- Prior-v21.4 `core/mod_library.py` exact-source reconciliation remains blocked: current blob `a5204ea1d5e0309d3c6a764ad9b974e7bdeb8268`; expected validated blob `e95b2f6f59b3b96f7c19ed70ee514df02e500926`, SHA-256 `552dbb7f98d5e0db2ad32c1b2888d8ad4ae8945fdf49ebc2853765e59c6c9e7a`, 69949 bytes.
-- Missing bootstrap chunk `005` contains final 2089 compressed bytes of that prior-v21.4 ZIP entry. Never fabricate missing bytes; never create `.materialize/READY` while incomplete.
-- Remove Foilage must remain blacklist-only; retain exact oak-leaf material/model blacklist entries.
-- Steam policy: manual rc7 `prelaunch` remains; automatic Minify prelaunch injection disabled; stale generated wrappers cleaned narrowly.
-- Hardening format gate excludes `Minify/core/mod_compat.py`, `Minify/core/mod_library.py`, `Minify/core/security.py`, `Minify/ui/settings.py`; compileall and full Ruff lint remain mandatory.
-- Test scopes remain distinct: current GitHub 139/139; uploaded v21.3.1 archive 116/116; historical local hardening kit 133/133 + 9 subtests.
-- Next work: adapt/re-express useful remaining v21.3.1 regression coverage directly on hardening; compare differing core-overlay semantics; perform hostile-input/security and complete rc7 diff review; clean incomplete migration/bootstrap tooling; then user/Dota smoke tests.
-- Do not fast-forward `beta`, merge, tag, release, or open publication PR before remaining gates pass.
-- At every major milestone update relevant `Docs/*.md` files; keep them terse bullets only.
-
-## Resume instruction
-- Read Docs, fetch current `v21.4-hardening`/`beta`/`main` refs, preserve tested-code/artifact identity above, then continue from `Docs/TODO.md` using the v21.3.1 upload as canonical feature reference and v21.4 hardening as security baseline.
+- Current tested code: `ed65e4c3ba317ac361f61835837a887784d1338c`.
+- Current hardening CI run `33934696171`: compileall PASS; Ruff format/lint PASS; pytest 141/141 PASS; Windows PyInstaller/runtime copy/portable ZIP/upload PASS.
+- Current test ZIP: `Minify-v21.4-hardening-ed65e4c3ba317ac361f61835837a887784d1338c-windows.zip`; SHA-256 `71e09b1fdcbc491b514f7ffc129b1319a19ae8dd3f9bb178df8af5c1de6a7fdc`; 53603001 bytes.
+- GitHub artifact ID `9959784334`; outer SHA-256 `0f8c7eb70a443b0e05cdb79a22c267bd031d0bfd8dbd801e391b5870327caa42`; 53063170 bytes.
+- Modern UI materialization commit: `f843585eca6fc6cbe412fd07c8707b528b7551d4`.
+- Current visual baseline: modern graphite/blue flat system, subtle borders, larger radii, transparent faux-bevel shadow. Previous Obsidian/Ember bevel style is superseded by user request.
+- Top-right `LOCAL MOD WORKSPACE` + stale `RC6` widgets were removed; `tests/test_modern_ui.py` protects this and the new palette.
+- User previously smoke-tested build `24703387...` as generally good; next user gate is review of the modern UI build across Patch, Mod Library, D2PFX, Settings, and resize states.
+- Canonical feature reference: supplied `Minify-v1.14rc7-ModManager-v21.3.1-Safe-Foliage-Fix (1).zip`; SHA-256 `37755c4ee92e1847eef1a5a9c89aef6ba488f33accd0cb102c62a7db8780b5f8`; bundled 116/116 tests pass.
+- Preserve recursive/nested mods, Collections, profiles, D2PFX, backups/conflict review, Dark Terrain collision behavior, Safe Foliage, Main Menu Background CSS, and no-auto-prelaunch policy.
+- Remove Foilage must remain blacklist-only/map-free and retain both exact oak-leaf blacklist entries.
+- Manual rc7 `prelaunch` remains; automatic Minify prelaunch injection disabled; stale generated wrappers cleaned narrowly.
+- Do not wholesale copy v21.3.1 core overlays onto hardening; reconcile feature-by-feature so newer hardening survives.
+- Prior-v21.4 `core/mod_library.py` reconciliation remains blocked: current blob `a5204ea1d5e0309d3c6a764ad9b974e7bdeb8268`; expected validated blob `e95b2f6f59b3b96f7c19ed70ee514df02e500926`, SHA-256 `552dbb7f98d5e0db2ad32c1b2888d8ad4ae8945fdf49ebc2853765e59c6c9e7a`, 69949 bytes.
+- Never fabricate missing bootstrap bytes or create `.materialize/READY` while incomplete.
+- Test scopes remain distinct: current GitHub 141/141; uploaded v21.3.1 archive 116/116; historical local hardening 133/133 + 9 subtests.
+- Next work after user UI feedback: adapt useful v21.3.1 regressions directly on hardening; semantic core-overlay reconciliation; hostile-input/security and exact-rc7 diff review; bootstrap cleanup; Dota smoke tests.
+- Do not fast-forward `beta`, merge/tag/release, or publish until remaining gates and user approval.
