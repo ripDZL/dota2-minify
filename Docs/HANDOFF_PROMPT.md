@@ -1,20 +1,19 @@
 # New Chat Handoff Prompt
 - Work only in `ripDZL/dota2-minify` branch `v21.4-hardening` unless user explicitly changes plan.
 - Read all `Docs/*.md` context files first.
-- Branch model: exactly `v21.4-hardening` -> `beta` -> `main`; no temporary/reference/integration branches.
-- Keep `main` frozen at `a26bc88a0d412e357965f29488b83a7f9093e11f`; keep `beta` frozen at `af83bbb051edced195d5f55ba49ff060a8c76f3c` until remaining gates pass.
+- Branch model: exactly `v21.4-hardening` -> `beta` -> `main`; keep beta/main frozen.
 - Exact upstream baseline: `Minify-v1.14rc7` / `d4b4520c945a9e1f8f5facc52a76ac5903babe90`.
-- Current tested product code: `a54c9259d5b1f45a1760f15f73e92f41460890d0`.
-- UI: **Black-Plum Reactor**; centered 340px brand column; 960x680 minimum; adaptive right deck/telemetry; 66/62px SYSTEM/PROTECTED card; stale RC6/PATCH ENGINE furniture removed.
-- Incomplete `.materialize/` bootstrap + materialization workflow removed; normal files are canonical source.
-- Hardening completed: bounded/atomic general downloads; bounded D2PFX catalogue fetch/decompression/cache; backup manifest symlink/non-file rejection; bounded strict profile import/storage; flat Windows-safe single-mod VPK metadata markers.
-- Hardening CI `33947470500`: compileall PASS; Ruff format/lint PASS; pytest 172/172 PASS; Windows PyInstaller/runtime copy/portable ZIP/upload PASS.
-- Current test ZIP: `Minify-v21.4-hardening-a54c9259d5b1f45a1760f15f73e92f41460890d0-windows.zip`; SHA-256 `a474cfa58c5f0b133b6438b64a3ddd90334a2d2d7b79f27863ddbda3f6e39c96`; 53,609,846 bytes.
-- Artifact ID `9963790021`; outer SHA-256 `c7debe82df92e42553692cc32974fc5bdd942f690ca5f3e7c96e1a0f91d266f3`.
-- Artifact verified: 1650 entries; normal portable roots; no staging/materialize markers; no Remove Foilage map/manifest; both oak entries; both Main Menu Background collapse rules.
+- Current tested product code: `f946f1b70a0207b59b634cf4f0500a92ee9f349b`.
+- UI: **Black-Plum Reactor**; centered header; 960x680 minimum; adaptive telemetry/right deck; 66/62px SYSTEM/PROTECTED card.
+- Canonical source is normal files; incomplete `.materialize/` bootstrap/workflow removed.
+- Hardening completed: general downloads; D2PFX catalogue; backup manifests; profiles; VPK metadata; D2PFX cursor copy/restore; D2PFX catalogue/cache/metadata/asset paths.
+- Hardening CI `33949542003`: compileall PASS; Ruff format/lint PASS; pytest 185/185 PASS; Windows PyInstaller/runtime copy/portable ZIP/upload PASS.
+- Current test ZIP: `Minify-v21.4-hardening-f946f1b70a0207b59b634cf4f0500a92ee9f349b-windows.zip`; SHA-256 `7de99bc4d9b9ef03ea5334c1f6943864f6c8d18e9eb989c4509337565e77eb9b`; 53,618,363 bytes.
+- Artifact ID `9964376842`; outer SHA-256 `b70c33b188f94a1fb8b24fe994270f56f527b06896a93bbcc9d3180a96242583`.
+- Artifact verified: 1650 entries; normal portable roots; no staging/materialize markers; no Remove Foilage map/manifest; both oak entries; both Main Menu Background rules.
 - Canonical feature reference: supplied v21.3.1 Safe Foliage Fix archive; SHA-256 `37755c4ee92e1847eef1a5a9c89aef6ba488f33accd0cb102c62a7db8780b5f8`; bundled 116/116 tests pass.
-- Preserve recursive/nested mods, Collections, profiles, D2PFX, backups/conflict review, Dark Terrain collision behavior, Safe Foliage, Main Menu Background CSS, manual rc7 prelaunch, and no-auto-prelaunch policy.
+- Preserve recursive/nested mods, Collections, profiles, D2PFX, backups/conflict review, Dark Terrain, Safe Foliage, Main Menu CSS, manual rc7 prelaunch, no-auto-prelaunch policy.
 - Never wholesale copy v21.3.1 core overlays over hardening; reconcile feature-by-feature.
 - Prior-v21.4 `core/mod_library.py` exact-source gap remains blocked; never fabricate missing bytes.
-- Next: review D2PFX cursor backup/restore + browser/path-race surfaces; adapt remaining useful v21.3.1 regressions; semantic core-overlay reconciliation; exact-rc7 diff review; Dota smoke tests.
+- Next: harden D2PFX browser install/download redirect/SSRF/safe-basename/preview-size/staged-publication surfaces; then path-race review, remaining regressions/core reconciliation/exact-rc7 diff, Dota smoke tests.
 - Do not fast-forward beta, merge/tag/release, or publish until remaining gates and user approval.

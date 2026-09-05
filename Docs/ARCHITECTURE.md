@@ -2,22 +2,20 @@
 - Baseline: exact upstream rc7 commit `d4b4520c945a9e1f8f5facc52a76ac5903babe90`; no current-main rebase during hardening.
 - Branches: exactly `v21.4-hardening` active -> `beta` validation -> `main` publication.
 - Fork source: ordinary materialized files + commits; incomplete `.materialize/` bootstrap/workflow removed.
-- UI: responsive **Black-Plum Reactor** command-console shell; centered 340px brand column; 960x680 minimum viewport; optional telemetry/right deck collapse before clipping.
-- UI palette: plum chrome; slate work areas; black strips; purple controls; lime selected/protected; red dividers/errors; gold telemetry; yellow links; ivory text.
+- UI: responsive **Black-Plum Reactor**; centered header; 960x680 minimum; optional telemetry/right deck collapse before clipping.
 - Security primitives: `Minify/core/security.py` for path confinement, archive limits, bounded decompression, hashing, atomic writes.
-- General downloads: streamed with timeout + size ceiling into a same-directory temp file; atomic replace only after complete success.
-- D2PFX catalogue: streamed bounded compressed payload; bounded gzip output; dict-only JSON; bounded cache file; atomic cache replace.
-- D2PFX asset imports: trusted-host validation; bounded file/catalogue payloads; safe archive extraction; staging cleanup; high/normal priority VPK behavior retained.
+- General downloads: streamed with timeout + size ceiling into same-directory temp file; atomic replace on success.
+- D2PFX catalogue: streamed bounded compressed/decompressed payload; dict/shape checks; confined regular-file cache; atomic replace.
+- D2PFX metadata: allowed catalogue filenames; <=256 categories; bounded depth/nodes/mods/links/text; category/asset paths normalized and traversal-rejected.
+- D2PFX cursor handling: source/live/backup paths confined to trusted roots; no symlink traversal; regular files only; atomic publication; bounded file/count/total size; failed/unsafe restore retains backup.
 - Mod discovery: bounded recursive scanner; no symlink traversal; nested IDs stable.
 - Collections: organizational parents; selectable child mods; markerless heuristic retained.
-- Patch transaction: resolve nested IDs, create managed-output restore point, conflict preflight/report, apply compatibility exclusions, validate output, rollback on failure.
+- Patch transaction: resolve nested IDs, create restore point, conflict preflight/report, compatibility exclusions, output validation, rollback.
 - Output: Minify-managed language/output paths only; never overwrite Valve source map VPKs.
 - Remove Foilage: blacklist-only; never ship `manifest.json` or `maps/dota.vpk`.
-- VPK extraction: virtual path resolves inside extraction root before writes.
-- VPK single-mod metadata: marker names flattened/sanitized for Windows; reserved device names guarded; long names hashed; no raw nested ID path creation.
-- Compatibility: virtual-path collision index drives Dark Terrain yield decisions.
-- Backups: managed-output allowlist; confined roots; regular non-symlink manifest; preflight before mutation; rollback on patch failure.
-- Profiles: bounded 8 MiB files; <=256 profiles; <=5000 states/profile; <=20000 total states; bounded names/mod IDs/hints; strict JSON booleans; export format/version checked when present; legacy storage shape retained.
-- Downloads: pinned versions + pinned SHA-256 + safe extraction before executable use; unsupported release architectures are PATH-only.
+- VPK single-mod metadata: flat Windows-safe marker names; reserved devices/traversal guarded; long names hashed.
+- Backups: managed-output allowlist; confined roots; regular non-symlink manifest; preflight before mutation; rollback on failure.
+- Profiles: bounded 8 MiB files; <=256 profiles; <=5000 states/profile; <=20000 total states; bounded names/mod IDs/hints; strict booleans; format/version checked.
+- Downloads: pinned dependency versions + SHA-256 + safe extraction before executable use.
 - Steam: manual rc7 `prelaunch` retained; automatic launch-option injection disabled; stale Minify wrappers cleaned narrowly.
-- Security boundary: local mod Python scripts are trusted code; archive/VPK/profile/backup/download/D2PFX data are untrusted inputs.
+- Security boundary: local mod Python scripts trusted code; archive/VPK/profile/backup/download/D2PFX data untrusted.

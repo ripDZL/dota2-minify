@@ -2,14 +2,14 @@
 - Fork: `ripDZL/dota2-minify`; active `v21.4-hardening`; exact rc7 baseline `d4b4520c945a9e1f8f5facc52a76ac5903babe90`.
 - Branch model: exactly `v21.4-hardening` -> `beta` -> `main`; beta/main frozen.
 - Canonical feature reference: supplied v21.3.1 Safe Foliage Fix archive; bundled 116/116 tests pass.
-- Patch pipeline materialized at `b22133201e88d654859541f2c6be69cea8e3cb25`; preserve nested resolution, compatibility filtering, restore points, conflict reporting, validation, rollback, no-auto-prelaunch cleanup.
-- UI baseline: **Black-Plum Reactor**; centered header; 960x680 minimum; adaptive telemetry/right deck; SYSTEM/PROTECTED fit fixed; stale RC6/PATCH ENGINE furniture removed.
-- Incomplete `.materialize/` bootstrap/workflow removed at `8097ef24b2354bdad9e2008907895fa679ecdb9e`.
-- Security sweep completed so far: bounded/atomic downloads + D2PFX catalogue; backup manifest symlink/non-file rejection; bounded strict profile inputs; safe VPK single-mod metadata marker filenames.
-- Current tested product code: `a54c9259d5b1f45a1760f15f73e92f41460890d0`.
-- Hardening CI `33947470500`: compileall PASS; Ruff format/lint PASS; pytest 172/172 PASS; Windows portable build PASS.
-- Current Windows ZIP: `Minify-v21.4-hardening-a54c9259d5b1f45a1760f15f73e92f41460890d0-windows.zip`; 53,609,846 bytes; SHA-256 `a474cfa58c5f0b133b6438b64a3ddd90334a2d2d7b79f27863ddbda3f6e39c96`.
-- Artifact `9963790021`; outer SHA-256 `c7debe82df92e42553692cc32974fc5bdd942f690ca5f3e7c96e1a0f91d266f3`; 1650-entry portable layout verified; Safe Foliage/Main Menu Background invariants pass.
-- `core/mod_library.py` prior-v21.4 exact-source gap remains unresolved; never fabricate missing bytes or substitute old overlay as exact source.
-- Next: continue cursor/browser/path-race security review; adapt useful v21.3.1 regressions; semantic core reconciliation + exact-rc7 diff review; Dota smoke tests.
+- UI baseline: **Black-Plum Reactor**; centered header; 960x680 minimum; adaptive telemetry/right deck; stale RC6/PATCH ENGINE furniture removed.
+- Security sweep completed: network/catalogue, backup manifest, profiles, VPK metadata, D2PFX cursor filesystem handling, D2PFX catalogue/cache/metadata/path validation.
+- Cursor security commits: `927c2da60b08081609b497ca7e44ed6f611c2f91`, tests `6754fc076268651f345cf887612c59ac2007cf1c`; CI 179/179 + Windows PASS.
+- Metadata security commits: `e535d720ccd917aed74c225ae188d218a61c3777`, tests `f946f1b70a0207b59b634cf4f0500a92ee9f349b`.
+- Current tested product code: `f946f1b70a0207b59b634cf4f0500a92ee9f349b`.
+- Hardening CI `33949542003`: compileall PASS; Ruff format/lint PASS; pytest 185/185 PASS; Windows portable build PASS.
+- Current Windows ZIP: `Minify-v21.4-hardening-f946f1b70a0207b59b634cf4f0500a92ee9f349b-windows.zip`; 53,618,363 bytes; SHA-256 `7de99bc4d9b9ef03ea5334c1f6943864f6c8d18e9eb989c4509337565e77eb9b`.
+- Artifact `9964376842`; outer SHA-256 `b70c33b188f94a1fb8b24fe994270f56f527b06896a93bbcc9d3180a96242583`; 1650-entry portable layout/Safe-Foliage/Main-Menu checks pass.
+- `core/mod_library.py` prior-v21.4 exact-source gap remains unresolved; never fabricate missing bytes.
+- Next: harden D2PFX browser install/download redirect/SSRF/filename/staging; continue path-race review; then regressions/core diff/Dota smoke tests.
 - Do not promote beta/main until remaining gates and user approval.

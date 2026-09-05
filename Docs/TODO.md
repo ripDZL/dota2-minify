@@ -2,15 +2,15 @@
 - [x] Pin exact rc7 baseline `d4b4520c945a9e1f8f5facc52a76ac5903babe90`.
 - [x] Enforce exactly three branches: `v21.4-hardening`, `beta`, `main`.
 - [x] Preserve hardened backend + v21.3.1 feature set without wholesale old-core replacement.
-- [x] Stabilize Black-Plum Reactor UI; centered header; 960x680 minimum; responsive collapse rules; fixed SYSTEM/PROTECTED clipping.
-- [x] Remove incomplete `.materialize/` bootstrap + one-shot materialization workflow.
-- [x] Bound/atomically write general downloads and D2PFX catalogue fetch/decompression/cache.
-- [x] Reject symlink/non-file backup manifests.
-- [x] Harden profiles: strict booleans; format/version checks; bounded files/profile/state/string/hint counts; legacy shape retained.
-- [x] Harden single-mod VPK metadata marker filenames for nested IDs, traversal-like names, and Windows reserved devices.
-- [x] Current tested code `a54c9259d5b1f45a1760f15f73e92f41460890d0`; CI `33947470500`; pytest 172/172 PASS; Windows build PASS.
-- [x] Current portable ZIP validated; SHA-256 `a474cfa58c5f0b133b6438b64a3ddd90334a2d2d7b79f27863ddbda3f6e39c96`.
-- [ ] Continue hostile-input/security sweep: D2PFX cursor backup/restore, browser metadata, path-race surfaces.
+- [x] Stabilize Black-Plum Reactor UI and minimum/responsive sizing.
+- [x] Remove incomplete `.materialize/` bootstrap + workflow.
+- [x] Harden general downloads, D2PFX catalogue, backups, profiles, and VPK metadata.
+- [x] Harden D2PFX cursor backup/install/restore against symlinks, path escapes, oversized input, and partial unsafe restore.
+- [x] Bound/validate D2PFX browser catalogue/cache/category/mod/link/asset metadata.
+- [x] Current tested code `f946f1b70a0207b59b634cf4f0500a92ee9f349b`; CI `33949542003`; pytest 185/185 PASS; Windows build PASS.
+- [x] Current portable ZIP validated; SHA-256 `7de99bc4d9b9ef03ea5334c1f6943864f6c8d18e9eb989c4509337565e77eb9b`.
+- [ ] Harden D2PFX browser install/download URL redirects, external-host SSRF boundaries, safe URL basenames, preview limits, and staged publication.
+- [ ] Continue path-race/security review after browser install path.
 - [ ] Adapt remaining useful v21.3.1 regressions directly on hardening.
 - [ ] Complete semantic core-overlay reconciliation; never wholesale copy old core.
 - [ ] Complete exact-rc7 diff review.
