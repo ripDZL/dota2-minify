@@ -8,12 +8,12 @@
 - [x] Black-Plum Reactor maps the supplied JSON palette using the original app screenshot's spatial roles.
 - [x] Header/metrics/deployment/guard layouts use DPG tables; optional telemetry/right deck collapse before clipping.
 - [x] SYSTEM/PROTECTED nav status card clipping fixed at `9b70ed054aa6d22e1da63947c07c489b5ec27294`; 66px normal / 62px compact responsive height.
-- [x] Current tested product commit `2e5f202a2fb4cabaabadc6c42f2a44c538b15449`.
-- [x] Hardening CI run `33941070677`: compileall PASS; Ruff format/lint PASS; pytest 150/150 PASS; Windows build/package/upload PASS.
-- [x] Current inner ZIP: `Minify-v21.4-hardening-2e5f202a2fb4cabaabadc6c42f2a44c538b15449-windows.zip`; 53,607,416 bytes; SHA-256 `73fec5657d1e975054a0c3ad48dfee235930b480e9d6c0f98dc9d77bc9eabe20`.
-- [x] Artifact ID `9961846431`; outer SHA-256 `9041b5b391cd73157a5bdd6ddfaa3544f885534a8e5c8e9ab9d45018c055de20`; portable layout/Safe Foliage checks PASS.
+- [x] Removed PATCH ENGINE header chip; centered Minify brand with equal stretch gutters at `f102aace15b1e8849cd11a85704eb5f495b09b23`.
+- [x] Enforced 960x680 minimum viewport and reserved vertical budget for shell/activity/terminal/footer so core controls cannot clip at minimum size.
+- [x] Previous tested product commit `2e5f202a2fb4cabaabadc6c42f2a44c538b15449`; CI `33941070677` was 150/150 PASS with Windows build PASS.
 - [x] `main` and `beta` remain frozen.
-- [ ] User review nav status fit and Black-Plum Reactor across maximized/medium/narrow viewport sizes.
+- [ ] Full hardening + Windows gate for centered-header/minimum-fit tree.
+- [ ] User review centered header and minimum-size behavior across maximized/medium/minimum viewport sizes.
 - [ ] Adapt remaining useful v21.3.1 regressions directly on hardening.
 - [ ] Complete semantic core-overlay reconciliation; never wholesale overwrite hardened backends.
 - [ ] Resolve prior-v21.4 `core/mod_library.py` exact-source gap only if authentic bytes become available.
