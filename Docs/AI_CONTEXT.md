@@ -2,15 +2,16 @@
 - Upstream baseline: `Egezenn/dota2-minify` tag `Minify-v1.14rc7`; exact commit `d4b4520c945a9e1f8f5facc52a76ac5903babe90`.
 - Fork: `ripDZL/dota2-minify`; active branch `v21.4-hardening`; promotion path `v21.4-hardening` -> `beta` -> `main`.
 - Exactly three branches; `main` frozen at `a26bc88a0d412e357965f29488b83a7f9093e11f`; `beta` frozen at `af83bbb051edced195d5f55ba49ff060a8c76f3c`.
-- Current tested product code: `f946f1b70a0207b59b634cf4f0500a92ee9f349b`.
+- Current tested product code: `53a358db219256187e21a40acc8ed45704c3589f`.
 - Current UI baseline: **Black-Plum Reactor**; centered header; 960x680 minimum; adaptive telemetry/right deck; SYSTEM/PROTECTED 66px normal / 62px compact.
 - Incomplete `.materialize/` bootstrap/workflow removed; canonical source is ordinary materialized files only.
 - Security completed: bounded/atomic general downloads; bounded D2PFX catalogue fetch/decompression/cache; backup manifest symlink rejection; bounded strict profiles; Windows-safe VPK metadata markers.
 - D2PFX cursor hardening: no symlink directory traversal; regular-file-only sources/backups/destinations; confined + atomic copy; 512-file / 64 MiB per-file / 256 MiB total limits; unsafe restore keeps recovery tree.
 - D2PFX browser metadata hardening: catalogue filename allowlist; regular non-symlink cache; `modsData` shape check; bounded categories/depth/nodes/mods/links/text; traversal-safe category/asset URLs.
-- Hardening CI run `33949542003`: compileall PASS; Ruff format/lint PASS; pytest 185/185 PASS; Windows PyInstaller/runtime copy/portable ZIP/upload PASS.
-- Current Windows test ZIP: `Minify-v21.4-hardening-f946f1b70a0207b59b634cf4f0500a92ee9f349b-windows.zip`; 53,618,363 bytes; SHA-256 `7de99bc4d9b9ef03ea5334c1f6943864f6c8d18e9eb989c4509337565e77eb9b`.
-- GitHub artifact ID `9964376842`; outer ZIP 53,077,900 bytes; SHA-256 `b70c33b188f94a1fb8b24fe994270f56f527b06896a93bbcc9d3180a96242583`.
+- D2PFX browser install hardening: every redirect hop validated; HTTPS/public-network boundary; safe URL-derived filenames; previews capped at 32 MiB; installs staged under `mods/` and atomically published only after extraction/metadata complete; failed staging cleaned.
+- Hardening CI run `33971846026`: compileall PASS; Ruff format/lint PASS; pytest 200/200 PASS; Windows PyInstaller/runtime copy/portable ZIP/upload PASS.
+- Current Windows test ZIP: `Minify-v21.4-hardening-53a358db219256187e21a40acc8ed45704c3589f-windows.zip`; 53,625,172 bytes; SHA-256 `6a1874783d6d49b3e53d069577b90c14cd52a7aa618d3298c929fd863f2bd54a`.
+- GitHub artifact ID `9971169200`; outer ZIP 53,085,318 bytes; SHA-256 `14cd19c31edfcd4051a454ec73c12bd4fd383816783cde04d29785bcb5ad48ea`.
 - Artifact verified: 1650 entries; normal portable roots; no staging/materialize markers; no Remove Foilage map/manifest; both oak entries; both Main Menu Background collapse rules.
 - Canonical user feature reference: v21.3.1 Safe Foliage Fix archive; SHA-256 `37755c4ee92e1847eef1a5a9c89aef6ba488f33accd0cb102c62a7db8780b5f8`; bundled 116/116 tests pass locally.
 - Preserve recursive/nested mods, Collections, profiles, D2PFX, backups/conflict review, Dark Terrain behavior, Safe Foliage, Main Menu Background fix, manual rc7 `prelaunch`, no-auto-prelaunch policy.
