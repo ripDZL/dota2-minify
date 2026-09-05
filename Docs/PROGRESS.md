@@ -5,18 +5,15 @@
 - [x] Recursive/nested mods, Collections, profiles, D2PFX, backups/conflict review, Safe Foliage, Main Menu fix, Dark Terrain behavior preserved.
 - [x] v21.3.1 patch pipeline integrated at `b22133201e88d654859541f2c6be69cea8e3cb25` without overwriting hardened core backends.
 - [x] Removed `LOCAL MOD WORKSPACE` + stale `RC6` UI furniture.
-- [x] Repaired resize/alignment defects using DPG table columns and adaptive visibility thresholds.
-- [x] User supplied original application screenshot clarifying JSON theme spatial roles.
-- [x] **Black-Plum Reactor** materialized at `bfeca95d36b685ec38bb9ab9be9885089a8bf4d6`: plum chrome, slate work surfaces, black strips, purple controls, lime selected/safe state with black text, red dividers, gold telemetry, yellow links, warm ivory text.
-- [x] Mod Library uses broad slate fields + purple controls; D2PFX selected categories use lime/black; screenshot-derived purple hover `(169, 98, 183)` retained.
-- [x] Current tested product commit `667be18dd0613098ad17f9c2eb8f66a4ee57bf8e`.
-- [x] Hardening CI run `33940573117`: compileall PASS; Ruff format/lint PASS; pytest 149/149 PASS in 0.78s; Windows build/package/upload PASS.
-- [x] Current inner ZIP: `Minify-v21.4-hardening-667be18dd0613098ad17f9c2eb8f66a4ee57bf8e-windows.zip`; 53607407 bytes; SHA-256 `0fd863453cc8d2482682fbc5b41cc718870165cf06305f4535589fe673255408`.
-- [x] GitHub artifact ID `9961687096`; 53067832 bytes; outer SHA-256 `ea94210af69e8dce1a35e9cb9d91c40e6f37146dc3316971e8e6cc08a414885f`.
-- [x] Artifact verified: 1650 entries; normal portable roots; no staging/materialize markers; Safe Foliage map/manifest absent; both oak blacklist entries present; Main Menu Background both rules present.
-- [x] Temporary compositor/workflow removed; only three long-lived branches remain.
+- [x] Black-Plum Reactor maps the supplied JSON palette using the original app screenshot's spatial roles.
+- [x] Header/metrics/deployment/guard layouts use DPG tables; optional telemetry/right deck collapse before clipping.
+- [x] SYSTEM/PROTECTED nav status card clipping fixed at `9b70ed054aa6d22e1da63947c07c489b5ec27294`; 66px normal / 62px compact responsive height.
+- [x] Current tested product commit `2e5f202a2fb4cabaabadc6c42f2a44c538b15449`.
+- [x] Hardening CI run `33941070677`: compileall PASS; Ruff format/lint PASS; pytest 150/150 PASS; Windows build/package/upload PASS.
+- [x] Current inner ZIP: `Minify-v21.4-hardening-2e5f202a2fb4cabaabadc6c42f2a44c538b15449-windows.zip`; 53,607,416 bytes; SHA-256 `73fec5657d1e975054a0c3ad48dfee235930b480e9d6c0f98dc9d77bc9eabe20`.
+- [x] Artifact ID `9961846431`; outer SHA-256 `9041b5b391cd73157a5bdd6ddfaa3544f885534a8e5c8e9ab9d45018c055de20`; portable layout/Safe Foliage checks PASS.
 - [x] `main` and `beta` remain frozen.
-- [ ] User review/smoke-test Black-Plum Reactor at maximized, medium, and narrow viewport sizes across Patch, Mod Library, D2PFX, Settings.
+- [ ] User review nav status fit and Black-Plum Reactor across maximized/medium/narrow viewport sizes.
 - [ ] Adapt remaining useful v21.3.1 regressions directly on hardening.
 - [ ] Complete semantic core-overlay reconciliation; never wholesale overwrite hardened backends.
 - [ ] Resolve prior-v21.4 `core/mod_library.py` exact-source gap only if authentic bytes become available.

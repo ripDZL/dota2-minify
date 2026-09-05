@@ -1,26 +1,22 @@
 # AI Context
 - Upstream baseline: `Egezenn/dota2-minify` tag `Minify-v1.14rc7`; exact commit `d4b4520c945a9e1f8f5facc52a76ac5903babe90`.
 - Fork: `ripDZL/dota2-minify`; active branch `v21.4-hardening`; promotion path `v21.4-hardening` -> `beta` -> `main`.
-- Exactly three branches must remain; `main` frozen at `a26bc88a0d412e357965f29488b83a7f9093e11f`; `beta` frozen at `af83bbb051edced195d5f55ba49ff060a8c76f3c`.
-- Current tested product code: `667be18dd0613098ad17f9c2eb8f66a4ee57bf8e`; Black-Plum UI materialization commit: `bfeca95d36b685ec38bb9ab9be9885089a8bf4d6`.
-- Current UI baseline: **Black-Plum Reactor**; supersedes Plumfire palette mapping while retaining the responsive command-console structure.
-- Theme source: user JSON + screenshot of its original application; spatial roles are plum chrome `#46335a`, slate work areas `#586c72`, black strips `#000000`, purple controls `#853894`, lime selected/safe `#7ac143` with black text, red dividers/errors `#df503b`, gold telemetry `#ffc30f`, yellow links `#ffff00`, warm ivory text `#f7f0e7`.
-- Screenshot-derived purple hover tone: `(169, 98, 183)`; primary patch/save controls stay purple while green is reserved for selection/protection state.
-- Mod Library uses broad slate fields + purple controls; D2PFX selected category uses lime fill/black text; D2PFX link emphasis uses JSON yellow.
-- Alignment fix retained: header, metric strip, deployment sequence, and guard matrix use real DPG table columns instead of space-padded text; adaptive resize hides optional telemetry/right deck before clipping.
-- Responsive thresholds: side deck requires workspace >=1080 and height >=720; metric strip requires inner height >=350/main >=560; restore/collision columns hide below 650/830 main width; engine column hides below 760 viewport width; activity caption hides below 900.
-- `LOCAL MOD WORKSPACE` / stale `RC6` UI remains removed.
-- Permanent visual regressions: `tests/test_modern_ui.py`; full hardening suite is 149/149.
-- Hardening CI run `33940573117`: compileall PASS; Ruff format PASS; Ruff lint PASS; pytest 149/149 PASS in 0.78s; Windows PyInstaller/runtime copy/portable ZIP/upload PASS.
-- Current Windows test ZIP: `Minify-v21.4-hardening-667be18dd0613098ad17f9c2eb8f66a4ee57bf8e-windows.zip`; 53607407 bytes; SHA-256 `0fd863453cc8d2482682fbc5b41cc718870165cf06305f4535589fe673255408`.
-- GitHub artifact ID `9961687096`; outer ZIP 53067832 bytes; SHA-256 `ea94210af69e8dce1a35e9cb9d91c40e6f37146dc3316971e8e6cc08a414885f`.
-- Artifact verified: 1650 entries; roots `LICENSE`, `Minify.exe`, `README.md`, `_internal`, `bin`, `mods`; no `.materialize`, `READY`, `AI_REMOTE_TMP`; no forbidden Remove Foilage map/manifest; both oak blacklist entries present; Main Menu Background keeps both rules.
-- Canonical user feature reference: `Minify-v1.14rc7-ModManager-v21.3.1-Safe-Foliage-Fix (1).zip`; SHA-256 `37755c4ee92e1847eef1a5a9c89aef6ba488f33accd0cb102c62a7db8780b5f8`; bundled 116/116 tests pass locally.
+- Exactly three branches; `main` frozen at `a26bc88a0d412e357965f29488b83a7f9093e11f`; `beta` frozen at `af83bbb051edced195d5f55ba49ff060a8c76f3c`.
+- Current tested product code: `2e5f202a2fb4cabaabadc6c42f2a44c538b15449`; nav-fit product commit: `9b70ed054aa6d22e1da63947c07c489b5ec27294`.
+- Current UI baseline: **Black-Plum Reactor**; screenshot-derived spatial roles over supplied JSON palette.
+- Palette roles: plum `#46335a` chrome; slate `#586c72` work surfaces; black strips; purple `#853894` controls; lime `#7ac143` selected/protected state with black text; red `#df503b` dividers/errors; gold `#ffc30f` telemetry; yellow `#ffff00` links; ivory `#f7f0e7` text.
+- Alignment: header/metrics/deployment/guard use real DPG tables; optional telemetry/right deck collapse before clipping.
+- Nav SYSTEM/PROTECTED card fix: initial height `66`; responsive height `66` normally / `62` compact; prevents second-line clipping on Windows font metrics.
+- `LOCAL MOD WORKSPACE` / stale `RC6` remains removed.
+- Permanent visual regressions: `tests/test_modern_ui.py`; full hardening suite now 150/150.
+- Hardening CI run `33941070677`: compileall PASS; Ruff format/lint PASS; pytest 150/150 PASS; Windows PyInstaller/runtime copy/portable ZIP/upload PASS.
+- Current Windows test ZIP: `Minify-v21.4-hardening-2e5f202a2fb4cabaabadc6c42f2a44c538b15449-windows.zip`; 53,607,416 bytes; SHA-256 `73fec5657d1e975054a0c3ad48dfee235930b480e9d6c0f98dc9d77bc9eabe20`.
+- GitHub artifact ID `9961846431`; outer ZIP 53,067,871 bytes; SHA-256 `9041b5b391cd73157a5bdd6ddfaa3544f885534a8e5c8e9ab9d45018c055de20`.
+- Artifact verified: 1650 entries; roots `LICENSE`, `Minify.exe`, `README.md`, `_internal`, `bin`, `mods`; no staging/materialize markers; no Remove Foilage map/manifest; both oak blacklist entries present.
+- Canonical user feature reference: v21.3.1 Safe Foliage Fix archive; SHA-256 `37755c4ee92e1847eef1a5a9c89aef6ba488f33accd0cb102c62a7db8780b5f8`; bundled 116/116 tests pass locally.
 - v21.3.1 patch pipeline materialized at `b22133201e88d654859541f2c6be69cea8e3cb25`; preserve nested paths, compatibility filtering, restore points, conflict reporting, output validation, rollback, no-auto-prelaunch cleanup.
-- Never wholesale replace hardened core files with v21.3.1 overlays; use them as feature references only.
-- Preserve recursive/nested mods, markerless/collapsible Collections, profiles, D2PFX browser/imports, backups/conflict review, Dark Terrain collision behavior, Safe Foliage, Main Menu Background fix, manual rc7 `prelaunch`, and no-auto-prelaunch policy.
+- Preserve recursive/nested mods, Collections, profiles, D2PFX, backups/conflict review, Dark Terrain collision behavior, Safe Foliage, Main Menu Background fix, manual rc7 `prelaunch`, and no-auto-prelaunch policy.
 - Remove Foilage: blacklist-only; never ship `manifest.json` or `maps/dota.vpk`; retain both exact oak-leaf blacklist entries.
-- Security boundary: mod Python scripts are trusted arbitrary code; VPK/archive/profile/backup/download/D2PFX inputs are untrusted.
-- Canonical fork architecture is materialized normal source; transformer/bootstrap only optional migration/repro tooling.
+- Security boundary: mod Python scripts trusted arbitrary code; VPK/archive/profile/backup/download/D2PFX inputs untrusted.
+- Canonical source is materialized normal files; transformer/bootstrap only optional migration/repro tooling.
 - `core/mod_library.py` prior-v21.4 exact-source reconciliation remains blocked; never fabricate missing bootstrap bytes or create `.materialize/READY` while incomplete.
-- Project-memory rule: read `Docs/*.md` at session start; update terse bullets at major milestones.

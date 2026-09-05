@@ -1,19 +1,17 @@
 # Session Summary
 - Fork: `ripDZL/dota2-minify`; active `v21.4-hardening`; exact rc7 baseline `d4b4520c945a9e1f8f5facc52a76ac5903babe90`.
 - Branch model: exactly `v21.4-hardening` -> `beta` -> `main`; beta/main frozen.
-- Canonical feature reference remains supplied v21.3.1 Safe Foliage Fix archive; bundled 116/116 tests pass.
+- Canonical feature reference: supplied v21.3.1 Safe Foliage Fix archive; bundled 116/116 tests pass.
 - Patch pipeline remains materialized at `b22133201e88d654859541f2c6be69cea8e3cb25`; preserve nested resolution, compatibility filtering, restore points, conflict reporting, validation, rollback, no-auto-prelaunch cleanup.
-- User supplied JSON theme plus screenshot of its original program, clarifying that colors are spatial roles rather than small accents.
-- Current UI baseline: **Black-Plum Reactor**; materialized at `bfeca95d36b685ec38bb9ab9be9885089a8bf4d6`; Plumfire mapping superseded while responsive command-console structure remains.
-- Spatial roles: plum `#46335a` chrome, slate `#586c72` work areas, black `#000000` strips, purple `#853894` controls, lime `#7ac143` selected/safe with black text, red `#df503b` dividers/errors, gold `#ffc30f` telemetry, yellow `#ffff00` links, ivory `#f7f0e7` text; screenshot-derived purple hover `(169, 98, 183)`.
-- Alignment repair remains: header/metric/deployment/guard sections use DPG tables; right deck and optional telemetry collapse at explicit viewport thresholds; card heights/wrapping adjust dynamically.
-- Mod Library uses broad slate fields + purple controls; D2PFX selected row uses lime fill/black text.
+- Current UI baseline: **Black-Plum Reactor**; uses supplied JSON palette according to original app screenshot spatial roles.
+- Palette grammar: plum chrome; slate work areas; black hard strips; purple controls; lime selected/protected state with black text; red dividers/errors; gold telemetry; yellow links; ivory text.
+- Header/metric/deployment/guard layouts use DPG tables; optional telemetry/right deck collapse before clipping.
+- User reported SYSTEM/PROTECTED nav status card clipping; fixed at `9b70ed054aa6d22e1da63947c07c489b5ec27294` with 66px normal / 62px compact responsive height.
 - `LOCAL MOD WORKSPACE` / stale `RC6` remains removed.
-- Current tested product code: `667be18dd0613098ad17f9c2eb8f66a4ee57bf8e`.
-- Hardening CI run `33940573117`: compileall PASS, Ruff format/lint PASS, pytest 149/149 PASS in 0.78s, Windows portable build PASS.
-- Current Windows ZIP: `Minify-v21.4-hardening-667be18dd0613098ad17f9c2eb8f66a4ee57bf8e-windows.zip`; 53607407 bytes; SHA-256 `0fd863453cc8d2482682fbc5b41cc718870165cf06305f4535589fe673255408`.
-- Artifact ID `9961687096`; outer SHA-256 `ea94210af69e8dce1a35e9cb9d91c40e6f37146dc3316971e8e6cc08a414885f`; 53067832 bytes; artifact safety/layout verified.
-- Artifact invariants: 1650 entries; normal roots; no staging/materialize markers; no Remove Foilage map/manifest; both oak blacklist entries present; Main Menu Background both CSS rules present.
+- Current tested product code: `2e5f202a2fb4cabaabadc6c42f2a44c538b15449`.
+- Hardening CI run `33941070677`: compileall PASS; Ruff format/lint PASS; pytest 150/150 PASS; Windows portable build PASS.
+- Current Windows ZIP: `Minify-v21.4-hardening-2e5f202a2fb4cabaabadc6c42f2a44c538b15449-windows.zip`; 53,607,416 bytes; SHA-256 `73fec5657d1e975054a0c3ad48dfee235930b480e9d6c0f98dc9d77bc9eabe20`.
+- Artifact ID `9961846431`; outer SHA-256 `9041b5b391cd73157a5bdd6ddfaa3544f885534a8e5c8e9ab9d45018c055de20`; artifact safety/layout verified.
 - `core/mod_library.py` prior-v21.4 exact-source gap remains unresolved; never fabricate missing bytes or substitute old overlay as exact source.
-- Remaining: user review Black-Plum at multiple viewport sizes, adapt useful v21.3.1 regressions, semantic core reconciliation, hostile-input/security sweep, exact-rc7 diff review, bootstrap cleanup, Dota smoke tests.
+- Remaining: user review nav fit/UI at multiple viewport sizes, adapt useful v21.3.1 regressions, semantic core reconciliation, hostile-input/security sweep, exact-rc7 diff review, bootstrap cleanup, Dota smoke tests.
 - Do not promote beta/main until remaining gates and user approval.
