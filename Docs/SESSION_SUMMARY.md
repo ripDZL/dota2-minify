@@ -2,14 +2,15 @@
 - Fork: `ripDZL/dota2-minify`; active `v21.4-hardening`; exact rc7 baseline `d4b4520c945a9e1f8f5facc52a76ac5903babe90`.
 - Branch model: exactly `v21.4-hardening` -> `beta` -> `main`; beta/main frozen.
 - Canonical feature reference: supplied v21.3.1 Safe Foliage Fix archive; bundled 116/116 tests pass.
-- UI baseline: **Black-Plum Reactor**; centered header; 960x680 minimum; adaptive telemetry/right deck; stale RC6/PATCH ENGINE furniture removed.
+- UI baseline: **Black-Plum Reactor**; `960x680` minimum; compact layout at <=1000 client width; optional telemetry collapses before clipping.
+- Minimum-width pass covers Home nav/metrics/actions/activity, Settings padding/wrap, D2PFX sidebar/header/card grid, and Mod Library metadata wrapping.
 - Security sweep includes network/catalogue, profiles, VPK metadata, D2PFX cursors/catalogue/install, and backup live-output/manifest path races.
-- Backup hardening product commit `3266a10ae4132201fcfc85c0adf0475b30416973`: no-follow manifest descriptor + identity check; managed-output confinement; symlinked parent escape rejected pre-mutation.
-- Restored v21.3.1 backend regressions directly on hardening: Dark Terrain/Safe Foliage/Main Menu compatibility and recursive/nested Collections/dependency behavior.
-- Exact validated head: `2de55f97a4bbb8d0e127335cc4a2effc56fd105a`.
-- Hardening CI `33972529166`: compileall PASS; Ruff format/lint PASS; pytest 228/228 PASS; Windows portable build PASS.
-- Windows ZIP: `Minify-v21.4-hardening-2de55f97a4bbb8d0e127335cc4a2effc56fd105a-windows.zip`; 53,625,698 bytes; SHA-256 `28e084172e7c9a984288999b0e26b01b69359a51ed9c4221bb35f7ff2feae759`.
-- Artifact `9971359063`; outer 53,085,215 bytes; SHA-256 `b774c5e257f19bd9d9d11e8d3b887fca39a58af6d3cdba1888182d98c9f35d6b`; portable/Safe-Foliage/Main-Menu checks pass.
+- Restored v21.3.1 compatibility, nested Collections/dependency, and semantic feature regressions directly on hardening.
+- Minimum-width UI product commit: `d647d7d84c8e0ddf429eab06529f49a2ecdaa448`; one-shot helper/workflow removed.
+- Exact validated product head: `a27dfa368a56ec8be5d713594eb5506abc24ee06`.
+- Hardening CI `33977097382`: compileall PASS; Ruff format/lint PASS; pytest 241/241 PASS; Windows portable build PASS.
+- Windows ZIP: `Minify-v21.4-hardening-a27dfa368a56ec8be5d713594eb5506abc24ee06-windows.zip`; 53,623,858 bytes; SHA-256 `906284491ae285d7233887c1306a56dae2512264b097262ef28facbd18c831da`.
+- Artifact `9972649232`; outer 53,084,155 bytes; SHA-256 `7df04164f5b97160f536d5c6fc1f9cfd36156e185f44d163ddba1fba407a2851`; portable/Safe-Foliage/Main-Menu checks pass.
 - `core/mod_library.py` prior-v21.4 exact-source gap remains unresolved; never fabricate missing bytes.
-- Next: remaining filesystem race/security review; semantic v21.3.1 UI/feature regression adaptation; semantic core/exact-rc7 diff review; Dota smoke tests.
+- Next: user minimum-width visual smoke-test; remaining filesystem race/security review; semantic core/exact-rc7 diff review; Dota smoke tests.
 - Do not promote beta/main until remaining gates and user approval.
