@@ -1,12 +1,154 @@
 import os
-import shutil
+import stat
+import tempfile
 
 import helper
 import vpk
-from core import base, constants, fs, log, mods_shared, output
+from core import base, constants, fs, log, mods_shared, output, security
 from patch import manifest_utils, vpk_utils
 
 from browsers.d2pfx import config as browser_config
+
+CURSOR_EXTENSIONS = {".ani", ".bmp", ".cur", ".res", ".png", ".jpg", ".jpeg"}
+CURSOR_MAX_FILES = 512
+CURSOR_MAX_FILE_BYTES = 64 * 1024 * 1024
+CURSOR_MAX_TOTAL_BYTES = 256 * 1024 * 1024
+
+
+def _relative_under(root: str, path: str) -> str:
+    root_abs = os.path.abspath(root)
+    path_abs = os.path.abspath(path)
+    relative = os.path.relpath(path_abs, root_abs).replace(os.sep, "/")
+    return security.safe_relative_path(relative)
+
+
+def _regular_file_stat(root: str, path: str):
+    relative = _relative_under(root, path)
+    _, confined = security.confined_destination(root, relative)
+    try:
+        info = os.stat(confined, follow_symlinks=False)
+    except FileNotFoundError as exc:
+        raise FileNotFoundError(f"Cursor file does not exist: {confined}") from exc
+    if not stat.S_ISREG(info.st_mode):
+        raise ValueError(f"Cursor path is not a regular file: {confined}")
+    return confined, info
+
+
+def _atomic_copy_regular_file(
+    source: str,
+    destination: str,
+    *,
+    source_root: str,
+    destination_root: str,
+    max_bytes: int = CURSOR_MAX_FILE_BYTES,
+) -> None:
+    """Copy one regular file without following source/destination symlinks."""
+    source, source_info = _regular_file_stat(source_root, source)
+    if source_info.st_size > max_bytes:
+        raise ValueError(f"Cursor file exceeds the {max_bytes}-byte safety limit: {source}")
+
+    destination_relative = _relative_under(destination_root, destination)
+    _, destination = security.confined_destination(destination_root, destination_relative)
+    parent = os.path.dirname(destination)
+    os.makedirs(parent, exist_ok=True)
+    _, destination = security.confined_destination(destination_root, destination_relative)
+
+    if os.path.lexists(destination):
+        destination_info = os.stat(destination, follow_symlinks=False)
+        if not stat.S_ISREG(destination_info.st_mode):
+            raise ValueError(f"Cursor destination is not a regular file: {destination}")
+
+    flags = os.O_RDONLY
+    if hasattr(os, "O_BINARY"):
+        flags |= os.O_BINARY
+    if hasattr(os, "O_NOFOLLOW"):
+        flags |= os.O_NOFOLLOW
+
+    source_fd = os.open(source, flags)
+    temporary = None
+    try:
+        opened_info = os.fstat(source_fd)
+        if not stat.S_ISREG(opened_info.st_mode):
+            raise ValueError(f"Cursor source changed to a non-regular file: {source}")
+        if opened_info.st_size > max_bytes:
+            raise ValueError(f"Cursor file exceeds the {max_bytes}-byte safety limit: {source}")
+
+        temporary_fd, temporary = tempfile.mkstemp(prefix=".minify-cursor-", dir=parent)
+        written = 0
+        with os.fdopen(source_fd, "rb") as input_file, os.fdopen(temporary_fd, "wb") as output_file:
+            source_fd = -1
+            while True:
+                chunk = input_file.read(1024 * 1024)
+                if not chunk:
+                    break
+                written += len(chunk)
+                if written > max_bytes:
+                    raise ValueError(f"Cursor file exceeds the {max_bytes}-byte safety limit: {source}")
+                output_file.write(chunk)
+
+        # Re-resolve the parent just before publication so an existing symlink
+        # component cannot redirect the atomic replace outside the trusted root.
+        _, destination = security.confined_destination(destination_root, destination_relative)
+        if os.path.lexists(destination):
+            destination_info = os.stat(destination, follow_symlinks=False)
+            if not stat.S_ISREG(destination_info.st_mode):
+                raise ValueError(f"Cursor destination changed to a non-regular file: {destination}")
+        os.replace(temporary, destination)
+        temporary = None
+    finally:
+        if source_fd >= 0:
+            os.close(source_fd)
+        if temporary:
+            try:
+                os.remove(temporary)
+            except FileNotFoundError:
+                pass
+
+
+def _cursor_source_dir(mod_path: str) -> str:
+    """Find a real cursor directory without traversing symlinked child dirs."""
+    mod_root = os.path.abspath(mod_path)
+    for root, dirs, _ in os.walk(mod_root, followlinks=False):
+        safe_dirs = []
+        for directory in dirs:
+            candidate = os.path.join(root, directory)
+            if os.path.islink(candidate):
+                continue
+            try:
+                _relative_under(mod_root, candidate)
+            except ValueError:
+                continue
+            safe_dirs.append(directory)
+            if directory.casefold() == "cursor":
+                return candidate
+        dirs[:] = safe_dirs
+    return mod_root
+
+
+def _collect_cursor_files(cursor_mod_paths: list[str]) -> list[tuple[str, str, str]]:
+    """Preflight all cursor sources before mutating Dota or persistent backups."""
+    collected: list[tuple[str, str, str]] = []
+    total_bytes = 0
+
+    for mod_path in cursor_mod_paths:
+        source_dir = _cursor_source_dir(mod_path)
+        for root, dirs, files in os.walk(source_dir, followlinks=False):
+            dirs[:] = [directory for directory in dirs if not os.path.islink(os.path.join(root, directory))]
+            for filename in files:
+                if os.path.splitext(filename)[1].casefold() not in CURSOR_EXTENSIONS:
+                    continue
+                source = os.path.join(root, filename)
+                source, info = _regular_file_stat(source_dir, source)
+                if info.st_size > CURSOR_MAX_FILE_BYTES:
+                    raise ValueError(f"Cursor file exceeds the per-file safety limit: {source}")
+                collected.append((source_dir, source, filename))
+                total_bytes += info.st_size
+                if len(collected) > CURSOR_MAX_FILES:
+                    raise ValueError(f"Cursor selection exceeds the {CURSOR_MAX_FILES}-file safety limit.")
+                if total_bytes > CURSOR_MAX_TOTAL_BYTES:
+                    raise ValueError("Cursor selection exceeds the total-size safety limit.")
+
+    return collected
 
 
 def run(mod_list, current_mod=None):
@@ -56,10 +198,16 @@ def run(mod_list, current_mod=None):
 
         # Find VPKs for VPK-based D2PFX mods
         vpk_files = []
-        for root, _, files in os.walk(mod_path):
-            for f in files:
-                if f.endswith(".vpk"):
-                    vpk_files.append(os.path.join(root, f))
+        for root, dirs, files in os.walk(mod_path, followlinks=False):
+            dirs[:] = [directory for directory in dirs if not os.path.islink(os.path.join(root, directory))]
+            for filename in files:
+                if filename.endswith(".vpk"):
+                    candidate = os.path.join(root, filename)
+                    try:
+                        candidate, _ = _regular_file_stat(mod_path, candidate)
+                    except (FileNotFoundError, ValueError):
+                        continue
+                    vpk_files.append(candidate)
 
         if not vpk_files:
             continue
@@ -109,37 +257,42 @@ def run(mod_list, current_mod=None):
         game_root = os.path.dirname(os.path.dirname(constants.dota_game_pak_path))
         minify_root = os.path.dirname(os.path.abspath(base.mods_dir))
         cursor_bkup_dir = os.path.join(minify_root, "backup", "d2pfx_cursors")
+        cursor_backup_payload = os.path.join(cursor_bkup_dir, "dota", "resource", "cursor")
         dota_cursor_dir = os.path.join(game_root, "dota", "resource", "cursor")
 
         output.add_text("&installing_terminal", "D2PFX Cursors")
+        cursor_files = _collect_cursor_files(cursor_mod_paths)
 
-        for mod_path in cursor_mod_paths:
-            cursor_source_dir = None
-            for root, dirs, _ in os.walk(mod_path):
-                for d in dirs:
-                    if d.lower() == "cursor":
-                        cursor_source_dir = os.path.join(root, d)
-                        break
-                if cursor_source_dir:
-                    break
+        # Preflight live and persistent-backup destinations before the first write.
+        for _, _, filename in cursor_files:
+            destination = os.path.join(dota_cursor_dir, filename)
+            backup = os.path.join(cursor_backup_payload, filename)
+            for root, path in ((game_root, destination), (minify_root, backup)):
+                relative = _relative_under(root, path)
+                _, confined = security.confined_destination(root, relative)
+                if os.path.lexists(confined):
+                    info = os.stat(confined, follow_symlinks=False)
+                    if not stat.S_ISREG(info.st_mode):
+                        raise ValueError(f"Unsafe cursor destination path: {confined}")
 
-            if not cursor_source_dir:
-                cursor_source_dir = mod_path
+        for source_root, source, filename in cursor_files:
+            destination = os.path.join(dota_cursor_dir, filename)
+            backup = os.path.join(cursor_backup_payload, filename)
 
-            for root, _, files in os.walk(cursor_source_dir):
-                for fname in files:
-                    ext = os.path.splitext(fname)[1].lower()
-                    if ext in (".ani", ".bmp", ".cur", ".res", ".png", ".jpg", ".jpeg"):
-                        src_file = os.path.join(root, fname)
-                        dest_file = os.path.join(dota_cursor_dir, fname)
-                        bkup_file = os.path.join(cursor_bkup_dir, "dota", "resource", "cursor", fname)
+            if os.path.isfile(destination) and not os.path.exists(backup):
+                _atomic_copy_regular_file(
+                    destination,
+                    backup,
+                    source_root=game_root,
+                    destination_root=minify_root,
+                )
 
-                        if os.path.isfile(dest_file) and not os.path.exists(bkup_file):
-                            fs.create_dirs(os.path.dirname(bkup_file))
-                            shutil.copy2(dest_file, bkup_file)
-
-                        fs.create_dirs(os.path.dirname(dest_file))
-                        shutil.copy2(src_file, dest_file)
+            _atomic_copy_regular_file(
+                source,
+                destination,
+                source_root=source_root,
+                destination_root=game_root,
+            )
     else:
         restore_d2pfx_cursors()
 
@@ -195,17 +348,51 @@ def run(mod_list, current_mod=None):
 def restore_d2pfx_cursors():
     minify_root = os.path.dirname(os.path.abspath(base.mods_dir))
     cursor_bkup_dir = os.path.join(minify_root, "backup", "d2pfx_cursors")
-    if os.path.isdir(cursor_bkup_dir):
-        game_root = os.path.dirname(os.path.dirname(constants.dota_game_pak_path))
-        restored = 0
-        for dirpath, _, filenames in os.walk(cursor_bkup_dir):
-            for fname in filenames:
-                bkup_file = os.path.join(dirpath, fname)
-                rel_path = os.path.relpath(bkup_file, cursor_bkup_dir).replace("\\", "/")
-                dest_file = os.path.join(game_root, rel_path)
-                fs.create_dirs(os.path.dirname(dest_file))
-                shutil.copy2(bkup_file, dest_file)
-                restored += 1
+    cursor_backup_payload = os.path.join(cursor_bkup_dir, "dota", "resource", "cursor")
+    if not os.path.isdir(cursor_bkup_dir):
+        return
+
+    game_root = os.path.dirname(os.path.dirname(constants.dota_game_pak_path))
+    dota_cursor_dir = os.path.join(game_root, "dota", "resource", "cursor")
+
+    try:
+        relative = _relative_under(minify_root, cursor_backup_payload)
+        _, confined_payload = security.confined_destination(minify_root, relative)
+    except ValueError:
+        log.write_warning("Refusing to restore D2PFX cursor backup outside Minify's backup root.")
+        return
+
+    if not os.path.isdir(confined_payload) or os.path.islink(confined_payload):
+        log.write_warning("Refusing to restore an invalid D2PFX cursor backup payload.")
+        return
+
+    restored = 0
+    unsafe = False
+    for entry in os.scandir(confined_payload):
+        if os.path.splitext(entry.name)[1].casefold() not in CURSOR_EXTENSIONS:
+            continue
+        if entry.is_symlink() or not entry.is_file(follow_symlinks=False):
+            unsafe = True
+            log.write_warning(f"Skipping unsafe D2PFX cursor backup entry: {entry.name}")
+            continue
+
+        destination = os.path.join(dota_cursor_dir, entry.name)
+        try:
+            _atomic_copy_regular_file(
+                entry.path,
+                destination,
+                source_root=minify_root,
+                destination_root=game_root,
+            )
+        except (OSError, ValueError):
+            unsafe = True
+            log.write_warning(f"Could not safely restore D2PFX cursor backup entry: {entry.name}")
+            continue
+        restored += 1
+
+    # Keep the backup tree intact if anything looked unsafe or failed; deleting
+    # it in that state would destroy the user's only recovery copy.
+    if not unsafe:
         fs.remove_path(cursor_bkup_dir)
-        if restored > 0:
-            output.add_text(f"Restored {restored} original cursor files.", msg_type="success")
+    if restored > 0:
+        output.add_text(f"Restored {restored} original cursor files.", msg_type="success")
