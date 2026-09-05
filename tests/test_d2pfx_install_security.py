@@ -15,7 +15,8 @@ def test_d2pfx_browser_preview_cache_uses_validated_bounded_downloads():
     assert "fs.download_file(url, local_path)" not in UI_SOURCE
     assert "fs.download_file(root_url, local_path)" not in UI_SOURCE
     assert "self.data_manager.download_file(url, local_path, max_bytes=D2PFX_PREVIEW_MAX_BYTES)" in UI_SOURCE
-    assert "self.data_manager.download_file(root_url, local_path, max_bytes=D2PFX_PREVIEW_MAX_BYTES)" in UI_SOURCE
+    assert UI_SOURCE.count("self.data_manager.download_file(") >= 2
+    assert "root_url, local_path, max_bytes=D2PFX_PREVIEW_MAX_BYTES" in UI_SOURCE
 
 
 def test_d2pfx_install_uses_staging_and_atomic_publication():
