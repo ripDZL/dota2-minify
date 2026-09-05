@@ -1,6 +1,8 @@
 # AI Context
 - Upstream baseline: `Egezenn/dota2-minify` tag `Minify-v1.14rc7`; exact commit `d4b4520c945a9e1f8f5facc52a76ac5903babe90`.
 - Fork target: `ripDZL/dota2-minify`; `v21.4-hardening` is active integration/development; keep `main` upstream-tracking and `beta` frozen until runtime gates pass.
+- Branch policy: exactly three long-lived branches only: `v21.4-hardening` -> `beta` -> `main`. Temporary/reference/integration branches must not remain in the repository.
+- Branch cleanup completed 2026-09-04: removed `v21.2-ui-reference`, `v21.4-ui-format`, `v21.4-v2131-integration`, and `v21.4-v2131-regressions`; one-time cleanup workflow run `33933941673` succeeded and the workflow was then removed at `d10920c2192c45dbb701071e5149bfa16c6208c5`.
 - `main` remains `a26bc88a0d412e357965f29488b83a7f9093e11f`; `beta` remains `af83bbb051edced195d5f55ba49ff060a8c76f3c`.
 - Current tested code commit: `24703387f959c0ed2634fcc2454a46c0aad3f224`.
 - v21.3.1 patch-pipeline materialization commit: `b22133201e88d654859541f2c6be69cea8e3cb25`; only `Minify/patch/__init__.py` changed there.
@@ -12,7 +14,8 @@
 - Canonical user-supplied feature reference: `Minify-v1.14rc7-ModManager-v21.3.1-Safe-Foliage-Fix (1).zip`; SHA-256 `37755c4ee92e1847eef1a5a9c89aef6ba488f33accd0cb102c62a7db8780b5f8`; bundled 116/116 v21.3.1 regression tests pass locally.
 - Full v21.3.1 transformer target inventory was compared against hardening. `cli.py` and `pyproject.toml` are rc7 guard inputs only; every actual transformer write target is now materialized/modified relative to exact rc7. The sole actual write target still left rc7 before this milestone was `Minify/patch/__init__.py`.
 - Recovered patch pipeline now uses discovered nested paths/references, compatibility-filtered standard/VPK copying, transactional restore points, conflict preflight/reporting, generated-output validation, automatic managed-output rollback, and no-auto-prelaunch cleanup.
-- Previous v21.2 UI-only reference is superseded as target but remains provenance for the restored UI surface.
+- Previous v21.2 UI-only reference is superseded as target but remains provenance for the restored UI surface; its deleted branch is not required because the reference archive/provenance is preserved outside that ref.
+- Deleted `v21.4-v2131-regressions` contained only unvalidated adapted tests/workflow ahead of hardening, no production-source changes; re-adapt useful coverage directly on `v21.4-hardening` from the canonical v21.3.1 archive.
 - Do not blindly replace hardened core files with v21.3.1 overlay copies. Its `core/mod_library.py` is 68521 bytes / Git blob `56df3e70990003cfd76f04cbacf7878bba6e65ec`, which differs from both current hardening and the previously validated v21.4 source.
 - Archive 116-test suite is not yet fully adapted into canonical repository tests; current GitHub 139/139 and archive 116/116 scopes remain distinct.
 - Historical local hardening-kit checkpoint: 133/133 tests + 9 subtests; do not conflate with current GitHub or archive suites.

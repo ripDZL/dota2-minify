@@ -1,13 +1,16 @@
 # New Chat Handoff Prompt
 - Work only in `ripDZL/dota2-minify` branch `v21.4-hardening` unless the user explicitly changes the plan.
 - First read `Docs/AI_CONTEXT.md`, `Docs/TODO.md`, `Docs/PROGRESS.md`, `Docs/ARCHITECTURE.md`, `Docs/SESSION_SUMMARY.md`, and this file.
+- Branch model is exactly three long-lived refs: `v21.4-hardening` -> `beta` -> `main`; do not leave temporary/reference/integration branches in the repository.
+- Branch cleanup completed 2026-09-04 via successful one-time run `33933941673`; temporary branches removed and cleanup workflow removed at `d10920c2192c45dbb701071e5149bfa16c6208c5`.
 - Keep `main` upstream-tracking and untouched at `a26bc88a0d412e357965f29488b83a7f9093e11f`; keep `beta` frozen at `af83bbb051edced195d5f55ba49ff060a8c76f3c` until remaining runtime gates pass.
 - Exact upstream baseline: `Minify-v1.14rc7` commit `d4b4520c945a9e1f8f5facc52a76ac5903babe90`.
-- Current tested code commit: `24703387f959c0ed2634fcc2454a46c0aad3f224`; later branch commits may be Docs-only.
+- Current tested code commit: `24703387f959c0ed2634fcc2454a46c0aad3f224`; later branch commits may be Docs/ops-only.
 - Hardening CI run `33930820670`: compileall PASS; Ruff format gate PASS; Ruff lint PASS; pytest 139/139 PASS; Windows PyInstaller/runtime copy/portable ZIP/upload PASS.
 - Current test ZIP: `Minify-v21.4-hardening-24703387f959c0ed2634fcc2454a46c0aad3f224-windows.zip`; SHA-256 `c0f207ca8d49a8227133dc1ec9e985727ed83b049634999f3648e843209b444a`; 53603285 bytes.
 - GitHub artifact ID `9958480353`; outer SHA-256 `8a18f097b31ef420ae23d92594b06b55bf6964314453feb4b03b5fa4a18b3fd8`; 53063003 bytes.
 - Canonical user feature-reference: uploaded `Minify-v1.14rc7-ModManager-v21.3.1-Safe-Foliage-Fix (1).zip`; SHA-256 `37755c4ee92e1847eef1a5a9c89aef6ba488f33accd0cb102c62a7db8780b5f8`; bundled 116/116 tests pass locally.
+- Deleted `v21.4-v2131-regressions` held only unvalidated adapted tests/workflow, no production-source changes; continue test adaptation directly on hardening from the canonical archive.
 - Full v21.3.1 transformer target inventory has been checked. `cli.py` and `pyproject.toml` are rc7 guards only; every actual write target is now materialized/modified relative exact rc7.
 - Before this milestone the only actual transformer write target still rc7 was `Minify/patch/__init__.py`; materialized integration commit is `b22133201e88d654859541f2c6be69cea8e3cb25`.
 - Recovered patch pipeline includes nested dependency/conflict resolution, `get_mod_path` usage, compatibility-filtered standard/VPK paths, transactional restore points, conflict preflight/report, generated-output compatibility validation, managed-output rollback on failure, and no-auto-prelaunch cleanup.
@@ -23,7 +26,7 @@
 - Steam policy: manual rc7 `prelaunch` remains; automatic Minify prelaunch injection disabled; stale generated wrappers cleaned narrowly.
 - Hardening format gate excludes `Minify/core/mod_compat.py`, `Minify/core/mod_library.py`, `Minify/core/security.py`, `Minify/ui/settings.py`; compileall and full Ruff lint remain mandatory.
 - Test scopes remain distinct: current GitHub 139/139; uploaded v21.3.1 archive 116/116; historical local hardening kit 133/133 + 9 subtests.
-- Next work: adapt/re-express useful remaining v21.3.1 regression coverage against canonical source; compare differing core-overlay semantics; perform hostile-input/security and complete rc7 diff review; clean incomplete migration/bootstrap tooling; then user/Dota smoke tests.
+- Next work: adapt/re-express useful remaining v21.3.1 regression coverage directly on hardening; compare differing core-overlay semantics; perform hostile-input/security and complete rc7 diff review; clean incomplete migration/bootstrap tooling; then user/Dota smoke tests.
 - Do not fast-forward `beta`, merge, tag, release, or open publication PR before remaining gates pass.
 - At every major milestone update relevant `Docs/*.md` files; keep them terse bullets only.
 

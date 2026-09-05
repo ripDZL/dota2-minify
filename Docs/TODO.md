@@ -1,12 +1,13 @@
 # TODO
 - [x] Create `v21.4-hardening` from exact rc7 commit `d4b4520c945a9e1f8f5facc52a76ac5903babe90`.
 - [x] Create public `beta` branch separate from `main`.
+- [x] Enforce exactly three long-lived branches: `v21.4-hardening`, `beta`, `main`; remove all temporary/reference/integration branches.
 - [x] Adopt user-supplied v21.3.1 Safe Foliage Fix archive as canonical feature reference; SHA-256 `37755c4ee92e1847eef1a5a9c89aef6ba488f33accd0cb102c62a7db8780b5f8`; bundled 116/116 regression tests pass.
 - [x] Inventory all v21.3.1 transformer targets against current hardening; `cli.py`/`pyproject.toml` are guard-only and every actual write target is now materialized relative to exact rc7.
 - [x] Recover missing `Minify/patch/__init__.py` integration without replacing hardened core backends.
 - [x] Preserve nested dependency/conflict resolution, compatibility-filtered standard/VPK paths, restore-point creation, conflict preflight/reporting, output validation, rollback, and no-auto-prelaunch cleanup in the patch pipeline.
 - [x] Add permanent patch-pipeline regressions; current GitHub suite is 139/139 on tested code `24703387f959c0ed2634fcc2454a46c0aad3f224`.
-- [ ] Adapt/re-express remaining useful tests from the bundled 116-test v21.3.1 suite against canonical repository paths and materialized behavior.
+- [ ] Adapt/re-express remaining useful tests from the bundled 116-test v21.3.1 suite directly on `v21.4-hardening`; do not create another temporary regression branch.
 - [ ] Complete semantic feature-by-feature comparison of v21.3.1 overlay core files against hardened replacements; never wholesale overwrite newer security/backend changes.
 - [x] Materialize security/backup/prelaunch/compatibility/VPK/archive/download core.
 - [x] Resolve unsupported rare-architecture dependency selection; unsupported builds are PATH-only.

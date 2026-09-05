@@ -4,6 +4,8 @@
 - [x] Unsafe Remove Foilage full-map override removed; oak-leaf blacklist entries retained; Main Menu Background CSS fix retained.
 - [x] Historical local v21.4 hardening kit validated: 133/133 tests + 9 subtests; compileall pass.
 - [x] `v21.4-hardening` created from exact rc7; `beta` created separately; `main` untouched.
+- [x] Repository branch model reduced to exactly `v21.4-hardening`, `beta`, and `main`; one-time cleanup run `33933941673` removed four temporary branches and cleanup workflow was removed at `d10920c2192c45dbb701071e5149bfa16c6208c5`.
+- [x] Deleted `v21.4-v2131-regressions` had only unvalidated adapted tests/workflow ahead of hardening and no production-source changes; canonical archive remains source for re-adaptation directly on hardening.
 - [x] Materialized security/backup/prelaunch/compatibility/VPK/archive/download hardening, dependency architecture gating, recursive scanner/Collections backend, nested scripts, D2PFX backend/build-hook changes, and CSS fix.
 - [x] Restored/materialized beveled Mod Library/Settings/window/gui/__main__/D2PFX/profile UI surface.
 - [x] Compared the complete v21.3.1 transformer target inventory against hardening. `cli.py` and `pyproject.toml` are guard-only inputs; the only actual write target still left at rc7 was `Minify/patch/__init__.py`.
@@ -14,8 +16,8 @@
 - [x] Current inner test ZIP: `Minify-v21.4-hardening-24703387f959c0ed2634fcc2454a46c0aad3f224-windows.zip`; 53603285 bytes; SHA-256 `c0f207ca8d49a8227133dc1ec9e985727ed83b049634999f3648e843209b444a`.
 - [x] GitHub outer artifact ID `9958480353`; 53063003 bytes; SHA-256 `8a18f097b31ef420ae23d92594b06b55bf6964314453feb4b03b5fa4a18b3fd8`.
 - [x] Artifact layout verified: no `.materialize`, `READY`, `AI_REMOTE_TMP`; no forbidden Remove Foilage map/manifest payload; both oak-leaf blacklist entries present.
-- [x] Branch refs rechecked: `main` `a26bc88a0d412e357965f29488b83a7f9093e11f`; `beta` `af83bbb051edced195d5f55ba49ff060a8c76f3c`; no promotion made.
-- [ ] Adapt/re-express the remaining useful bundled v21.3.1 regressions against canonical materialized source; archive 116/116 and GitHub 139/139 scopes remain distinct.
+- [x] Branch refs rechecked before cleanup: `main` `a26bc88a0d412e357965f29488b83a7f9093e11f`; `beta` `af83bbb051edced195d5f55ba49ff060a8c76f3c`; no promotion made.
+- [ ] Adapt/re-express the remaining useful bundled v21.3.1 regressions directly on `v21.4-hardening`; archive 116/116 and GitHub 139/139 scopes remain distinct.
 - [ ] Feature-by-feature semantic reconciliation of differing v21.3.1 core overlays remains, especially `core/mod_library.py`; do not wholesale overwrite hardened backends.
 - [ ] `core/mod_library.py` prior-v21.4 exact-source reconciliation remains blocked: current Git blob `a5204ea1d5e0309d3c6a764ad9b974e7bdeb8268` differs from expected validated blob `e95b2f6f59b3b96f7c19ed70ee514df02e500926`.
 - [ ] Temporary `.materialize/` payload remains incomplete; no `READY`; never fabricate missing bytes.

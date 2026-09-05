@@ -1,6 +1,6 @@
 # Architecture
 - Baseline: exact upstream rc7 commit `d4b4520c945a9e1f8f5facc52a76ac5903babe90`; no current-main rebase during hardening.
-- Branches: `main` upstream-tracking; `v21.4-hardening` active development; `beta` user-facing promotion target.
+- Branches: exactly three long-lived refs: `v21.4-hardening` active development -> `beta` validation/promotion -> `main` final publication. Do not retain temporary/reference/integration branches.
 - Fork source: materialized files + ordinary commits; clone should run without source-rewrite bootstrap.
 - Build transformer and `.materialize/` workflow: temporary migration/reproducibility tooling only; not canonical source architecture.
 - Never trigger incomplete `.materialize/` input; reconstructed handoff ZIP must match pinned SHA-256 before use.
