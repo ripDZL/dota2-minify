@@ -5,18 +5,18 @@
 - [x] Recursive/nested mods, Collections, profiles, D2PFX, backups/conflict review, Safe Foliage, Main Menu fix, Dark Terrain behavior preserved.
 - [x] v21.3.1 patch pipeline integrated at `b22133201e88d654859541f2c6be69cea8e3cb25` without overwriting hardened core backends.
 - [x] Removed `LOCAL MOD WORKSPACE` + stale `RC6` UI furniture.
-- [x] User reviewed Prismatic Foundry as promising but reported resize/alignment defects and requested colors based on supplied JSON theme tokens.
-- [x] **Plumfire Reactor** materialized at `36d59def98068862b247692580a23701df34358d`: plum-black surfaces, violet primary controls, ember dividers, lime state, gold telemetry, warm ivory text, slate borders.
-- [x] Replaced space-padded header/metrics/deployment/guard layouts with DPG table columns; added adaptive visibility thresholds for narrow/short viewports.
-- [x] Mod Library and D2PFX palette reconciled to JSON-derived roles; D2PFX selected states use plum/violet/lime and link text uses JSON yellow.
-- [x] Current tested product commit `44309ffbd752c3c9788b4371cd6daf271fe763e8`.
-- [x] Hardening CI run `33939739722`: compileall PASS; Ruff format/lint PASS; pytest 148/148 PASS in 0.62s; Windows build/package/upload PASS.
-- [x] Current inner ZIP: `Minify-v21.4-hardening-44309ffbd752c3c9788b4371cd6daf271fe763e8-windows.zip`; 53608076 bytes; SHA-256 `505b0d5421b83093518218a5ef7cf62a9a943e2515cd07eae3465f70c4820ac5`.
-- [x] GitHub artifact ID `9961412398`; 53068102 bytes; outer SHA-256 `4760ea24c9912196b0da9323f00cf8d72fdb8ed33761a77907ae3083eb4d8ce2`.
-- [x] Artifact verified: 1650 entries; normal portable roots; no staging/materialize markers; Safe Foliage map/manifest absent; both oak blacklist entries present.
+- [x] Repaired resize/alignment defects using DPG table columns and adaptive visibility thresholds.
+- [x] User supplied original application screenshot clarifying JSON theme spatial roles.
+- [x] **Black-Plum Reactor** materialized at `bfeca95d36b685ec38bb9ab9be9885089a8bf4d6`: plum chrome, slate work surfaces, black strips, purple controls, lime selected/safe state with black text, red dividers, gold telemetry, yellow links, warm ivory text.
+- [x] Mod Library uses broad slate fields + purple controls; D2PFX selected categories use lime/black; screenshot-derived purple hover `(169, 98, 183)` retained.
+- [x] Current tested product commit `667be18dd0613098ad17f9c2eb8f66a4ee57bf8e`.
+- [x] Hardening CI run `33940573117`: compileall PASS; Ruff format/lint PASS; pytest 149/149 PASS in 0.78s; Windows build/package/upload PASS.
+- [x] Current inner ZIP: `Minify-v21.4-hardening-667be18dd0613098ad17f9c2eb8f66a4ee57bf8e-windows.zip`; 53607407 bytes; SHA-256 `0fd863453cc8d2482682fbc5b41cc718870165cf06305f4535589fe673255408`.
+- [x] GitHub artifact ID `9961687096`; 53067832 bytes; outer SHA-256 `ea94210af69e8dce1a35e9cb9d91c40e6f37146dc3316971e8e6cc08a414885f`.
+- [x] Artifact verified: 1650 entries; normal portable roots; no staging/materialize markers; Safe Foliage map/manifest absent; both oak blacklist entries present; Main Menu Background both rules present.
 - [x] Temporary compositor/workflow removed; only three long-lived branches remain.
 - [x] `main` and `beta` remain frozen.
-- [ ] User review/smoke-test Plumfire Reactor at maximized, medium, and narrow viewport sizes across Patch, Mod Library, D2PFX, Settings.
+- [ ] User review/smoke-test Black-Plum Reactor at maximized, medium, and narrow viewport sizes across Patch, Mod Library, D2PFX, Settings.
 - [ ] Adapt remaining useful v21.3.1 regressions directly on hardening.
 - [ ] Complete semantic core-overlay reconciliation; never wholesale overwrite hardened backends.
 - [ ] Resolve prior-v21.4 `core/mod_library.py` exact-source gap only if authentic bytes become available.
