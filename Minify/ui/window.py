@@ -107,6 +107,7 @@ def on_resize():
     # optional telemetry before any card or label can collide or clip.
     nav_width = max(176, min(220, int(shared.window_width * 0.13)))
     shell_body_height = max(350, min(500, int(shared.window_height * 0.47)))
+    nav_status_height = 66 if shell_body_height >= 370 else 62
     workspace_width = max(430, shared.window_width - nav_width - 34)
     wide_workspace = workspace_width >= 1080 and shared.window_height >= 720
     side_width = min(360, max(320, int(workspace_width * 0.25))) if wide_workspace else 0
@@ -125,6 +126,8 @@ def on_resize():
         dpg.configure_item("header_engine_column", show=shared.window_width >= 760)
     if dpg.does_item_exist("app_nav_rail"):
         dpg.configure_item("app_nav_rail", width=nav_width, height=shell_body_height)
+    if dpg.does_item_exist("nav_status_card"):
+        dpg.configure_item("nav_status_card", height=nav_status_height)
     if dpg.does_item_exist("app_workspace"):
         dpg.configure_item("app_workspace", width=workspace_width, height=shell_body_height)
     if dpg.does_item_exist("app_workspace_main"):

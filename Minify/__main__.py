@@ -122,7 +122,7 @@ def create_ui():
             parent="app_nav_rail",
             tag="nav_status_card",
             width=-1,
-            height=54,
+            height=66,
             border=True,
             no_scrollbar=True,
             no_scroll_with_mouse=True,

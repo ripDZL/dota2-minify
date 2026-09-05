@@ -107,3 +107,11 @@ def test_source_screenshot_spatial_color_roles_are_materialized():
     assert "UI_RAISED = (133, 56, 148, 255)" in CHECKBOXES
     assert "dpg.add_theme_color(dpg.mvThemeCol_Header, (122, 193, 67, 230))" in D2PFX
     assert "dpg.add_theme_color(dpg.mvThemeCol_Text, (0, 0, 0))" in D2PFX
+
+
+def test_nav_status_card_has_safe_vertical_budget():
+    start = MAIN.index('tag="nav_status_card"')
+    card = MAIN[start : start + 240]
+    assert "height=66" in card
+    assert "nav_status_height = 66 if shell_body_height >= 370 else 62" in WINDOW
+    assert 'dpg.configure_item("nav_status_card", height=nav_status_height)' in WINDOW
