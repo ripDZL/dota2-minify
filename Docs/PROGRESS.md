@@ -2,19 +2,18 @@
 - [x] Exact rc7 baseline pinned; exactly `v21.4-hardening`, `beta`, `main` retained.
 - [x] Recursive/nested mods, Collections, profiles, D2PFX, backups/conflict review, Safe Foliage, Main Menu fix, Dark Terrain behavior preserved.
 - [x] v21.3.1 patch pipeline integrated without overwriting hardened core backends.
-- [x] Black-Plum Reactor UI stabilized.
-- [x] Incomplete `.materialize/` bootstrap/workflow removed.
-- [x] Network/catalogue, backup-manifest, profile, and VPK-metadata hostile-input passes completed.
-- [x] D2PFX cursor pass: confined regular-file-only atomic copy; no symlink traversal; bounded files/bytes; safe restore retention.
-- [x] D2PFX metadata pass: confined non-symlink cache; catalogue allowlist/shape checks; bounded flattening; safe category/asset paths.
-- [x] D2PFX install pass: redirect-hop validation; HTTPS/public-network boundary; safe URL filenames; 32 MiB preview cap; staged atomic publication; failure cleanup.
-- [x] Current tested product commit `53a358db219256187e21a40acc8ed45704c3589f`.
-- [x] Hardening CI `33971846026`: compileall PASS; Ruff format/lint PASS; pytest 200/200 PASS; Windows build/package/upload PASS.
-- [x] Inner ZIP: `Minify-v21.4-hardening-53a358db219256187e21a40acc8ed45704c3589f-windows.zip`; 53,625,172 bytes; SHA-256 `6a1874783d6d49b3e53d069577b90c14cd52a7aa618d3298c929fd863f2bd54a`.
-- [x] Artifact ID `9971169200`; outer SHA-256 `14cd19c31edfcd4051a454ec73c12bd4fd383816783cde04d29785bcb5ad48ea`; portable/Safe-Foliage/Main-Menu checks PASS.
+- [x] Black-Plum Reactor UI stabilized; incomplete `.materialize/` bootstrap/workflow removed.
+- [x] Network/catalogue, profile, VPK metadata, D2PFX cursor/install, and backup hostile-input passes completed.
+- [x] Backup race pass: regular no-follow manifest open with identity check; managed live output confinement; parent symlink escapes fail before mutation.
+- [x] Restored v21.3.1 compatibility tests: Dark Terrain collision semantics, Safe Foliage invariants, Main Menu background fix.
+- [x] Restored v21.3.1 nested tests: Collections discovery, stable IDs, symlink avoidance, dependency resolution.
+- [x] Latest product hardening commit `3266a10ae4132201fcfc85c0adf0475b30416973`; exact validated head `2de55f97a4bbb8d0e127335cc4a2effc56fd105a`.
+- [x] Hardening CI `33972529166`: compileall PASS; Ruff format/lint PASS; pytest 228/228 PASS; Windows build/package/upload PASS.
+- [x] Inner ZIP 53,625,698 bytes; SHA-256 `28e084172e7c9a984288999b0e26b01b69359a51ed9c4221bb35f7ff2feae759`.
+- [x] Artifact `9971359063`; outer 53,085,215 bytes; SHA-256 `b774c5e257f19bd9d9d11e8d3b887fca39a58af6d3cdba1888182d98c9f35d6b`; 1650-entry portable/Safe-Foliage/Main-Menu checks PASS.
 - [x] `main` and `beta` remain frozen.
-- [ ] Continue hostile-input/path-race review.
-- [ ] Adapt remaining useful v21.3.1 regressions; complete semantic core reconciliation + exact-rc7 diff review.
+- [ ] Continue path-race/hostile-input review and remaining semantic v21.3.1 regression adaptation.
+- [ ] Complete semantic core reconciliation + exact-rc7 diff review.
 - [ ] Resolve prior-v21.4 `core/mod_library.py` exact-source gap only if authentic bytes become available.
 - [ ] Dota startup/lobby/match/rollback/profiles/D2PFX/Dark-Terrain/Remove-Foilage smoke tests.
 - [ ] Promote hardening -> beta only after remaining gates/user acceptance; beta -> main only after beta validation.
