@@ -34,6 +34,15 @@ def test_user_json_palette_is_materialized():
     assert "UI_SUCCESS = (122, 193, 67, 255)" in CHECKBOXES
 
 
+def test_primary_action_uses_json_button_role():
+    start = THEME.index('with dpg.theme(tag="main_primary_button_theme")')
+    end = THEME.index('with dpg.theme(tag="main_secondary_button_theme")', start)
+    primary = THEME[start:end]
+    assert "dpg.add_theme_color(dpg.mvThemeCol_Button, ACCENT)" in primary
+    assert "dpg.add_theme_color(dpg.mvThemeCol_ButtonHovered, ACCENT_HOVER)" in primary
+    assert "dpg.add_theme_color(dpg.mvThemeCol_ButtonActive, ACCENT_ACTIVE)" in primary
+
+
 def test_release_console_uses_real_alignment_tables():
     for tag in ("header_layout", "dashboard_metric_table", "dashboard_flow_table", "dashboard_guard_table"):
         assert f'tag="{tag}"' in MAIN
