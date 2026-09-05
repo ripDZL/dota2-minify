@@ -3,15 +3,17 @@
 - Branch model: exactly `v21.4-hardening` -> `beta` -> `main`; beta/main frozen.
 - Canonical feature reference remains supplied v21.3.1 Safe Foliage Fix archive; bundled 116/116 tests pass.
 - Patch pipeline remains materialized at `b22133201e88d654859541f2c6be69cea8e3cb25`; preserve nested resolution, compatibility filtering, restore points, conflict reporting, validation, rollback, no-auto-prelaunch cleanup.
-- User reviewed Prismatic Foundry screenshot and requested resize/alignment fixes plus colors based on uploaded JSON theme file.
-- Current UI baseline: **Plumfire Reactor**; materialized at `36d59def98068862b247692580a23701df34358d`; Prismatic palette superseded but dense command-console structure retained.
-- JSON token anchors: `#df503b` divider, `#7ac143` highlight, `#ffff00` link, `#586c72` base, `#853894` button, `#ffc30f` bright text, `#a48f7b` disabled, `#d9c7b0` placeholder, `#f7f0e7` primary, `#46335a` window, `#000000` alt.
-- Alignment repair: header/metric/deployment/guard sections use DPG tables; right deck and optional telemetry collapse at explicit viewport thresholds; card heights/wrapping adjust dynamically.
+- User supplied JSON theme plus screenshot of its original program, clarifying that colors are spatial roles rather than small accents.
+- Current UI baseline: **Black-Plum Reactor**; materialized at `bfeca95d36b685ec38bb9ab9be9885089a8bf4d6`; Plumfire mapping superseded while responsive command-console structure remains.
+- Spatial roles: plum `#46335a` chrome, slate `#586c72` work areas, black `#000000` strips, purple `#853894` controls, lime `#7ac143` selected/safe with black text, red `#df503b` dividers/errors, gold `#ffc30f` telemetry, yellow `#ffff00` links, ivory `#f7f0e7` text; screenshot-derived purple hover `(169, 98, 183)`.
+- Alignment repair remains: header/metric/deployment/guard sections use DPG tables; right deck and optional telemetry collapse at explicit viewport thresholds; card heights/wrapping adjust dynamically.
+- Mod Library uses broad slate fields + purple controls; D2PFX selected row uses lime fill/black text.
 - `LOCAL MOD WORKSPACE` / stale `RC6` remains removed.
-- Current tested product code: `44309ffbd752c3c9788b4371cd6daf271fe763e8`.
-- Hardening CI run `33939739722`: compileall PASS, Ruff format/lint PASS, pytest 148/148 PASS in 0.62s, Windows portable build PASS.
-- Current Windows ZIP: `Minify-v21.4-hardening-44309ffbd752c3c9788b4371cd6daf271fe763e8-windows.zip`; 53608076 bytes; SHA-256 `505b0d5421b83093518218a5ef7cf62a9a943e2515cd07eae3465f70c4820ac5`.
-- Artifact ID `9961412398`; outer SHA-256 `4760ea24c9912196b0da9323f00cf8d72fdb8ed33761a77907ae3083eb4d8ce2`; artifact safety/layout verified.
+- Current tested product code: `667be18dd0613098ad17f9c2eb8f66a4ee57bf8e`.
+- Hardening CI run `33940573117`: compileall PASS, Ruff format/lint PASS, pytest 149/149 PASS in 0.78s, Windows portable build PASS.
+- Current Windows ZIP: `Minify-v21.4-hardening-667be18dd0613098ad17f9c2eb8f66a4ee57bf8e-windows.zip`; 53607407 bytes; SHA-256 `0fd863453cc8d2482682fbc5b41cc718870165cf06305f4535589fe673255408`.
+- Artifact ID `9961687096`; outer SHA-256 `ea94210af69e8dce1a35e9cb9d91c40e6f37146dc3316971e8e6cc08a414885f`; 53067832 bytes; artifact safety/layout verified.
+- Artifact invariants: 1650 entries; normal roots; no staging/materialize markers; no Remove Foilage map/manifest; both oak blacklist entries present; Main Menu Background both CSS rules present.
 - `core/mod_library.py` prior-v21.4 exact-source gap remains unresolved; never fabricate missing bytes or substitute old overlay as exact source.
-- Remaining: user review Plumfire at multiple viewport sizes, adapt useful v21.3.1 regressions, semantic core reconciliation, hostile-input/security sweep, exact-rc7 diff review, bootstrap cleanup, Dota smoke tests.
+- Remaining: user review Black-Plum at multiple viewport sizes, adapt useful v21.3.1 regressions, semantic core reconciliation, hostile-input/security sweep, exact-rc7 diff review, bootstrap cleanup, Dota smoke tests.
 - Do not promote beta/main until remaining gates and user approval.
