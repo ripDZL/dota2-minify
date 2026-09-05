@@ -1,24 +1,24 @@
 # Progress
-- [x] v21.3.1 Safe Foliage Fix validated: bundled 116/116 regressions pass locally.
-- [x] Repository branch model reduced to exactly `v21.4-hardening`, `beta`, and `main`.
-- [x] Materialized security/backup/prelaunch/compatibility/VPK/archive/download hardening and recursive/nested mod/Collections/profile/D2PFX behavior.
-- [x] Materialized v21.3.1 patch pipeline at `b22133201e88d654859541f2c6be69cea8e3cb25` without replacing hardened core backends.
-- [x] Prior validated build `24703387...` passed 139/139 + Windows build and user reported it generally good.
-- [x] Removed top-right `LOCAL MOD WORKSPACE` + stale `RC6` UI.
-- [x] Initial graphite/blue flat UI passed 141/141 + Windows build, then was superseded by user request for a richer release identity.
-- [x] Obsidian Arc release UI materialized at `1af11a0bebe62b206f2ebf08fda01890b8766104`: layered graphite surfaces, arc-blue state/navigation, ember identity/patch actions, gold metadata, teal D2PFX/safety, edge depth, nested hero/action/flow/safety cards.
-- [x] Reconciled Mod Library private palette/themes and D2PFX selection/title styling with Obsidian Arc.
-- [x] Expanded `tests/test_modern_ui.py`; current tested code `c76956a953a3bdf7a42ca386c3879df8a053ed51`.
-- [x] Hardening CI run `33935960179`: compileall PASS; Ruff format/lint PASS; pytest 144/144 PASS in 0.78s; Windows PyInstaller/runtime copy/ZIP/upload PASS.
-- [x] Current inner ZIP: `Minify-v21.4-hardening-c76956a953a3bdf7a42ca386c3879df8a053ed51-windows.zip`; 53603844 bytes; SHA-256 `1b67a34cef9d1c66fa810691d031fc4afe2c2a069866e63d28634c4ac06569bc`.
-- [x] GitHub artifact ID `9960183184`; 53063825 bytes; outer SHA-256 `a96af66909b872429b8d7b5965fca82732559c917319ba87342dd4b97039d997`.
-- [x] Artifact verified: 1650 entries; normal portable roots; no staging/materialize markers; no forbidden Remove Foilage map/manifest; both oak blacklist entries present.
-- [x] `main` and `beta` remain frozen; no promotion made.
-- [ ] User review/smoke-test Obsidian Arc build across Patch, Mod Library, D2PFX, Settings, resize states.
-- [ ] Adapt/re-express remaining useful bundled v21.3.1 regressions directly on hardening.
-- [ ] Feature-by-feature semantic reconciliation of differing v21.3.1 core overlays; never wholesale overwrite hardened backends.
-- [ ] Resolve prior-v21.4 `core/mod_library.py` exact-source gap only if authentic missing bytes become available.
+- [x] Exact rc7 baseline pinned at `d4b4520c945a9e1f8f5facc52a76ac5903babe90`.
+- [x] Repository reduced to exactly `v21.4-hardening`, `beta`, `main`.
+- [x] Hardened security/backup/prelaunch/compatibility/VPK/archive/download paths materialized.
+- [x] Recursive/nested mods, Collections, profiles, D2PFX, backups/conflict review, Safe Foliage, Main Menu fix, Dark Terrain behavior preserved.
+- [x] v21.3.1 patch pipeline integrated at `b22133201e88d654859541f2c6be69cea8e3cb25` without overwriting hardened core backends.
+- [x] Removed `LOCAL MOD WORKSPACE` + stale `RC6` UI furniture.
+- [x] Obsidian Arc UI superseded by user-requested **Crimson Slate** theme.
+- [x] Crimson Slate materialized at `7bb3f4f9eb5194f429ae459ea20e8090b51f2c2f`: charcoal/plum panels, crimson focus/actions, compact rectangular controls, inset fields, thin borders, low radii, dense modular cards.
+- [x] Mod Library and D2PFX selected-state styling reconciled to Crimson Slate.
+- [x] Current tested product commit `66d6dd77bd216feb6ff67375d3803ed0be9e150e`.
+- [x] Hardening CI run `33937575665`: compileall PASS; Ruff format/lint PASS; pytest 145/145 PASS in 0.65s; Windows build/package/upload PASS.
+- [x] Current inner ZIP: `Minify-v21.4-hardening-66d6dd77bd216feb6ff67375d3803ed0be9e150e-windows.zip`; 53603222 bytes; SHA-256 `dee14f404eadede2e4e0b02f76620090ce04dc6c2cc1d87a6cf62c3525862e52`.
+- [x] GitHub artifact ID `9960698474`; 53062983 bytes; outer SHA-256 `e98f68c8e990e63dfbc587dd51b7ab3f06df49ebbbbc1343cc99a645657434e7`.
+- [x] Artifact verified: 1650 entries; normal portable roots; no staging/materialize markers; Safe Foliage map/manifest absent; both oak blacklist entries present.
+- [x] `main` and `beta` remain frozen.
+- [ ] User review/smoke-test Crimson Slate across Patch, Mod Library, D2PFX, Settings, resize states.
+- [ ] Adapt remaining useful v21.3.1 regressions directly on hardening.
+- [ ] Complete semantic core-overlay reconciliation; never wholesale overwrite hardened backends.
+- [ ] Resolve prior-v21.4 `core/mod_library.py` exact-source gap only if authentic bytes become available.
 - [ ] Complete/remove incomplete `.materialize/` bootstrap; never create `READY` while incomplete.
-- [ ] Full hostile-input/security sweep and complete exact-rc7 diff review.
-- [ ] Dota startup/lobby/demo-or-match/patch-rollback/profiles/D2PFX/Dark-Terrain/Remove-Foilage smoke tests.
-- [ ] Promote `v21.4-hardening` -> `beta` only after remaining validation/user acceptance; promote `beta` -> `main` only after beta validation.
+- [ ] Full hostile-input/security sweep and exact-rc7 diff review.
+- [ ] Dota startup/lobby/match/rollback/profiles/D2PFX/Dark-Terrain/Remove-Foilage smoke tests.
+- [ ] Promote hardening -> beta only after remaining gates/user acceptance; beta -> main only after beta validation.
