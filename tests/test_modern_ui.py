@@ -80,9 +80,11 @@ def test_alignment_labels_do_not_depend_on_space_padding():
 def test_responsive_shell_collapses_before_clipping():
     assert "wide_workspace = workspace_width >= 1080 and shared.window_height >= 720" in WINDOW
     assert "side_width = min(360, max(320, int(workspace_width * 0.25))) if wide_workspace else 0" in WINDOW
-    assert "metric_visible = inner_height >= 350 and main_width >= 560" in WINDOW
-    assert 'dpg.configure_item("metric_restore_column", show=main_width >= 650)' in WINDOW
-    assert 'dpg.configure_item("metric_collision_column", show=main_width >= 830)' in WINDOW
+    assert "metric_visible = inner_height >= 350 and main_width >= 520" in WINDOW
+    assert "metric_restore_visible = metric_visible and main_width >= 760" in WINDOW
+    assert "metric_collision_visible = metric_visible and main_width >= 940" in WINDOW
+    assert 'dpg.configure_item("metric_restore_column", show=metric_restore_visible)' in WINDOW
+    assert 'dpg.configure_item("metric_collision_column", show=metric_collision_visible)' in WINDOW
     assert 'dpg.configure_item("dashboard_hero_card", height=hero_height)' in WINDOW
     assert 'dpg.configure_item("dashboard_safety_text", wrap=max(180, side_width - 30))' in WINDOW
 
@@ -137,3 +139,17 @@ def test_viewport_has_safe_minimum_layout_budget():
     assert "min_width=MIN_VIEWPORT_WIDTH" in MAIN
     assert "min_height=MIN_VIEWPORT_HEIGHT" in MAIN
     assert "shell_body_height = max(350, min(500, shared.window_height - 330))" in WINDOW
+
+
+def test_minimum_width_fit_contract_covers_primary_library_and_d2pfx():
+    assert "compact_width = shared.window_width <= 1000" in WINDOW
+    assert "nav_min_width = 160 if compact_width else 176" in WINDOW
+    assert 'dpg.configure_item("button_patch", width=176 if compact_width else 210)' in WINDOW
+    assert 'dpg.configure_item("button_refresh_main", width=128 if compact_width else 146)' in WINDOW
+    assert 'dpg.configure_item("activity_caption", show=shared.window_width >= 1040)' in WINDOW
+    assert "settings_width = max(320, shared.window_width - 16)" in WINDOW
+    assert 'with dpg.child_window(width=168, tag="d2pfx_sidebar"):' in D2PFX
+    assert "init_width_or_weight=320" in D2PFX
+    assert 'tag="d2pfx_cat_desc", wrap=360' in D2PFX
+    assert "new_cols = max(2, min(4, int(content_width / 240)))" in D2PFX
+    assert "wrap=max(220, _list_width() - 64)" in CHECKBOXES

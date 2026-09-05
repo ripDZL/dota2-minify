@@ -118,7 +118,7 @@ class BrowserUI:
                 gui.register_persistent_window("d2pfx_browser_window")
                 with dpg.group(horizontal=True):
                     # Sidebar
-                    with dpg.child_window(width=180, tag="d2pfx_sidebar"):
+                    with dpg.child_window(width=168, tag="d2pfx_sidebar"):
                         dpg.add_input_text(
                             hint="Search categories...",
                             width=-1,
@@ -133,11 +133,11 @@ class BrowserUI:
                     with dpg.group():
                         with dpg.table(header_row=False, width=-1):
                             dpg.add_table_column()
-                            dpg.add_table_column(width_fixed=True, init_width_or_weight=350)
+                            dpg.add_table_column(width_fixed=True, init_width_or_weight=320)
                             with dpg.table_row():
                                 with dpg.group():
                                     dpg.add_text("Select a category", tag="d2pfx_cat_title", color=(255, 255, 0))
-                                    desc_text = dpg.add_text("", tag="d2pfx_cat_desc", wrap=0)
+                                    desc_text = dpg.add_text("", tag="d2pfx_cat_desc", wrap=360)
                                     if dpg.does_item_exist("small_font"):
                                         dpg.bind_item_font(desc_text, "small_font")
 
@@ -147,6 +147,7 @@ class BrowserUI:
                                     dpg.add_text(
                                         "Installable packs, resources, and community tools",
                                         tag="d2pfx_browser_subtitle",
+                                        wrap=300,
                                     )
                                     if dpg.does_item_exist("large_font"):
                                         dpg.bind_item_font("d2pfx_browser_heading", "large_font")
@@ -417,8 +418,14 @@ class BrowserUI:
         if not dpg.does_item_exist("d2pfx_browser_window") or not dpg.is_item_shown("d2pfx_browser_window"):
             return
 
-        content_width = shared.window_width - 150  # sidebar
-        new_cols = max(2, int(content_width / 200))  # Adjust divisor for card width
+        content_width = max(420, shared.window_width - 210)
+        new_cols = max(2, min(4, int(content_width / 240)))
+        category_wrap = max(220, shared.window_width - 168 - 320 - 80)
+
+        if dpg.does_item_exist("d2pfx_cat_desc"):
+            dpg.configure_item("d2pfx_cat_desc", wrap=category_wrap)
+        if dpg.does_item_exist("d2pfx_browser_subtitle"):
+            dpg.configure_item("d2pfx_browser_subtitle", wrap=300)
 
         if self.current_cols != new_cols:
             self.current_cols = new_cols

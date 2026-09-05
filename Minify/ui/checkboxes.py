@@ -357,10 +357,14 @@ def on_resize(width=None, height=None):
         dpg.configure_item("mod_manager_status_text", wrap=max(220, width - 34))
 
     indent = _row_action_indent(width)
+    meta_wrap = max(220, list_width - 64)
     for mod in checkboxes:
         tag = f"{mod}_favorite_button"
         if dpg.does_item_exist(tag):
             dpg.configure_item(tag, indent=indent)
+        meta_tag = f"{mod}_meta"
+        if dpg.does_item_exist(meta_tag):
+            dpg.configure_item(meta_tag, wrap=meta_wrap)
 
 
 def _capture_ui_state(*, capture_search=True):
@@ -2268,7 +2272,7 @@ def _create_mod_row(mod, section, enable_ticking, value, has_details, parent_tag
     _add_tooltip(fav_tag, "Add or remove this mod from Favorites")
     _add_tooltip(f"{mod}_manage_button", "Open information and actions for this mod")
 
-    dpg.add_text(_meta_text(mod), parent=row_tag, tag=meta_tag, indent=28)
+    dpg.add_text(_meta_text(mod), parent=row_tag, tag=meta_tag, indent=28, wrap=max(220, _list_width() - 64))
     dpg.bind_item_theme(meta_tag, "mod_manager_muted_theme" if section != "unknown" else "mod_manager_warning_theme")
 
     if mod.lower().endswith(".vpk"):

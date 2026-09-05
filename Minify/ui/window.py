@@ -105,7 +105,9 @@ def on_resize():
 
     # v21.4 adaptive shell. Width and height breakpoints intentionally remove
     # optional telemetry before any card or label can collide or clip.
-    nav_width = max(176, min(220, int(shared.window_width * 0.13)))
+    compact_width = shared.window_width <= 1000
+    nav_min_width = 160 if compact_width else 176
+    nav_width = max(nav_min_width, min(220, int(shared.window_width * 0.13)))
     # Reserve enough vertical space for the activity stream, terminal, and footer.
     # The viewport minimum guarantees this body never has to clip navigation controls.
     shell_body_height = max(350, min(500, shared.window_height - 330))
@@ -115,7 +117,9 @@ def on_resize():
     side_width = min(360, max(320, int(workspace_width * 0.25))) if wide_workspace else 0
     main_width = max(360, workspace_width - side_width - (18 if wide_workspace else 0) - 30)
     inner_height = max(300, shell_body_height - 34)
-    metric_visible = inner_height >= 350 and main_width >= 560
+    metric_visible = inner_height >= 350 and main_width >= 520
+    metric_restore_visible = metric_visible and main_width >= 760
+    metric_collision_visible = metric_visible and main_width >= 940
     hero_height = 168 if metric_visible else 124
     status_height = 60 if inner_height >= 350 else 56
     action_height = 76 if inner_height >= 350 else 66
@@ -139,13 +143,21 @@ def on_resize():
     if dpg.does_item_exist("dashboard_metric_strip"):
         dpg.configure_item("dashboard_metric_strip", show=metric_visible, height=42)
     if dpg.does_item_exist("metric_restore_column"):
-        dpg.configure_item("metric_restore_column", show=main_width >= 650)
+        dpg.configure_item("metric_restore_column", show=metric_restore_visible)
+    if dpg.does_item_exist("metric_restore_state"):
+        dpg.configure_item("metric_restore_state", show=metric_restore_visible)
     if dpg.does_item_exist("metric_collision_column"):
-        dpg.configure_item("metric_collision_column", show=main_width >= 830)
+        dpg.configure_item("metric_collision_column", show=metric_collision_visible)
+    if dpg.does_item_exist("metric_collision_state"):
+        dpg.configure_item("metric_collision_state", show=metric_collision_visible)
     if dpg.does_item_exist("dashboard_status_panel"):
         dpg.configure_item("dashboard_status_panel", height=status_height)
     if dpg.does_item_exist("dashboard_action_bar"):
         dpg.configure_item("dashboard_action_bar", height=action_height)
+    if dpg.does_item_exist("button_patch"):
+        dpg.configure_item("button_patch", width=176 if compact_width else 210)
+    if dpg.does_item_exist("button_refresh_main"):
+        dpg.configure_item("button_refresh_main", width=128 if compact_width else 146)
     if dpg.does_item_exist("dashboard_flow_card"):
         dpg.configure_item("dashboard_flow_card", height=flow_height)
     if dpg.does_item_exist("dashboard_signal_card"):
@@ -159,13 +171,16 @@ def on_resize():
     if dpg.does_item_exist("activity_header"):
         dpg.configure_item("activity_header", width=shared.window_width, height=44)
     if dpg.does_item_exist("activity_caption"):
-        dpg.configure_item("activity_caption", show=shared.window_width >= 900)
+        dpg.configure_item("activity_caption", show=shared.window_width >= 1040)
     if dpg.does_item_exist("activity_stream_state"):
-        dpg.configure_item("activity_stream_state", show=shared.window_width >= 620)
+        dpg.configure_item("activity_stream_state", show=shared.window_width >= 700)
+    settings_width = max(320, shared.window_width - 16)
     if dpg.does_item_exist("settings_scroll"):
-        dpg.configure_item("settings_scroll", width=shared.window_width, height=max(220, shared.window_height - 78))
+        dpg.configure_item("settings_scroll", width=settings_width, height=max(220, shared.window_height - 78))
     if dpg.does_item_exist("settings_actions_bar"):
-        dpg.configure_item("settings_actions_bar", width=shared.window_width, height=56)
+        dpg.configure_item("settings_actions_bar", width=settings_width, height=56)
+    if dpg.does_item_exist("settings_intro"):
+        dpg.configure_item("settings_intro", wrap=max(260, settings_width - 24))
     terminal.wrap_size = (
         base.main_window_width - 20 if dev_tools.dev_mode_state == 1 else min(max(360, shared.window_width - 30), 1180)
     )
