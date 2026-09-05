@@ -1,29 +1,23 @@
 # AI Context
 - Upstream baseline: `Egezenn/dota2-minify` tag `Minify-v1.14rc7`; exact commit `d4b4520c945a9e1f8f5facc52a76ac5903babe90`.
-- Fork target: `ripDZL/dota2-minify`; `v21.4-hardening` is active development.
-- Branch policy: exactly three long-lived branches: `v21.4-hardening` -> `beta` -> `main`; do not retain temporary/reference/integration branches.
-- `main` remains `a26bc88a0d412e357965f29488b83a7f9093e11f`; `beta` remains `af83bbb051edced195d5f55ba49ff060a8c76f3c`.
-- Current tested code commit: `c76956a953a3bdf7a42ca386c3879df8a053ed51`.
-- Obsidian Arc materialization commit: `1af11a0bebe62b206f2ebf08fda01890b8766104`; the earlier flat graphite/blue pass is superseded.
-- UI release identity: deep layered graphite; arc-blue navigation/state; ember-orange Minify identity + patch actions; gold metadata; teal D2PFX/safety; subtle opaque edge shadow; nested hero/action/flow/safety cards.
-- Mod Library private palette/themes were reconciled to the same release system; D2PFX legacy bright-cyan selection/title styling was replaced with release teal.
-- Top-right `LOCAL MOD WORKSPACE` / stale `RC6` widgets remain removed.
-- Permanent UI regressions: `tests/test_modern_ui.py`; current GitHub suite is 144/144.
-- Hardening CI run `33935960179`: compileall PASS, Ruff format PASS, Ruff lint PASS, pytest 144/144 PASS in 0.78s, Windows PyInstaller/runtime copy/portable ZIP/upload PASS.
-- Current Windows test ZIP: `Minify-v21.4-hardening-c76956a953a3bdf7a42ca386c3879df8a053ed51-windows.zip`; SHA-256 `1b67a34cef9d1c66fa810691d031fc4afe2c2a069866e63d28634c4ac06569bc`; 53603844 bytes.
-- GitHub artifact ID `9960183184`; outer ZIP SHA-256 `a96af66909b872429b8d7b5965fca82732559c917319ba87342dd4b97039d997`; 53063825 bytes.
-- Artifact verified: 1650 entries; roots `LICENSE`, `Minify.exe`, `README.md`, `_internal`, `bin`, `mods`; no `.materialize`, `READY`, `AI_REMOTE_TMP`; no Remove Foilage manifest/map payload; both oak-leaf blacklist entries present.
+- Fork: `ripDZL/dota2-minify`; active branch `v21.4-hardening`; promotion path `v21.4-hardening` -> `beta` -> `main`.
+- Exactly three branches must remain; `main` frozen at `a26bc88a0d412e357965f29488b83a7f9093e11f`; `beta` frozen at `af83bbb051edced195d5f55ba49ff060a8c76f3c`.
+- Current tested product code: `66d6dd77bd216feb6ff67375d3803ed0be9e150e`.
+- Current visual baseline: **Crimson Slate**; materialization commit `7bb3f4f9eb5194f429ae459ea20e8090b51f2c2f`; inspired by the user-provided Flat Dark GUI reference without copying its artwork/assets.
+- Crimson Slate: charcoal/plum-black panels, crimson/magenta focus/action states, compact rectangular controls, inset fields, thin modular borders, low radii, dense cards; prior Obsidian Arc blue/orange palette superseded.
+- Mod Library uses the same dark/crimson palette; D2PFX selected state/title uses crimson while teal remains source/status metadata.
+- `LOCAL MOD WORKSPACE` / stale `RC6` UI remains removed.
+- `tests/test_modern_ui.py` now has 6 visual-contract regressions; full hardening suite is 145/145.
+- Hardening CI run `33937575665`: compileall PASS; Ruff format PASS; Ruff lint PASS; pytest 145/145 PASS in 0.65s; Windows PyInstaller/runtime copy/portable ZIP/upload PASS.
+- Current Windows test ZIP: `Minify-v21.4-hardening-66d6dd77bd216feb6ff67375d3803ed0be9e150e-windows.zip`; 53603222 bytes; SHA-256 `dee14f404eadede2e4e0b02f76620090ce04dc6c2cc1d87a6cf62c3525862e52`.
+- GitHub artifact ID `9960698474`; outer ZIP 53062983 bytes; SHA-256 `e98f68c8e990e63dfbc587dd51b7ab3f06df49ebbbbc1343cc99a645657434e7`.
+- Artifact verified: 1650 entries; roots `LICENSE`, `Minify.exe`, `README.md`, `_internal`, `bin`, `mods`; no `.materialize`, `READY`, `AI_REMOTE_TMP`; no forbidden Remove Foilage map/manifest; both oak blacklist entries present.
 - Canonical user feature reference: `Minify-v1.14rc7-ModManager-v21.3.1-Safe-Foliage-Fix (1).zip`; SHA-256 `37755c4ee92e1847eef1a5a9c89aef6ba488f33accd0cb102c62a7db8780b5f8`; bundled 116/116 tests pass locally.
-- v21.3.1 patch-pipeline integration is materialized at `b22133201e88d654859541f2c6be69cea8e3cb25`; preserve nested paths, compatibility filtering, restore points, conflict reporting, output validation, rollback, and no-auto-prelaunch cleanup.
-- Do not wholesale replace hardened core files with v21.3.1 overlays; use them as feature references only.
-- Archive 116/116, current GitHub 144/144, and historical local 133/133 + 9 subtests are distinct scopes.
-- Preserve recursive/nested mods, markerless/collapsible Collections, profiles, D2PFX browser/imports, backups/conflict review, Obsidian Arc workspace structure, and no-auto-prelaunch policy.
-- Steam policy: manual rc7 `prelaunch` remains; automatic Minify prelaunch injection disabled; stale generated wrappers cleaned narrowly.
-- Remove Foilage: blacklist-only; never ship `Remove Foilage/manifest.json` or `Remove Foilage/maps/dota.vpk`; retain `tree_oak_leaves_05.vmat_c` and `tree_oak_leaves_05.vmdl_c` blacklist entries.
-- Remove Main Menu Background: retain dashboard-manager and `#FrontpageContents` collapse rules.
-- Dark Terrain: yield `materials/dev/deferred_post_process.vmat_c` only when another selected mod owns the same virtual path; associated Dark fog is excluded only for that collision case.
-- Security boundaries: mod Python scripts are arbitrary-code trust boundary; VPK/archive/profile/backup/download/D2PFX inputs are untrusted.
-- Publication rule: materialized normal source is canonical; transformer/bootstrap is optional migration/repro tooling only.
-- `core/mod_library.py` prior-v21.4 reconciliation remains blocked: current blob `a5204ea1d5e0309d3c6a764ad9b974e7bdeb8268`; expected validated blob `e95b2f6f59b3b96f7c19ed70ee514df02e500926`, SHA-256 `552dbb7f98d5e0db2ad32c1b2888d8ad4ae8945fdf49ebc2853765e59c6c9e7a`, 69949 bytes.
-- Missing bootstrap chunk `005` contains the final 2089 compressed bytes of that ZIP entry; never fabricate missing bytes or create `.materialize/READY` while incomplete.
+- v21.3.1 patch pipeline materialized at `b22133201e88d654859541f2c6be69cea8e3cb25`; preserve nested paths, compatibility filtering, restore points, conflict reporting, output validation, rollback, no-auto-prelaunch cleanup.
+- Never wholesale replace hardened core files with v21.3.1 overlays; use them as feature references only.
+- Preserve recursive/nested mods, markerless/collapsible Collections, profiles, D2PFX browser/imports, backups/conflict review, Dark Terrain collision behavior, Safe Foliage, Main Menu Background fix, manual rc7 `prelaunch`, and no-auto-prelaunch policy.
+- Remove Foilage: blacklist-only; never ship `manifest.json` or `maps/dota.vpk`; retain both exact oak-leaf blacklist entries.
+- Security boundary: mod Python scripts are trusted arbitrary code; VPK/archive/profile/backup/download/D2PFX inputs are untrusted.
+- Canonical fork architecture is materialized normal source; transformer/bootstrap only optional migration/repro tooling.
+- `core/mod_library.py` prior-v21.4 exact-source reconciliation remains blocked; never fabricate missing bootstrap bytes or create `.materialize/READY` while incomplete.
 - Project-memory rule: read `Docs/*.md` at session start; update terse bullets at major milestones.
