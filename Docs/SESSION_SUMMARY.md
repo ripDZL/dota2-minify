@@ -1,17 +1,16 @@
 # Session Summary
-- Fork: `ripDZL/dota2-minify`; active branch `v21.4-hardening`; exact rc7 baseline `d4b4520c945a9e1f8f5facc52a76ac5903babe90`.
-- Branch model: exactly `v21.4-hardening` -> `beta` -> `main`; beta/main remain frozen.
-- Canonical user feature reference: `Minify-v1.14rc7-ModManager-v21.3.1-Safe-Foliage-Fix (1).zip`; SHA-256 `37755c4ee92e1847eef1a5a9c89aef6ba488f33accd0cb102c62a7db8780b5f8`; bundled 116/116 tests pass.
-- Patch-pipeline integration materialized at `b22133201e88d654859541f2c6be69cea8e3cb25`; preserve nested resolution, compatibility filtering, restore points, conflict reporting, validation, rollback, no-auto-prelaunch cleanup.
-- User smoke-tested previous validated Windows build `24703387...` as generally good.
-- User rejected the first modern graphite/blue pass as too flat/minimal for release and requested a more complex/flavorful UI.
-- Obsidian Arc release UI materialized at `1af11a0bebe62b206f2ebf08fda01890b8766104`: layered graphite surfaces, arc-blue navigation/state, ember identity/patch actions, gold metadata, teal D2PFX/safety, opaque edge depth, nested hero/action/flow/safety cards.
-- Mod Library private palette/themes and D2PFX selected/title styling now match the release system; stale top-right workspace/RC6 furniture remains removed.
-- Current tested code: `c76956a953a3bdf7a42ca386c3879df8a053ed51`; `tests/test_modern_ui.py` protects release hierarchy/palette invariants.
-- Hardening CI run `33935960179`: compileall PASS, Ruff format/lint PASS, pytest 144/144 PASS in 0.78s, Windows PyInstaller/runtime copy/ZIP/upload PASS.
-- Current Windows ZIP: `Minify-v21.4-hardening-c76956a953a3bdf7a42ca386c3879df8a053ed51-windows.zip`; 53603844 bytes; SHA-256 `1b67a34cef9d1c66fa810691d031fc4afe2c2a069866e63d28634c4ac06569bc`.
-- GitHub artifact ID `9960183184`; outer ZIP 53063825 bytes; SHA-256 `a96af66909b872429b8d7b5965fca82732559c917319ba87342dd4b97039d997`.
-- Artifact verified: 1650 entries; normal portable roots; no staging/materialize markers; Remove Foilage remains blacklist-only/map-free with both oak entries.
-- `core/mod_library.py` prior-v21.4 exact-source gap remains unresolved; never substitute old v21.3.1 overlay or fabricate missing bytes.
-- Remaining: user review Obsidian Arc, adapt useful v21.3.1 regressions directly on hardening, semantic core-overlay reconciliation, hostile-input/security sweep, exact-rc7 diff review, bootstrap cleanup, Dota smoke tests.
+- Fork: `ripDZL/dota2-minify`; active `v21.4-hardening`; exact rc7 baseline `d4b4520c945a9e1f8f5facc52a76ac5903babe90`.
+- Branch model: exactly `v21.4-hardening` -> `beta` -> `main`; beta/main frozen.
+- Canonical feature reference remains supplied v21.3.1 Safe Foliage Fix archive; bundled 116/116 tests pass.
+- Patch pipeline remains materialized at `b22133201e88d654859541f2c6be69cea8e3cb25`; preserve nested resolution, compatibility filtering, restore points, conflict reporting, validation, rollback, no-auto-prelaunch cleanup.
+- User requested a theme similar to Fab listing `Flat Dark GUI / UI Kit - 5 color themes`; implementation uses only visual-language inspiration, no copied artwork/assets.
+- Current UI baseline: **Crimson Slate**; materialized at `7bb3f4f9eb5194f429ae459ea20e8090b51f2c2f`; prior Obsidian Arc palette superseded.
+- Crimson Slate: charcoal/plum-black panels, crimson/magenta states/actions, compact rectangular controls, inset fields, thin modular borders, low radii, dense cards; Mod Library matched; D2PFX selected state/title crimson with teal metadata retained.
+- `LOCAL MOD WORKSPACE` / stale `RC6` remains removed.
+- Current tested product code: `66d6dd77bd216feb6ff67375d3803ed0be9e150e`.
+- Hardening CI run `33937575665`: compileall PASS, Ruff format/lint PASS, pytest 145/145 PASS in 0.65s, Windows portable build PASS.
+- Current Windows ZIP: `Minify-v21.4-hardening-66d6dd77bd216feb6ff67375d3803ed0be9e150e-windows.zip`; 53603222 bytes; SHA-256 `dee14f404eadede2e4e0b02f76620090ce04dc6c2cc1d87a6cf62c3525862e52`.
+- Artifact ID `9960698474`; outer SHA-256 `e98f68c8e990e63dfbc587dd51b7ab3f06df49ebbbbc1343cc99a645657434e7`; artifact safety/layout verified.
+- `core/mod_library.py` prior-v21.4 exact-source gap remains unresolved; never fabricate missing bytes or substitute old overlay as exact source.
+- Remaining: user review Crimson Slate, adapt useful v21.3.1 regressions, semantic core reconciliation, hostile-input/security sweep, exact-rc7 diff review, bootstrap cleanup, Dota smoke tests.
 - Do not promote beta/main until remaining gates and user approval.
