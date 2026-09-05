@@ -1,0 +1,38 @@
+name: Apply centered header fit patch
+
+on:
+  push:
+    branches: [v21.4-hardening]
+
+permissions:
+  contents: write
+
+jobs:
+  apply:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: v21.4-hardening
+          fetch-depth: 0
+      - uses: astral-sh/setup-uv@v5
+        with:
+          python-version: '3.13'
+      - name: Install dependencies
+        run: uv sync --group dev
+      - name: Apply centered header and minimum-fit changes
+        run: |
+          python tools/apply_header_fit_once.py
+          uv run ruff format Minify/__main__.py Minify/ui/window.py Minify/ui/theme.py tests/test_modern_ui.py
+          uv run python -m compileall -q Minify tests
+          uv run ruff check Minify
+          uv run pytest tests/test_modern_ui.py
+      - name: Commit materialized fix
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git rm -f tools/apply_header_fit_once.py .github/workflows/header-fit-once.yml
+          git add Minify/__main__.py Minify/ui/window.py Minify/ui/theme.py tests/test_modern_ui.py
+          git commit -m 'ui: center header and enforce safe minimum viewport'
+          git push origin HEAD:v21.4-hardening
