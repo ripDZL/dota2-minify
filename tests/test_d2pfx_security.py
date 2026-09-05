@@ -69,3 +69,13 @@ def test_d2pfx_rejects_oversized_cached_catalogue(monkeypatch, tmp_path):
 
     with patch("browsers.d2pfx.data.requests.get", side_effect=RuntimeError("offline")):
         assert manager.fetch_gz_json("mods.json.gz") is None
+
+
+@patch("browsers.d2pfx.data.requests.get")
+def test_d2pfx_catalogue_closes_non_200_response(mock_get, monkeypatch, tmp_path):
+    manager = _manager(monkeypatch, tmp_path)
+    response = _FakeResponse(b"", status_code=503)
+    mock_get.return_value = response
+
+    assert manager.fetch_gz_json("mods.json.gz", force_refresh=True) is None
+    assert response.closed is True
