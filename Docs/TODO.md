@@ -3,14 +3,14 @@
 - [x] Enforce exactly three branches: `v21.4-hardening`, `beta`, `main`.
 - [x] Preserve hardened security/backend behavior and v21.3.1 feature set without wholesale old-core replacement.
 - [x] Remove stale `LOCAL MOD WORKSPACE` / `RC6` header furniture.
-- [x] Replace Prismatic Foundry palette with **Plumfire Reactor** grounded in user JSON design tokens.
-- [x] Map JSON roles to UI: violet buttons, ember dividers/destructive states, lime protected/success, gold telemetry, warm ivory text, plum-black surfaces, slate borders.
 - [x] Replace fragile space-padded status layouts with DPG table columns and adaptive visibility thresholds.
-- [x] Reconcile Mod Library + D2PFX colors to the same JSON-derived palette.
-- [x] Add/update visual regressions; tested product code `44309ffbd752c3c9788b4371cd6daf271fe763e8`.
-- [x] Current CI run `33939739722`: compileall/Ruff PASS; pytest 148/148 PASS; Windows build PASS.
-- [x] Current portable ZIP validated; SHA-256 `505b0d5421b83093518218a5ef7cf62a9a943e2515cd07eae3465f70c4820ac5`.
-- [ ] User review Plumfire Reactor at maximized, medium, and narrow sizes; capture screenshots for remaining alignment/palette tuning.
+- [x] Interpret uploaded JSON using the original application screenshot's spatial color roles.
+- [x] Materialize **Black-Plum Reactor**: plum chrome, slate work surfaces, black strips, purple controls, lime selected/safe state, red dividers, gold telemetry, yellow links, warm ivory text.
+- [x] Reconcile Mod Library + D2PFX to the same spatial roles; selected D2PFX row is lime with black text.
+- [x] Add/update visual regressions; tested product code `667be18dd0613098ad17f9c2eb8f66a4ee57bf8e`.
+- [x] Current CI run `33940573117`: compileall/Ruff PASS; pytest 149/149 PASS; Windows build PASS.
+- [x] Current portable ZIP validated; SHA-256 `0fd863453cc8d2482682fbc5b41cc718870165cf06305f4535589fe673255408`.
+- [ ] User review Black-Plum Reactor at maximized, medium, and narrow sizes; capture screenshots for remaining alignment/palette tuning.
 - [ ] Adapt remaining useful v21.3.1 regressions directly on hardening.
 - [ ] Complete semantic core-overlay reconciliation; never wholesale copy old core.
 - [ ] Reconcile prior-v21.4 `core/mod_library.py` only if authentic missing bytes become available.
