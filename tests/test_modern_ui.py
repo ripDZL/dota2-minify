@@ -147,9 +147,31 @@ def test_minimum_width_fit_contract_covers_primary_library_and_d2pfx():
     assert 'dpg.configure_item("button_patch", width=176 if compact_width else 210)' in WINDOW
     assert 'dpg.configure_item("button_refresh_main", width=128 if compact_width else 146)' in WINDOW
     assert 'dpg.configure_item("activity_caption", show=shared.window_width >= 1040)' in WINDOW
-    assert "settings_width = max(320, shared.window_width - 16)" in WINDOW
+    assert "content_width = max(320, shared.window_width - CONTENT_INSET)" in WINDOW
+    assert "settings_width = content_width" in WINDOW
     assert 'with dpg.child_window(width=168, tag="d2pfx_sidebar"):' in D2PFX
     assert "init_width_or_weight=320" in D2PFX
     assert 'tag="d2pfx_cat_desc", wrap=360' in D2PFX
     assert "new_cols = max(2, min(4, int(content_width / 240)))" in D2PFX
     assert "wrap=max(220, _list_width() - 64)" in CHECKBOXES
+
+
+def test_minimum_height_contract_keeps_navigation_and_library_controls_accessible():
+    assert '"app_nav_rail",\n            width=nav_width,\n            height=shell_body_height,\n            no_scrollbar=False' in WINDOW
+    assert 'dpg.configure_item("mod_source_rail", no_scrollbar=False, no_scroll_with_mouse=False)' in WINDOW
+    assert 'dpg.configure_item("terminal_window", width=content_width)' in WINDOW
+    assert 'dpg.configure_item("footer", width=content_width)' in WINDOW
+
+
+def test_minimum_height_contract_bounds_d2pfx_and_auxiliary_scroll_regions():
+    assert "d2pfx_content_height = max(MIN_D2PFX_CONTENT_HEIGHT, shared.window_height - 64)" in WINDOW
+    assert "d2pfx_mods_height = max(180, d2pfx_content_height - D2PFX_HEADER_BUDGET)" in WINDOW
+    assert 'dpg.configure_item("d2pfx_mods_view", height=d2pfx_mods_height, no_scrollbar=False)' in WINDOW
+    assert 'dpg.configure_item("conflict_list", height=max(220, min(410, shared.window_height - 320)))' in WINDOW
+    assert 'dpg.configure_item("d2pfx_import_preview", height=max(150, min(230, shared.window_height - 350)))' in WINDOW
+
+
+def test_registered_browser_windows_resize_before_browser_layout_hooks():
+    resize_tag_index = WINDOW.index('for window_tag in getattr(browser_config, "RESIZE_TAGS", [])')
+    hook_index = WINDOW.index('if hasattr(browser_config, "on_resize"):', resize_tag_index)
+    assert resize_tag_index < hook_index

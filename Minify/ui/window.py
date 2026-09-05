@@ -12,6 +12,14 @@ from ui import details, dev_tools, modal_shared, shared, terminal
 is_moving_viewport = False
 
 
+# Keep child surfaces inside the decorated viewport's client area. Dear PyGui's
+# viewport minimum applies to the outer window, so the actual client area is a
+# little smaller on Windows.
+CONTENT_INSET = 16
+MIN_D2PFX_CONTENT_HEIGHT = 260
+D2PFX_HEADER_BUDGET = 188
+
+
 def drag(sender, app_data, user_data):
     global is_moving_viewport
 
@@ -82,6 +90,54 @@ def focus():
             )
 
 
+def _configure_minimum_window_surfaces(content_width, compact_width):
+    """Keep secondary surfaces usable inside the minimum client area."""
+    if dpg.does_item_exist("mod_source_rail"):
+        # The source rail is taller than the minimum-height library body. A
+        # scrollbar keeps Restore/selection/navigation controls reachable.
+        dpg.configure_item("mod_source_rail", no_scrollbar=False, no_scroll_with_mouse=False)
+
+    if dpg.does_item_exist("terminal_window"):
+        dpg.configure_item("terminal_window", width=content_width)
+    if dpg.does_item_exist("footer"):
+        dpg.configure_item("footer", width=content_width)
+
+    # D2PFX has a scrollable card surface, but its sidebar and card viewport
+    # previously relied on implicit height. Give both a client-area budget so
+    # the browser cannot extend below the decorated 960x680 window.
+    d2pfx_sidebar_width = 156 if compact_width else 168
+    d2pfx_content_height = max(MIN_D2PFX_CONTENT_HEIGHT, shared.window_height - 64)
+    d2pfx_mods_height = max(180, d2pfx_content_height - D2PFX_HEADER_BUDGET)
+    if dpg.does_item_exist("d2pfx_sidebar"):
+        dpg.configure_item(
+            "d2pfx_sidebar",
+            width=d2pfx_sidebar_width,
+            height=d2pfx_content_height,
+            no_scrollbar=False,
+            no_scroll_with_mouse=False,
+        )
+    if dpg.does_item_exist("d2pfx_mods_view"):
+        dpg.configure_item("d2pfx_mods_view", height=d2pfx_mods_height, no_scrollbar=False)
+
+    # Auxiliary dialogs already clamp their outer dimensions. Clamp their
+    # largest inner scroll region as well so title/description/action rows stay
+    # visible at the minimum height.
+    if dpg.does_item_exist("conflict_list"):
+        dpg.configure_item("conflict_list", height=max(220, min(410, shared.window_height - 320)))
+    if dpg.does_item_exist("patch_preview_warning"):
+        dpg.configure_item("patch_preview_warning", wrap=max(260, min(540, content_width - 60)))
+    if dpg.does_item_exist("backup_summary"):
+        dpg.configure_item("backup_summary", wrap=max(260, min(650, content_width - 60)))
+    if dpg.does_item_exist("mod_action_identify_hint"):
+        dpg.configure_item("mod_action_identify_hint", wrap=max(260, min(520, content_width - 60)))
+    if dpg.does_item_exist("mod_action_hash"):
+        dpg.configure_item("mod_action_hash", wrap=max(260, min(520, content_width - 60)))
+    if dpg.does_item_exist("d2pfx_import_preview"):
+        dpg.configure_item("d2pfx_import_preview", height=max(150, min(230, shared.window_height - 350)))
+    if dpg.does_item_exist("d2pfx_import_progress_text"):
+        dpg.configure_item("d2pfx_import_progress_text", wrap=max(260, min(660, content_width - 60)))
+
+
 # TODO: wrap sizes should be generalized
 def on_resize():
     if dev_tools.dev_mode_state != 1:
@@ -89,11 +145,12 @@ def on_resize():
         dev_tools.prev_height = dpg.get_viewport_height()
     shared.viewport_width = dpg.get_viewport_width()
     shared.viewport_height = dpg.get_viewport_height()
-    # terminal wrap size
+    # Use decorated-window client dimensions for every child layout budget.
     client_width_fn = getattr(dpg, "get_viewport_client_width", None)
     client_height_fn = getattr(dpg, "get_viewport_client_height", None)
     shared.window_width = int(client_width_fn() if client_width_fn else dpg.get_viewport_width())
     shared.window_height = int(client_height_fn() if client_height_fn else dpg.get_viewport_height())
+    content_width = max(320, shared.window_width - CONTENT_INSET)
 
     if dpg.does_item_exist("primary_window"):
         dpg.configure_item(
@@ -109,10 +166,10 @@ def on_resize():
     nav_min_width = 160 if compact_width else 176
     nav_width = max(nav_min_width, min(220, int(shared.window_width * 0.13)))
     # Reserve enough vertical space for the activity stream, terminal, and footer.
-    # The viewport minimum guarantees this body never has to clip navigation controls.
+    # The navigation rail itself becomes scrollable when that budget is tight.
     shell_body_height = max(350, min(500, shared.window_height - 330))
     nav_status_height = 66 if shell_body_height >= 370 else 62
-    workspace_width = max(430, shared.window_width - nav_width - 34)
+    workspace_width = max(430, content_width - nav_width - 18)
     wide_workspace = workspace_width >= 1080 and shared.window_height >= 720
     side_width = min(360, max(320, int(workspace_width * 0.25))) if wide_workspace else 0
     main_width = max(360, workspace_width - side_width - (18 if wide_workspace else 0) - 30)
@@ -127,9 +184,15 @@ def on_resize():
     signal_height = 110 if inner_height >= 390 else 102
 
     if dpg.does_item_exist("app_shell_header"):
-        dpg.configure_item("app_shell_header", width=shared.window_width, height=76)
+        dpg.configure_item("app_shell_header", width=content_width, height=76)
     if dpg.does_item_exist("app_nav_rail"):
-        dpg.configure_item("app_nav_rail", width=nav_width, height=shell_body_height)
+        dpg.configure_item(
+            "app_nav_rail",
+            width=nav_width,
+            height=shell_body_height,
+            no_scrollbar=False,
+            no_scroll_with_mouse=False,
+        )
     if dpg.does_item_exist("nav_status_card"):
         dpg.configure_item("nav_status_card", height=nav_status_height)
     if dpg.does_item_exist("app_workspace"):
@@ -169,20 +232,22 @@ def on_resize():
     if dpg.does_item_exist("dashboard_safety_text") and wide_workspace:
         dpg.configure_item("dashboard_safety_text", wrap=max(180, side_width - 30))
     if dpg.does_item_exist("activity_header"):
-        dpg.configure_item("activity_header", width=shared.window_width, height=44)
+        dpg.configure_item("activity_header", width=content_width, height=44)
     if dpg.does_item_exist("activity_caption"):
         dpg.configure_item("activity_caption", show=shared.window_width >= 1040)
     if dpg.does_item_exist("activity_stream_state"):
         dpg.configure_item("activity_stream_state", show=shared.window_width >= 700)
-    settings_width = max(320, shared.window_width - 16)
+
+    settings_width = content_width
     if dpg.does_item_exist("settings_scroll"):
         dpg.configure_item("settings_scroll", width=settings_width, height=max(220, shared.window_height - 78))
     if dpg.does_item_exist("settings_actions_bar"):
         dpg.configure_item("settings_actions_bar", width=settings_width, height=56)
     if dpg.does_item_exist("settings_intro"):
         dpg.configure_item("settings_intro", wrap=max(260, settings_width - 24))
+
     terminal.wrap_size = (
-        base.main_window_width - 20 if dev_tools.dev_mode_state == 1 else min(max(360, shared.window_width - 30), 1180)
+        base.main_window_width - 20 if dev_tools.dev_mode_state == 1 else min(max(360, content_width - 14), 1180)
     )
 
     for item in shared.terminal_history:
@@ -218,14 +283,17 @@ def on_resize():
             height=shared.window_height,
         )
 
-    # Browser discovery resizing
+    # Resize registered browser windows before their module-specific layout hook
+    # so child calculations see the final client-area dimensions.
     for browser_config in get_browser_configs():
-        if hasattr(browser_config, "on_resize"):
-            browser_config.on_resize()
-
         for window_tag in getattr(browser_config, "RESIZE_TAGS", []):
             if dpg.does_item_exist(window_tag):
                 dpg.configure_item(window_tag, width=shared.window_width, height=shared.window_height)
+
+        if hasattr(browser_config, "on_resize"):
+            browser_config.on_resize()
+
+    _configure_minimum_window_surfaces(content_width, compact_width)
 
     if dpg.is_item_shown("modal_popup"):
         modal_shared.configure()
