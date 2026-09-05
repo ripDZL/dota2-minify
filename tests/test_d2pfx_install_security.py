@@ -1,7 +1,8 @@
 from pathlib import Path
 
 
-UI_SOURCE = Path("Minify/browsers/d2pfx/ui.py").read_text(encoding="utf-8")
+ROOT = Path(__file__).resolve().parents[1]
+UI_SOURCE = (ROOT / "Minify" / "browsers" / "d2pfx" / "ui.py").read_text(encoding="utf-8")
 
 
 def _install_block():
