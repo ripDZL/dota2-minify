@@ -3,12 +3,13 @@
 - Branch model: exactly `v21.4-hardening` -> `beta` -> `main`; beta/main frozen.
 - Canonical feature reference: supplied v21.3.1 Safe Foliage Fix archive; bundled 116/116 tests pass.
 - UI baseline: **Black-Plum Reactor**; centered header; 960x680 minimum; adaptive telemetry/right deck; stale RC6/PATCH ENGINE furniture removed.
-- Security sweep completed: network/catalogue, backup manifest, profiles, VPK metadata, D2PFX cursor filesystem handling, D2PFX catalogue/cache/metadata/path validation, D2PFX browser remote install path.
-- D2PFX install hardening: redirect-hop validation; HTTPS/public endpoint checks; flat safe URL filenames; 32 MiB preview cap; staged payload/extraction/metadata; atomic target publication; failure cleanup.
-- Current tested product code: `53a358db219256187e21a40acc8ed45704c3589f`.
-- Hardening CI `33971846026`: compileall PASS; Ruff format/lint PASS; pytest 200/200 PASS; Windows portable build PASS.
-- Current Windows ZIP: `Minify-v21.4-hardening-53a358db219256187e21a40acc8ed45704c3589f-windows.zip`; 53,625,172 bytes; SHA-256 `6a1874783d6d49b3e53d069577b90c14cd52a7aa618d3298c929fd863f2bd54a`.
-- Artifact `9971169200`; outer SHA-256 `14cd19c31edfcd4051a454ec73c12bd4fd383816783cde04d29785bcb5ad48ea`; 1650-entry portable layout/Safe-Foliage/Main-Menu checks pass.
+- Security sweep includes network/catalogue, profiles, VPK metadata, D2PFX cursors/catalogue/install, and backup live-output/manifest path races.
+- Backup hardening product commit `3266a10ae4132201fcfc85c0adf0475b30416973`: no-follow manifest descriptor + identity check; managed-output confinement; symlinked parent escape rejected pre-mutation.
+- Restored v21.3.1 backend regressions directly on hardening: Dark Terrain/Safe Foliage/Main Menu compatibility and recursive/nested Collections/dependency behavior.
+- Exact validated head: `2de55f97a4bbb8d0e127335cc4a2effc56fd105a`.
+- Hardening CI `33972529166`: compileall PASS; Ruff format/lint PASS; pytest 228/228 PASS; Windows portable build PASS.
+- Windows ZIP: `Minify-v21.4-hardening-2de55f97a4bbb8d0e127335cc4a2effc56fd105a-windows.zip`; 53,625,698 bytes; SHA-256 `28e084172e7c9a984288999b0e26b01b69359a51ed9c4221bb35f7ff2feae759`.
+- Artifact `9971359063`; outer 53,085,215 bytes; SHA-256 `b774c5e257f19bd9d9d11e8d3b887fca39a58af6d3cdba1888182d98c9f35d6b`; portable/Safe-Foliage/Main-Menu checks pass.
 - `core/mod_library.py` prior-v21.4 exact-source gap remains unresolved; never fabricate missing bytes.
-- Next: continue path-race/security review; adapt remaining useful v21.3.1 regressions; semantic core/exact-rc7 diff review; Dota smoke tests.
+- Next: remaining filesystem race/security review; semantic v21.3.1 UI/feature regression adaptation; semantic core/exact-rc7 diff review; Dota smoke tests.
 - Do not promote beta/main until remaining gates and user approval.
