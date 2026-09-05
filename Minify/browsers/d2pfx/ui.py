@@ -95,9 +95,9 @@ class BrowserUI:
         if not dpg.does_item_exist("selected_cat_theme"):
             with dpg.theme(tag="selected_cat_theme"):
                 with dpg.theme_component(dpg.mvSelectable):
-                    dpg.add_theme_color(dpg.mvThemeCol_Header, (0, 119, 119, 150))
-                    dpg.add_theme_color(dpg.mvThemeCol_HeaderHovered, (0, 119, 119, 200))
-                    dpg.add_theme_color(dpg.mvThemeCol_HeaderActive, (0, 119, 119, 255))
+                    dpg.add_theme_color(dpg.mvThemeCol_Header, (20, 78, 76, 190))
+                    dpg.add_theme_color(dpg.mvThemeCol_HeaderHovered, (30, 108, 104, 220))
+                    dpg.add_theme_color(dpg.mvThemeCol_HeaderActive, (42, 137, 130, 255))
                     dpg.add_theme_color(dpg.mvThemeCol_Text, (255, 255, 255))
 
     def render(self):
@@ -135,7 +135,7 @@ class BrowserUI:
                             dpg.add_table_column(width_fixed=True, init_width_or_weight=350)
                             with dpg.table_row():
                                 with dpg.group():
-                                    dpg.add_text("Select a category", tag="d2pfx_cat_title", color=(0, 255, 255))
+                                    dpg.add_text("Select a category", tag="d2pfx_cat_title", color=(78, 208, 196))
                                     desc_text = dpg.add_text("", tag="d2pfx_cat_desc", wrap=0)
                                     if dpg.does_item_exist("small_font"):
                                         dpg.bind_item_font(desc_text, "small_font")

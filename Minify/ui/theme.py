@@ -5,38 +5,42 @@ import ctypes
 import dearpygui.dearpygui as dpg
 from core import base, utils
 
-# v21.4: modern graphite visual system.
-# Flat layered surfaces, cool blue focus, subtle borders and larger radii.
-# BEVEL_* names remain compatibility aliases, but the shadow is transparent so
-# controls render as clean flat cards instead of faux-raised chrome.
-BACKGROUND = (10, 13, 18, 255)
-BACKGROUND_DEEP = (7, 9, 13, 255)
-SURFACE = (17, 22, 29, 255)
-SURFACE_ALT = (22, 28, 37, 255)
-SURFACE_RAISED = (27, 34, 44, 255)
-SURFACE_RECESSED = (12, 16, 22, 255)
-SURFACE_HOVER = (35, 44, 57, 255)
-SURFACE_ACTIVE = (24, 31, 41, 255)
-SURFACE_WARM = (27, 31, 41, 255)
-BORDER = (54, 65, 82, 255)
-BORDER_SOFT = (35, 43, 55, 255)
-BEVEL_LIGHT = BORDER
-BEVEL_DARK = (0, 0, 0, 0)
-BEVEL_EMBER = (112, 170, 255, 255)
-TEXT = (236, 241, 248, 255)
-MUTED = (150, 161, 178, 255)
-MUTED_DARK = (92, 102, 118, 255)
-ACCENT = (80, 145, 255, 255)
-ACCENT_HOVER = (111, 168, 255, 255)
-ACCENT_ACTIVE = (61, 122, 232, 255)
-ACCENT_MUTED = (38, 70, 120, 255)
-HIGHLIGHT = (142, 183, 255, 255)
-D2PFX = (76, 201, 190, 255)
-VPK = (126, 196, 141, 255)
-DANGER = (223, 86, 105, 255)
-DANGER_HOVER = (239, 108, 125, 255)
-WARNING = (236, 186, 83, 255)
-SUCCESS = (93, 200, 139, 255)
+# v21.4: Obsidian Arc release visual system.
+# Deep layered graphite, luminous arc-blue state, ember-orange identity/actions,
+# and subtle physical edge lighting. Dense enough to feel authored, restrained
+# enough to keep long mod lists readable.
+BACKGROUND = (7, 9, 14, 255)
+BACKGROUND_DEEP = (3, 5, 9, 255)
+SURFACE = (14, 19, 27, 255)
+SURFACE_ALT = (21, 28, 39, 255)
+SURFACE_RAISED = (30, 39, 53, 255)
+SURFACE_RECESSED = (9, 13, 19, 255)
+SURFACE_HOVER = (43, 55, 73, 255)
+SURFACE_ACTIVE = (25, 33, 46, 255)
+SURFACE_WARM = (34, 24, 25, 255)
+BORDER = (65, 80, 103, 255)
+BORDER_SOFT = (32, 42, 57, 255)
+BEVEL_LIGHT = (100, 118, 145, 255)
+BEVEL_DARK = (1, 2, 5, 220)
+BEVEL_EMBER = (255, 132, 92, 255)
+TEXT = (241, 245, 250, 255)
+MUTED = (158, 171, 190, 255)
+MUTED_DARK = (88, 100, 119, 255)
+ACCENT = (84, 151, 255, 255)
+ACCENT_HOVER = (116, 176, 255, 255)
+ACCENT_ACTIVE = (62, 125, 232, 255)
+ACCENT_MUTED = (36, 69, 119, 255)
+EMBER = (240, 103, 70, 255)
+EMBER_HOVER = (255, 133, 91, 255)
+EMBER_ACTIVE = (204, 80, 55, 255)
+EMBER_MUTED = (103, 48, 40, 255)
+HIGHLIGHT = (239, 191, 105, 255)
+D2PFX = (78, 208, 196, 255)
+VPK = (132, 201, 145, 255)
+DANGER = (222, 82, 101, 255)
+DANGER_HOVER = (241, 104, 121, 255)
+WARNING = (239, 184, 78, 255)
+SUCCESS = (91, 204, 139, 255)
 
 settings_theme = 0
 
@@ -122,6 +126,46 @@ def apply():
             dpg.add_theme_style(dpg.mvStyleVar_ChildBorderSize, 0)
             dpg.add_theme_style(dpg.mvStyleVar_WindowPadding, x=3, y=2)
 
+    with dpg.theme(tag="dashboard_hero_card_theme"):
+        with dpg.theme_component(dpg.mvChildWindow):
+            dpg.add_theme_color(dpg.mvThemeCol_ChildBg, SURFACE_ALT)
+            dpg.add_theme_color(dpg.mvThemeCol_Border, ACCENT_MUTED)
+            dpg.add_theme_color(dpg.mvThemeCol_BorderShadow, BEVEL_DARK)
+            dpg.add_theme_style(dpg.mvStyleVar_ChildBorderSize, 1)
+            dpg.add_theme_style(dpg.mvStyleVar_ChildRounding, 8)
+            dpg.add_theme_style(dpg.mvStyleVar_WindowPadding, x=14, y=11)
+
+    with dpg.theme(tag="dashboard_action_bar_theme"):
+        with dpg.theme_component(dpg.mvChildWindow):
+            dpg.add_theme_color(dpg.mvThemeCol_ChildBg, SURFACE_RECESSED)
+            dpg.add_theme_color(dpg.mvThemeCol_Border, BORDER_SOFT)
+            dpg.add_theme_color(dpg.mvThemeCol_BorderShadow, BEVEL_DARK)
+            dpg.add_theme_style(dpg.mvStyleVar_ChildBorderSize, 1)
+            dpg.add_theme_style(dpg.mvStyleVar_ChildRounding, 8)
+            dpg.add_theme_style(dpg.mvStyleVar_WindowPadding, x=9, y=8)
+
+    with dpg.theme(tag="dashboard_flow_card_theme"):
+        with dpg.theme_component(dpg.mvChildWindow):
+            dpg.add_theme_color(dpg.mvThemeCol_ChildBg, SURFACE_ALT)
+            dpg.add_theme_color(dpg.mvThemeCol_Border, (57, 79, 116, 255))
+            dpg.add_theme_color(dpg.mvThemeCol_BorderShadow, BEVEL_DARK)
+            dpg.add_theme_style(dpg.mvStyleVar_ChildBorderSize, 1)
+            dpg.add_theme_style(dpg.mvStyleVar_ChildRounding, 8)
+            dpg.add_theme_style(dpg.mvStyleVar_WindowPadding, x=11, y=10)
+
+    with dpg.theme(tag="dashboard_safety_card_theme"):
+        with dpg.theme_component(dpg.mvChildWindow):
+            dpg.add_theme_color(dpg.mvThemeCol_ChildBg, (13, 25, 25, 255))
+            dpg.add_theme_color(dpg.mvThemeCol_Border, (42, 91, 82, 255))
+            dpg.add_theme_color(dpg.mvThemeCol_BorderShadow, BEVEL_DARK)
+            dpg.add_theme_style(dpg.mvStyleVar_ChildBorderSize, 1)
+            dpg.add_theme_style(dpg.mvStyleVar_ChildRounding, 8)
+            dpg.add_theme_style(dpg.mvStyleVar_WindowPadding, x=11, y=10)
+
+    with dpg.theme(tag="dashboard_safety_title_theme"):
+        with dpg.theme_component(dpg.mvAll):
+            dpg.add_theme_color(dpg.mvThemeCol_Text, D2PFX)
+
     with dpg.theme(tag="app_workspace_side_theme"):
         with dpg.theme_component(dpg.mvChildWindow):
             dpg.add_theme_color(dpg.mvThemeCol_ChildBg, SURFACE_RECESSED)
@@ -189,7 +233,7 @@ def apply():
 
     with dpg.theme(tag="dashboard_title_theme"):
         with dpg.theme_component(dpg.mvAll):
-            dpg.add_theme_color(dpg.mvThemeCol_Text, ACCENT_HOVER)
+            dpg.add_theme_color(dpg.mvThemeCol_Text, EMBER_HOVER)
 
     with dpg.theme(tag="dashboard_product_theme"):
         with dpg.theme_component(dpg.mvAll):
@@ -229,10 +273,10 @@ def apply():
 
     with dpg.theme(tag="main_primary_button_theme"):
         with dpg.theme_component(dpg.mvButton):
-            dpg.add_theme_color(dpg.mvThemeCol_Text, TEXT)
-            dpg.add_theme_color(dpg.mvThemeCol_Button, ACCENT)
-            dpg.add_theme_color(dpg.mvThemeCol_ButtonHovered, ACCENT_HOVER)
-            dpg.add_theme_color(dpg.mvThemeCol_ButtonActive, ACCENT_ACTIVE)
+            dpg.add_theme_color(dpg.mvThemeCol_Text, (25, 13, 10, 255))
+            dpg.add_theme_color(dpg.mvThemeCol_Button, EMBER)
+            dpg.add_theme_color(dpg.mvThemeCol_ButtonHovered, EMBER_HOVER)
+            dpg.add_theme_color(dpg.mvThemeCol_ButtonActive, EMBER_ACTIVE)
             dpg.add_theme_color(dpg.mvThemeCol_Border, BEVEL_EMBER)
             dpg.add_theme_color(dpg.mvThemeCol_BorderShadow, BEVEL_DARK)
             dpg.add_theme_style(dpg.mvStyleVar_FrameBorderSize, 1)
@@ -406,6 +450,10 @@ def apply():
         ("app_workspace", "app_workspace_theme"),
         ("app_workspace_main", "app_workspace_main_theme"),
         ("app_workspace_side", "app_workspace_side_theme"),
+        ("dashboard_hero_card", "dashboard_hero_card_theme"),
+        ("dashboard_action_bar", "dashboard_action_bar_theme"),
+        ("dashboard_flow_card", "dashboard_flow_card_theme"),
+        ("dashboard_safety_card", "dashboard_safety_card_theme"),
         ("dashboard_status_panel", "dashboard_status_panel_theme"),
         ("activity_header", "activity_header_theme"),
         ("settings_scroll", "settings_scroll_theme"),
@@ -438,6 +486,11 @@ def apply():
             dpg.bind_item_theme(tag, "dashboard_highlight_theme")
     if dpg.does_item_exist("dashboard_status_label"):
         dpg.bind_item_theme("dashboard_status_label", "dashboard_status_ready_theme")
+
+    if dpg.does_item_exist("dashboard_safety_title"):
+        dpg.bind_item_theme("dashboard_safety_title", "dashboard_safety_title_theme")
+    if dpg.does_item_exist("dashboard_safety_text"):
+        dpg.bind_item_theme("dashboard_safety_text", "dashboard_muted_theme")
 
     if dpg.does_item_exist("button_patch"):
         dpg.bind_item_theme("button_patch", "main_primary_button_theme")

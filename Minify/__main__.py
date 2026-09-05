@@ -160,21 +160,30 @@ def create_ui():
                 no_scrollbar=True,
                 no_scroll_with_mouse=True,
             )
-            dpg.add_text("PATCH WORKSPACE", parent="app_workspace_main", tag="workspace_eyebrow")
-            dpg.add_text("Build a clean patch", parent="app_workspace_main", tag="dashboard_focus_title")
+            dpg.add_child_window(
+                parent="app_workspace_main",
+                tag="dashboard_hero_card",
+                height=118,
+                width=-1,
+                border=True,
+                no_scrollbar=True,
+                no_scroll_with_mouse=True,
+            )
+            dpg.add_text("PATCH WORKSPACE", parent="dashboard_hero_card", tag="workspace_eyebrow")
+            dpg.add_text("Build a clean patch", parent="dashboard_hero_card", tag="dashboard_focus_title")
             dpg.bind_item_font("dashboard_focus_title", "large_font")
-            dpg.add_text("0 selected • 0 installed", parent="app_workspace_main", tag="dashboard_metric")
+            dpg.add_text("0 selected • 0 installed", parent="dashboard_hero_card", tag="dashboard_metric")
             dpg.add_text(
                 "Choose your mods, review shared files, then let Minify create a restore point before changing Dota.",
-                parent="app_workspace_main",
+                parent="dashboard_hero_card",
                 tag="dashboard_focus_hint",
                 wrap=420,
             )
-            dpg.add_spacer(parent="app_workspace_main", height=5)
+            dpg.add_spacer(parent="app_workspace_main", height=6)
             dpg.add_child_window(
                 parent="app_workspace_main",
                 tag="dashboard_status_panel",
-                height=58,
+                height=54,
                 width=-1,
                 border=True,
                 no_scrollbar=True,
@@ -184,17 +193,26 @@ def create_ui():
                 dpg.add_text("● READY", tag="dashboard_status_label")
                 dpg.add_text("Getting your mod library ready...", tag="dashboard_status_message", wrap=420)
             dpg.add_spacer(parent="app_workspace_main", height=6)
-            with dpg.group(parent="app_workspace_main", horizontal=True):
+            dpg.add_child_window(
+                parent="app_workspace_main",
+                tag="dashboard_action_bar",
+                height=58,
+                width=-1,
+                border=True,
+                no_scrollbar=True,
+                no_scroll_with_mouse=True,
+            )
+            with dpg.group(parent="dashboard_action_bar", horizontal=True):
                 dpg.add_button(
                     tag="button_patch",
                     label="Review & Patch",
                     callback=checkboxes.show_patch_preview,
                     enabled=False,
                     width=196,
-                    height=40,
+                    height=38,
                 )
                 dpg.add_button(
-                    tag="button_refresh_main", label="Refresh", callback=checkboxes.refresh, width=132, height=40
+                    tag="button_refresh_main", label="Refresh", callback=checkboxes.refresh, width=132, height=38
                 )
 
             dpg.add_child_window(
@@ -206,16 +224,34 @@ def create_ui():
                 no_scrollbar=True,
                 no_scroll_with_mouse=True,
             )
-            dpg.add_text("PATCH FLOW", parent="app_workspace_side", tag="dashboard_side_title")
-            dpg.add_text("01  Review shared files", parent="app_workspace_side", tag="dashboard_step_1")
-            dpg.add_text("02  Create restore point", parent="app_workspace_side", tag="dashboard_step_2")
-            dpg.add_text("03  Apply selected mods", parent="app_workspace_side", tag="dashboard_step_3")
+            dpg.add_child_window(
+                parent="app_workspace_side",
+                tag="dashboard_flow_card",
+                height=126,
+                width=-1,
+                border=True,
+                no_scrollbar=True,
+                no_scroll_with_mouse=True,
+            )
+            dpg.add_text("PATCH FLOW", parent="dashboard_flow_card", tag="dashboard_side_title")
+            dpg.add_text("01  Review shared files", parent="dashboard_flow_card", tag="dashboard_step_1")
+            dpg.add_text("02  Create restore point", parent="dashboard_flow_card", tag="dashboard_step_2")
+            dpg.add_text("03  Apply selected mods", parent="dashboard_flow_card", tag="dashboard_step_3")
             dpg.add_spacer(parent="app_workspace_side", height=6)
-            dpg.add_separator(parent="app_workspace_side")
-            dpg.add_text("SAFETY", parent="app_workspace_side")
+            dpg.add_child_window(
+                parent="app_workspace_side",
+                tag="dashboard_safety_card",
+                height=-1,
+                width=-1,
+                border=True,
+                no_scrollbar=True,
+                no_scroll_with_mouse=True,
+            )
+            dpg.add_text("SAFETY / ROLLBACK", parent="dashboard_safety_card", tag="dashboard_safety_title")
             dpg.add_text(
                 "Automatic rollback protects the previous Minify output if a patch fails.",
-                parent="app_workspace_side",
+                parent="dashboard_safety_card",
+                tag="dashboard_safety_text",
                 wrap=220,
             )
 
