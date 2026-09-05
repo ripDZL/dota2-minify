@@ -1,4 +1,6 @@
+import hashlib
 import os
+import re
 import shutil
 import threading
 from concurrent.futures import ThreadPoolExecutor
@@ -59,11 +61,21 @@ def is_minify_pak(vpk_path):
     return not pak_files.isdisjoint(marker_files)
 
 
+def _metadata_marker_filename(mod_name):
+    """Return a flat Windows-safe marker filename for a single-mod patch."""
+    raw = str(mod_name).strip()
+    safe = re.sub(r'[<>:"/\\|?*\x00-\x1f]+', "_", raw).strip(" .") or "mod"
+    if len(safe) > 120:
+        digest = hashlib.sha256(raw.encode("utf-8", errors="replace")).hexdigest()[:16]
+        safe = f"{safe[:96]}-{digest}"
+    return f"{safe}.txt"
+
+
 def dump_metadata(target_dir, mod_name=None, vpk_mods=None, extra_lists=None):
     """
     Standardizes metadata files for generated Paks.
     - target_dir: Where to dump.
-    - mod_name: If provided, creates {mod_name}.txt (for single mod patches).
+    - mod_name: If provided, creates a flat safe marker file for single-mod patches.
     - vpk_mods: List of VPK mod names for minify_vpk_mods.txt.
     - extra_lists: Dict of {filename: [lines]} for additional metadata files.
     """
@@ -74,7 +86,7 @@ def dump_metadata(target_dir, mod_name=None, vpk_mods=None, extra_lists=None):
     if mod_name is None:
         shutil.copy(base.mods_config_dir, os.path.join(target_dir, "minify_mods.json"))
     else:
-        open(os.path.join(target_dir, f"{mod_name}.txt"), "w").close()
+        open(os.path.join(target_dir, _metadata_marker_filename(mod_name)), "w").close()
 
     # 2. Lists
     if vpk_mods:
