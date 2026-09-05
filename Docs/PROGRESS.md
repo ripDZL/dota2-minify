@@ -5,16 +5,16 @@
 - [x] Recursive/nested mods, Collections, profiles, D2PFX, backups/conflict review, Safe Foliage, Main Menu fix, Dark Terrain behavior preserved.
 - [x] v21.3.1 patch pipeline integrated at `b22133201e88d654859541f2c6be69cea8e3cb25` without overwriting hardened core backends.
 - [x] Removed `LOCAL MOD WORKSPACE` + stale `RC6` UI furniture.
-- [x] Obsidian Arc UI superseded by user-requested **Crimson Slate** theme.
-- [x] Crimson Slate materialized at `7bb3f4f9eb5194f429ae459ea20e8090b51f2c2f`: charcoal/plum panels, crimson focus/actions, compact rectangular controls, inset fields, thin borders, low radii, dense modular cards.
-- [x] Mod Library and D2PFX selected-state styling reconciled to Crimson Slate.
-- [x] Current tested product commit `66d6dd77bd216feb6ff67375d3803ed0be9e150e`.
-- [x] Hardening CI run `33937575665`: compileall PASS; Ruff format/lint PASS; pytest 145/145 PASS in 0.65s; Windows build/package/upload PASS.
-- [x] Current inner ZIP: `Minify-v21.4-hardening-66d6dd77bd216feb6ff67375d3803ed0be9e150e-windows.zip`; 53603222 bytes; SHA-256 `dee14f404eadede2e4e0b02f76620090ce04dc6c2cc1d87a6cf62c3525862e52`.
-- [x] GitHub artifact ID `9960698474`; 53062983 bytes; outer SHA-256 `e98f68c8e990e63dfbc587dd51b7ab3f06df49ebbbbc1343cc99a645657434e7`.
+- [x] Crimson Slate superseded by user-requested **Prismatic Foundry** command-console UI.
+- [x] Prismatic Foundry materialized at `cdd22c9e88b58581bce5068e886543e5f8278810`: layered command deck, engine/status chips, metric strip, deployment sequence, guard matrix, fail-safe card, live activity stream.
+- [x] Release palette: navy-black, violet, cyan, magenta, orange, gold; Mod Library and D2PFX reconciled.
+- [x] Current tested product commit `9aac26ee764de58f3c981fb1fbe873bbb9546c23`.
+- [x] Hardening CI run `33938518712`: compileall PASS; Ruff format/lint PASS; pytest 147/147 PASS in 0.82s; Windows build/package/upload PASS.
+- [x] Current inner ZIP: `Minify-v21.4-hardening-9aac26ee764de58f3c981fb1fbe873bbb9546c23-windows.zip`; 53605596 bytes; SHA-256 `403f8371c5bc19062317edca208ac89a95cf835f030c1cc0b0ac944ebe65d937`.
+- [x] GitHub artifact ID `9960999815`; 53065805 bytes; outer SHA-256 `e516ba78acbabf68ed2db1f444bc08bed6572e1ca7850ffaa09362db46bf2a51`.
 - [x] Artifact verified: 1650 entries; normal portable roots; no staging/materialize markers; Safe Foliage map/manifest absent; both oak blacklist entries present.
 - [x] `main` and `beta` remain frozen.
-- [ ] User review/smoke-test Crimson Slate across Patch, Mod Library, D2PFX, Settings, resize states.
+- [ ] User review/smoke-test Prismatic Foundry across Patch, Mod Library, D2PFX, Settings, resize states.
 - [ ] Adapt remaining useful v21.3.1 regressions directly on hardening.
 - [ ] Complete semantic core-overlay reconciliation; never wholesale overwrite hardened backends.
 - [ ] Resolve prior-v21.4 `core/mod_library.py` exact-source gap only if authentic bytes become available.
