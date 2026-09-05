@@ -6,9 +6,11 @@
 - [x] Build Black-Plum Reactor from supplied JSON tokens + original app screenshot spatial roles.
 - [x] Replace fragile space-padded status layouts with DPG table columns and adaptive visibility thresholds.
 - [x] Fix clipped SYSTEM/PROTECTED nav card; 66px normal / 62px compact height with resize wiring.
-- [x] Current tested code `2e5f202a2fb4cabaabadc6c42f2a44c538b15449`; CI run `33941070677`; pytest 150/150 PASS; Windows build PASS.
-- [x] Current portable ZIP validated; SHA-256 `73fec5657d1e975054a0c3ad48dfee235930b480e9d6c0f98dc9d77bc9eabe20`.
-- [ ] User review Black-Plum Reactor + nav card fit at maximized, medium, and narrow sizes.
+- [x] Remove PATCH ENGINE header chip and center Minify brand with equal stretch gutters.
+- [x] Enforce 960x680 minimum viewport and reserve vertical layout budget so core UI cannot clip at minimum size.
+- [x] Current tested code `cca977084a1f254e9e5a29078c798986b0dd4c7a`; CI run `33941654693`; pytest 152/152 PASS; Windows build PASS.
+- [x] Current portable ZIP validated; SHA-256 `2c5beb037ddef8a278092ee955826324e35ee75d4e0770b23940b42447abf62f`.
+- [ ] User review Black-Plum Reactor at maximized, medium, and minimum 960x680 sizes.
 - [ ] Adapt remaining useful v21.3.1 regressions directly on hardening.
 - [ ] Complete semantic core-overlay reconciliation; never wholesale copy old core.
 - [ ] Reconcile prior-v21.4 `core/mod_library.py` only if authentic missing bytes become available.

@@ -7,12 +7,14 @@
 - [x] Removed `LOCAL MOD WORKSPACE` + stale `RC6` UI furniture.
 - [x] Black-Plum Reactor maps the supplied JSON palette using the original app screenshot's spatial roles.
 - [x] Header/metrics/deployment/guard layouts use DPG tables; optional telemetry/right deck collapse before clipping.
-- [x] SYSTEM/PROTECTED nav status card clipping fixed at `9b70ed054aa6d22e1da63947c07c489b5ec27294`; 66px normal / 62px compact responsive height.
-- [x] Removed PATCH ENGINE header chip; centered Minify brand with equal stretch gutters at `f102aace15b1e8849cd11a85704eb5f495b09b23`.
-- [x] Enforced 960x680 minimum viewport and reserved vertical budget for shell/activity/terminal/footer so core controls cannot clip at minimum size.
-- [x] Previous tested product commit `2e5f202a2fb4cabaabadc6c42f2a44c538b15449`; CI `33941070677` was 150/150 PASS with Windows build PASS.
+- [x] SYSTEM/PROTECTED nav status card clipping fixed; 66px normal / 62px compact responsive height.
+- [x] PATCH ENGINE header chip removed; Minify brand centered with equal stretch gutters at `f102aace15b1e8849cd11a85704eb5f495b09b23`.
+- [x] Minimum viewport enforced at 960x680; shell body reserves vertical space so navigation/activity/terminal/footer fit without overlap.
+- [x] Current tested product commit `cca977084a1f254e9e5a29078c798986b0dd4c7a`.
+- [x] Hardening CI run `33941654693`: compileall PASS; Ruff format/lint PASS; pytest 152/152 PASS; Windows build/package/upload PASS.
+- [x] Current inner ZIP: `Minify-v21.4-hardening-cca977084a1f254e9e5a29078c798986b0dd4c7a-windows.zip`; 53,607,426 bytes; SHA-256 `2c5beb037ddef8a278092ee955826324e35ee75d4e0770b23940b42447abf62f`.
+- [x] Artifact ID `9962033860`; outer SHA-256 `e05a3a27b78d4ed8ffbf4c823fac6b3d5503c4a9d7a93db403174153302926cc`; portable layout/Safe Foliage/Main Menu Background checks PASS.
 - [x] `main` and `beta` remain frozen.
-- [ ] Full hardening + Windows gate for centered-header/minimum-fit tree.
 - [ ] User review centered header and minimum-size behavior across maximized/medium/minimum viewport sizes.
 - [ ] Adapt remaining useful v21.3.1 regressions directly on hardening.
 - [ ] Complete semantic core-overlay reconciliation; never wholesale overwrite hardened backends.

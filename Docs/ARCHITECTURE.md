@@ -4,7 +4,10 @@
 - Fork source: materialized files + ordinary commits; clone runs without source-rewrite bootstrap.
 - UI: responsive command-console shell using **Black-Plum Reactor** visual system grounded in supplied JSON tokens and original app screenshot spatial roles.
 - UI palette grammar: plum chrome; slate work areas; black strips; purple controls; lime selected/protected state with black text; red dividers/errors; gold telemetry; yellow links; ivory text.
-- UI alignment: header, metric strip, deployment sequence, and guard matrix use DPG tables; resize logic hides optional columns/right deck before clipping and adjusts card heights/wrapping.
+- Header: PATCH ENGINE chip removed; brand centered with equal stretch table gutters around a 340px fixed brand column.
+- UI minimum viewport: 960x680; saved window dimensions are clamped to this minimum at startup.
+- UI vertical budget: shell body is `max(350, min(500, window_height - 330))`, reserving space for header/accent/activity/terminal/footer.
+- UI alignment: metric strip, deployment sequence, and guard matrix use DPG tables; resize logic hides optional columns/right deck before clipping and adjusts card heights/wrapping.
 - Nav SYSTEM/PROTECTED status card: 66px normal / 62px compact adaptive height to avoid Windows font-metric clipping.
 - UI inspiration/reference inputs may guide color roles and composition; do not copy third-party artwork/assets without explicit licensing.
 - Build transformer and `.materialize/` workflow: optional migration/repro tooling only; never canonical source.

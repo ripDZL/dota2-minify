@@ -5,13 +5,15 @@
 - Patch pipeline remains materialized at `b22133201e88d654859541f2c6be69cea8e3cb25`; preserve nested resolution, compatibility filtering, restore points, conflict reporting, validation, rollback, no-auto-prelaunch cleanup.
 - Current UI baseline: **Black-Plum Reactor**; uses supplied JSON palette according to original app screenshot spatial roles.
 - Palette grammar: plum chrome; slate work areas; black hard strips; purple controls; lime selected/protected state with black text; red dividers/errors; gold telemetry; yellow links; ivory text.
-- Header/metric/deployment/guard layouts use DPG tables; optional telemetry/right deck collapse before clipping.
-- User reported SYSTEM/PROTECTED nav status card clipping; fixed at `9b70ed054aa6d22e1da63947c07c489b5ec27294` with 66px normal / 62px compact responsive height.
+- SYSTEM/PROTECTED nav status card uses 66px normal / 62px compact responsive height; clipping fixed.
+- PATCH ENGINE header chip removed; brand centered with equal stretch gutters and a 340px fixed center column.
+- Minimum viewport is 960x680; shell body reserves 330px for header/activity/terminal/footer; optional telemetry/right deck collapses before clipping.
 - `LOCAL MOD WORKSPACE` / stale `RC6` remains removed.
-- Current tested product code: `2e5f202a2fb4cabaabadc6c42f2a44c538b15449`.
-- Hardening CI run `33941070677`: compileall PASS; Ruff format/lint PASS; pytest 150/150 PASS; Windows portable build PASS.
-- Current Windows ZIP: `Minify-v21.4-hardening-2e5f202a2fb4cabaabadc6c42f2a44c538b15449-windows.zip`; 53,607,416 bytes; SHA-256 `73fec5657d1e975054a0c3ad48dfee235930b480e9d6c0f98dc9d77bc9eabe20`.
-- Artifact ID `9961846431`; outer SHA-256 `9041b5b391cd73157a5bdd6ddfaa3544f885534a8e5c8e9ab9d45018c055de20`; artifact safety/layout verified.
+- Current tested product code: `cca977084a1f254e9e5a29078c798986b0dd4c7a`; centered-header product commit `f102aace15b1e8849cd11a85704eb5f495b09b23`.
+- Hardening CI run `33941654693`: compileall PASS; Ruff format/lint PASS; pytest 152/152 PASS; Windows portable build PASS.
+- Current Windows ZIP: `Minify-v21.4-hardening-cca977084a1f254e9e5a29078c798986b0dd4c7a-windows.zip`; 53,607,426 bytes; SHA-256 `2c5beb037ddef8a278092ee955826324e35ee75d4e0770b23940b42447abf62f`.
+- Artifact ID `9962033860`; outer SHA-256 `e05a3a27b78d4ed8ffbf4c823fac6b3d5503c4a9d7a93db403174153302926cc`; 1650-entry portable layout verified; Safe Foliage and Main Menu Background invariants pass.
+- Exactly three branches verified after milestone; beta/main unchanged.
 - `core/mod_library.py` prior-v21.4 exact-source gap remains unresolved; never fabricate missing bytes or substitute old overlay as exact source.
-- Remaining: user review nav fit/UI at multiple viewport sizes, adapt useful v21.3.1 regressions, semantic core reconciliation, hostile-input/security sweep, exact-rc7 diff review, bootstrap cleanup, Dota smoke tests.
+- Remaining: user review centered/minimum-size UI, adapt useful v21.3.1 regressions, semantic core reconciliation, hostile-input/security sweep, exact-rc7 diff review, bootstrap cleanup, Dota smoke tests.
 - Do not promote beta/main until remaining gates and user approval.

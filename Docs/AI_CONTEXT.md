@@ -2,17 +2,18 @@
 - Upstream baseline: `Egezenn/dota2-minify` tag `Minify-v1.14rc7`; exact commit `d4b4520c945a9e1f8f5facc52a76ac5903babe90`.
 - Fork: `ripDZL/dota2-minify`; active branch `v21.4-hardening`; promotion path `v21.4-hardening` -> `beta` -> `main`.
 - Exactly three branches; `main` frozen at `a26bc88a0d412e357965f29488b83a7f9093e11f`; `beta` frozen at `af83bbb051edced195d5f55ba49ff060a8c76f3c`.
-- Current tested product code: `2e5f202a2fb4cabaabadc6c42f2a44c538b15449`; nav-fit product commit: `9b70ed054aa6d22e1da63947c07c489b5ec27294`.
+- Current tested product code: `cca977084a1f254e9e5a29078c798986b0dd4c7a`; centered-header product commit: `f102aace15b1e8849cd11a85704eb5f495b09b23`.
 - Current UI baseline: **Black-Plum Reactor**; screenshot-derived spatial roles over supplied JSON palette.
 - Palette roles: plum `#46335a` chrome; slate `#586c72` work surfaces; black strips; purple `#853894` controls; lime `#7ac143` selected/protected state with black text; red `#df503b` dividers/errors; gold `#ffc30f` telemetry; yellow `#ffff00` links; ivory `#f7f0e7` text.
-- Alignment: header/metrics/deployment/guard use real DPG tables; optional telemetry/right deck collapse before clipping.
-- Nav SYSTEM/PROTECTED card fix: initial height `66`; responsive height `66` normally / `62` compact; prevents second-line clipping on Windows font metrics.
+- Header: PATCH ENGINE chip removed; Minify brand centered with equal stretch gutters and a 340px fixed brand column.
+- Minimum viewport: 960x680; shell body reserves 330px for header/activity/terminal/footer; optional right deck and telemetry collapse before clipping.
+- Nav SYSTEM/PROTECTED card: 66px normal / 62px compact responsive height; Windows font clipping fixed.
 - `LOCAL MOD WORKSPACE` / stale `RC6` remains removed.
-- Permanent visual regressions: `tests/test_modern_ui.py`; full hardening suite now 150/150.
-- Hardening CI run `33941070677`: compileall PASS; Ruff format/lint PASS; pytest 150/150 PASS; Windows PyInstaller/runtime copy/portable ZIP/upload PASS.
-- Current Windows test ZIP: `Minify-v21.4-hardening-2e5f202a2fb4cabaabadc6c42f2a44c538b15449-windows.zip`; 53,607,416 bytes; SHA-256 `73fec5657d1e975054a0c3ad48dfee235930b480e9d6c0f98dc9d77bc9eabe20`.
-- GitHub artifact ID `9961846431`; outer ZIP 53,067,871 bytes; SHA-256 `9041b5b391cd73157a5bdd6ddfaa3544f885534a8e5c8e9ab9d45018c055de20`.
-- Artifact verified: 1650 entries; roots `LICENSE`, `Minify.exe`, `README.md`, `_internal`, `bin`, `mods`; no staging/materialize markers; no Remove Foilage map/manifest; both oak blacklist entries present.
+- Permanent visual regressions: `tests/test_modern_ui.py`; full hardening suite now 152/152.
+- Hardening CI run `33941654693`: compileall PASS; Ruff format/lint PASS; pytest 152/152 PASS; Windows PyInstaller/runtime copy/portable ZIP/upload PASS.
+- Current Windows test ZIP: `Minify-v21.4-hardening-cca977084a1f254e9e5a29078c798986b0dd4c7a-windows.zip`; 53,607,426 bytes; SHA-256 `2c5beb037ddef8a278092ee955826324e35ee75d4e0770b23940b42447abf62f`.
+- GitHub artifact ID `9962033860`; outer ZIP 53,067,459 bytes; SHA-256 `e05a3a27b78d4ed8ffbf4c823fac6b3d5503c4a9d7a93db403174153302926cc`.
+- Artifact verified: 1650 entries; roots `LICENSE`, `Minify.exe`, `README.md`, `_internal`, `bin`, `mods`; no staging/materialize markers; no Remove Foilage map/manifest; both oak blacklist entries present; Main Menu Background keeps `DOTADashboardBackgroundManager:not(.Hidden)` and `#FrontpageContents` collapse rules.
 - Canonical user feature reference: v21.3.1 Safe Foliage Fix archive; SHA-256 `37755c4ee92e1847eef1a5a9c89aef6ba488f33accd0cb102c62a7db8780b5f8`; bundled 116/116 tests pass locally.
 - v21.3.1 patch pipeline materialized at `b22133201e88d654859541f2c6be69cea8e3cb25`; preserve nested paths, compatibility filtering, restore points, conflict reporting, output validation, rollback, no-auto-prelaunch cleanup.
 - Preserve recursive/nested mods, Collections, profiles, D2PFX, backups/conflict review, Dark Terrain collision behavior, Safe Foliage, Main Menu Background fix, manual rc7 `prelaunch`, and no-auto-prelaunch policy.
