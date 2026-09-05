@@ -81,9 +81,6 @@ def create_ui():
             dpg.bind_item_font("app_title", "large_font")
             dpg.add_text("Dota 2 Mod Manager", tag="app_product_name")
             dpg.add_text(f"v{base.VERSION}", tag="app_version")
-            dpg.add_spacer(tag="header_spacer", width=10)
-            dpg.add_text("LOCAL MOD WORKSPACE", tag="header_context")
-            dpg.add_text("RC6", tag="header_badge")
 
         dpg.add_spacer(height=8)
         dpg.add_group(tag="app_shell_body", horizontal=True, horizontal_spacing=8)

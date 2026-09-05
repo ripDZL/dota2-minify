@@ -115,8 +115,6 @@ def on_resize():
 
     if dpg.does_item_exist("app_shell_header"):
         dpg.configure_item("app_shell_header", width=shared.window_width, height=60)
-    if dpg.does_item_exist("header_spacer"):
-        dpg.configure_item("header_spacer", width=max(12, shared.window_width - 520))
     if dpg.does_item_exist("app_nav_rail"):
         dpg.configure_item("app_nav_rail", width=nav_width, height=shell_body_height)
     if dpg.does_item_exist("app_workspace"):
