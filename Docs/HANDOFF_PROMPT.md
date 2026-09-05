@@ -4,18 +4,19 @@
 - Branch model: exactly `v21.4-hardening` -> `beta` -> `main`; no temporary/reference/integration branches.
 - Keep `main` frozen at `a26bc88a0d412e357965f29488b83a7f9093e11f`; keep `beta` frozen at `af83bbb051edced195d5f55ba49ff060a8c76f3c` until remaining gates pass.
 - Exact upstream baseline: `Minify-v1.14rc7` / `d4b4520c945a9e1f8f5facc52a76ac5903babe90`.
-- Current tested product code: `44309ffbd752c3c9788b4371cd6daf271fe763e8`; UI materialization commit `36d59def98068862b247692580a23701df34358d`.
-- Current UI baseline: **Plumfire Reactor**; supersedes Prismatic Foundry palette while preserving dense command-console composition.
-- Palette source: user JSON tokens `#df503b` divider, `#7ac143` highlight, `#ffff00` link, `#586c72` base, `#853894` button, `#ffc30f` bright text, `#a48f7b` disabled, `#d9c7b0` placeholder, `#f7f0e7` primary, `#46335a` window, `#000000` alt.
+- Current tested product code: `667be18dd0613098ad17f9c2eb8f66a4ee57bf8e`; Black-Plum UI materialization commit `bfeca95d36b685ec38bb9ab9be9885089a8bf4d6`.
+- Current UI baseline: **Black-Plum Reactor**; user JSON provides tokens and original-app screenshot provides spatial color roles.
+- Roles: plum `#46335a` chrome, slate `#586c72` work areas, black `#000000` strips, purple `#853894` controls, lime `#7ac143` selected/safe with black text, red `#df503b` dividers/errors, gold `#ffc30f` telemetry, yellow `#ffff00` links, ivory `#f7f0e7` text; purple hover `(169,98,183)`.
 - Alignment: header/metrics/deployment/guard use DPG table columns; resize logic hides right deck/optional telemetry before clipping and adjusts card heights/wrapping.
+- Mod Library uses broad slate fields + purple controls; D2PFX selected row uses lime fill/black text.
 - `LOCAL MOD WORKSPACE` + stale `RC6` widgets remain removed.
-- Current hardening CI run `33939739722`: compileall PASS; Ruff format/lint PASS; pytest 148/148 PASS; Windows PyInstaller/runtime copy/portable ZIP/upload PASS.
-- Current test ZIP: `Minify-v21.4-hardening-44309ffbd752c3c9788b4371cd6daf271fe763e8-windows.zip`; SHA-256 `505b0d5421b83093518218a5ef7cf62a9a943e2515cd07eae3465f70c4820ac5`; 53608076 bytes.
-- GitHub artifact ID `9961412398`; outer SHA-256 `4760ea24c9912196b0da9323f00cf8d72fdb8ed33761a77907ae3083eb4d8ce2`; 53068102 bytes.
-- Artifact verified: 1650 entries; normal portable roots; no staging/materialize markers; no Remove Foilage map/manifest; both oak-leaf blacklist entries present.
+- Current hardening CI run `33940573117`: compileall PASS; Ruff format/lint PASS; pytest 149/149 PASS; Windows PyInstaller/runtime copy/portable ZIP/upload PASS.
+- Current test ZIP: `Minify-v21.4-hardening-667be18dd0613098ad17f9c2eb8f66a4ee57bf8e-windows.zip`; SHA-256 `0fd863453cc8d2482682fbc5b41cc718870165cf06305f4535589fe673255408`; 53607407 bytes.
+- GitHub artifact ID `9961687096`; outer SHA-256 `ea94210af69e8dce1a35e9cb9d91c40e6f37146dc3316971e8e6cc08a414885f`; 53067832 bytes.
+- Artifact verified: 1650 entries; normal portable roots; no staging/materialize markers; no Remove Foilage map/manifest; both oak-leaf blacklist entries present; Main Menu Background both CSS rules present.
 - Canonical feature reference: supplied v21.3.1 Safe Foliage Fix archive; SHA-256 `37755c4ee92e1847eef1a5a9c89aef6ba488f33accd0cb102c62a7db8780b5f8`; bundled 116/116 tests pass.
 - Preserve recursive/nested mods, Collections, profiles, D2PFX, backups/conflict review, Dark Terrain collision behavior, Safe Foliage, Main Menu Background CSS, manual rc7 prelaunch, and no-auto-prelaunch policy.
 - Never wholesale copy v21.3.1 core overlays over hardening; reconcile feature-by-feature.
 - Prior-v21.4 `core/mod_library.py` exact-source gap remains blocked; never fabricate missing bootstrap bytes or create `.materialize/READY` while incomplete.
-- Next: user review Plumfire at maximized/medium/narrow viewport sizes, then adapt useful v21.3.1 regressions, semantic core reconciliation, hostile-input/security + exact-rc7 diff review, bootstrap cleanup, Dota smoke tests.
+- Next: user review Black-Plum at maximized/medium/narrow viewport sizes, then adapt useful v21.3.1 regressions, semantic core reconciliation, hostile-input/security + exact-rc7 diff review, bootstrap cleanup, Dota smoke tests.
 - Do not fast-forward beta, merge/tag/release, or publish until remaining gates and user approval.
