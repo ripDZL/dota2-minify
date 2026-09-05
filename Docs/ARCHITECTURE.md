@@ -4,9 +4,11 @@
 - Fork source: ordinary materialized files + commits; incomplete `.materialize/` bootstrap/workflow removed.
 - UI: responsive **Black-Plum Reactor**; centered header; 960x680 minimum; optional telemetry/right deck collapse before clipping.
 - Security primitives: `Minify/core/security.py` for path confinement, archive limits, bounded decompression, hashing, atomic writes.
-- General downloads: streamed with timeout + size ceiling into same-directory temp file; atomic replace on success.
+- General downloads: streamed with timeout + size ceiling into same-directory temp file; atomic replace on success; optional redirect-hop URL validator.
 - D2PFX catalogue: streamed bounded compressed/decompressed payload; dict/shape checks; confined regular-file cache; atomic replace.
 - D2PFX metadata: allowed catalogue filenames; <=256 categories; bounded depth/nodes/mods/links/text; category/asset paths normalized and traversal-rejected.
+- D2PFX remote downloads: HTTPS only; credentials/fragments/nonstandard ports/local/private/non-global endpoints rejected; every redirect target revalidated.
+- D2PFX browser installs: URL path -> flat Windows-safe filename; preview download <=32 MiB; payload staged below `mods/`; ZIP extraction/manifest/notes/preview complete before atomic target publication; staging removed on failure.
 - D2PFX cursor handling: source/live/backup paths confined to trusted roots; no symlink traversal; regular files only; atomic publication; bounded file/count/total size; failed/unsafe restore retains backup.
 - Mod discovery: bounded recursive scanner; no symlink traversal; nested IDs stable.
 - Collections: organizational parents; selectable child mods; markerless heuristic retained.
