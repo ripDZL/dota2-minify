@@ -5,6 +5,7 @@ import shlex
 import shutil
 import stat
 import subprocess
+import tempfile
 import tarfile
 import time
 import zipfile
@@ -144,38 +145,59 @@ def restore_directory(source: str, backup: str) -> None:
     remove_path(backup)
 
 
-def download_file(url: str, target_path: str, progress_tag: Optional[str] = None) -> bool:
-    """
-    Downloads a file from url to target_path using requests.
-    Updates the UI progress_tag with "Downloading: X.XX/Y.YY MB" if provided.
-    """
-
+def download_file(
+    url: str,
+    target_path: str,
+    progress_tag: Optional[str] = None,
+    max_bytes: int | None = security.ARCHIVE_MAX_FILE_BYTES,
+) -> bool:
+    """Download to a temporary file with bounded size and request timeouts."""
+    response = None
+    temporary = None
     try:
-        response = requests.get(url, stream=True)
+        if max_bytes is not None and max_bytes < 1:
+            raise ValueError("max_bytes must be positive or None")
+
+        response = requests.get(url, stream=True, timeout=(10, 60))
         response.raise_for_status()
-        total_size = int(response.headers.get("content-length", 0))
+        try:
+            total_size = int(response.headers.get("content-length", 0) or 0)
+        except (TypeError, ValueError):
+            total_size = 0
+        if max_bytes is not None and total_size > max_bytes:
+            raise ValueError(f"Download exceeds the {max_bytes}-byte safety limit.")
+
         block_size = 8192
         downloaded = 0
         last_report_time = 0
+        parent = os.path.dirname(os.path.abspath(target_path)) or os.getcwd()
+        os.makedirs(parent, exist_ok=True)
+        fd, temporary = tempfile.mkstemp(prefix=".minify-download-", dir=parent)
 
-        with open(target_path, "wb") as f:
+        with os.fdopen(fd, "wb") as f:
             for chunk in response.iter_content(chunk_size=block_size):
-                if chunk:
-                    f.write(chunk)
-                    downloaded += len(chunk)
-                    if progress_tag:
-                        current_time = time.time()
-                        if current_time - last_report_time >= 0.1:
-                            downloaded_mb = downloaded / (1024 * 1024)
-                            total_size_mb = total_size / (1024 * 1024)
-                            if total_size > 0:
-                                dpg.set_value(
-                                    progress_tag,
-                                    f"Downloading: {downloaded_mb:.2f}/{total_size_mb:.2f} MB",
-                                )
-                            else:
-                                dpg.set_value(progress_tag, f"Downloading: {downloaded_mb:.2f} MB")
-                            last_report_time = current_time
+                if not chunk:
+                    continue
+                downloaded += len(chunk)
+                if max_bytes is not None and downloaded > max_bytes:
+                    raise ValueError(f"Download exceeds the {max_bytes}-byte safety limit.")
+                f.write(chunk)
+                if progress_tag:
+                    current_time = time.time()
+                    if current_time - last_report_time >= 0.1:
+                        downloaded_mb = downloaded / (1024 * 1024)
+                        total_size_mb = total_size / (1024 * 1024)
+                        if total_size > 0:
+                            dpg.set_value(
+                                progress_tag,
+                                f"Downloading: {downloaded_mb:.2f}/{total_size_mb:.2f} MB",
+                            )
+                        else:
+                            dpg.set_value(progress_tag, f"Downloading: {downloaded_mb:.2f} MB")
+                        last_report_time = current_time
+
+        os.replace(temporary, target_path)
+        temporary = None
 
         if progress_tag:
             downloaded_mb = downloaded / (1024 * 1024)
@@ -184,11 +206,19 @@ def download_file(url: str, target_path: str, progress_tag: Optional[str] = None
                 dpg.set_value(progress_tag, f"Downloading: {downloaded_mb:.2f}/{total_size_mb:.2f} MB")
             else:
                 dpg.set_value(progress_tag, f"Downloading: {downloaded_mb:.2f} MB")
-
         return True
     except Exception as e:
+        if temporary:
+            try:
+                os.remove(temporary)
+            except FileNotFoundError:
+                pass
         output.add_text(f"Failed to open {target_path}: {e}", msg_type="error")
         return False
+    finally:
+        if response is not None:
+            with utils.try_pass():
+                response.close()
 
 
 def extract_archive(archive_path: str, extract_dir: str = ".", target_file: Optional[str] = None) -> bool:

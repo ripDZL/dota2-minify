@@ -1,11 +1,10 @@
-import gzip
-import io
 import json
 import os
+import tempfile
 import time
 
 import requests
-from core import base, config, fs
+from core import base, config, fs, security
 
 # D2PFX Browser Constants
 BASE_URL = "https://raw.githubusercontent.com/h6rd/Dota2PornFxWeb/data/"
@@ -41,21 +40,56 @@ class DataManager:
 
         if not force_refresh and os.path.exists(local_path):
             try:
+                if os.path.getsize(local_path) > security.D2PFX_MAX_MANIFEST_BYTES:
+                    raise ValueError("Cached D2PFX catalogue exceeds the safety limit.")
                 with open(local_path, "r", encoding="utf-8") as f:
-                    return json.load(f)
+                    cached = json.load(f)
+                if not isinstance(cached, dict):
+                    raise ValueError("Cached D2PFX catalogue must be a JSON object.")
+                return cached
             except Exception:
                 pass
 
+        response = None
         try:
-            response = requests.get(gz_url, timeout=10)
+            response = requests.get(gz_url, stream=True, timeout=(10, 30))
             if response.status_code == 200:
-                with gzip.GzipFile(fileobj=io.BytesIO(response.content)) as f:
-                    data = json.load(f)
-                    with open(local_path, "w", encoding="utf-8") as out:
+                compressed = bytearray()
+                for chunk in response.iter_content(chunk_size=64 * 1024):
+                    if not chunk:
+                        continue
+                    compressed.extend(chunk)
+                    if len(compressed) > security.D2PFX_MAX_MANIFEST_BYTES:
+                        raise ValueError("Compressed D2PFX catalogue exceeds the safety limit.")
+
+                decoded = security.bounded_zlib_decompress(
+                    bytes(compressed),
+                    max_output=security.D2PFX_MAX_MANIFEST_BYTES,
+                )
+                data = json.loads(decoded.decode("utf-8"))
+                if not isinstance(data, dict):
+                    raise ValueError("D2PFX catalogue must be a JSON object.")
+
+                fd, temporary = tempfile.mkstemp(prefix=".d2pfx-catalogue-", suffix=".json", dir=self.cache_dir)
+                try:
+                    with os.fdopen(fd, "w", encoding="utf-8") as out:
                         json.dump(data, out, indent=2)
-                    return data
+                    os.replace(temporary, local_path)
+                except Exception:
+                    try:
+                        os.remove(temporary)
+                    except FileNotFoundError:
+                        pass
+                    raise
+                return data
         except Exception as e:
             print(f"Error fetching {filename}: {e}")
+        finally:
+            if response is not None:
+                try:
+                    response.close()
+                except Exception:
+                    pass
 
         return None
 
