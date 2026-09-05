@@ -1,0 +1,49 @@
+name: Apply bounded network hardening
+
+on:
+  push:
+    branches: [v21.4-hardening]
+    paths:
+      - tools/apply_network_hardening.py
+
+permissions:
+  contents: write
+
+jobs:
+  apply:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: astral-sh/setup-uv@v5
+        with:
+          python-version: "3.13"
+
+      - name: Install dependencies
+        run: uv sync --group dev
+
+      - name: Apply hardening patch
+        run: uv run python tools/apply_network_hardening.py
+
+      - name: Format and validate
+        shell: bash
+        run: |
+          set -euo pipefail
+          uv run ruff format Minify/core/fs.py Minify/browsers/d2pfx/data.py tests/test_fs_security.py tests/test_d2pfx_security.py
+          uv run python -m compileall -q Minify tests
+          uv run ruff check Minify
+          uv run pytest tests/test_fs_security.py tests/test_d2pfx_security.py
+
+      - name: Commit materialized hardening
+        shell: bash
+        run: |
+          set -euo pipefail
+          rm -f tools/apply_network_hardening.py .github/workflows/network-hardening-once.yml
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add -A
+          git diff --cached --check
+          git commit -m 'security: bound downloads and D2PFX manifests'
+          git push origin HEAD:v21.4-hardening
