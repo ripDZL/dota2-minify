@@ -38,9 +38,9 @@ MAX_LINKS_PER_MOD = 64
 MAX_ASSET_PATH_CHARS = 2048
 D2PFX_PREVIEW_MAX_BYTES = 32 * 1024 * 1024
 D2PFX_INSTALL_MAX_BYTES = 2 * 1024 * 1024 * 1024
-WINDOWS_RESERVED_STEMS = {"con", "prn", "aux", "nul"} | {f"com{i}" for i in range(1, 10)} | {
-    f"lpt{i}" for i in range(1, 10)
-}
+WINDOWS_RESERVED_STEMS = (
+    {"con", "prn", "aux", "nul"} | {f"com{i}" for i in range(1, 10)} | {f"lpt{i}" for i in range(1, 10)}
+)
 
 
 def _safe_category_id(value) -> str:
@@ -250,7 +250,6 @@ class DataManager:
                 try:
                     with os.fdopen(fd, "w", encoding="utf-8") as out:
                         json.dump(data, out, indent=2)
-                    # Revalidate the cache destination after the temp file is complete.
                     local_path = self._catalogue_cache_path(filename)
                     os.replace(temporary, local_path)
                 except Exception:
