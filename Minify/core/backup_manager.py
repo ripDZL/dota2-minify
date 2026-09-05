@@ -6,6 +6,7 @@ import datetime as dt
 import json
 import os
 import shutil
+import stat
 import tempfile
 
 from core import base, constants, security
@@ -53,17 +54,37 @@ def _write_manifest(snapshot: str, manifest: dict) -> None:
 
 
 def _read_manifest(snapshot: str) -> dict:
+    fd = None
     try:
         path = _manifest_path(snapshot)
-        if os.path.islink(path) or not os.path.isfile(path):
+        before = os.stat(path, follow_symlinks=False)
+        if not stat.S_ISREG(before.st_mode) or before.st_size > MAX_MANIFEST_BYTES:
             return {}
-        if os.path.getsize(path) > MAX_MANIFEST_BYTES:
+
+        flags = os.O_RDONLY
+        if hasattr(os, "O_BINARY"):
+            flags |= os.O_BINARY
+        if hasattr(os, "O_NOFOLLOW"):
+            flags |= os.O_NOFOLLOW
+        fd = os.open(path, flags)
+        opened = os.fstat(fd)
+        if not stat.S_ISREG(opened.st_mode) or opened.st_size > MAX_MANIFEST_BYTES:
             return {}
-        with open(path, encoding="utf-8-sig") as file:
+        if (before.st_dev, before.st_ino) != (opened.st_dev, opened.st_ino):
+            return {}
+
+        with os.fdopen(fd, "r", encoding="utf-8-sig") as file:
+            fd = None
             data = json.load(file)
         return data if isinstance(data, dict) else {}
     except Exception:
         return {}
+    finally:
+        if fd is not None:
+            try:
+                os.close(fd)
+            except OSError:
+                pass
 
 
 def _copy_if_exists(source: str, destination: str) -> bool:
@@ -110,6 +131,14 @@ def _validated_output_path(value: str) -> str:
     return allowed[candidate]
 
 
+def _managed_output_path(output_path: str, relative: str) -> str:
+    canonical = str(relative).replace("\\", "/").strip("/")
+    if canonical not in _MANAGED_CANONICAL:
+        raise ValueError(f"Unmanaged output path: {relative!r}")
+    _, destination = security.confined_destination(output_path, canonical)
+    return destination
+
+
 def _validated_manifest_outputs(value) -> list[str]:
     if not isinstance(value, list):
         raise ValueError("Backup managed-output list is invalid.")
@@ -144,6 +173,9 @@ def _validated_selection_path() -> str:
 
 def create_restore_point(output_path: str, selected_mods=None, reason="pre-patch") -> str:
     output_path = _validated_output_path(output_path)
+    live_paths = {
+        relative.replace(os.sep, "/"): _managed_output_path(output_path, relative) for relative in MANAGED_OUTPUTS
+    }
     os.makedirs(_root(), exist_ok=True)
     now = dt.datetime.now().astimezone()
     stamp = now.strftime("%Y%m%d-%H%M%S-%f")
@@ -152,7 +184,7 @@ def create_restore_point(output_path: str, selected_mods=None, reason="pre-patch
 
     existing = []
     for relative in MANAGED_OUTPUTS:
-        source = os.path.join(output_path, relative)
+        source = live_paths[relative.replace(os.sep, "/")]
         destination = os.path.join(snapshot, "output", relative)
         if _copy_if_exists(source, destination):
             existing.append(relative.replace(os.sep, "/"))
@@ -222,6 +254,9 @@ def restore_restore_point(snapshot: str, restore_selection=True) -> dict:
 
     output_path = _validated_output_path(manifest.get("output_path"))
     existing = _validated_manifest_outputs(manifest.get("existing_managed_outputs", []))
+    live_paths = {
+        relative.replace(os.sep, "/"): _managed_output_path(output_path, relative) for relative in MANAGED_OUTPUTS
+    }
 
     sources: dict[str, str] = {}
     for canonical in existing:
@@ -265,7 +300,7 @@ def restore_restore_point(snapshot: str, restore_selection=True) -> dict:
             os.makedirs(os.path.dirname(destination), exist_ok=True)
             shutil.copy2(source, destination)
         for relative in MANAGED_OUTPUTS:
-            current = os.path.join(output_path, relative)
+            current = live_paths[relative.replace(os.sep, "/")]
             if os.path.isfile(current) and not os.path.islink(current):
                 old = os.path.join(staged_old, relative)
                 os.makedirs(os.path.dirname(old), exist_ok=True)
@@ -284,13 +319,13 @@ def restore_restore_point(snapshot: str, restore_selection=True) -> dict:
         selection_touched = False
         try:
             for relative in MANAGED_OUTPUTS:
-                current = os.path.join(output_path, relative)
+                current = live_paths[relative.replace(os.sep, "/")]
                 if os.path.isfile(current) or os.path.islink(current):
                     os.remove(current)
             for canonical in existing:
                 relative = canonical.replace("/", os.sep)
                 source = os.path.join(staged_new, relative)
-                destination = os.path.join(output_path, relative)
+                destination = live_paths[canonical]
                 os.makedirs(os.path.dirname(destination), exist_ok=True)
                 os.replace(source, destination)
                 restored.append(canonical)
@@ -301,7 +336,7 @@ def restore_restore_point(snapshot: str, restore_selection=True) -> dict:
                 selection_restored = True
         except Exception:
             for relative in MANAGED_OUTPUTS:
-                current = os.path.join(output_path, relative)
+                current = live_paths[relative.replace(os.sep, "/")]
                 if os.path.isfile(current) or os.path.islink(current):
                     os.remove(current)
                 old = os.path.join(staged_old, relative)
