@@ -7,6 +7,7 @@ THEME = (ROOT / "Minify" / "ui" / "theme.py").read_text(encoding="utf-8")
 CHECKBOXES = (ROOT / "Minify" / "ui" / "checkboxes.py").read_text(encoding="utf-8")
 D2PFX = (ROOT / "Minify" / "browsers" / "d2pfx" / "ui.py").read_text(encoding="utf-8")
 WINDOW = (ROOT / "Minify" / "ui" / "window.py").read_text(encoding="utf-8")
+TERMINAL = (ROOT / "Minify" / "ui" / "terminal.py").read_text(encoding="utf-8")
 
 
 def test_stale_workspace_badge_removed():
@@ -58,7 +59,6 @@ def test_release_console_has_dense_command_hierarchy():
     for tag in (
         "header_brand_group",
         "header_accent_rail",
-        "nav_status_card",
         "dashboard_hero_card",
         "dashboard_metric_strip",
         "dashboard_status_panel",
@@ -86,20 +86,38 @@ def test_alignment_labels_do_not_depend_on_space_padding():
         assert stale not in MAIN
 
 
-def test_activity_header_uses_plain_language():
+def test_activity_header_uses_plain_language_and_copy_tools():
     assert 'dpg.add_text("ACTIVITY LOG", parent="activity_header", tag="activity_label")' in MAIN
     assert "LIVE ACTIVITY" not in MAIN
     assert "STREAM ONLINE" not in MAIN
     assert 'tag="activity_caption"' not in MAIN
     assert 'tag="activity_stream_state"' not in MAIN
+    assert 'tag="activity_copy_button"' in WINDOW
+    assert 'label="COPY LOG"' in WINDOW
+    assert 'tag="activity_select_button"' in WINDOW
+    assert 'label="SELECT TEXT"' in WINDOW
+    assert "callback=terminal.copy_all" in WINDOW
+    assert "callback=terminal.show_copy_view" in WINDOW
+
+
+def test_activity_log_has_selectable_debug_view():
+    assert "def get_text():" in TERMINAL
+    assert "def copy_all(" in TERMINAL
+    assert "dpg.set_clipboard_text(get_text())" in TERMINAL
+    assert "def show_copy_view(" in TERMINAL
+    assert 'tag="activity_log_copy_text"' in TERMINAL
+    assert "multiline=True" in TERMINAL
+    assert "readonly=True" in TERMINAL
+    assert 'label="COPY ALL"' in TERMINAL
 
 
 def test_responsive_home_uses_single_workspace_before_clipping():
     assert "main_width = max(360, workspace_width - 20)" in WINDOW
-    assert "hero_height = 178 if inner_height >= 350 else 168" in WINDOW
-    assert "status_height = 60" in WINDOW
-    assert "action_height = 76" in WINDOW
-    assert 'dpg.configure_item("dashboard_metric_strip", height=66)' in WINDOW
+    assert "sequence_height = max(84, min(104, int(inner_height * 0.28)))" in WINDOW
+    assert "hero_height = max(184, min(204, sequence_height + 94))" in WINDOW
+    assert "status_height = 52 if inner_height < 380 else 56" in WINDOW
+    assert "action_height = 68 if inner_height < 380 else 72" in WINDOW
+    assert 'dpg.configure_item("dashboard_metric_strip", height=sequence_height)' in WINDOW
     assert "wide_workspace" not in WINDOW
     assert 'dpg.configure_item("app_workspace_side"' not in WINDOW
     assert 'dpg.configure_item("dashboard_hero_card", height=hero_height)' in WINDOW
@@ -128,25 +146,20 @@ def test_source_screenshot_spatial_color_roles_are_materialized():
     assert "dpg.add_theme_color(dpg.mvThemeCol_Text, (0, 0, 0))" in D2PFX
 
 
-def test_nav_status_card_has_safe_vertical_budget():
-    start = MAIN.index('tag="nav_status_card"')
-    card = MAIN[start : start + 320]
-    assert "height=66" in card
-    assert 'dpg.add_text("SYSTEM", parent="nav_status_card"' in card
-    assert 'dpg.add_text("● PROTECTED", parent="nav_status_card"' in card
-    assert "nav_status_height = 66 if shell_body_height >= 370 else 62" in WINDOW
-    assert 'dpg.configure_item("nav_status_card", height=nav_status_height)' in WINDOW
+def test_redundant_left_status_card_is_hidden_at_runtime():
+    assert 'dpg.configure_item("nav_workspace_label", show=False)' in WINDOW
+    assert 'dpg.configure_item("nav_status_card", show=False)' in WINDOW
+    assert "nav_status_height" not in WINDOW
+    assert 'dpg.configure_item("nav_status_card", height=' not in WINDOW
 
 
-def test_header_brand_is_centered_and_engine_chip_removed():
-    assert 'tag="header_brand_group"' in MAIN
-    assert 'tag="header_left_gutter"' in MAIN
-    assert 'tag="header_right_gutter"' in MAIN
-    assert MAIN.count("width_stretch=True, init_width_or_weight=1.0") >= 2
-    assert 'tag="header_brand_column", width_fixed=True, init_width_or_weight=340' in MAIN
-    assert 'tag="header_engine_chip"' not in MAIN
-    assert 'tag="header_engine_column"' not in MAIN
-    assert 'dpg.add_text("PATCH ENGINE"' not in MAIN
+def test_header_is_reduced_to_centered_minify_release_lines():
+    assert 'dpg.configure_item("header_brand_group", horizontal=False)' in WINDOW
+    assert 'dpg.set_value("app_product_name", f"RELEASE: {base.VERSION}")' in WINDOW
+    assert 'dpg.configure_item("app_version", show=False)' in WINDOW
+    assert "HEADER_BRAND_WIDTH = 340" in WINDOW
+    assert 'dpg.configure_item("app_title", indent=max(0, (HEADER_BRAND_WIDTH - title_width) // 2))' in WINDOW
+    assert 'dpg.configure_item("app_product_name", indent=max(0, (HEADER_BRAND_WIDTH - release_width) // 2))' in WINDOW
 
 
 def test_viewport_has_safe_minimum_layout_budget():
