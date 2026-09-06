@@ -1,12 +1,13 @@
 # Session Summary
 - Fork: `ripDZL/dota2-minify`; active `v21.4-hardening`; exact rc7 baseline `d4b4520c945a9e1f8f5facc52a76ac5903babe90`.
 - Branch model: exactly `v21.4-hardening` -> `beta` -> `main`; beta/main frozen.
-- Exact validated product head: `ec068f85a988a8001450e83c439e5a224f55b1de`; later commits are Docs-only.
-- Home cleanup: static right deployment/guard/fail-safe explainer removed; single full-width workspace; Analyze/Snapshot/Compose stacked vertically; selected/installed count retained in status panel; terminal header is `ACTIVITY LOG`; old caption and `STREAM ONLINE` removed.
-- Home sizing: shell >=360; hero 168/178; sequence 66; status 60; action bar 76; activity header 36; existing `960x680` hardening retained.
+- Exact validated product head: `71b218d7f6e568831e66d086249309a47e0f61a9`; later commits are Docs-only.
+- Home runtime header now shows centered stacked `MINIFY` and `RELEASE: {base.VERSION}`; redundant left `COMMAND DECK` + `SYSTEM / PROTECTED` chrome hidden.
+- Analyze/Snapshot/Compose sequence height adapts `84..104`px with client height; hero/status/action budgets scale to stop row clipping.
+- Activity header remains `ACTIVITY LOG`; `COPY LOG` copies current visible entries; `SELECT TEXT` opens a read-only selectable multiline view while colored live output remains intact.
 - Windows browsing uses native system file/folder dialogs for D2PFX ZIP import, profile JSON import, and profile export directory; DPG fallback only if native startup fails.
-- CI `34045400676`: compileall PASS; Ruff PASS; pytest **255/255 PASS**; Windows portable build PASS.
-- Artifact `9992953059`; 53,087,565 bytes; digest `sha256:1ae05cb88d7ca29e14e3e0eb8a58ef8440994978e3273b45f77ef94b82f86ffc`.
+- CI `34046658231`: compileall PASS; Ruff PASS; pytest **256/256 PASS**; Windows portable build PASS.
+- Artifact `9993322800`; 53,090,744 bytes; digest `sha256:7f451f26f90287fe22c91e534fe9c585e84aa0f6c9880c78ba59259dfff6b91d`; extracted portable ZIP SHA-256 `0a166c78d9c6cd58cb1b593ead345c29569f15600dfa7516ca2a9ec4a78f4387`.
 - Custom VPK category behavior from `302c776e63c9ffa5771d065d619f511b89c08cd6` remains intact.
-- Remaining gates: real Windows smoke of cleaned Home/native picker/custom categories/960x680 surfaces; residual path-race/security review; semantic core/exact-rc7 reconciliation; Dota smoke tests.
+- Remaining gates: real Windows smoke of header/sequence/log copy/native picker/custom categories/960x680 surfaces; residual path-race/security review; semantic core/exact-rc7 reconciliation; Dota smoke tests.
 - Do not promote beta/main until remaining gates and explicit user approval.
