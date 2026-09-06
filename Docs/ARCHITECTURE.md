@@ -2,10 +2,12 @@
 - Baseline: exact upstream rc7 `d4b4520c945a9e1f8f5facc52a76ac5903babe90`; no current-main rebase during hardening.
 - Branches: exactly `v21.4-hardening` -> `beta` -> `main`; beta/main frozen.
 - UI: Dear PyGui Black-Plum Reactor; outer minimum `960x680`; responsive client-size budgeting and scroll bounds.
-- Home: single full-width action workspace; static right explainer removed; patch flow is a three-row Analyze/Snapshot/Compose table; live library count stays in status panel.
+- Home: single full-width action workspace; static right explainer removed; live library count stays in status panel.
 - Header cleanup is applied in `Minify/ui/window.py` after static UI creation: hide left status chrome; stack `MINIFY` over `RELEASE: {base.VERSION}`; retain old source tags only for compatibility.
-- Home sizing: shell >=360 client px; sequence `84..104` from `inner_height`; hero `184..204`; status `52/56`; action bar `68/72`; activity header 36.
-- Activity log keeps colored per-message rendering in `Minify/ui/terminal.py`; `COPY LOG` serializes current visible entries to clipboard; `SELECT TEXT` opens a read-only multiline selectable view.
+- Patch sequence is reparented at runtime from the hero card into `app_workspace_main` before the status panel; row height `94..116`; hero/status/action are independent rows; main workspace can scroll at constrained height.
+- Deployment command widths use `action_cluster_width` bounded to `360..620` rather than fixed narrow buttons.
+- Activity log keeps colored per-message rendering in `Minify/ui/terminal.py`; `COPY LOG` serializes current visible entries to clipboard; `SELECT TEXT` opens a read-only multiline selectable view; action controls use a right-edge safety inset.
+- Developer tools: `Minify/ui/dev_tools.py` installs `GENERAL`/`DEVELOPER` tabs into the existing Control Panel, moves `settings_content_group` under General, renders advanced controls under Developer, and no longer creates floating windows or expands the viewport.
 - Windows file browsing: `Minify/helper.py` intercepts only D2PFX ZIP import, profile import, and profile export file-dialog tags; uses Tk/Windows native file/folder dialogs; preserves callbacks; Dear PyGui dialog is fallback on native-start failure; non-Windows unchanged.
 - Mod discovery: bounded recursive scanner; no symlink traversal; stable nested IDs; ordinary top-level folders with VPK-backed immediate children become categories.
 - D2PFX: bounded catalogue/download/install/cursor paths; staged installs; confined metadata/cache; native picker only changes local ZIP selection UI.
