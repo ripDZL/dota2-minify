@@ -1,25 +1,16 @@
 # AI Context
 - Upstream baseline: `Egezenn/dota2-minify` tag `Minify-v1.14rc7`; exact commit `d4b4520c945a9e1f8f5facc52a76ac5903babe90`.
-- Fork: `ripDZL/dota2-minify`; active branch `v21.4-hardening`; promotion path `v21.4-hardening` -> `beta` -> `main`.
-- Exactly three branches; `main` frozen at `a26bc88a0d412e357965f29488b83a7f9093e11f`; `beta` frozen at `af83bbb051edced195d5f55ba49ff060a8c76f3c`.
-- Exact validated product head: `d50d95b9407dac4e8e687eef065125aa099284cc`; feature commit `302c776e63c9ffa5771d065d619f511b89c08cd6` adds custom VPK-folder categories; `d50d95b...` is the test-harness follow-up.
-- Commits after `d50d95b9407dac4e8e687eef065125aa099284cc` are Docs-only at this handoff; re-fetch branch head at new-chat start.
-- Current UI baseline: **Black-Plum Reactor**; outer viewport minimum `960x680`; compact client-width mode at `<=1000`; optional telemetry collapses before clipping.
-- Minimum-window hardening budgets from Dear PyGui client dimensions, reserves a 16px content inset, makes Home and Mod Library navigation rails scrollable when vertically constrained, bounds terminal/footer widths, gives D2PFX explicit client-height/scroll budgets, and clamps patch/conflict/restore/import text/scroll regions.
-- Settings keeps a vertically scrollable content surface and client-width action bar; Mod Library list/metadata/status sizing remains responsive.
-- Custom mod categories: an ordinary top-level folder under `mods/` is auto-treated as a category when its immediate child folders contain visible VPKs; those child folders become separate nested Local folder mods. Non-VPK siblings are ignored unless they are recognized directory mods; hidden/reserved folders and symlinks are not followed.
-- Automated regression coverage includes `tests/test_modern_ui.py`, `tests/test_custom_vpk_categories.py`, and nested-mod compatibility tests; current suite is **249/249 PASS**.
-- Remaining user-facing UI gate: human visual smoke-test **every element and text label at exactly 960x680** across Home, Mod Library, Settings, D2PFX, patch preview/conflict report, restore points, terminal, and footer. CI/source assertions do not replace that visual check.
-- Hardening CI `33991949698`: compileall PASS; Ruff format/lint PASS; pytest **249/249 PASS**; Windows PyInstaller/runtime copy/portable ZIP/upload PASS.
-- Current GitHub artifact ID `9976907972`; name `Minify-v21.4-hardening-windows`; size 53,088,476 bytes; digest `sha256:be73752f3c45b716815d24a557715669f49412f5a72b8d2fa01c0418e051ed4b`.
-- Previous minimum-window product head: `e1200a3f768529074a1ec31774e34085e3a717bb`; CI `33980746532`; 244/244 PASS; Windows build PASS.
-- Previous fully inspected baseline product head: `a27dfa368a56ec8be5d713594eb5506abc24ee06`; CI `33977097382`; 241/241 PASS; Windows build PASS.
-- Canonical source: ordinary materialized files only; no active one-shot transformer/workflow; `.materialize/READY` absent.
-- Security completed: bounded/atomic downloads; D2PFX catalogue/cache/metadata/cursors/install path; strict profiles; VPK metadata; backup restore confinement.
-- Backup hardening: manifest opened regular-file-only with no-follow/identity recheck; managed live outputs preflight through confined destinations; symlinked `maps` escape rejected before backup/restore mutation.
-- v21.3.1 backend regressions restored directly on hardening: Dark Terrain/Safe Foliage/Main Menu compatibility + recursive/nested Collections/dependency resolution + semantic feature coverage.
-- Canonical user feature reference: v21.3.1 Safe Foliage Fix archive; SHA-256 `37755c4ee92e1847eef1a5a9c89aef6ba488f33accd0cb102c62a7db8780b5f8`; bundled 116/116 tests pass locally.
-- Preserve recursive/nested mods, Collections, profiles, D2PFX, backups/conflict review, Dark Terrain behavior, Safe Foliage, Main Menu Background fix, manual rc7 `prelaunch`, no-auto-prelaunch policy.
-- Remove Foilage: blacklist-only; never ship `manifest.json` or `maps/dota.vpk`; retain both exact oak-leaf blacklist entries.
-- Security boundary: mod Python scripts trusted arbitrary code; VPK/archive/profile/backup/download/D2PFX inputs untrusted.
-- `core/mod_library.py` prior-v21.4 exact-source reconciliation remains blocked; never fabricate missing bytes.
+- Fork: `ripDZL/dota2-minify`; active `v21.4-hardening`; promotion `v21.4-hardening` -> `beta` -> `main`.
+- Exactly three branches; `beta` frozen `af83bbb051edced195d5f55ba49ff060a8c76f3c`; `main` frozen `a26bc88a0d412e357965f29488b83a7f9093e11f`.
+- Exact validated product head: `2f1a60d01defefc4239a836b9d7e5539b2f3720e` (`feat(ui): use native Windows file dialogs`).
+- Native Windows system picker now handles D2PFX ZIP import, profile JSON import, and profile export-directory selection; themed Dear PyGui file dialogs remain fallback-only if native picker startup fails.
+- Native-picker regression coverage: `tests/test_native_file_dialogs.py`; cancellation stays cancelled; existing DPG callback data contract is preserved; unrelated `configure_item` calls pass through unchanged.
+- Hardening CI `34043716068`: compileall PASS; Ruff format/lint PASS; pytest **253/253 PASS**; Windows portable build/package/upload PASS.
+- Current artifact `9992464458`; 53,089,784-byte GitHub artifact; digest `sha256:79ec991410315246ead60d2b54afb1651a11c1e4b0560ed0c009e6d4e27412d4`.
+- Custom mod categories: `mods/<Category>/<Child>/.../*.vpk` promotes the top-level folder to a category; each VPK-backed immediate child is a nested Local folder mod; recognized folder-mod siblings are kept; unrelated/hidden/reserved/symlink entries are excluded.
+- UI baseline: Black-Plum Reactor; outer minimum `960x680`; client-size budgeting/scroll hardening retained.
+- Human Windows smoke remains required for native picker runtime behavior and every major `960x680` surface; CI does not prove pixel-level rendering.
+- Preserve recursive/nested mods, Collections, profiles, D2PFX, backups/conflict review, Dark Terrain, Safe Foliage, Main Menu Background fix, manual rc7 `prelaunch`, and no-auto-prelaunch policy.
+- Remove Foilage: blacklist-only; never ship `manifest.json` or `maps/dota.vpk`; retain both oak-leaf blacklist entries.
+- Security boundary: mod Python scripts are trusted code; archive/VPK/profile/backup/download/D2PFX data are untrusted.
+- Remaining work: human Windows/Dota smoke; residual path-race/hostile-input review; semantic core/exact-rc7 diff reconciliation; no beta/main promotion without explicit user approval.
