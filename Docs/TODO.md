@@ -4,10 +4,12 @@
 - [x] Preserve hardened backend + v21.3.1 feature set; custom VPK-folder categories included.
 - [x] Harden Black-Plum Reactor minimum/responsive sizing at `960x680`.
 - [x] Clean Home UI: remove static right explainer; stack Analyze/Snapshot/Compose; simplify terminal header to `ACTIVITY LOG`.
-- [x] Simplify Home header/left rail; make patch-sequence height adaptive; add Activity Log copy-all and selectable-text view.
+- [x] Simplify Home header/left rail; add Activity Log copy-all/selectable-text view.
+- [x] Fix latest red-marked Home issues: detach patch sequence from hero to stop clipping; make status/action rows independent; responsive deployment button widths; inset Activity Log controls from right edge.
+- [x] Move Developer Tools behind Control Panel -> Developer tab; hide footer developer entry; retire floating/viewport-expansion dev panes.
 - [x] Replace themed file browsing with native Windows picker for D2PFX ZIP import, profile import, and profile export directory.
-- [x] Product head `71b218d7f6e568831e66d086249309a47e0f61a9`; CI `34046658231`; **256/256 PASS**; Windows build PASS; artifact `9993322800`.
-- [ ] Human Windows smoke-test centered release header, unclipped three-step sequence, hidden left status chrome, log copy/select, native pickers, and every major surface at exactly `960x680`.
+- [x] Product head `d28cc12d9be4616ecc5f6bf7e665e4e6392b45fd`; CI `34059436199`; **258/258 PASS**; Windows build PASS; artifact `9997008784`.
+- [ ] Human Windows smoke-test latest Home layout, Control Panel General/Developer tabs, log copy/select, native pickers, and every major surface at exactly `960x680`.
 - [ ] Smoke-test custom category discovery against real user-created folders/VPKs on Windows.
 - [ ] Continue hostile-input/path-race review; residual local filesystem races require explicit assessment.
 - [ ] Complete semantic core-overlay reconciliation and exact-rc7 diff review; never wholesale copy stale core.
