@@ -204,7 +204,7 @@ def create_ui():
             dpg.add_child_window(
                 parent="app_workspace_main",
                 tag="dashboard_hero_card",
-                height=180,
+                height=168,
                 width=-1,
                 border=True,
                 no_scrollbar=True,
@@ -223,7 +223,7 @@ def create_ui():
             dpg.add_child_window(
                 parent="dashboard_hero_card",
                 tag="dashboard_metric_strip",
-                height=78,
+                height=66,
                 width=-1,
                 border=True,
                 no_scrollbar=True,
@@ -246,11 +246,10 @@ def create_ui():
                     dpg.add_text("COMPOSE", tag="dashboard_step_3")
                     dpg.add_text("Selected mods", tag="dashboard_step_3_detail")
 
-            dpg.add_spacer(parent="app_workspace_main", height=6)
             dpg.add_child_window(
                 parent="app_workspace_main",
                 tag="dashboard_status_panel",
-                height=54,
+                height=60,
                 width=-1,
                 border=True,
                 no_scrollbar=True,
@@ -261,11 +260,10 @@ def create_ui():
                 dpg.add_text("Getting your mod library ready...", tag="dashboard_status_message", wrap=420)
             dpg.add_text("0 selected • 0 installed", parent="dashboard_status_panel", tag="dashboard_metric")
 
-            dpg.add_spacer(parent="app_workspace_main", height=6)
             dpg.add_child_window(
                 parent="app_workspace_main",
                 tag="dashboard_action_bar",
-                height=62,
+                height=76,
                 width=-1,
                 border=True,
                 no_scrollbar=True,
