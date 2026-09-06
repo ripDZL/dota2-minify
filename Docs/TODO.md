@@ -4,9 +4,10 @@
 - [x] Preserve hardened backend + v21.3.1 feature set; custom VPK-folder categories included.
 - [x] Harden Black-Plum Reactor minimum/responsive sizing at `960x680`.
 - [x] Clean Home UI: remove static right explainer; stack Analyze/Snapshot/Compose; simplify terminal header to `ACTIVITY LOG`.
+- [x] Simplify Home header/left rail; make patch-sequence height adaptive; add Activity Log copy-all and selectable-text view.
 - [x] Replace themed file browsing with native Windows picker for D2PFX ZIP import, profile import, and profile export directory.
-- [x] Product head `ec068f85a988a8001450e83c439e5a224f55b1de`; CI `34045400676`; **255/255 PASS**; Windows build PASS; artifact `9992953059`.
-- [ ] Human Windows smoke-test cleaned Home, native pickers, and every major surface at exactly `960x680`.
+- [x] Product head `71b218d7f6e568831e66d086249309a47e0f61a9`; CI `34046658231`; **256/256 PASS**; Windows build PASS; artifact `9993322800`.
+- [ ] Human Windows smoke-test centered release header, unclipped three-step sequence, hidden left status chrome, log copy/select, native pickers, and every major surface at exactly `960x680`.
 - [ ] Smoke-test custom category discovery against real user-created folders/VPKs on Windows.
 - [ ] Continue hostile-input/path-race review; residual local filesystem races require explicit assessment.
 - [ ] Complete semantic core-overlay reconciliation and exact-rc7 diff review; never wholesale copy stale core.
