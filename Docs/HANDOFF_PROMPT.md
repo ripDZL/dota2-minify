@@ -3,13 +3,14 @@
 - Read `Docs/*.md` and re-fetch branch head before code changes.
 - Branch model: exactly `v21.4-hardening` -> `beta` -> `main`; keep beta/main frozen.
 - Exact upstream baseline: `Minify-v1.14rc7` / `d4b4520c945a9e1f8f5facc52a76ac5903babe90`; do not rebase current upstream main.
-- Exact validated product head: `2f1a60d01defefc4239a836b9d7e5539b2f3720e`.
-- Native Windows picker: D2PFX ZIP import, profile JSON import, and profile export directory use system dialogs; existing DPG callbacks are reused; DPG dialog is fallback on native startup failure; non-Windows remains unchanged.
-- CI `34043716068`: compileall/Ruff PASS; pytest **253/253 PASS**; Windows portable build PASS.
-- Artifact `9992464458`; digest `sha256:79ec991410315246ead60d2b54afb1651a11c1e4b0560ed0c009e6d4e27412d4`.
-- Black-Plum Reactor UI and `960x680` hardening remain current.
+- Exact validated product head: `ec068f85a988a8001450e83c439e5a224f55b1de`; later commits are Docs-only at this handoff.
+- Home cleanup: right static deployment/guard/fail-safe rail removed; Analyze/Snapshot/Compose flow stacked vertically; selected/installed count retained in status panel; terminal header renamed `ACTIVITY LOG`; old stage caption and `STREAM ONLINE` removed.
+- Home sizing: shell >=360; hero 168/178; sequence 66; status 60; action bar 76; activity header 36; `960x680` client hardening remains.
+- Native Windows picker: D2PFX ZIP import, profile JSON import, and profile export directory use system dialogs; DPG dialog fallback on native startup failure; non-Windows unchanged.
+- CI `34045400676`: compileall/Ruff PASS; pytest **255/255 PASS**; Windows portable build PASS.
+- Artifact `9992953059`; digest `sha256:1ae05cb88d7ca29e14e3e0eb8a58ef8440994978e3273b45f77ef94b82f86ffc`.
 - Custom VPK-folder categories remain: `mods/<Category>/<Child>/.../*.vpk` exposes VPK-backed children as nested Local folder mods.
 - Preserve recursive/nested mods, Collections, profiles, D2PFX, backups/conflict review, Dark Terrain, Safe Foliage, Main Menu fix, manual rc7 `prelaunch`, no-auto-prelaunch.
 - Remove Foilage invariant: blacklist-only; never ship `manifest.json` or `maps/dota.vpk`.
-- Remaining gates: human Windows native-picker/custom-category/960x680 smoke; residual filesystem race/security review; semantic core/exact-rc7 diff review; Dota smoke tests.
+- Remaining gates: human Windows cleaned-Home/native-picker/custom-category/960x680 smoke; residual filesystem race/security review; semantic core/exact-rc7 diff review; Dota smoke tests.
 - Never promote beta/main without explicit user approval.
