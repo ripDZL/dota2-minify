@@ -2,14 +2,17 @@
 - Upstream baseline: `Egezenn/dota2-minify` tag `Minify-v1.14rc7`; exact commit `d4b4520c945a9e1f8f5facc52a76ac5903babe90`.
 - Fork: `ripDZL/dota2-minify`; active `v21.4-hardening`; promotion `v21.4-hardening` -> `beta` -> `main`.
 - Exactly three branches; `beta` frozen `af83bbb051edced195d5f55ba49ff060a8c76f3c`; `main` frozen `a26bc88a0d412e357965f29488b83a7f9093e11f`.
-- Exact validated product head: `ec068f85a988a8001450e83c439e5a224f55b1de`; later milestone commits are Docs-only at this handoff.
-- Home cleanup: removed static right-side deployment/guard/fail-safe explainer; single full-width action workspace; three-step patch sequence stacked vertically as Analyze -> Snapshot -> Compose; live selected/installed count remains in status panel; activity header is `ACTIVITY LOG`; `STREAM ONLINE` and stage-caption noise removed.
-- Home minimum-height budget: shell >=360; hero 168/178; sequence 66; status 60; action bar 76; activity header 36; existing `960x680` client-size/scroll hardening retained.
+- Exact validated product head: `71b218d7f6e568831e66d086249309a47e0f61a9`; later milestone commits are Docs-only at this handoff.
+- Home header runtime presentation is two centered stacked lines: `MINIFY` and `RELEASE: {base.VERSION}`; old product subtitle/version tag remains hidden for compatibility.
+- Left `COMMAND DECK` heading and `SYSTEM / PROTECTED` status card are hidden; navigation actions remain.
+- Patch sequence stays vertical Analyze -> Snapshot -> Compose and now uses adaptive height `84..104`px tied to client-area height; hero/status/action budgets scale with it to prevent vertical clipping.
+- Activity header is `ACTIVITY LOG`; `COPY LOG` copies the visible log; `SELECT TEXT` opens a read-only multiline view for highlighting/Ctrl+C while preserving the colored live log.
 - Native Windows system picker handles D2PFX ZIP import, profile JSON import, and profile export-directory selection; themed Dear PyGui dialogs are fallback-only on native startup failure.
 - Custom mod categories: `mods/<Category>/<Child>/.../*.vpk` promotes the top-level folder to a category; each VPK-backed immediate child is a nested Local folder mod; recognized folder-mod siblings kept; unrelated/hidden/reserved/symlink entries excluded.
-- Hardening CI `34045400676`: compileall PASS; Ruff format/lint PASS; pytest **255/255 PASS**; Windows portable build/package/upload PASS.
-- Current artifact `9992953059`; 53,087,565-byte GitHub artifact; digest `sha256:1ae05cb88d7ca29e14e3e0eb8a58ef8440994978e3273b45f77ef94b82f86ffc`.
-- Human Windows smoke remains required for cleaned Home and every major `960x680` surface; CI does not prove pixel-level rendering.
+- Hardening CI `34046658231`: compileall PASS; Ruff format/lint PASS; pytest **256/256 PASS**; Windows portable build/package/upload PASS.
+- Current artifact `9993322800`; 53,090,744-byte GitHub artifact; digest `sha256:7f451f26f90287fe22c91e534fe9c585e84aa0f6c9880c78ba59259dfff6b91d`.
+- Extracted portable ZIP SHA-256: `0a166c78d9c6cd58cb1b593ead345c29569f15600dfa7516ca2a9ec4a78f4387`.
+- Human Windows smoke remains required for header centering, unclipped patch sequence, hidden left status card, log copy/select behavior, and every major `960x680` surface; CI does not prove pixel-level rendering.
 - Preserve recursive/nested mods, Collections, profiles, D2PFX, backups/conflict review, Dark Terrain, Safe Foliage, Main Menu Background fix, manual rc7 `prelaunch`, and no-auto-prelaunch policy.
 - Remove Foilage: blacklist-only; never ship `manifest.json` or `maps/dota.vpk`; retain both oak-leaf blacklist entries.
 - Security boundary: mod Python scripts are trusted code; archive/VPK/profile/backup/download/D2PFX data are untrusted.
