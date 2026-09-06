@@ -96,10 +96,10 @@ def test_activity_header_uses_plain_language():
 
 def test_responsive_home_uses_single_workspace_before_clipping():
     assert "main_width = max(360, workspace_width - 20)" in WINDOW
-    assert "hero_height = 190 if inner_height >= 350 else 180" in WINDOW
-    assert "status_height = 58 if inner_height >= 350 else 54" in WINDOW
-    assert "action_height = 68 if inner_height >= 350 else 62" in WINDOW
-    assert 'dpg.configure_item("dashboard_metric_strip", height=78)' in WINDOW
+    assert "hero_height = 178 if inner_height >= 350 else 168" in WINDOW
+    assert "status_height = 60" in WINDOW
+    assert "action_height = 76" in WINDOW
+    assert 'dpg.configure_item("dashboard_metric_strip", height=66)' in WINDOW
     assert "wide_workspace" not in WINDOW
     assert 'dpg.configure_item("app_workspace_side"' not in WINDOW
     assert 'dpg.configure_item("dashboard_hero_card", height=hero_height)' in WINDOW
@@ -154,7 +154,7 @@ def test_viewport_has_safe_minimum_layout_budget():
     assert "MIN_VIEWPORT_HEIGHT = 680" in MAIN
     assert "min_width=MIN_VIEWPORT_WIDTH" in MAIN
     assert "min_height=MIN_VIEWPORT_HEIGHT" in MAIN
-    assert "shell_body_height = max(350, min(500, shared.window_height - 330))" in WINDOW
+    assert "shell_body_height = max(360, min(500, shared.window_height - 320))" in WINDOW
 
 
 def test_minimum_width_fit_contract_covers_primary_library_and_d2pfx():
