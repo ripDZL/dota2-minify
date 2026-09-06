@@ -18,6 +18,7 @@ is_moving_viewport = False
 CONTENT_INSET = 16
 MIN_D2PFX_CONTENT_HEIGHT = 260
 D2PFX_HEADER_BUDGET = 188
+HEADER_BRAND_WIDTH = 340
 
 
 def drag(sender, app_data, user_data):
@@ -88,6 +89,69 @@ def focus():
                 ["wmctrl", "-a", "Minify"],
                 check=True,
             )
+
+
+def _item_width(tag, fallback):
+    try:
+        width = int(dpg.get_item_rect_size(tag)[0])
+        return width if width > 0 else fallback
+    except Exception:
+        return fallback
+
+
+def _configure_home_surface(content_width):
+    """Apply the simplified user-facing home chrome after the static UI exists."""
+    if dpg.does_item_exist("nav_workspace_label"):
+        dpg.configure_item("nav_workspace_label", show=False)
+    if dpg.does_item_exist("nav_status_card"):
+        dpg.configure_item("nav_status_card", show=False)
+
+    # Keep only the product name and the real release version in the centered
+    # header. The original source tags stay intact for compatibility, but the
+    # runtime presentation is deliberately reduced to two stacked lines.
+    if dpg.does_item_exist("header_brand_group"):
+        dpg.configure_item("header_brand_group", horizontal=False)
+    if dpg.does_item_exist("app_product_name"):
+        dpg.set_value("app_product_name", f"RELEASE: {base.VERSION}")
+        dpg.configure_item("app_product_name", show=True)
+    if dpg.does_item_exist("app_version"):
+        dpg.configure_item("app_version", show=False)
+
+    if dpg.does_item_exist("app_title"):
+        title_width = _item_width("app_title", 58)
+        dpg.configure_item("app_title", indent=max(0, (HEADER_BRAND_WIDTH - title_width) // 2))
+    if dpg.does_item_exist("app_product_name"):
+        release_width = _item_width("app_product_name", 132)
+        dpg.configure_item("app_product_name", indent=max(0, (HEADER_BRAND_WIDTH - release_width) // 2))
+
+    # Keep the colored live log, but add direct clipboard and selectable-text
+    # access for debugging without replacing the existing output renderer.
+    if dpg.does_item_exist("activity_header"):
+        if not dpg.does_item_exist("activity_copy_button"):
+            dpg.add_button(
+                parent="activity_header",
+                tag="activity_copy_button",
+                label="COPY LOG",
+                callback=terminal.copy_all,
+                width=86,
+                height=24,
+            )
+            if dpg.does_item_exist("main_secondary_button_theme"):
+                dpg.bind_item_theme("activity_copy_button", "main_secondary_button_theme")
+        if not dpg.does_item_exist("activity_select_button"):
+            dpg.add_button(
+                parent="activity_header",
+                tag="activity_select_button",
+                label="SELECT TEXT",
+                callback=terminal.show_copy_view,
+                width=94,
+                height=24,
+            )
+            if dpg.does_item_exist("main_secondary_button_theme"):
+                dpg.bind_item_theme("activity_select_button", "main_secondary_button_theme")
+
+        dpg.set_item_pos("activity_copy_button", (max(150, content_width - 198), 5))
+        dpg.set_item_pos("activity_select_button", (max(242, content_width - 104), 5))
 
 
 def _configure_minimum_window_surfaces(content_width, compact_width):
@@ -166,18 +230,20 @@ def on_resize():
     nav_min_width = 160 if compact_width else 176
     nav_width = max(nav_min_width, min(220, int(shared.window_width * 0.13)))
     # Keep the action surface readable at 960x680 while retaining a useful log
-    # viewport below it. Natural item spacing replaces extra spacer rows.
+    # viewport below it. Sequence height grows with the real client area and is
+    # included in the hero budget instead of being clipped by a fixed 66px box.
     shell_body_height = max(360, min(500, shared.window_height - 320))
-    nav_status_height = 66 if shell_body_height >= 370 else 62
     workspace_width = max(430, content_width - nav_width - 18)
     main_width = max(360, workspace_width - 20)
     inner_height = max(300, shell_body_height - 34)
-    hero_height = 178 if inner_height >= 350 else 168
-    status_height = 60
-    action_height = 76
+    sequence_height = max(84, min(104, int(inner_height * 0.28)))
+    hero_height = max(184, min(204, sequence_height + 94))
+    status_height = 52 if inner_height < 380 else 56
+    action_height = 68 if inner_height < 380 else 72
 
     if dpg.does_item_exist("app_shell_header"):
         dpg.configure_item("app_shell_header", width=content_width, height=76)
+    _configure_home_surface(content_width)
     if dpg.does_item_exist("app_nav_rail"):
         dpg.configure_item(
             "app_nav_rail",
@@ -186,8 +252,6 @@ def on_resize():
             no_scrollbar=False,
             no_scroll_with_mouse=False,
         )
-    if dpg.does_item_exist("nav_status_card"):
-        dpg.configure_item("nav_status_card", height=nav_status_height)
     if dpg.does_item_exist("app_workspace"):
         dpg.configure_item("app_workspace", width=workspace_width, height=shell_body_height)
     if dpg.does_item_exist("app_workspace_main"):
@@ -195,7 +259,7 @@ def on_resize():
     if dpg.does_item_exist("dashboard_hero_card"):
         dpg.configure_item("dashboard_hero_card", height=hero_height)
     if dpg.does_item_exist("dashboard_metric_strip"):
-        dpg.configure_item("dashboard_metric_strip", height=66)
+        dpg.configure_item("dashboard_metric_strip", height=sequence_height)
     if dpg.does_item_exist("dashboard_status_panel"):
         dpg.configure_item("dashboard_status_panel", height=status_height)
     if dpg.does_item_exist("dashboard_action_bar"):
