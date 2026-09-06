@@ -2,7 +2,9 @@
 - Baseline: exact upstream rc7 `d4b4520c945a9e1f8f5facc52a76ac5903babe90`; no current-main rebase during hardening.
 - Branches: exactly `v21.4-hardening` -> `beta` -> `main`; beta/main frozen.
 - UI: Dear PyGui Black-Plum Reactor; outer minimum `960x680`; responsive client-size budgeting and scroll bounds.
-- Windows file browsing: `Minify/helper.py` intercepts only D2PFX ZIP import, profile import, and profile export file-dialog tags; uses Tk/Windows native file/folder dialogs; preserves existing callbacks; Dear PyGui dialog is fallback on native-start failure; non-Windows behavior is unchanged.
+- Home: single full-width action workspace; static right explainer removed; patch flow is a three-row Analyze/Snapshot/Compose table; live library count stays in status panel; terminal header is plain `ACTIVITY LOG`.
+- Home sizing: shell >=360 client px; hero 168/178; flow 66; status 60; action bar 76; activity header 36.
+- Windows file browsing: `Minify/helper.py` intercepts only D2PFX ZIP import, profile import, and profile export file-dialog tags; uses Tk/Windows native file/folder dialogs; preserves callbacks; Dear PyGui dialog is fallback on native-start failure; non-Windows unchanged.
 - Mod discovery: bounded recursive scanner; no symlink traversal; stable nested IDs; ordinary top-level folders with VPK-backed immediate children become categories.
 - D2PFX: bounded catalogue/download/install/cursor paths; staged installs; confined metadata/cache; native picker only changes local ZIP selection UI.
 - Patch transaction: nested-ID resolution, restore point, conflict preflight/report, compatibility exclusions, output validation, rollback.
