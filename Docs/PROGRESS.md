@@ -1,14 +1,15 @@
 # Progress
 - [x] Exact rc7 baseline pinned; exactly `v21.4-hardening`, `beta`, `main` retained.
 - [x] Black-Plum Reactor UI + `960x680` client-size hardening retained.
-- [x] Home cleaned: right explainer removed; patch sequence vertical; selected/installed count kept; activity header simplified.
-- [x] Home follow-up: centered `MINIFY` / `RELEASE: {base.VERSION}` runtime header; left redundant status chrome hidden; patch sequence adaptive `84..104`px; `COPY LOG` + selectable log view added.
+- [x] Home cleaned: right explainer removed; centered release header; redundant left status chrome hidden; patch sequence vertical; selected/installed count kept; activity header simplified.
+- [x] Home clipping follow-up: patch sequence detached into its own responsive row; status/action rows independent; deployment buttons use responsive width budget; Activity Log action buttons inset from right edge.
+- [x] Developer tools moved behind Control Panel -> Developer tab; footer dev entry hidden; floating/viewport-expansion panes removed.
 - [x] Recursive/nested mods, custom VPK-folder categories, Collections, profiles, D2PFX, backups/conflict review retained.
 - [x] Windows local browsing uses native system picker for D2PFX ZIP import, profile import, and profile export directory.
-- [x] Product head `71b218d7f6e568831e66d086249309a47e0f61a9` validated by CI `34046658231`: compileall/Ruff PASS; pytest **256/256 PASS**; Windows portable build PASS.
-- [x] Artifact `9993322800`; digest `sha256:7f451f26f90287fe22c91e534fe9c585e84aa0f6c9880c78ba59259dfff6b91d`.
+- [x] Product head `d28cc12d9be4616ecc5f6bf7e665e4e6392b45fd` validated by CI `34059436199`: compileall/Ruff PASS; pytest **258/258 PASS**; Windows portable build PASS.
+- [x] Artifact `9997008784`; digest `sha256:254178eccc85d24d0edc1fa39e416edf41acf642f80b45124552b2fcb5bf5765`.
 - [x] `beta` and `main` remain frozen.
-- [ ] Human Windows smoke: centered header, unclipped three-step sequence, hidden left status chrome, Activity Log copy/select, native picker behavior, and all major `960x680` surfaces.
+- [ ] Human Windows smoke: latest Home row sizing, Control Panel General/Developer tabs, Activity Log copy/select, native picker behavior, and all major `960x680` surfaces.
 - [ ] Continue hostile-input/path-race review and exact-rc7/semantic core reconciliation.
 - [ ] Dota startup/lobby/match/rollback/profiles/D2PFX/Dark-Terrain/Remove-Foilage smoke tests.
 - [ ] Promote hardening -> beta only after remaining gates/user approval; beta -> main only after beta validation.
