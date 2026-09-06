@@ -11,8 +11,9 @@ from core import base, config, constants, fs, log, output, steam
 
 from ui import checkboxes
 
-# Developer tools state
-dev_mode_state = -1
+# Developer tools are embedded in Control Panel now. Keep the legacy state
+# variables because resize code and third-party integrations may still import them.
+dev_mode_state = 0
 prev_width = None
 prev_height = None
 
@@ -49,200 +50,132 @@ def tick_batch(state: bool):
     checkboxes.setup_state()
 
 
-def toggle():
+def _tool_button(parent, label, callback):
+    dpg.add_button(parent=parent, label=label, callback=callback, width=-1)
+
+
+def _wipe_language_paths():
     import patch
 
+    threading.Thread(target=patch.unins.wipe, daemon=True).start()
+
+
+def render_panel(parent):
+    """Render advanced tools inside the Control Panel Developer tab."""
+    if dpg.does_item_exist("developer_tools_content"):
+        return
+
+    with dpg.group(parent=parent, tag="developer_tools_content"):
+        dpg.add_text("DEVELOPER TOOLS", tag="developer_tools_title")
+        dpg.add_text(
+            "Advanced diagnostics and maintenance. Use these only when you know what the action changes.",
+            tag="developer_tools_warning",
+            wrap=700,
+        )
+        dpg.add_separator()
+
+        paths = dpg.add_collapsing_header(label="Paths & files", default_open=True)
+        _tool_button(paths, "Open compile output path", lambda: fs.open_thing(os.path.join(helper.output_path)))
+        _tool_button(
+            paths,
+            "Open compiled pak66 VPK",
+            lambda: fs.open_thing(os.path.join(helper.output_path, "pak66_dir.vpk")),
+        )
+        _tool_button(paths, "Open Minify root", lambda: fs.open_thing(os.getcwd()))
+        _tool_button(paths, "Open logs", lambda: fs.open_thing(base.logs_dir))
+        _tool_button(paths, "Open config", lambda: fs.open_thing(base.config_dir))
+        _tool_button(paths, "Open mods", lambda: fs.open_thing(base.mods_dir))
+        _tool_button(
+            paths,
+            "Open Dota 2 folder",
+            lambda: fs.open_thing(os.path.join(config.get("steam_library"), "steamapps", "common", "dota 2 beta")),
+        )
+        _tool_button(paths, "Open Dota 2 pak01 VPK", lambda: fs.open_thing(constants.dota_game_pak_path))
+        _tool_button(paths, "Open Dota 2 core pak01 VPK", lambda: fs.open_thing(constants.dota_core_pak_path))
+        _tool_button(
+            paths,
+            "Launch Dota 2 Tools",
+            lambda: fs.open_thing(
+                constants.dota2_tools_executable,
+                f"-addon a -language {config.get('output_locale')} -novid -console",
+            ),
+        )
+        dpg.add_text("Requires Steam to be running.", parent=paths)
+        _tool_button(
+            paths,
+            "Launch Dota 2",
+            lambda: fs.open_thing(
+                constants.dota2_executable,
+                f"-language {config.get('output_locale')} -novid -console",
+            ),
+        )
+        _tool_button(paths, "Create debug zip", log.create_debug_zip)
+
+        mod_tools = dpg.add_collapsing_header(label="Mod tools", default_open=False)
+        _tool_button(mod_tools, "Select path to compile", helper.select_compile_dir)
+        _tool_button(
+            mod_tools,
+            "Compile items from selected path",
+            lambda: helper.compile_assets(
+                input_path=os.path.join(base.config_dir, "custom"),
+                output_path=os.path.join(base.config_dir, "compiled"),
+            ),
+        )
+        _tool_button(mod_tools, "Untick all mods", lambda: tick_batch(False))
+        _tool_button(mod_tools, "Tick all mods", lambda: tick_batch(True))
+
+        maintenance = dpg.add_collapsing_header(label="Maintenance", default_open=False)
+        dpg.add_text("These actions can change local Steam/Dota state.", parent=maintenance, wrap=700)
+        _tool_button(
+            maintenance,
+            "Wipe language paths",
+            _wipe_language_paths,
+        )
+        _tool_button(maintenance, "Extract workshop tools", extract_workshop_tools)
+        _tool_button(maintenance, "Launch Steam", lambda: fs.open_thing(steam.steam_executable_path, "-silent"))
+        _tool_button(maintenance, "Kill Steam", lambda: fs.open_thing(steam.steam_executable_path, "-exitsteam"))
+        _tool_button(maintenance, "Validate Dota 2", lambda: webbrowser.open(f"steam://validate/{base.STEAM_DOTA_ID}"))
+
+        debug_env = config.get("debug_env", False) if not base.FROZEN else False
+        if not base.FROZEN and debug_env:
+            debug_tools = dpg.add_collapsing_header(label="Dear PyGui diagnostics", default_open=False)
+            _tool_button(debug_tools, "Debug", dpg.show_debug)
+            _tool_button(debug_tools, "Item registry", dpg.show_item_registry)
+            _tool_button(debug_tools, "Metrics", dpg.show_metrics)
+            _tool_button(debug_tools, "Style editor", dpg.show_style_editor)
+            _tool_button(debug_tools, "Font manager", dpg.show_font_manager)
+
+
+def install_control_panel_tab():
+    """Install Preferences/Developer tabs into the existing Control Panel."""
+    if not dpg.does_item_exist("settings_scroll") or not dpg.does_item_exist("settings_content_group"):
+        return
+    if dpg.does_item_exist("settings_tabs"):
+        return
+
+    with dpg.tab_bar(parent="settings_scroll", tag="settings_tabs"):
+        dpg.add_tab(label="GENERAL", tag="settings_general_tab")
+        dpg.add_tab(label="DEVELOPER", tag="settings_developer_tab")
+
+    dpg.move_item("settings_content_group", parent="settings_general_tab")
+    render_panel("settings_developer_tab")
+
+    # Remove any old floating developer panes if this build is reached from a
+    # live/reloaded context rather than a clean process start.
+    for tag in ("opener", "mod_tools", "maintenance_tools", "debug_tools"):
+        if dpg.does_item_exist(tag):
+            dpg.delete_item(tag)
+
+
+def toggle():
+    """Open the Control Panel directly on its Developer tab."""
     global dev_mode_state
-    width_increase = 450
-    height_increase = 200 if config.get("debug_env", False) else 0
+    dev_mode_state = 0
+    install_control_panel_tab()
 
-    target_width = base.main_window_width + width_increase
-    target_height = base.main_window_height + height_increase
+    if dpg.does_item_exist("settings_menu"):
+        from ui import window
 
-    current_w = prev_width if prev_width is not None else base.main_window_width
-    current_h = prev_height if prev_height is not None else base.main_window_height
-
-    expanded_w = max(current_w, target_width)
-    expanded_h = max(current_h, target_height)
-
-    tools_height = base.main_window_height // 2
-    debug_env = config.get("debug_env", False) if not base.FROZEN else False
-
-    if dev_mode_state == -1:  # init
-        dev_mode_state = 1
-        dpg.configure_viewport(
-            item=base.TITLE,
-            width=expanded_w,
-            height=expanded_h,
-            min_width=target_width,
-            min_height=target_height,
-        )
-        with dpg.window(
-            label="Path & File Opener",
-            tag="opener",
-            pos=(base.main_window_width, 0),
-            width=width_increase // 2,
-            height=base.main_window_height,
-            no_resize=True,
-            no_move=True,
-            no_close=True,
-            no_collapse=True,
-        ):
-            dpg.add_button(
-                label="Path: Compile output path",
-                callback=lambda: fs.open_thing(os.path.join(helper.output_path)),
-            )
-            dpg.add_button(
-                label="File: Compiled pak66 VPK",
-                callback=lambda: fs.open_thing(os.path.join(helper.output_path, "pak66_dir.vpk")),
-            )
-            dpg.add_spacer(width=0, height=5)
-            dpg.add_button(
-                label="Path: Minify root",
-                callback=lambda: fs.open_thing(os.getcwd()),
-            )
-            dpg.add_button(
-                label="Path: Logs",
-                callback=lambda: fs.open_thing(base.logs_dir),
-            )
-            dpg.add_button(
-                label="Path: Config",
-                callback=lambda: fs.open_thing(base.config_dir),
-            )
-            dpg.add_button(
-                label="Path: Mods",
-                callback=lambda: fs.open_thing(base.mods_dir),
-            )
-            dpg.add_spacer(width=0, height=5)
-            dpg.add_button(
-                label="Path: Dota2",
-                callback=lambda: fs.open_thing(
-                    os.path.join(config.get("steam_library"), "steamapps", "common", "dota 2 beta")
-                ),
-            )
-            dpg.add_button(
-                label="File: Dota2 pak01 VPK",
-                callback=lambda: fs.open_thing(constants.dota_game_pak_path),
-            )
-            dpg.add_button(
-                label="File: Dota2 pak01(core) VPK",
-                callback=lambda: fs.open_thing(constants.dota_core_pak_path),
-            )
-            dpg.add_spacer(width=0, height=5)
-            dpg.add_button(
-                label="Executable: Dota2 Tools",
-                callback=lambda: fs.open_thing(
-                    constants.dota2_tools_executable,
-                    f"-addon a -language {config.get('output_locale')} -novid -console",
-                ),
-            )
-            dpg.add_text("^ Requires steam to be open")
-            dpg.add_button(
-                label="Executable: Dota2",
-                callback=lambda: fs.open_thing(
-                    constants.dota2_executable, f"-language {config.get('output_locale')} -novid -console"
-                ),
-            )
-            dpg.add_button(label="Create debug zip", callback=log.create_debug_zip)
-
-        with dpg.window(
-            label="Mod Tools",
-            tag="mod_tools",
-            pos=(base.main_window_width + width_increase // 2, 0),
-            width=width_increase // 2,
-            height=tools_height,
-            no_resize=True,
-            no_move=True,
-            no_close=True,
-            no_collapse=True,
-        ):
-            dpg.add_button(
-                label="Select path to compile",
-                callback=helper.select_compile_dir,
-            )
-            dpg.add_button(
-                label="Compile items from path",
-                callback=lambda: helper.compile_assets(
-                    input_path=os.path.join(base.config_dir, "custom"),
-                    output_path=os.path.join(base.config_dir, "compiled"),
-                ),
-            )
-            # ui.add_spacer(width=0, height=5)
-            # ui.add_button(label="Patch with seperate paks", callback=patch.patch_seperate) # broken
-            dpg.add_spacer(width=0, height=5)
-            dpg.add_button(label="Untick all mods", callback=lambda: tick_batch(False))
-            dpg.add_button(label="Tick all mods", callback=lambda: tick_batch(True))
-
-        with dpg.window(
-            label="Maintenance Tools",
-            tag="maintenance_tools",
-            pos=(base.main_window_width + width_increase // 2, tools_height),
-            width=width_increase // 2,
-            height=base.main_window_height - tools_height,
-            no_resize=True,
-            no_move=True,
-            no_close=True,
-            no_collapse=True,
-        ):
-            dpg.add_button(
-                label="Wipe language paths",
-                callback=lambda: threading.Thread(target=patch.unins.wipe, daemon=True).start(),
-            )
-            dpg.add_spacer(width=0, height=5)
-            dpg.add_button(label="Extract workshop tools", callback=extract_workshop_tools)
-            dpg.add_spacer(width=0, height=5)
-            dpg.add_button(label="Launch Steam", callback=lambda: fs.open_thing(steam.steam_executable_path, "-silent"))
-            dpg.add_button(
-                label="Kill Steam", callback=lambda: fs.open_thing(steam.steam_executable_path, "-exitsteam")
-            )
-            dpg.add_button(
-                label="Validate Dota2", callback=lambda: webbrowser.open(f"steam://validate/{base.STEAM_DOTA_ID}")
-            )
-
-        if not base.FROZEN and debug_env:
-            with dpg.window(
-                label="Debug tools",
-                tag="debug_tools",
-                pos=(base.main_window_width, base.main_window_height),
-                width=width_increase,
-                height=150,
-                no_resize=True,
-                no_move=True,
-                no_close=True,
-                no_collapse=True,
-            ):
-                dpg.add_button(label="debug", callback=dpg.show_debug)
-                dpg.add_button(label="item_registry", callback=dpg.show_item_registry)
-                dpg.add_button(label="metrics", callback=dpg.show_metrics)
-                dpg.add_button(label="style_editor", callback=dpg.show_style_editor)
-                dpg.add_button(label="font_manager", callback=dpg.show_font_manager)
-
-    elif dev_mode_state == 1:  # Currently open -> Close
-        dev_mode_state = 0
-        dpg.configure_viewport(
-            item=base.TITLE,
-            width=current_w,
-            height=current_h,
-            min_width=base.main_window_width,
-            min_height=base.main_window_height,
-        )
-        dpg.configure_item("opener", show=False)
-        dpg.configure_item("mod_tools", show=False)
-        dpg.configure_item("maintenance_tools", show=False)
-        if not base.FROZEN and debug_env:
-            dpg.configure_item("debug_tools", show=False)
-
-    else:  # Currently closed (0) -> Open
-        dev_mode_state = 1
-        dpg.configure_viewport(
-            item=base.TITLE,
-            width=expanded_w,
-            height=expanded_h,
-            min_width=target_width,
-            min_height=target_height,
-        )
-        dpg.configure_item("opener", show=True)
-        dpg.configure_item("mod_tools", show=True)
-        dpg.configure_item("maintenance_tools", show=True)
-        if not base.FROZEN and debug_env:
-            dpg.configure_item("debug_tools", show=True)
+        window.show_overlay("settings_menu")
+        if dpg.does_item_exist("settings_tabs") and dpg.does_item_exist("settings_developer_tab"):
+            dpg.set_value("settings_tabs", "settings_developer_tab")
