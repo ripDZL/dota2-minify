@@ -8,6 +8,7 @@ CHECKBOXES = (ROOT / "Minify" / "ui" / "checkboxes.py").read_text(encoding="utf-
 D2PFX = (ROOT / "Minify" / "browsers" / "d2pfx" / "ui.py").read_text(encoding="utf-8")
 WINDOW = (ROOT / "Minify" / "ui" / "window.py").read_text(encoding="utf-8")
 TERMINAL = (ROOT / "Minify" / "ui" / "terminal.py").read_text(encoding="utf-8")
+DEVTOOLS = (ROOT / "Minify" / "ui" / "dev_tools.py").read_text(encoding="utf-8")
 
 
 def test_stale_workspace_badge_removed():
@@ -98,6 +99,7 @@ def test_activity_header_uses_plain_language_and_copy_tools():
     assert 'label="SELECT TEXT"' in WINDOW
     assert "callback=terminal.copy_all" in WINDOW
     assert "callback=terminal.show_copy_view" in WINDOW
+    assert "right_edge = max(270, content_width - 28)" in WINDOW
 
 
 def test_activity_log_has_selectable_debug_view():
@@ -111,16 +113,28 @@ def test_activity_log_has_selectable_debug_view():
     assert 'label="COPY ALL"' in TERMINAL
 
 
-def test_responsive_home_uses_single_workspace_before_clipping():
+def test_responsive_home_uses_independent_rows_before_clipping():
     assert "main_width = max(360, workspace_width - 20)" in WINDOW
-    assert "sequence_height = max(84, min(104, int(inner_height * 0.28)))" in WINDOW
-    assert "hero_height = max(184, min(204, sequence_height + 94))" in WINDOW
-    assert "status_height = 52 if inner_height < 380 else 56" in WINDOW
-    assert "action_height = 68 if inner_height < 380 else 72" in WINDOW
+    assert "hero_height = 124 if compact_width else 116" in WINDOW
+    assert "sequence_height = max(94, min(116, int(inner_height * 0.24)))" in WINDOW
+    assert "status_height = 68" in WINDOW
+    assert "action_height = 74" in WINDOW
+    assert 'dpg.move_item(' in WINDOW
+    assert 'parent="app_workspace_main"' in WINDOW
+    assert 'before="dashboard_status_panel"' in WINDOW
     assert 'dpg.configure_item("dashboard_metric_strip", height=sequence_height)' in WINDOW
+    assert '"app_workspace_main",\n            width=main_width,\n            height=inner_height,\n            no_scrollbar=False' in WINDOW
     assert "wide_workspace" not in WINDOW
     assert 'dpg.configure_item("app_workspace_side"' not in WINDOW
     assert 'dpg.configure_item("dashboard_hero_card", height=hero_height)' in WINDOW
+
+
+def test_deployment_buttons_use_responsive_row_budget():
+    assert "action_cluster_width = max(360, min(620, main_width - 28))" in WINDOW
+    assert "patch_width = max(200, int(action_cluster_width * 0.58))" in WINDOW
+    assert "refresh_width = max(150, action_cluster_width - patch_width - 8)" in WINDOW
+    assert 'dpg.configure_item("button_patch", width=patch_width)' in WINDOW
+    assert 'dpg.configure_item("button_refresh_main", width=refresh_width)' in WINDOW
 
 
 def test_release_console_keeps_actionable_navigation():
@@ -146,11 +160,25 @@ def test_source_screenshot_spatial_color_roles_are_materialized():
     assert "dpg.add_theme_color(dpg.mvThemeCol_Text, (0, 0, 0))" in D2PFX
 
 
-def test_redundant_left_status_card_is_hidden_at_runtime():
+def test_redundant_left_status_and_footer_dev_entry_are_hidden_at_runtime():
     assert 'dpg.configure_item("nav_workspace_label", show=False)' in WINDOW
     assert 'dpg.configure_item("nav_status_card", show=False)' in WINDOW
+    assert 'dpg.configure_item("button_dev", show=False)' in WINDOW
     assert "nav_status_height" not in WINDOW
     assert 'dpg.configure_item("nav_status_card", height=' not in WINDOW
+
+
+def test_developer_tools_live_in_control_panel_tab_not_floating_windows():
+    assert "def install_control_panel_tab():" in DEVTOOLS
+    assert 'tag="settings_tabs"' in DEVTOOLS
+    assert 'tag="settings_general_tab"' in DEVTOOLS
+    assert 'tag="settings_developer_tab"' in DEVTOOLS
+    assert 'label="DEVELOPER"' in DEVTOOLS
+    assert 'dpg.move_item("settings_content_group", parent="settings_general_tab")' in DEVTOOLS
+    assert 'render_panel("settings_developer_tab")' in DEVTOOLS
+    assert 'window.show_overlay("settings_menu")' in DEVTOOLS
+    assert "with dpg.window(" not in DEVTOOLS
+    assert "dpg.configure_viewport(" not in DEVTOOLS
 
 
 def test_header_is_reduced_to_centered_minify_release_lines():
@@ -167,14 +195,13 @@ def test_viewport_has_safe_minimum_layout_budget():
     assert "MIN_VIEWPORT_HEIGHT = 680" in MAIN
     assert "min_width=MIN_VIEWPORT_WIDTH" in MAIN
     assert "min_height=MIN_VIEWPORT_HEIGHT" in MAIN
-    assert "shell_body_height = max(360, min(500, shared.window_height - 320))" in WINDOW
+    assert "shell_body_height = max(360, min(520, shared.window_height - 300))" in WINDOW
 
 
 def test_minimum_width_fit_contract_covers_primary_library_and_d2pfx():
     assert "compact_width = shared.window_width <= 1000" in WINDOW
     assert "nav_min_width = 160 if compact_width else 176" in WINDOW
-    assert 'dpg.configure_item("button_patch", width=176 if compact_width else 210)' in WINDOW
-    assert 'dpg.configure_item("button_refresh_main", width=128 if compact_width else 146)' in WINDOW
+    assert "action_cluster_width = max(360, min(620, main_width - 28))" in WINDOW
     assert 'dpg.configure_item("activity_header", width=content_width, height=36)' in WINDOW
     assert "content_width = max(320, shared.window_width - CONTENT_INSET)" in WINDOW
     assert "settings_width = content_width" in WINDOW
