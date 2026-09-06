@@ -1,26 +1,14 @@
 # TODO
 - [x] Pin exact rc7 baseline `d4b4520c945a9e1f8f5facc52a76ac5903babe90`.
-- [x] Enforce exactly three branches: `v21.4-hardening`, `beta`, `main`.
-- [x] Preserve hardened backend + v21.3.1 feature set without wholesale old-core replacement.
-- [x] Stabilize Black-Plum Reactor UI and `960x680` minimum/responsive sizing.
-- [x] Harden the minimum-window layout contract in code: client-area width budgeting; scrollable constrained nav/source rails; bounded terminal/footer; explicit D2PFX child heights; bounded patch/conflict/restore/import regions.
-- [x] Add minimum-window regression assertions to `tests/test_modern_ui.py`.
-- [x] Add automatic custom VPK-folder categories: top-level custom containers with VPK-backed immediate child folders expose those children as separate nested Local folder mods/categories without requiring eight children or `.minify-collection`.
-- [x] Add custom-category regression coverage and keep existing nested-mod compatibility tests green.
-- [x] Remove incomplete `.materialize/` bootstrap + workflow.
-- [x] Harden general downloads, D2PFX catalogue/cursors/install, profiles, VPK metadata, and backup restore paths.
-- [x] Close backup manifest check/open race and managed-output parent symlink escape.
-- [x] Restore v21.3.1 Dark Terrain/Safe Foliage/Main Menu compatibility regressions directly on hardening.
-- [x] Restore v21.3.1 recursive/nested Collections/dependency regressions directly on hardening.
-- [x] Restore semantic v21.3.1 feature regressions without stale exact-layout constants.
-- [x] Exact validated product head `d50d95b9407dac4e8e687eef065125aa099284cc`; CI `33991949698`; pytest **249/249 PASS**; Windows build PASS.
-- [x] Current Windows artifact `9976907972`; digest `sha256:be73752f3c45b716815d24a557715669f49412f5a72b8d2fa01c0418e051ed4b`.
-- [ ] Human visual smoke-test exactly `960x680` on Home, Mod Library, Settings, D2PFX, patch preview/conflict report, restore points, terminal, and footer; verify every label/control with real Windows rendering.
+- [x] Keep exactly three branches: `v21.4-hardening`, `beta`, `main`.
+- [x] Preserve hardened backend + v21.3.1 feature set; custom VPK-folder categories included.
+- [x] Harden Black-Plum Reactor minimum/responsive sizing at `960x680`.
+- [x] Replace themed file browsing with native Windows picker for D2PFX ZIP import, profile import, and profile export directory.
+- [x] Product head `2f1a60d01defefc4239a836b9d7e5539b2f3720e`; CI `34043716068`; **253/253 PASS**; Windows build PASS; artifact `9992464458`.
+- [ ] Human Windows smoke-test native pickers and every major surface at exactly `960x680`.
 - [ ] Smoke-test custom category discovery against real user-created folders/VPKs on Windows.
-- [ ] Continue hostile-input/path-race review; residual local filesystem race windows require explicit assessment.
-- [ ] Complete semantic core-overlay reconciliation; never wholesale copy old core.
-- [ ] Complete exact-rc7 diff review.
-- [ ] Reconcile prior-v21.4 `core/mod_library.py` only if authentic missing bytes become available.
-- [ ] Clean pycache/temp artifacts before publication.
-- [ ] User/Dota smoke tests: startup/layout, library, settings, Collections/profiles, D2PFX, lobby/match, rollback, Dark Terrain, Remove Foilage.
+- [ ] Continue hostile-input/path-race review; residual local filesystem races require explicit assessment.
+- [ ] Complete semantic core-overlay reconciliation and exact-rc7 diff review; never wholesale copy stale core.
+- [ ] Clean temp/pycache artifacts before publication.
+- [ ] Dota smoke: startup/layout, library/settings, Collections/profiles, D2PFX, lobby/match, rollback, Dark Terrain, Remove Foilage.
 - [ ] Promote hardening -> beta only after remaining gates/user approval; beta -> main only after beta validation.
