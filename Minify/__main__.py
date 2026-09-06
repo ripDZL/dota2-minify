@@ -66,8 +66,8 @@ def create_ui():
         no_saved_settings=True,
         pos=(0, 0),
     ):
-        # v21.4 responsive command console. Layout uses real columns and adaptive
-        # visibility so Windows font metrics cannot break alignment.
+        # v21.4 responsive command console. Keep the home surface focused on
+        # actions, live state, and the patch sequence rather than static help.
         dpg.add_child_window(
             tag="app_shell_header",
             height=76,
@@ -191,7 +191,7 @@ def create_ui():
             no_scrollbar=True,
             no_scroll_with_mouse=True,
         )
-        with dpg.group(parent="app_workspace", tag="workspace_columns", horizontal=True, horizontal_spacing=10):
+        with dpg.group(parent="app_workspace", tag="workspace_columns"):
             dpg.add_child_window(
                 parent="workspace_columns",
                 tag="app_workspace_main",
@@ -204,7 +204,7 @@ def create_ui():
             dpg.add_child_window(
                 parent="app_workspace_main",
                 tag="dashboard_hero_card",
-                height=168,
+                height=180,
                 width=-1,
                 border=True,
                 no_scrollbar=True,
@@ -219,30 +219,38 @@ def create_ui():
                 tag="dashboard_focus_hint",
                 wrap=460,
             )
-            dpg.add_spacer(parent="dashboard_hero_card", height=5)
+            dpg.add_spacer(parent="dashboard_hero_card", height=3)
             dpg.add_child_window(
                 parent="dashboard_hero_card",
                 tag="dashboard_metric_strip",
-                height=42,
+                height=78,
                 width=-1,
                 border=True,
                 no_scrollbar=True,
                 no_scroll_with_mouse=True,
             )
             with dpg.table(parent="dashboard_metric_strip", tag="dashboard_metric_table", header_row=False, width=-1):
-                dpg.add_table_column(tag="metric_primary_column")
-                dpg.add_table_column(tag="metric_restore_column")
-                dpg.add_table_column(tag="metric_collision_column")
+                dpg.add_table_column(width_fixed=True, init_width_or_weight=28)
+                dpg.add_table_column(width_fixed=True, init_width_or_weight=92)
+                dpg.add_table_column()
                 with dpg.table_row():
-                    dpg.add_text("0 selected • 0 installed", tag="dashboard_metric")
-                    dpg.add_text("RESTORE // ARMED", tag="metric_restore_state")
-                    dpg.add_text("COLLISION // INDEXED", tag="metric_collision_state")
+                    dpg.add_text("01", tag="dashboard_step_1_index")
+                    dpg.add_text("ANALYZE", tag="dashboard_step_1")
+                    dpg.add_text("Shared files", tag="dashboard_step_1_detail")
+                with dpg.table_row():
+                    dpg.add_text("02", tag="dashboard_step_2_index")
+                    dpg.add_text("SNAPSHOT", tag="dashboard_step_2")
+                    dpg.add_text("Restore point", tag="dashboard_step_2_detail")
+                with dpg.table_row():
+                    dpg.add_text("03", tag="dashboard_step_3_index")
+                    dpg.add_text("COMPOSE", tag="dashboard_step_3")
+                    dpg.add_text("Selected mods", tag="dashboard_step_3_detail")
 
             dpg.add_spacer(parent="app_workspace_main", height=6)
             dpg.add_child_window(
                 parent="app_workspace_main",
                 tag="dashboard_status_panel",
-                height=60,
+                height=54,
                 width=-1,
                 border=True,
                 no_scrollbar=True,
@@ -251,12 +259,13 @@ def create_ui():
             with dpg.group(parent="dashboard_status_panel", horizontal=True):
                 dpg.add_text("● READY", tag="dashboard_status_label")
                 dpg.add_text("Getting your mod library ready...", tag="dashboard_status_message", wrap=420)
+            dpg.add_text("0 selected • 0 installed", parent="dashboard_status_panel", tag="dashboard_metric")
 
             dpg.add_spacer(parent="app_workspace_main", height=6)
             dpg.add_child_window(
                 parent="app_workspace_main",
                 tag="dashboard_action_bar",
-                height=76,
+                height=62,
                 width=-1,
                 border=True,
                 no_scrollbar=True,
@@ -280,97 +289,16 @@ def create_ui():
                     height=34,
                 )
 
-            dpg.add_child_window(
-                parent="workspace_columns",
-                tag="app_workspace_side",
-                width=320,
-                height=-1,
-                border=True,
-                no_scrollbar=True,
-                no_scroll_with_mouse=True,
-            )
-            dpg.add_child_window(
-                parent="app_workspace_side",
-                tag="dashboard_flow_card",
-                height=136,
-                width=-1,
-                border=True,
-                no_scrollbar=True,
-                no_scroll_with_mouse=True,
-            )
-            dpg.add_text("DEPLOYMENT SEQUENCE", parent="dashboard_flow_card", tag="dashboard_side_title")
-            with dpg.table(parent="dashboard_flow_card", tag="dashboard_flow_table", header_row=False, width=-1):
-                dpg.add_table_column(width_fixed=True, init_width_or_weight=28)
-                dpg.add_table_column(width_fixed=True, init_width_or_weight=72)
-                dpg.add_table_column()
-                with dpg.table_row():
-                    dpg.add_text("01", tag="dashboard_step_1_index")
-                    dpg.add_text("ANALYZE", tag="dashboard_step_1")
-                    dpg.add_text("Shared files", tag="dashboard_step_1_detail")
-                with dpg.table_row():
-                    dpg.add_text("02", tag="dashboard_step_2_index")
-                    dpg.add_text("SNAPSHOT", tag="dashboard_step_2")
-                    dpg.add_text("Restore point", tag="dashboard_step_2_detail")
-                with dpg.table_row():
-                    dpg.add_text("03", tag="dashboard_step_3_index")
-                    dpg.add_text("COMPOSE", tag="dashboard_step_3")
-                    dpg.add_text("Selected graph", tag="dashboard_step_3_detail")
-
-            dpg.add_spacer(parent="app_workspace_side", height=6)
-            dpg.add_child_window(
-                parent="app_workspace_side",
-                tag="dashboard_signal_card",
-                height=110,
-                width=-1,
-                border=True,
-                no_scrollbar=True,
-                no_scroll_with_mouse=True,
-            )
-            dpg.add_text("GUARD MATRIX", parent="dashboard_signal_card", tag="dashboard_signal_title")
-            with dpg.table(parent="dashboard_signal_card", tag="dashboard_guard_table", header_row=False, width=-1):
-                dpg.add_table_column()
-                dpg.add_table_column()
-                with dpg.table_row():
-                    dpg.add_text("ROLLBACK", tag="signal_rollback_label")
-                    dpg.add_text("AUTOMATIC", tag="signal_rollback")
-                with dpg.table_row():
-                    dpg.add_text("VALIDATION", tag="signal_validation_label")
-                    dpg.add_text("ENFORCED", tag="signal_validation")
-                with dpg.table_row():
-                    dpg.add_text("PATH SAFETY", tag="signal_paths_label")
-                    dpg.add_text("CONFINED", tag="signal_paths")
-
-            dpg.add_spacer(parent="app_workspace_side", height=6)
-            dpg.add_child_window(
-                parent="app_workspace_side",
-                tag="dashboard_safety_card",
-                height=-1,
-                width=-1,
-                border=True,
-                no_scrollbar=True,
-                no_scroll_with_mouse=True,
-            )
-            dpg.add_text("FAIL-SAFE", parent="dashboard_safety_card", tag="dashboard_safety_title")
-            dpg.add_text(
-                "If deployment validation fails, Minify rolls back the managed output to the previous restore point.",
-                parent="dashboard_safety_card",
-                tag="dashboard_safety_text",
-                wrap=240,
-            )
-
         dpg.add_spacer(height=8)
         dpg.add_child_window(
             tag="activity_header",
-            height=44,
+            height=36,
             autosize_x=True,
             border=True,
             no_scrollbar=True,
             no_scroll_with_mouse=True,
         )
-        with dpg.group(parent="activity_header", horizontal=True):
-            dpg.add_text("LIVE ACTIVITY", tag="activity_label")
-            dpg.add_text("SETUP  /  DOWNLOAD  /  PATCH  /  VALIDATION", tag="activity_caption")
-            dpg.add_text("● STREAM ONLINE", tag="activity_stream_state")
+        dpg.add_text("ACTIVITY LOG", parent="activity_header", tag="activity_label")
 
         dpg.add_spacer(height=4)
         with dpg.group(tag="terminal_and_footer_group"):
