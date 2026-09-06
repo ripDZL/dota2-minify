@@ -1,25 +1,12 @@
 # Progress
 - [x] Exact rc7 baseline pinned; exactly `v21.4-hardening`, `beta`, `main` retained.
-- [x] Recursive/nested mods, Collections, profiles, D2PFX, backups/conflict review, Safe Foliage, Main Menu fix, Dark Terrain behavior preserved.
-- [x] v21.3.1 patch pipeline integrated without overwriting hardened core backends.
-- [x] Black-Plum Reactor UI stabilized; incomplete `.materialize/` bootstrap/workflow removed.
-- [x] `960x680` minimum-window code hardening: client-area width budget; compact nav/metrics/actions; Home and Mod Library rails scroll when height-constrained; terminal/footer bounded to client width.
-- [x] D2PFX minimum fit: compact sidebar; explicit sidebar/card-view height budgets; scrollable constrained surfaces; wrapped header/category text; responsive 2-4 card grid.
-- [x] Patch preview/conflict, restore, Mod actions, and D2PFX import inner text/scroll regions bounded to the live client area.
-- [x] Settings keeps a vertically scrollable content region and client-width action bar; Mod Library metadata/status sizing remains responsive.
-- [x] Custom VPK-folder categories: small user-created top-level folders auto-promote to categories when immediate child folders contain VPKs; VPK-backed child folders become separate nested Local folder mods; recognized folder-mod siblings are retained.
-- [x] Custom-category regression coverage added in `tests/test_custom_vpk_categories.py`; nested-mod test harness updated for new helpers.
-- [x] Exact validated product head `d50d95b9407dac4e8e687eef065125aa099284cc`.
-- [x] Hardening CI `33991949698`: compileall PASS; Ruff format/lint PASS; pytest **249/249 PASS**; Windows build/package/upload PASS.
-- [x] Current artifact `9976907972`; 53,088,476 bytes; digest `sha256:be73752f3c45b716815d24a557715669f49412f5a72b8d2fa01c0418e051ed4b`.
-- [x] Network/catalogue, profile, VPK metadata, D2PFX cursor/install, and backup hostile-input passes completed.
-- [x] Backup race pass: regular no-follow manifest open with identity check; managed live output confinement; parent symlink escapes fail before mutation.
-- [x] Restored v21.3.1 compatibility/nested/semantic feature regressions directly on hardening.
-- [x] `main` and `beta` remain frozen.
-- [ ] Human visual smoke-test all major surfaces at exactly `960x680`; source assertions/CI are not a substitute for pixel-level verification.
-- [ ] Smoke-test custom category discovery with real user mod folders/VPKs on Windows.
-- [ ] Continue path-race/hostile-input review.
-- [ ] Complete semantic core reconciliation + exact-rc7 diff review.
-- [ ] Resolve prior-v21.4 `core/mod_library.py` exact-source gap only if authentic bytes become available.
+- [x] Black-Plum Reactor UI + `960x680` client-size hardening retained.
+- [x] Recursive/nested mods, custom VPK-folder categories, Collections, profiles, D2PFX, backups/conflict review retained.
+- [x] Windows local browsing uses native system picker for D2PFX ZIP import, profile import, and profile export directory.
+- [x] Product head `2f1a60d01defefc4239a836b9d7e5539b2f3720e` validated by CI `34043716068`: compileall/Ruff PASS; pytest **253/253 PASS**; Windows portable build PASS.
+- [x] Artifact `9992464458`; digest `sha256:79ec991410315246ead60d2b54afb1651a11c1e4b0560ed0c009e6d4e27412d4`.
+- [x] `beta` and `main` remain frozen.
+- [ ] Human Windows smoke: native file/folder picker behavior plus all major `960x680` surfaces.
+- [ ] Continue hostile-input/path-race review and exact-rc7/semantic core reconciliation.
 - [ ] Dota startup/lobby/match/rollback/profiles/D2PFX/Dark-Terrain/Remove-Foilage smoke tests.
-- [ ] Promote hardening -> beta only after remaining gates/user acceptance; beta -> main only after beta validation.
+- [ ] Promote hardening -> beta only after remaining gates/user approval; beta -> main only after beta validation.
