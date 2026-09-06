@@ -18,6 +18,73 @@ from patch import manifest_utils
 compiler_filepicker_path = ""
 output_path = config.get("output_path", constants.minify_default_dota_pak_output_path)
 
+_NATIVE_FILE_DIALOGS = {
+    "d2pfx_import_dialog": ("open", (("ZIP archives", "*.zip"), ("All files", "*.*"))),
+    "profile_import_dialog": ("open", (("JSON files", "*.json"), ("All files", "*.*"))),
+    "profile_export_dialog": ("directory", ()),
+}
+_ORIGINAL_DPG_CONFIGURE_ITEM = dpg.configure_item
+
+
+def _run_native_dialog(kind, filetypes=()):
+    """Open a native Windows file/folder picker and return the selected path."""
+    root = tk.Tk()
+    root.withdraw()
+    try:
+        root.attributes("-topmost", True)
+        if kind == "directory":
+            return filedialog.askdirectory(parent=root)
+        return filedialog.askopenfilename(parent=root, filetypes=filetypes)
+    finally:
+        root.destroy()
+
+
+def _show_native_file_dialog(item):
+    """Handle a known DPG file-dialog tag with the native system picker."""
+    dialog = _NATIVE_FILE_DIALOGS.get(item)
+    if not dialog:
+        return False
+
+    kind, filetypes = dialog
+    try:
+        path = _run_native_dialog(kind, filetypes)
+    except Exception as exc:
+        log.write_warning(f"Native file picker unavailable; falling back to Minify dialog: {exc}")
+        return False
+
+    # Cancellation is still a handled native-dialog request. Do not expose the
+    # themed DPG browser after the user intentionally closed the system picker.
+    if not path:
+        return True
+
+    callback = dpg.get_item_callback(item)
+    if callable(callback):
+        app_data = {
+            "file_path_name": path,
+            "current_path": path,
+            "selections": {os.path.basename(path): path},
+        }
+        callback(item, app_data, None)
+    return True
+
+
+def _configure_item_with_native_file_dialog(item, **kwargs):
+    if kwargs.get("show") is True and item in _NATIVE_FILE_DIALOGS:
+        if _show_native_file_dialog(item):
+            return None
+    return _ORIGINAL_DPG_CONFIGURE_ITEM(item, **kwargs)
+
+
+def _install_native_file_dialog_bridge():
+    """Use system file dialogs for user browsing on Windows."""
+    if not base.is_win or getattr(dpg.configure_item, "_minify_native_file_dialog_bridge", False):
+        return
+    _configure_item_with_native_file_dialog._minify_native_file_dialog_bridge = True
+    dpg.configure_item = _configure_item_with_native_file_dialog
+
+
+_install_native_file_dialog_bridge()
+
 
 def get_blank_file_extensions():
     extensions = []
