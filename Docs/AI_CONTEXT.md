@@ -2,14 +2,14 @@
 - Upstream baseline: `Egezenn/dota2-minify` tag `Minify-v1.14rc7`; exact commit `d4b4520c945a9e1f8f5facc52a76ac5903babe90`.
 - Fork: `ripDZL/dota2-minify`; active `v21.4-hardening`; promotion `v21.4-hardening` -> `beta` -> `main`.
 - Exactly three branches; `beta` frozen `af83bbb051edced195d5f55ba49ff060a8c76f3c`; `main` frozen `a26bc88a0d412e357965f29488b83a7f9093e11f`.
-- Exact validated product head: `2f1a60d01defefc4239a836b9d7e5539b2f3720e` (`feat(ui): use native Windows file dialogs`).
-- Native Windows system picker now handles D2PFX ZIP import, profile JSON import, and profile export-directory selection; themed Dear PyGui file dialogs remain fallback-only if native picker startup fails.
-- Native-picker regression coverage: `tests/test_native_file_dialogs.py`; cancellation stays cancelled; existing DPG callback data contract is preserved; unrelated `configure_item` calls pass through unchanged.
-- Hardening CI `34043716068`: compileall PASS; Ruff format/lint PASS; pytest **253/253 PASS**; Windows portable build/package/upload PASS.
-- Current artifact `9992464458`; 53,089,784-byte GitHub artifact; digest `sha256:79ec991410315246ead60d2b54afb1651a11c1e4b0560ed0c009e6d4e27412d4`.
-- Custom mod categories: `mods/<Category>/<Child>/.../*.vpk` promotes the top-level folder to a category; each VPK-backed immediate child is a nested Local folder mod; recognized folder-mod siblings are kept; unrelated/hidden/reserved/symlink entries are excluded.
-- UI baseline: Black-Plum Reactor; outer minimum `960x680`; client-size budgeting/scroll hardening retained.
-- Human Windows smoke remains required for native picker runtime behavior and every major `960x680` surface; CI does not prove pixel-level rendering.
+- Exact validated product head: `ec068f85a988a8001450e83c439e5a224f55b1de`; later milestone commits are Docs-only at this handoff.
+- Home cleanup: removed static right-side deployment/guard/fail-safe explainer; single full-width action workspace; three-step patch sequence stacked vertically as Analyze -> Snapshot -> Compose; live selected/installed count remains in status panel; activity header is `ACTIVITY LOG`; `STREAM ONLINE` and stage-caption noise removed.
+- Home minimum-height budget: shell >=360; hero 168/178; sequence 66; status 60; action bar 76; activity header 36; existing `960x680` client-size/scroll hardening retained.
+- Native Windows system picker handles D2PFX ZIP import, profile JSON import, and profile export-directory selection; themed Dear PyGui dialogs are fallback-only on native startup failure.
+- Custom mod categories: `mods/<Category>/<Child>/.../*.vpk` promotes the top-level folder to a category; each VPK-backed immediate child is a nested Local folder mod; recognized folder-mod siblings kept; unrelated/hidden/reserved/symlink entries excluded.
+- Hardening CI `34045400676`: compileall PASS; Ruff format/lint PASS; pytest **255/255 PASS**; Windows portable build/package/upload PASS.
+- Current artifact `9992953059`; 53,087,565-byte GitHub artifact; digest `sha256:1ae05cb88d7ca29e14e3e0eb8a58ef8440994978e3273b45f77ef94b82f86ffc`.
+- Human Windows smoke remains required for cleaned Home and every major `960x680` surface; CI does not prove pixel-level rendering.
 - Preserve recursive/nested mods, Collections, profiles, D2PFX, backups/conflict review, Dark Terrain, Safe Foliage, Main Menu Background fix, manual rc7 `prelaunch`, and no-auto-prelaunch policy.
 - Remove Foilage: blacklist-only; never ship `manifest.json` or `maps/dota.vpk`; retain both oak-leaf blacklist entries.
 - Security boundary: mod Python scripts are trusted code; archive/VPK/profile/backup/download/D2PFX data are untrusted.
