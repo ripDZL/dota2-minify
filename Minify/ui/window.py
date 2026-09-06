@@ -165,16 +165,16 @@ def on_resize():
     compact_width = shared.window_width <= 1000
     nav_min_width = 160 if compact_width else 176
     nav_width = max(nav_min_width, min(220, int(shared.window_width * 0.13)))
-    # Reserve enough vertical space for the activity log, terminal, and footer.
-    # The navigation rail itself becomes scrollable when that budget is tight.
-    shell_body_height = max(350, min(500, shared.window_height - 330))
+    # Keep the action surface readable at 960x680 while retaining a useful log
+    # viewport below it. Natural item spacing replaces extra spacer rows.
+    shell_body_height = max(360, min(500, shared.window_height - 320))
     nav_status_height = 66 if shell_body_height >= 370 else 62
     workspace_width = max(430, content_width - nav_width - 18)
     main_width = max(360, workspace_width - 20)
     inner_height = max(300, shell_body_height - 34)
-    hero_height = 190 if inner_height >= 350 else 180
-    status_height = 58 if inner_height >= 350 else 54
-    action_height = 68 if inner_height >= 350 else 62
+    hero_height = 178 if inner_height >= 350 else 168
+    status_height = 60
+    action_height = 76
 
     if dpg.does_item_exist("app_shell_header"):
         dpg.configure_item("app_shell_header", width=content_width, height=76)
@@ -195,7 +195,7 @@ def on_resize():
     if dpg.does_item_exist("dashboard_hero_card"):
         dpg.configure_item("dashboard_hero_card", height=hero_height)
     if dpg.does_item_exist("dashboard_metric_strip"):
-        dpg.configure_item("dashboard_metric_strip", height=78)
+        dpg.configure_item("dashboard_metric_strip", height=66)
     if dpg.does_item_exist("dashboard_status_panel"):
         dpg.configure_item("dashboard_status_panel", height=status_height)
     if dpg.does_item_exist("dashboard_action_bar"):
