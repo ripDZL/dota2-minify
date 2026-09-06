@@ -1,18 +1,12 @@
 # Session Summary
 - Fork: `ripDZL/dota2-minify`; active `v21.4-hardening`; exact rc7 baseline `d4b4520c945a9e1f8f5facc52a76ac5903babe90`.
 - Branch model: exactly `v21.4-hardening` -> `beta` -> `main`; beta/main frozen.
-- Canonical feature reference: supplied v21.3.1 Safe Foliage Fix archive; bundled 116/116 tests pass.
-- UI baseline: **Black-Plum Reactor**; outer minimum `960x680`; compact layout at <=1000 client width; optional telemetry collapses before clipping.
-- Minimum-window contract in `Minify/ui/window.py`: client-dimension budgeting with a 16px content inset; Home/Mod Library constrained rails scroll; terminal/footer widths bounded; D2PFX explicit child-height/scroll budgets; patch/conflict/restore/import inner regions bounded/wrapped.
-- Custom VPK categories added in `302c776e63c9ffa5771d065d619f511b89c08cd6`: a small user-created top-level folder auto-becomes a category when immediate child folders contain VPKs; each VPK-backed child is a separate nested Local folder mod; recognized directory-mod siblings are retained; unrelated siblings, hidden/reserved dirs, and symlink traversal are excluded.
-- Test-harness follow-up `d50d95b9407dac4e8e687eef065125aa099284cc` keeps existing nested-mod regression extraction aware of the new discovery helpers.
-- Exact validated product head: `d50d95b9407dac4e8e687eef065125aa099284cc`.
-- Hardening CI `33991949698`: compileall PASS; Ruff format/lint PASS; pytest **249/249 PASS**; Windows portable build PASS.
-- Current artifact `9976907972`; 53,088,476 bytes; digest `sha256:be73752f3c45b716815d24a557715669f49412f5a72b8d2fa01c0418e051ed4b`.
-- Remaining UI gate: human Windows visual smoke-test at exactly `960x680` across Home, Mod Library, Settings, D2PFX, patch preview/conflict report, restore points, terminal, and footer. CI/source assertions verify contracts but not pixel rendering.
-- Remaining feature gate: real Windows smoke-test of user-created custom category folders/VPKs.
-- Security sweep includes network/catalogue, profiles, VPK metadata, D2PFX cursors/catalogue/install, and backup live-output/manifest path races.
-- Restored v21.3.1 compatibility, nested Collections/dependency, and semantic feature regressions directly on hardening.
-- `core/mod_library.py` prior-v21.4 exact-source gap remains unresolved; never fabricate missing bytes.
-- After visual/custom-category acceptance: remaining filesystem race/security review; semantic core/exact-rc7 diff review; Dota smoke tests.
-- Do not promote beta/main until remaining gates and user approval.
+- Current product head: `2f1a60d01defefc4239a836b9d7e5539b2f3720e`.
+- Windows browsing now uses native system file/folder dialogs for D2PFX ZIP import, profile JSON import, and profile export directory selection; DPG dialog is fallback-only if native startup fails.
+- Native-picker tests verify routing, callback compatibility, cancellation, and pass-through of unrelated DPG configuration.
+- CI `34043716068`: compileall PASS; Ruff PASS; pytest **253/253 PASS**; Windows portable build PASS.
+- Artifact `9992464458`; digest `sha256:79ec991410315246ead60d2b54afb1651a11c1e4b0560ed0c009e6d4e27412d4`.
+- Custom VPK category behavior from `302c776e63c9ffa5771d065d619f511b89c08cd6` remains intact.
+- UI baseline remains Black-Plum Reactor with `960x680` minimum-window hardening.
+- Remaining gates: real Windows smoke of native picker/custom categories/960x680 surfaces; residual path-race/security review; semantic core/exact-rc7 reconciliation; Dota smoke tests.
+- Do not promote beta/main until remaining gates and explicit user approval.
