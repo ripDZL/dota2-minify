@@ -1,12 +1,13 @@
 # Progress
 - [x] Exact rc7 baseline pinned; exactly `v21.4-hardening`, `beta`, `main` retained.
 - [x] Black-Plum Reactor UI + `960x680` client-size hardening retained.
+- [x] Home cleaned: static right explainer removed; patch sequence stacked Analyze/Snapshot/Compose; selected/installed count kept; terminal header simplified to `ACTIVITY LOG`.
 - [x] Recursive/nested mods, custom VPK-folder categories, Collections, profiles, D2PFX, backups/conflict review retained.
 - [x] Windows local browsing uses native system picker for D2PFX ZIP import, profile import, and profile export directory.
-- [x] Product head `2f1a60d01defefc4239a836b9d7e5539b2f3720e` validated by CI `34043716068`: compileall/Ruff PASS; pytest **253/253 PASS**; Windows portable build PASS.
-- [x] Artifact `9992464458`; digest `sha256:79ec991410315246ead60d2b54afb1651a11c1e4b0560ed0c009e6d4e27412d4`.
+- [x] Product head `ec068f85a988a8001450e83c439e5a224f55b1de` validated by CI `34045400676`: compileall/Ruff PASS; pytest **255/255 PASS**; Windows portable build PASS.
+- [x] Artifact `9992953059`; digest `sha256:1ae05cb88d7ca29e14e3e0eb8a58ef8440994978e3273b45f77ef94b82f86ffc`.
 - [x] `beta` and `main` remain frozen.
-- [ ] Human Windows smoke: native file/folder picker behavior plus all major `960x680` surfaces.
+- [ ] Human Windows smoke: cleaned Home plus native file/folder picker behavior and all major `960x680` surfaces.
 - [ ] Continue hostile-input/path-race review and exact-rc7/semantic core reconciliation.
 - [ ] Dota startup/lobby/match/rollback/profiles/D2PFX/Dark-Terrain/Remove-Foilage smoke tests.
 - [ ] Promote hardening -> beta only after remaining gates/user approval; beta -> main only after beta validation.
