@@ -46,12 +46,12 @@ def test_primary_action_uses_json_button_role():
 
 
 def test_release_console_uses_real_alignment_tables():
-    for tag in ("header_layout", "dashboard_metric_table", "dashboard_flow_table", "dashboard_guard_table"):
+    for tag in ("header_layout", "dashboard_metric_table"):
         assert f'tag="{tag}"' in MAIN
     for tag in ("header_left_gutter", "header_brand_column", "header_right_gutter"):
         assert f'tag="{tag}"' in MAIN
-    for tag in ("metric_restore_column", "metric_collision_column"):
-        assert f'tag="{tag}"' in MAIN
+    assert 'tag="dashboard_flow_table"' not in MAIN
+    assert 'tag="dashboard_guard_table"' not in MAIN
 
 
 def test_release_console_has_dense_command_hierarchy():
@@ -63,30 +63,46 @@ def test_release_console_has_dense_command_hierarchy():
         "dashboard_metric_strip",
         "dashboard_status_panel",
         "dashboard_action_bar",
-        "dashboard_flow_card",
-        "dashboard_signal_card",
-        "dashboard_safety_card",
+        "activity_header",
     ):
         assert f'tag="{tag}"' in MAIN
 
 
+def test_home_explainer_panel_removed_and_patch_sequence_is_vertical():
+    for tag in ("app_workspace_side", "dashboard_flow_card", "dashboard_signal_card", "dashboard_safety_card"):
+        assert f'tag="{tag}"' not in MAIN
+    sequence_start = MAIN.index('tag="dashboard_metric_table"')
+    sequence_end = MAIN.index('tag="dashboard_status_panel"', sequence_start)
+    sequence = MAIN[sequence_start:sequence_end]
+    assert sequence.count("with dpg.table_row():") == 3
+    for label in ("ANALYZE", "Shared files", "SNAPSHOT", "Restore point", "COMPOSE", "Selected mods"):
+        assert label in sequence
+
+
 def test_alignment_labels_do_not_depend_on_space_padding():
-    for label in ("Shared files", "Restore point", "Selected graph", "AUTOMATIC", "ENFORCED", "CONFINED"):
+    for label in ("Shared files", "Restore point", "Selected mods"):
         assert label in MAIN
-    assert "Shared-file collision scan" not in MAIN
-    assert "ROLLBACK        AUTOMATIC" not in MAIN
+    for stale in ("Shared-file collision scan", "ROLLBACK        AUTOMATIC", "GUARD MATRIX", "FAIL-SAFE"):
+        assert stale not in MAIN
 
 
-def test_responsive_shell_collapses_before_clipping():
-    assert "wide_workspace = workspace_width >= 1080 and shared.window_height >= 720" in WINDOW
-    assert "side_width = min(360, max(320, int(workspace_width * 0.25))) if wide_workspace else 0" in WINDOW
-    assert "metric_visible = inner_height >= 350 and main_width >= 520" in WINDOW
-    assert "metric_restore_visible = metric_visible and main_width >= 760" in WINDOW
-    assert "metric_collision_visible = metric_visible and main_width >= 940" in WINDOW
-    assert 'dpg.configure_item("metric_restore_column", show=metric_restore_visible)' in WINDOW
-    assert 'dpg.configure_item("metric_collision_column", show=metric_collision_visible)' in WINDOW
+def test_activity_header_uses_plain_language():
+    assert 'dpg.add_text("ACTIVITY LOG", parent="activity_header", tag="activity_label")' in MAIN
+    assert "LIVE ACTIVITY" not in MAIN
+    assert "STREAM ONLINE" not in MAIN
+    assert 'tag="activity_caption"' not in MAIN
+    assert 'tag="activity_stream_state"' not in MAIN
+
+
+def test_responsive_home_uses_single_workspace_before_clipping():
+    assert "main_width = max(360, workspace_width - 20)" in WINDOW
+    assert "hero_height = 190 if inner_height >= 350 else 180" in WINDOW
+    assert "status_height = 58 if inner_height >= 350 else 54" in WINDOW
+    assert "action_height = 68 if inner_height >= 350 else 62" in WINDOW
+    assert 'dpg.configure_item("dashboard_metric_strip", height=78)' in WINDOW
+    assert "wide_workspace" not in WINDOW
+    assert 'dpg.configure_item("app_workspace_side"' not in WINDOW
     assert 'dpg.configure_item("dashboard_hero_card", height=hero_height)' in WINDOW
-    assert 'dpg.configure_item("dashboard_safety_text", wrap=max(180, side_width - 30))' in WINDOW
 
 
 def test_release_console_keeps_actionable_navigation():
@@ -146,7 +162,7 @@ def test_minimum_width_fit_contract_covers_primary_library_and_d2pfx():
     assert "nav_min_width = 160 if compact_width else 176" in WINDOW
     assert 'dpg.configure_item("button_patch", width=176 if compact_width else 210)' in WINDOW
     assert 'dpg.configure_item("button_refresh_main", width=128 if compact_width else 146)' in WINDOW
-    assert 'dpg.configure_item("activity_caption", show=shared.window_width >= 1040)' in WINDOW
+    assert 'dpg.configure_item("activity_header", width=content_width, height=36)' in WINDOW
     assert "content_width = max(320, shared.window_width - CONTENT_INSET)" in WINDOW
     assert "settings_width = content_width" in WINDOW
     assert 'with dpg.child_window(width=168, tag="d2pfx_sidebar"):' in D2PFX
