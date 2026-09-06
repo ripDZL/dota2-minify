@@ -7,14 +7,17 @@
 - [x] D2PFX minimum fit: compact sidebar; explicit sidebar/card-view height budgets; scrollable constrained surfaces; wrapped header/category text; responsive 2-4 card grid.
 - [x] Patch preview/conflict, restore, Mod actions, and D2PFX import inner text/scroll regions bounded to the live client area.
 - [x] Settings keeps a vertically scrollable content region and client-width action bar; Mod Library metadata/status sizing remains responsive.
-- [x] Minimum-window product commit `e1200a3f768529074a1ec31774e34085e3a717bb`.
-- [x] Hardening CI `33980746532`: compileall PASS; Ruff format/lint PASS; pytest **244/244 PASS**; Windows build/package/upload PASS.
-- [x] Current artifact `9973687312`; 53,087,750 bytes; digest `sha256:9fdb1837a712ae25b46b40f011249140a13c9969c8562f08e14545bc9255d607`.
+- [x] Custom VPK-folder categories: small user-created top-level folders auto-promote to categories when immediate child folders contain VPKs; VPK-backed child folders become separate nested Local folder mods; recognized folder-mod siblings are retained.
+- [x] Custom-category regression coverage added in `tests/test_custom_vpk_categories.py`; nested-mod test harness updated for new helpers.
+- [x] Exact validated product head `d50d95b9407dac4e8e687eef065125aa099284cc`.
+- [x] Hardening CI `33991949698`: compileall PASS; Ruff format/lint PASS; pytest **249/249 PASS**; Windows build/package/upload PASS.
+- [x] Current artifact `9976907972`; 53,088,476 bytes; digest `sha256:be73752f3c45b716815d24a557715669f49412f5a72b8d2fa01c0418e051ed4b`.
 - [x] Network/catalogue, profile, VPK metadata, D2PFX cursor/install, and backup hostile-input passes completed.
 - [x] Backup race pass: regular no-follow manifest open with identity check; managed live output confinement; parent symlink escapes fail before mutation.
 - [x] Restored v21.3.1 compatibility/nested/semantic feature regressions directly on hardening.
 - [x] `main` and `beta` remain frozen.
 - [ ] Human visual smoke-test all major surfaces at exactly `960x680`; source assertions/CI are not a substitute for pixel-level verification.
+- [ ] Smoke-test custom category discovery with real user mod folders/VPKs on Windows.
 - [ ] Continue path-race/hostile-input review.
 - [ ] Complete semantic core reconciliation + exact-rc7 diff review.
 - [ ] Resolve prior-v21.4 `core/mod_library.py` exact-source gap only if authentic bytes become available.

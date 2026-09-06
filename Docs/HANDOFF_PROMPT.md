@@ -5,11 +5,12 @@
 - Exact upstream baseline: `Minify-v1.14rc7` / `d4b4520c945a9e1f8f5facc52a76ac5903babe90`; do not rebase onto current upstream main.
 - Canonical source: ordinary materialized files only; no active one-shot transformer/workflow; incomplete `.materialize/` bootstrap is removed; `.materialize/READY` must remain absent.
 - Current UI: **Black-Plum Reactor**; outer viewport minimum `960x680`; compact client-width mode at `<=1000`; centered header; optional telemetry collapses before clipping.
-- Exact validated product head: `e1200a3f768529074a1ec31774e34085e3a717bb` (`fix(ui): harden 960x680 layout`).
+- Exact validated product head: `d50d95b9407dac4e8e687eef065125aa099284cc`; custom VPK-category feature landed in `302c776e63c9ffa5771d065d619f511b89c08cd6`, followed by the test-harness fix at `d50d95b...`.
 - Minimum-window behavior: layouts budget from Dear PyGui client dimensions with a 16px inset; Home and Mod Library navigation rails become scrollable when vertically constrained; terminal/footer widths are bounded; Settings remains vertically scrollable; D2PFX sidebar/card view get explicit height/scroll budgets; patch/conflict/restore/D2PFX-import inner regions are bounded/wrapped.
-- Regression coverage: `tests/test_modern_ui.py` asserts client-width budget, accessible navigation/source rails, D2PFX/auxiliary height bounds, and browser resize ordering.
-- Hardening CI `33980746532`: compileall PASS; Ruff format/lint PASS; pytest **244/244 PASS**; Windows PyInstaller/runtime copy/portable ZIP/upload PASS.
-- Current GitHub artifact ID `9973687312`; name `Minify-v21.4-hardening-windows`; size 53,087,750 bytes; digest `sha256:9fdb1837a712ae25b46b40f011249140a13c9969c8562f08e14545bc9255d607`.
+- Custom category behavior: `mods/<Custom Folder>/<Child Mod>/.../*.vpk` auto-detects `<Custom Folder>` as a category even for small collections. Each VPK-backed immediate child becomes a separate nested Local folder mod; recognized folder-mod siblings are kept; unrelated non-VPK siblings are ignored; hidden/reserved dirs and symlinks are not followed.
+- Regression coverage: `tests/test_modern_ui.py`, `tests/test_custom_vpk_categories.py`, and nested-mod compatibility tests; suite is **249/249 PASS**.
+- Hardening CI `33991949698`: compileall PASS; Ruff format/lint PASS; pytest **249/249 PASS**; Windows PyInstaller/runtime copy/portable ZIP/upload PASS.
+- Current GitHub artifact ID `9976907972`; name `Minify-v21.4-hardening-windows`; size 53,088,476 bytes; digest `sha256:be73752f3c45b716815d24a557715669f49412f5a72b8d2fa01c0418e051ed4b`.
 - Immediate remaining UI gate: human Windows visual smoke-test **every element and text label at exactly 960x680** on Home, Mod Library, Settings, D2PFX, patch preview/conflict report, restore points, terminal, and footer. Automated CI/source assertions are green but do not prove pixel-level rendering.
 - Canonical feature reference: user-supplied v21.3.1 Safe Foliage Fix archive; SHA-256 `37755c4ee92e1847eef1a5a9c89aef6ba488f33accd0cb102c62a7db8780b5f8`; bundled 116/116 tests pass.
 - Preserve: recursive/nested mods; markerless/collapsible Collections; profiles; D2PFX browser/imports; backups/conflict review; Dark Terrain collision behavior; Safe Foliage blacklist-only fix; Main Menu Background CSS fix; manual rc7 `prelaunch`; no automatic prelaunch injection.

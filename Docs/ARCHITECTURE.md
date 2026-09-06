@@ -17,7 +17,7 @@
 - D2PFX remote downloads: HTTPS only; credentials/fragments/nonstandard ports/local/private/non-global endpoints rejected; every redirect target revalidated.
 - D2PFX browser installs: URL path -> flat Windows-safe filename; preview <=32 MiB; payload staged below `mods/`; extraction/metadata complete before atomic publication; staging removed on failure.
 - D2PFX cursor handling: source/live/backup paths confined to trusted roots; no symlink traversal; regular files only; atomic publication; bounded file/count/total size; failed restore retains backup.
-- Mod discovery: bounded recursive scanner; no symlink traversal; nested IDs stable; Collections organizational parents preserved.
+- Mod discovery: bounded recursive scanner; no symlink traversal; nested IDs stable; Collections organizational parents preserved. A normal top-level folder whose immediate child folders contain VPKs is auto-promoted to a category; VPK-backed child folders and recognized directory-mod siblings are exposed as nested Local folder mods, while unrelated non-payload siblings are ignored.
 - Patch transaction: resolve nested IDs, create restore point, conflict preflight/report, compatibility exclusions, output validation, rollback.
 - Output: Minify-managed language/output paths only; never overwrite Valve source map VPKs.
 - Backups: managed-output allowlist; manifest opened via regular-file/no-follow descriptor with pre/post identity check; live managed outputs pass confined-destination preflight; symlinked parent escape rejected before mutation; transactional rollback retained.

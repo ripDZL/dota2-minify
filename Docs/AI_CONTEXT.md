@@ -2,15 +2,17 @@
 - Upstream baseline: `Egezenn/dota2-minify` tag `Minify-v1.14rc7`; exact commit `d4b4520c945a9e1f8f5facc52a76ac5903babe90`.
 - Fork: `ripDZL/dota2-minify`; active branch `v21.4-hardening`; promotion path `v21.4-hardening` -> `beta` -> `main`.
 - Exactly three branches; `main` frozen at `a26bc88a0d412e357965f29488b83a7f9093e11f`; `beta` frozen at `af83bbb051edced195d5f55ba49ff060a8c76f3c`.
-- Exact validated product head: `e1200a3f768529074a1ec31774e34085e3a717bb` (`fix(ui): harden 960x680 layout`).
-- Commits after `e1200a3f768529074a1ec31774e34085e3a717bb` are Docs-only at this handoff; re-fetch branch head at new-chat start.
+- Exact validated product head: `d50d95b9407dac4e8e687eef065125aa099284cc`; feature commit `302c776e63c9ffa5771d065d619f511b89c08cd6` adds custom VPK-folder categories; `d50d95b...` is the test-harness follow-up.
+- Commits after `d50d95b9407dac4e8e687eef065125aa099284cc` are Docs-only at this handoff; re-fetch branch head at new-chat start.
 - Current UI baseline: **Black-Plum Reactor**; outer viewport minimum `960x680`; compact client-width mode at `<=1000`; optional telemetry collapses before clipping.
-- Minimum-window hardening now budgets from Dear PyGui client dimensions, reserves a 16px content inset, makes Home and Mod Library navigation rails scrollable when vertically constrained, bounds terminal/footer widths, gives D2PFX explicit client-height/scroll budgets, and clamps patch/conflict/restore/import text/scroll regions.
+- Minimum-window hardening budgets from Dear PyGui client dimensions, reserves a 16px content inset, makes Home and Mod Library navigation rails scrollable when vertically constrained, bounds terminal/footer widths, gives D2PFX explicit client-height/scroll budgets, and clamps patch/conflict/restore/import text/scroll regions.
 - Settings keeps a vertically scrollable content surface and client-width action bar; Mod Library list/metadata/status sizing remains responsive.
-- Automated layout regression coverage is in `tests/test_modern_ui.py`; current suite is **244/244 PASS**.
-- Remaining user-facing gate: human visual smoke-test **every element and text label at exactly 960x680** across Home, Mod Library, Settings, D2PFX, patch preview/conflict report, restore points, terminal, and footer. CI/source assertions do not replace that visual check.
-- Hardening CI `33980746532`: compileall PASS; Ruff format/lint PASS; pytest **244/244 PASS**; Windows PyInstaller/runtime copy/portable ZIP/upload PASS.
-- Current GitHub artifact ID `9973687312`; name `Minify-v21.4-hardening-windows`; size 53,087,750 bytes; digest `sha256:9fdb1837a712ae25b46b40f011249140a13c9969c8562f08e14545bc9255d607`.
+- Custom mod categories: an ordinary top-level folder under `mods/` is auto-treated as a category when its immediate child folders contain visible VPKs; those child folders become separate nested Local folder mods. Non-VPK siblings are ignored unless they are recognized directory mods; hidden/reserved folders and symlinks are not followed.
+- Automated regression coverage includes `tests/test_modern_ui.py`, `tests/test_custom_vpk_categories.py`, and nested-mod compatibility tests; current suite is **249/249 PASS**.
+- Remaining user-facing UI gate: human visual smoke-test **every element and text label at exactly 960x680** across Home, Mod Library, Settings, D2PFX, patch preview/conflict report, restore points, terminal, and footer. CI/source assertions do not replace that visual check.
+- Hardening CI `33991949698`: compileall PASS; Ruff format/lint PASS; pytest **249/249 PASS**; Windows PyInstaller/runtime copy/portable ZIP/upload PASS.
+- Current GitHub artifact ID `9976907972`; name `Minify-v21.4-hardening-windows`; size 53,088,476 bytes; digest `sha256:be73752f3c45b716815d24a557715669f49412f5a72b8d2fa01c0418e051ed4b`.
+- Previous minimum-window product head: `e1200a3f768529074a1ec31774e34085e3a717bb`; CI `33980746532`; 244/244 PASS; Windows build PASS.
 - Previous fully inspected baseline product head: `a27dfa368a56ec8be5d713594eb5506abc24ee06`; CI `33977097382`; 241/241 PASS; Windows build PASS.
 - Canonical source: ordinary materialized files only; no active one-shot transformer/workflow; `.materialize/READY` absent.
 - Security completed: bounded/atomic downloads; D2PFX catalogue/cache/metadata/cursors/install path; strict profiles; VPK metadata; backup restore confinement.

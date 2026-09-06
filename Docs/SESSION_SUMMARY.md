@@ -3,14 +3,16 @@
 - Branch model: exactly `v21.4-hardening` -> `beta` -> `main`; beta/main frozen.
 - Canonical feature reference: supplied v21.3.1 Safe Foliage Fix archive; bundled 116/116 tests pass.
 - UI baseline: **Black-Plum Reactor**; outer minimum `960x680`; compact layout at <=1000 client width; optional telemetry collapses before clipping.
-- This session hardened the minimum-window contract in `Minify/ui/window.py`: layout now budgets from client dimensions with a 16px content inset; Home/Mod Library constrained rails scroll; terminal/footer widths are bounded; D2PFX receives explicit child-height/scroll budgets; patch/conflict/restore/import inner regions are bounded/wrapped.
-- Added three minimum-window regression assertions in `tests/test_modern_ui.py`.
-- Exact validated product head: `e1200a3f768529074a1ec31774e34085e3a717bb`.
-- Hardening CI `33980746532`: compileall PASS; Ruff format/lint PASS; pytest **244/244 PASS**; Windows portable build PASS.
-- Current artifact `9973687312`; 53,087,750 bytes; digest `sha256:9fdb1837a712ae25b46b40f011249140a13c9969c8562f08e14545bc9255d607`.
-- The remaining UI gate is a human Windows visual smoke-test at exactly `960x680` across Home, Mod Library, Settings, D2PFX, patch preview/conflict report, restore points, terminal, and footer. CI/source assertions verify contracts but not pixel rendering.
+- Minimum-window contract in `Minify/ui/window.py`: client-dimension budgeting with a 16px content inset; Home/Mod Library constrained rails scroll; terminal/footer widths bounded; D2PFX explicit child-height/scroll budgets; patch/conflict/restore/import inner regions bounded/wrapped.
+- Custom VPK categories added in `302c776e63c9ffa5771d065d619f511b89c08cd6`: a small user-created top-level folder auto-becomes a category when immediate child folders contain VPKs; each VPK-backed child is a separate nested Local folder mod; recognized directory-mod siblings are retained; unrelated siblings, hidden/reserved dirs, and symlink traversal are excluded.
+- Test-harness follow-up `d50d95b9407dac4e8e687eef065125aa099284cc` keeps existing nested-mod regression extraction aware of the new discovery helpers.
+- Exact validated product head: `d50d95b9407dac4e8e687eef065125aa099284cc`.
+- Hardening CI `33991949698`: compileall PASS; Ruff format/lint PASS; pytest **249/249 PASS**; Windows portable build PASS.
+- Current artifact `9976907972`; 53,088,476 bytes; digest `sha256:be73752f3c45b716815d24a557715669f49412f5a72b8d2fa01c0418e051ed4b`.
+- Remaining UI gate: human Windows visual smoke-test at exactly `960x680` across Home, Mod Library, Settings, D2PFX, patch preview/conflict report, restore points, terminal, and footer. CI/source assertions verify contracts but not pixel rendering.
+- Remaining feature gate: real Windows smoke-test of user-created custom category folders/VPKs.
 - Security sweep includes network/catalogue, profiles, VPK metadata, D2PFX cursors/catalogue/install, and backup live-output/manifest path races.
 - Restored v21.3.1 compatibility, nested Collections/dependency, and semantic feature regressions directly on hardening.
 - `core/mod_library.py` prior-v21.4 exact-source gap remains unresolved; never fabricate missing bytes.
-- After visual acceptance: remaining filesystem race/security review; semantic core/exact-rc7 diff review; Dota smoke tests.
+- After visual/custom-category acceptance: remaining filesystem race/security review; semantic core/exact-rc7 diff review; Dota smoke tests.
 - Do not promote beta/main until remaining gates and user approval.
