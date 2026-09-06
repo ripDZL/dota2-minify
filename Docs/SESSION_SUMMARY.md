@@ -1,12 +1,12 @@
 # Session Summary
 - Fork: `ripDZL/dota2-minify`; active `v21.4-hardening`; exact rc7 baseline `d4b4520c945a9e1f8f5facc52a76ac5903babe90`.
 - Branch model: exactly `v21.4-hardening` -> `beta` -> `main`; beta/main frozen.
-- Current product head: `2f1a60d01defefc4239a836b9d7e5539b2f3720e`.
-- Windows browsing now uses native system file/folder dialogs for D2PFX ZIP import, profile JSON import, and profile export directory selection; DPG dialog is fallback-only if native startup fails.
-- Native-picker tests verify routing, callback compatibility, cancellation, and pass-through of unrelated DPG configuration.
-- CI `34043716068`: compileall PASS; Ruff PASS; pytest **253/253 PASS**; Windows portable build PASS.
-- Artifact `9992464458`; digest `sha256:79ec991410315246ead60d2b54afb1651a11c1e4b0560ed0c009e6d4e27412d4`.
+- Exact validated product head: `ec068f85a988a8001450e83c439e5a224f55b1de`; later commits are Docs-only.
+- Home cleanup: static right deployment/guard/fail-safe explainer removed; single full-width workspace; Analyze/Snapshot/Compose stacked vertically; selected/installed count retained in status panel; terminal header is `ACTIVITY LOG`; old caption and `STREAM ONLINE` removed.
+- Home sizing: shell >=360; hero 168/178; sequence 66; status 60; action bar 76; activity header 36; existing `960x680` hardening retained.
+- Windows browsing uses native system file/folder dialogs for D2PFX ZIP import, profile JSON import, and profile export directory; DPG fallback only if native startup fails.
+- CI `34045400676`: compileall PASS; Ruff PASS; pytest **255/255 PASS**; Windows portable build PASS.
+- Artifact `9992953059`; 53,087,565 bytes; digest `sha256:1ae05cb88d7ca29e14e3e0eb8a58ef8440994978e3273b45f77ef94b82f86ffc`.
 - Custom VPK category behavior from `302c776e63c9ffa5771d065d619f511b89c08cd6` remains intact.
-- UI baseline remains Black-Plum Reactor with `960x680` minimum-window hardening.
-- Remaining gates: real Windows smoke of native picker/custom categories/960x680 surfaces; residual path-race/security review; semantic core/exact-rc7 reconciliation; Dota smoke tests.
+- Remaining gates: real Windows smoke of cleaned Home/native picker/custom categories/960x680 surfaces; residual path-race/security review; semantic core/exact-rc7 reconciliation; Dota smoke tests.
 - Do not promote beta/main until remaining gates and explicit user approval.
