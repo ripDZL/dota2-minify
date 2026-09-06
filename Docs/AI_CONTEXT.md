@@ -2,17 +2,18 @@
 - Upstream baseline: `Egezenn/dota2-minify` tag `Minify-v1.14rc7`; exact commit `d4b4520c945a9e1f8f5facc52a76ac5903babe90`.
 - Fork: `ripDZL/dota2-minify`; active `v21.4-hardening`; promotion `v21.4-hardening` -> `beta` -> `main`.
 - Exactly three branches; `beta` frozen `af83bbb051edced195d5f55ba49ff060a8c76f3c`; `main` frozen `a26bc88a0d412e357965f29488b83a7f9093e11f`.
-- Exact validated product head: `71b218d7f6e568831e66d086249309a47e0f61a9`; later milestone commits are Docs-only at this handoff.
+- Exact validated product head: `d28cc12d9be4616ecc5f6bf7e665e4e6392b45fd`; later milestone commits are Docs-only at this handoff.
 - Home header runtime presentation is two centered stacked lines: `MINIFY` and `RELEASE: {base.VERSION}`; old product subtitle/version tag remains hidden for compatibility.
-- Left `COMMAND DECK` heading and `SYSTEM / PROTECTED` status card are hidden; navigation actions remain.
-- Patch sequence stays vertical Analyze -> Snapshot -> Compose and now uses adaptive height `84..104`px tied to client-area height; hero/status/action budgets scale with it to prevent vertical clipping.
-- Activity header is `ACTIVITY LOG`; `COPY LOG` copies the visible log; `SELECT TEXT` opens a read-only multiline view for highlighting/Ctrl+C while preserving the colored live log.
+- Left `COMMAND DECK` heading and `SYSTEM / PROTECTED` status card are hidden; navigation actions remain; footer Developer button is hidden.
+- Patch sequence is moved out of the hero card into its own responsive row so Analyze/Snapshot/Compose cannot be cropped by hero padding/font metrics; sequence height is `94..116`px; status/action rows are independent; the main workspace becomes scrollable if minimum-height space is exhausted.
+- Deployment command widths use a bounded responsive row budget instead of fixed narrow widths.
+- Activity header is `ACTIVITY LOG`; `COPY LOG` copies the visible log; `SELECT TEXT` opens a read-only multiline view for highlighting/Ctrl+C; both controls keep a 28px right-edge safety inset.
+- Developer tools no longer create floating viewport-expansion panes. Control Panel now has `GENERAL` and `DEVELOPER` tabs; advanced path/mod/maintenance/debug tools live in Developer; maintenance is collapsed by default.
 - Native Windows system picker handles D2PFX ZIP import, profile JSON import, and profile export-directory selection; themed Dear PyGui dialogs are fallback-only on native startup failure.
 - Custom mod categories: `mods/<Category>/<Child>/.../*.vpk` promotes the top-level folder to a category; each VPK-backed immediate child is a nested Local folder mod; recognized folder-mod siblings kept; unrelated/hidden/reserved/symlink entries excluded.
-- Hardening CI `34046658231`: compileall PASS; Ruff format/lint PASS; pytest **256/256 PASS**; Windows portable build/package/upload PASS.
-- Current artifact `9993322800`; 53,090,744-byte GitHub artifact; digest `sha256:7f451f26f90287fe22c91e534fe9c585e84aa0f6c9880c78ba59259dfff6b91d`.
-- Extracted portable ZIP SHA-256: `0a166c78d9c6cd58cb1b593ead345c29569f15600dfa7516ca2a9ec4a78f4387`.
-- Human Windows smoke remains required for header centering, unclipped patch sequence, hidden left status card, log copy/select behavior, and every major `960x680` surface; CI does not prove pixel-level rendering.
+- Hardening CI `34059436199`: compileall PASS; Ruff format/lint PASS; pytest **258/258 PASS**; Windows portable build/package/upload PASS.
+- Current artifact `9997008784`; 53,091,451-byte GitHub artifact; digest `sha256:254178eccc85d24d0edc1fa39e416edf41acf642f80b45124552b2fcb5bf5765`.
+- Human Windows smoke remains required for the latest Home/Control Panel layout and every major `960x680` surface; CI does not prove pixel-level rendering.
 - Preserve recursive/nested mods, Collections, profiles, D2PFX, backups/conflict review, Dark Terrain, Safe Foliage, Main Menu Background fix, manual rc7 `prelaunch`, and no-auto-prelaunch policy.
 - Remove Foilage: blacklist-only; never ship `manifest.json` or `maps/dota.vpk`; retain both oak-leaf blacklist entries.
 - Security boundary: mod Python scripts are trusted code; archive/VPK/profile/backup/download/D2PFX data are untrusted.
