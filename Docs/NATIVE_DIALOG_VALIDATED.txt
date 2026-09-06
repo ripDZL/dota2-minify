@@ -1,0 +1,6 @@
+Product head: 2f1a60d01defefc4239a836b9d7e5539b2f3720e
+CI: 34043716068
+Tests: 253/253 PASS
+Artifact: 9992464458
+Digest: sha256:79ec991410315246ead60d2b54afb1651a11c1e4b0560ed0c009e6d4e27412d4
+Windows native pickers: D2PFX ZIP, profile import, profile export
