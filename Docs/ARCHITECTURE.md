@@ -1,29 +1,13 @@
 # Architecture
-- Baseline: exact upstream rc7 commit `d4b4520c945a9e1f8f5facc52a76ac5903babe90`; no current-main rebase during hardening.
-- Branches: exactly `v21.4-hardening` active -> `beta` validation -> `main` publication.
-- Fork source: ordinary materialized files + commits; no active one-shot transformer/workflow; incomplete `.materialize/` bootstrap/workflow removed.
-- UI: Dear PyGui responsive **Black-Plum Reactor** under `Minify/ui`; centered header; outer `960x680` minimum; compact client-width mode at <=1000.
-- Minimum-window contract: child layout budgets derive from Dear PyGui client width/height, with a 16px content inset for decorated-window padding; optional telemetry/secondary metrics collapse before clipping.
-- Home contract: compact nav/action widths preserve controls; navigation rail becomes vertically scrollable when the minimum-height body cannot contain every command; activity/terminal/footer stay within client width.
-- Mod Library contract: source rail/search/list/status widths derive from live menu dimensions; the source rail scrolls when constrained; list and metadata remain scrollable/wrapped.
-- Settings contract: content is vertically scrollable; action surface and intro wrap use live client width.
-- D2PFX contract: compact sidebar width at minimum; sidebar and card surface receive explicit client-height budgets and scrolling; 320px context/actions column retained; wrapped category/subtitle text; card grid bounded to 2-4 columns.
-- Auxiliary UI contract: conflict list, patch warning, restore summary, mod-action text, and D2PFX import preview/progress are bounded/wrapped from live client dimensions so action rows stay reachable.
-- Browser resize order: registered top-level browser windows are sized before module-specific `on_resize` hooks so child calculations see final client dimensions.
-- Security primitives: `Minify/core/security.py` for path confinement, archive limits, bounded decompression, hashing, atomic writes.
-- General downloads: streamed with timeout + size ceiling into same-directory temp file; atomic replace on success; optional redirect-hop URL validator.
-- D2PFX catalogue: streamed bounded compressed/decompressed payload; dict/shape checks; confined regular-file cache; atomic replace.
-- D2PFX metadata: allowed catalogue filenames; <=256 categories; bounded depth/nodes/mods/links/text; category/asset paths normalized and traversal-rejected.
-- D2PFX remote downloads: HTTPS only; credentials/fragments/nonstandard ports/local/private/non-global endpoints rejected; every redirect target revalidated.
-- D2PFX browser installs: URL path -> flat Windows-safe filename; preview <=32 MiB; payload staged below `mods/`; extraction/metadata complete before atomic publication; staging removed on failure.
-- D2PFX cursor handling: source/live/backup paths confined to trusted roots; no symlink traversal; regular files only; atomic publication; bounded file/count/total size; failed restore retains backup.
-- Mod discovery: bounded recursive scanner; no symlink traversal; nested IDs stable; Collections organizational parents preserved. A normal top-level folder whose immediate child folders contain VPKs is auto-promoted to a category; VPK-backed child folders and recognized directory-mod siblings are exposed as nested Local folder mods, while unrelated non-payload siblings are ignored.
-- Patch transaction: resolve nested IDs, create restore point, conflict preflight/report, compatibility exclusions, output validation, rollback.
-- Output: Minify-managed language/output paths only; never overwrite Valve source map VPKs.
-- Backups: managed-output allowlist; manifest opened via regular-file/no-follow descriptor with pre/post identity check; live managed outputs pass confined-destination preflight; symlinked parent escape rejected before mutation; transactional rollback retained.
-- Remove Foilage: blacklist-only; never ship `manifest.json` or `maps/dota.vpk`.
-- VPK single-mod metadata: flat Windows-safe marker names; reserved devices/traversal guarded; long names hashed.
-- Profiles: bounded 8 MiB files; <=256 profiles; <=5000 states/profile; <=20000 total states; bounded names/mod IDs/hints; strict booleans; format/version checked.
-- Downloads: pinned dependency versions + SHA-256 + safe extraction before executable use.
-- Steam: manual rc7 `prelaunch` retained; automatic launch-option injection disabled; stale Minify wrappers cleaned narrowly.
-- Security boundary: local mod Python scripts trusted code; archive/VPK/profile/backup/download/D2PFX data untrusted; local concurrent filesystem replacement remains a separate race class requiring explicit review.
+- Baseline: exact upstream rc7 `d4b4520c945a9e1f8f5facc52a76ac5903babe90`; no current-main rebase during hardening.
+- Branches: exactly `v21.4-hardening` -> `beta` -> `main`; beta/main frozen.
+- UI: Dear PyGui Black-Plum Reactor; outer minimum `960x680`; responsive client-size budgeting and scroll bounds.
+- Windows file browsing: `Minify/helper.py` intercepts only D2PFX ZIP import, profile import, and profile export file-dialog tags; uses Tk/Windows native file/folder dialogs; preserves existing callbacks; Dear PyGui dialog is fallback on native-start failure; non-Windows behavior is unchanged.
+- Mod discovery: bounded recursive scanner; no symlink traversal; stable nested IDs; ordinary top-level folders with VPK-backed immediate children become categories.
+- D2PFX: bounded catalogue/download/install/cursor paths; staged installs; confined metadata/cache; native picker only changes local ZIP selection UI.
+- Patch transaction: nested-ID resolution, restore point, conflict preflight/report, compatibility exclusions, output validation, rollback.
+- Backups: managed-output allowlist; regular/no-follow manifest open with identity recheck; confined live-output preflight; rollback retained.
+- Security primitives: `Minify/core/security.py`; bounded downloads/decompression; path confinement; hashing; atomic writes.
+- Profiles: bounded/validated imports; native picker only changes local JSON/directory selection UI.
+- Steam: manual rc7 `prelaunch`; automatic launch-option injection disabled.
+- Security boundary: local mod Python scripts trusted; archive/VPK/profile/backup/download/D2PFX data untrusted.
