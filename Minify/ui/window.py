@@ -10,6 +10,7 @@ from core.registry import get_browser_configs
 from ui import details, dev_tools, modal_shared, shared, terminal
 
 is_moving_viewport = False
+_home_sequence_detached = False
 
 
 # Keep child surfaces inside the decorated viewport's client area. Dear PyGui's
@@ -40,17 +41,6 @@ def drag(sender, app_data, user_data):
             or dpg.is_item_hovered("settings_menu")
             or dpg.get_item_alias(dpg.get_active_window()).endswith("details_window_tag")
         )
-
-        if not is_hovered and dev_tools.dev_mode_state == 1:
-            is_hovered = (
-                dpg.is_item_hovered("opener")
-                or dpg.is_item_hovered("mod_tools")
-                or dpg.is_item_hovered("maintenance_tools")
-            )
-
-            debug_env = config.get("debug_env", False) if not base.FROZEN else False
-            if not is_hovered and debug_env:
-                is_hovered = dpg.is_item_hovered("debug_tools")
 
         if is_hovered:
             is_moving_viewport = True
@@ -101,10 +91,32 @@ def _item_width(tag, fallback):
 
 def _configure_home_surface(content_width):
     """Apply the simplified user-facing home chrome after the static UI exists."""
+    global _home_sequence_detached
+
     if dpg.does_item_exist("nav_workspace_label"):
         dpg.configure_item("nav_workspace_label", show=False)
     if dpg.does_item_exist("nav_status_card"):
         dpg.configure_item("nav_status_card", show=False)
+    if dpg.does_item_exist("button_dev"):
+        dpg.configure_item("button_dev", show=False)
+
+    # Developer controls belong behind the Control Panel rather than an exposed
+    # footer button and floating viewport-expansion panes.
+    dev_tools.install_control_panel_tab()
+
+    # The three-row patch sequence used to live inside the hero card. Windows
+    # font/padding metrics could consume the remaining hero height and crop the
+    # final row. Give it its own responsive surface in the main stack instead.
+    if not _home_sequence_detached and dpg.does_item_exist("dashboard_metric_strip"):
+        try:
+            dpg.move_item(
+                "dashboard_metric_strip",
+                parent="app_workspace_main",
+                before="dashboard_status_panel",
+            )
+            _home_sequence_detached = True
+        except Exception:
+            pass
 
     # Keep only the product name and the real release version in the centered
     # header. The original source tags stay intact for compatibility, but the
@@ -150,8 +162,11 @@ def _configure_home_surface(content_width):
             if dpg.does_item_exist("main_secondary_button_theme"):
                 dpg.bind_item_theme("activity_select_button", "main_secondary_button_theme")
 
-        dpg.set_item_pos("activity_copy_button", (max(150, content_width - 198), 5))
-        dpg.set_item_pos("activity_select_button", (max(242, content_width - 104), 5))
+        right_edge = max(270, content_width - 28)
+        select_x = max(242, right_edge - 94)
+        copy_x = max(150, select_x - 94)
+        dpg.set_item_pos("activity_copy_button", (copy_x, 5))
+        dpg.set_item_pos("activity_select_button", (select_x, 5))
 
 
 def _configure_minimum_window_surfaces(content_width, compact_width):
@@ -229,17 +244,20 @@ def on_resize():
     compact_width = shared.window_width <= 1000
     nav_min_width = 160 if compact_width else 176
     nav_width = max(nav_min_width, min(220, int(shared.window_width * 0.13)))
-    # Keep the action surface readable at 960x680 while retaining a useful log
-    # viewport below it. Sequence height grows with the real client area and is
-    # included in the hero budget instead of being clipped by a fixed 66px box.
-    shell_body_height = max(360, min(500, shared.window_height - 320))
+    shell_body_height = max(360, min(520, shared.window_height - 300))
     workspace_width = max(430, content_width - nav_width - 18)
     main_width = max(360, workspace_width - 20)
     inner_height = max(300, shell_body_height - 34)
-    sequence_height = max(84, min(104, int(inner_height * 0.28)))
-    hero_height = max(184, min(204, sequence_height + 94))
-    status_height = 52 if inner_height < 380 else 56
-    action_height = 68 if inner_height < 380 else 72
+
+    # Hero text, patch sequence, live state and commands are independent rows.
+    # This prevents any child from consuming another row's available height.
+    hero_height = 124 if compact_width else 116
+    sequence_height = max(94, min(116, int(inner_height * 0.24)))
+    status_height = 68
+    action_height = 74
+    action_cluster_width = max(360, min(620, main_width - 28))
+    patch_width = max(200, int(action_cluster_width * 0.58))
+    refresh_width = max(150, action_cluster_width - patch_width - 8)
 
     if dpg.does_item_exist("app_shell_header"):
         dpg.configure_item("app_shell_header", width=content_width, height=76)
@@ -255,7 +273,13 @@ def on_resize():
     if dpg.does_item_exist("app_workspace"):
         dpg.configure_item("app_workspace", width=workspace_width, height=shell_body_height)
     if dpg.does_item_exist("app_workspace_main"):
-        dpg.configure_item("app_workspace_main", width=main_width, height=inner_height)
+        dpg.configure_item(
+            "app_workspace_main",
+            width=main_width,
+            height=inner_height,
+            no_scrollbar=False,
+            no_scroll_with_mouse=False,
+        )
     if dpg.does_item_exist("dashboard_hero_card"):
         dpg.configure_item("dashboard_hero_card", height=hero_height)
     if dpg.does_item_exist("dashboard_metric_strip"):
@@ -265,9 +289,9 @@ def on_resize():
     if dpg.does_item_exist("dashboard_action_bar"):
         dpg.configure_item("dashboard_action_bar", height=action_height)
     if dpg.does_item_exist("button_patch"):
-        dpg.configure_item("button_patch", width=176 if compact_width else 210)
+        dpg.configure_item("button_patch", width=patch_width)
     if dpg.does_item_exist("button_refresh_main"):
-        dpg.configure_item("button_refresh_main", width=128 if compact_width else 146)
+        dpg.configure_item("button_refresh_main", width=refresh_width)
     if dpg.does_item_exist("dashboard_focus_hint"):
         dpg.configure_item("dashboard_focus_hint", wrap=max(240, main_width - 28))
     if dpg.does_item_exist("dashboard_status_message"):
@@ -282,6 +306,8 @@ def on_resize():
         dpg.configure_item("settings_actions_bar", width=settings_width, height=56)
     if dpg.does_item_exist("settings_intro"):
         dpg.configure_item("settings_intro", wrap=max(260, settings_width - 24))
+    if dpg.does_item_exist("developer_tools_warning"):
+        dpg.configure_item("developer_tools_warning", wrap=max(260, settings_width - 40))
 
     terminal.wrap_size = (
         base.main_window_width - 20 if dev_tools.dev_mode_state == 1 else min(max(360, content_width - 14), 1180)
