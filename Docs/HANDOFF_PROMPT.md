@@ -3,14 +3,15 @@
 - Read `Docs/*.md` and re-fetch branch head before code changes.
 - Branch model: exactly `v21.4-hardening` -> `beta` -> `main`; keep beta/main frozen.
 - Exact upstream baseline: `Minify-v1.14rc7` / `d4b4520c945a9e1f8f5facc52a76ac5903babe90`; do not rebase current upstream main.
-- Exact validated product head: `ec068f85a988a8001450e83c439e5a224f55b1de`; later commits are Docs-only at this handoff.
-- Home cleanup: right static deployment/guard/fail-safe rail removed; Analyze/Snapshot/Compose flow stacked vertically; selected/installed count retained in status panel; terminal header renamed `ACTIVITY LOG`; old stage caption and `STREAM ONLINE` removed.
-- Home sizing: shell >=360; hero 168/178; sequence 66; status 60; action bar 76; activity header 36; `960x680` client hardening remains.
+- Exact validated product head: `71b218d7f6e568831e66d086249309a47e0f61a9`; later commits are Docs-only at this handoff.
+- Home runtime header: centered stacked `MINIFY` + `RELEASE: {base.VERSION}`; left `COMMAND DECK` and `SYSTEM / PROTECTED` chrome hidden.
+- Analyze/Snapshot/Compose sequence height adapts `84..104`px to client height; hero/status/action budgets scale with it to avoid clipping.
+- Activity header is `ACTIVITY LOG`; `COPY LOG` copies all visible entries; `SELECT TEXT` opens a selectable read-only log view.
 - Native Windows picker: D2PFX ZIP import, profile JSON import, and profile export directory use system dialogs; DPG dialog fallback on native startup failure; non-Windows unchanged.
-- CI `34045400676`: compileall/Ruff PASS; pytest **255/255 PASS**; Windows portable build PASS.
-- Artifact `9992953059`; digest `sha256:1ae05cb88d7ca29e14e3e0eb8a58ef8440994978e3273b45f77ef94b82f86ffc`.
+- CI `34046658231`: compileall/Ruff PASS; pytest **256/256 PASS**; Windows portable build PASS.
+- Artifact `9993322800`; digest `sha256:7f451f26f90287fe22c91e534fe9c585e84aa0f6c9880c78ba59259dfff6b91d`; extracted portable ZIP SHA-256 `0a166c78d9c6cd58cb1b593ead345c29569f15600dfa7516ca2a9ec4a78f4387`.
 - Custom VPK-folder categories remain: `mods/<Category>/<Child>/.../*.vpk` exposes VPK-backed children as nested Local folder mods.
 - Preserve recursive/nested mods, Collections, profiles, D2PFX, backups/conflict review, Dark Terrain, Safe Foliage, Main Menu fix, manual rc7 `prelaunch`, no-auto-prelaunch.
 - Remove Foilage invariant: blacklist-only; never ship `manifest.json` or `maps/dota.vpk`.
-- Remaining gates: human Windows cleaned-Home/native-picker/custom-category/960x680 smoke; residual filesystem race/security review; semantic core/exact-rc7 diff review; Dota smoke tests.
+- Remaining gates: human Windows header/sequence/log-copy/native-picker/custom-category/960x680 smoke; residual filesystem race/security review; semantic core/exact-rc7 diff review; Dota smoke tests.
 - Never promote beta/main without explicit user approval.
