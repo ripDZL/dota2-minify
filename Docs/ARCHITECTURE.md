@@ -5,7 +5,8 @@
 - Home: centered release header; left status chrome/right explainer removed; visible workspace is live status/count plus deployment actions only.
 - Home hero and `ANALYZE/SNAPSHOT/COMPOSE` sequence remain as hidden compatibility tags; runtime compact pass hides them and keeps only the subtle separator before deployment actions.
 - Compact Home layout uses 68px status, >=96px actions, 22px gap, and >=250px shell; a next-frame callback reapplies compact heights after `window.on_resize`.
-- Deployment controls retain narrow-layout vertical stacking when required.
+- Compact Home copy is centered without heavy layout chrome: tagged horizontal rows use leading spacers calculated from live text width and current status/action panel width for READY/message, selected/installed count, and `DEPLOYMENT COMMANDS`.
+- Deployment buttons remain independently responsive and retain narrow-layout vertical stacking when required.
 - Restore dialog: `backup_restore_button` is explicitly 180x30 for safe label fit on Windows.
 - Activity Log: colored live output plus copy-all/selectable debug view; buttons use 108/132px widths, 30px height, 8px gap, 28px right inset.
 - Mod Library footer: explicit safe widths for Error details/Open VPK folder/Restore backups/Review & Patch; Review & Patch hover changes ember -> lime, active darker green.
