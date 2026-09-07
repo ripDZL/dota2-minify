@@ -1,19 +1,19 @@
 # Progress
 - [x] Exact rc7 baseline pinned; exactly `v21.4-hardening`, `beta`, `main` retained.
 - [x] Black-Plum Reactor UI + `960x680` client-size hardening retained.
-- [x] Home stays one continuous slate surface; three subtle separators now distinguish intro/sequence/status/actions without nested cards.
-- [x] Deployment action row clipping fix retained with 96/136px budget and narrow stacking.
-- [x] Restore backup action is 180x30 so `Restore this backup` fits Windows font metrics.
+- [x] Home compacted to live status/count + deployment actions; explanatory hero and `ANALYZE/SNAPSHOT/COMPOSE` sequence hidden at runtime.
+- [x] Compact Home shell reapplies after resize so removed content does not leave a large empty workspace; one subtle separator remains before actions.
+- [x] Restore backup action remains 180x30 so `Restore this backup` fits Windows font metrics.
 - [x] Activity Log supports copy-all plus selectable read-only text; controls use safe widths/right inset and 30px vertically centered button height.
 - [x] Mod Library footer controls use safe label widths; Review & Patch has distinct lime hover/darker-green active state.
 - [x] Control Panel action buttons/combos are content-fit; General `opt_` text fields clamp to 280-720px; invalid collapsing-header width configuration remains removed.
 - [x] Developer tools remain behind Control Panel -> Developer; floating/viewport-expansion panes removed.
 - [x] Recursive/nested mods, custom VPK-folder categories, Collections, profiles, D2PFX, backups/conflict review retained.
 - [x] Windows local browsing uses native system picker for D2PFX ZIP import, profile import, and profile export directory.
-- [x] Product head `c6607667db8d1862612835423f4d4b3e23bce4b1` validated by CI `34154573475`: compileall/Ruff PASS; pytest **267/267 PASS**; Windows portable build PASS.
-- [x] Artifact `10030528705`; digest `sha256:44d334a226a106eda5c3f55756765e3eaa353624033e50dc94f3411d238cb3ed`; portable ZIP SHA-256 `3cac232708840286357be0df11ecbaa1a2ca2d03b7ea602ccc63041ae143287a`.
+- [x] Product head `7b38c2957aa412da7f37a8fe95269d265cc37288` validated by CI `34155677327`: compileall/Ruff PASS; pytest **270/270 PASS**; Windows portable build PASS.
+- [x] Artifact `10030898392`; digest `sha256:094b70f06d3faae4e281a4a6ff57fa9cad2aaf043d254d261cd95993e1cf99bb`; portable ZIP SHA-256 `a7de61dfc07ac57c98cbcc89c4f587cca71246125c0e363028c41b9a250edb06`.
 - [x] `beta` and `main` remain frozen.
-- [ ] Human Windows smoke: restore-button fit, Home separators, Control Panel field sizing, Activity Log centering, Home/Mod Library controls, native picker, and all major `960x680` surfaces.
+- [ ] Human Windows smoke: compact Home actual layout, restore-button fit, Control Panel field sizing, Activity Log centering, Home/Mod Library controls, native picker, and all major `960x680` surfaces.
 - [ ] Continue hostile-input/path-race review and exact-rc7/semantic core reconciliation.
 - [ ] Dota startup/lobby/match/rollback/profiles/D2PFX/Dark-Terrain/Remove-Foilage smoke tests.
 - [ ] Promote hardening -> beta only after remaining gates/user approval; beta -> main only after beta validation.
