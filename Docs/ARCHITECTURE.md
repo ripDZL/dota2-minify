@@ -2,18 +2,17 @@
 - Baseline: exact upstream rc7 `d4b4520c945a9e1f8f5facc52a76ac5903babe90`; no current-main rebase during hardening.
 - Branches: exactly `v21.4-hardening` -> `beta` -> `main`; beta/main frozen.
 - UI: Dear PyGui Black-Plum Reactor; outer minimum `960x680`; responsive client-size budgeting and scroll bounds.
-- Home: single full-width action workspace; static right explainer removed; live library count stays in status panel.
-- Header cleanup in `Minify/ui/window.py`: hide left status chrome; stack `MINIFY` over `RELEASE: {base.VERSION}`; retain old source tags for compatibility.
-- Patch sequence is reparented from hero into `app_workspace_main` before status; hero/sequence/status/action are independent rows.
-- Deployment commands: runtime tagged `dashboard_action_buttons`; 96px action bar normally, 136px when stacked; shell height is raised to fit required rows up to 520px; vertical stack activates only for `main_width < 560`; width budget remains confined to main client width.
-- Activity log keeps colored rendering in `Minify/ui/terminal.py`; `COPY LOG` serializes visible entries; `SELECT TEXT` opens read-only selectable multiline text; action controls retain right-edge safety inset.
+- Home: centered release header; left status chrome/right explainer removed; patch sequence, status, and deployment controls are independent rows.
+- Deployment controls: runtime `dashboard_action_buttons`; action bar 96px normal / 136px stacked; parent shell grows to required row budget up to 520px; stack below `main_width < 560`.
+- Activity Log: colored live output plus copy-all/selectable debug view; buttons use 108/132px widths, 8px gap, 28px right inset.
+- Mod Library footer: explicit safe widths for Error details/Open VPK folder/Restore backups/Review & Patch; Review & Patch hover changes ember -> lime, active darker green.
 - Developer tools: `GENERAL`/`DEVELOPER` tabs in Control Panel; advanced controls under Developer; no floating windows/viewport expansion.
-- Windows file browsing: `Minify/helper.py` uses native file/folder dialogs for D2PFX ZIP import, profile import, and profile export; Dear PyGui fallback on native-start failure; non-Windows unchanged.
-- Mod discovery: bounded recursive scanner; no symlink traversal; stable nested IDs; ordinary top-level folders with VPK-backed immediate children become categories.
+- Windows file browsing: native dialogs for D2PFX ZIP import, profile import, profile export; DPG fallback on native-start failure.
+- Mod discovery: bounded recursive scanner; no symlink traversal; stable nested IDs; top-level folders with VPK-backed immediate children become categories.
 - D2PFX: bounded catalogue/download/install/cursor paths; staged installs; confined metadata/cache.
 - Patch transaction: nested-ID resolution, restore point, conflict preflight/report, compatibility exclusions, output validation, rollback.
 - Backups: managed-output allowlist; regular/no-follow manifest open with identity recheck; confined live-output preflight; rollback retained.
 - Security primitives: `Minify/core/security.py`; bounded downloads/decompression; path confinement; hashing; atomic writes.
-- Profiles: bounded/validated imports; native picker only changes local JSON/directory selection UI.
+- Profiles: bounded/validated imports; native picker only changes local browse UI.
 - Steam: manual rc7 `prelaunch`; automatic launch-option injection disabled.
 - Security boundary: local mod Python scripts trusted; archive/VPK/profile/backup/download/D2PFX data untrusted.

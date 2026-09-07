@@ -1,16 +1,16 @@
 # Progress
 - [x] Exact rc7 baseline pinned; exactly `v21.4-hardening`, `beta`, `main` retained.
 - [x] Black-Plum Reactor UI + `960x680` client-size hardening retained.
-- [x] Home cleaned: right explainer removed; centered release header; redundant left status chrome hidden; patch sequence detached into its own row; activity header simplified.
-- [x] Deployment action clipping fixed: dedicated runtime button group; 96/136px action height; shell reserves enough row height; narrow layouts stack buttons vertically.
-- [x] Developer tools moved behind Control Panel -> Developer; footer dev entry hidden; floating/viewport-expansion panes removed.
-- [x] Activity Log supports copy-all plus selectable read-only text view.
+- [x] Home cleaned: centered release header; redundant chrome removed; patch sequence/status/deployment rows independent; action row clipping fixed with 96/136px budget and narrow stacking.
+- [x] Activity Log supports copy-all plus selectable read-only text; controls widened to 108/132px with safe right inset.
+- [x] Mod Library footer controls widened to safe label widths; Review & Patch uses distinct lime hover/darker-green active state.
+- [x] Developer tools moved behind Control Panel -> Developer; floating/viewport-expansion panes removed.
 - [x] Recursive/nested mods, custom VPK-folder categories, Collections, profiles, D2PFX, backups/conflict review retained.
 - [x] Windows local browsing uses native system picker for D2PFX ZIP import, profile import, and profile export directory.
-- [x] Product head `d682c2396f9e2984235c559e3df736086ed0b5c8` validated by CI `34074302712`: compileall/Ruff PASS; pytest **259/259 PASS**; Windows portable build PASS.
-- [x] Artifact `10001534140`; digest `sha256:a8f1703af303824cd8d8b7eb86788a3bcc7fe3eada3c78434f6adb397b9592b6`; portable ZIP SHA-256 `2f9486490199a435178f5160cfa31a190a120b2c584e3f4750636ab57f6e0691`.
+- [x] Product head `c5cb0f15fc8868d00483a6a5723a01bd71a35381` validated by CI `34075661836`: compileall/Ruff PASS; pytest **260/260 PASS**; Windows portable build PASS.
+- [x] Artifact `10001965090`; digest `sha256:cad1913c0ca70d8f256a6ae19f3c0f78086aa829817d80521c58554b75d2b637`; portable ZIP SHA-256 `076a1b86b9231366162ec9a393acfde9265510f5c797c27df7239199b7ef6cbf`.
 - [x] `beta` and `main` remain frozen.
-- [ ] Human Windows smoke: latest Home deployment row at normal and minimum sizes, Control Panel tabs, Activity Log copy/select, native picker behavior, and all major `960x680` surfaces.
+- [ ] Human Windows smoke: latest Home/Mod Library controls, Activity Log copy/select, Control Panel tabs, native picker, and all major `960x680` surfaces.
 - [ ] Continue hostile-input/path-race review and exact-rc7/semantic core reconciliation.
 - [ ] Dota startup/lobby/match/rollback/profiles/D2PFX/Dark-Terrain/Remove-Foilage smoke tests.
 - [ ] Promote hardening -> beta only after remaining gates/user approval; beta -> main only after beta validation.

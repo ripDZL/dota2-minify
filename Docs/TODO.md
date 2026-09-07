@@ -3,12 +3,13 @@
 - [x] Keep exactly three branches: `v21.4-hardening`, `beta`, `main`.
 - [x] Preserve hardened backend + v21.3.1 feature set; custom VPK-folder categories included.
 - [x] Harden Black-Plum Reactor minimum/responsive sizing at `960x680`.
-- [x] Clean Home UI: remove static right explainer; center release header; hide redundant left status; detach Analyze/Snapshot/Compose; simplify Activity Log.
-- [x] Add Activity Log copy-all/selectable-text view and Control Panel -> Developer tab.
-- [x] Fix Deployment Commands clipping: reserve action row height, grow shell to row budget, stack buttons only when genuinely narrow.
-- [x] Replace themed file browsing with native Windows picker for D2PFX ZIP import, profile import, and profile export directory.
-- [x] Product head `d682c2396f9e2984235c559e3df736086ed0b5c8`; CI `34074302712`; **259/259 PASS**; Windows build PASS; artifact `10001534140`.
-- [ ] Human Windows smoke-test latest Home deployment row, Control Panel tabs, log copy/select, native pickers, and every major surface at exactly `960x680`.
+- [x] Clean Home UI and prevent deployment-row clipping with responsive vertical budget/stacking.
+- [x] Add Activity Log copy/select tools and widen them to keep labels inside button frames.
+- [x] Widen Mod Library footer buttons; make Review & Patch visibly change ember -> lime on hover.
+- [x] Move Developer Tools behind Control Panel -> Developer; hide footer developer entry; retire floating dev panes.
+- [x] Replace themed browsing with native Windows picker for D2PFX ZIP/profile import/profile export directory.
+- [x] Product head `c5cb0f15fc8868d00483a6a5723a01bd71a35381`; CI `34075661836`; **260/260 PASS**; Windows build PASS; artifact `10001965090`.
+- [ ] Human Windows smoke-test latest Home, Activity Log buttons, Mod Library footer/hover state, native pickers, and every major surface at exactly `960x680`.
 - [ ] Smoke-test custom category discovery against real user-created folders/VPKs on Windows.
 - [ ] Continue hostile-input/path-race review; residual local filesystem races require explicit assessment.
 - [ ] Complete semantic core-overlay reconciliation and exact-rc7 diff review; never wholesale copy stale core.
