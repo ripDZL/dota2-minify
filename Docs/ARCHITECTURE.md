@@ -2,12 +2,13 @@
 - Baseline: exact upstream rc7 `d4b4520c945a9e1f8f5facc52a76ac5903babe90`; no current-main rebase during hardening.
 - Branches: exactly `v21.4-hardening` -> `beta` -> `main`; beta/main frozen.
 - UI: Dear PyGui Black-Plum Reactor; outer minimum `960x680`; responsive client-size budgeting and scroll bounds.
-- Home: centered release header; left status chrome/right explainer removed; dashboard main/hero/sequence/status/action regions visually merge into one borderless slate surface.
-- Home sequence table uses the same row/background color as the surrounding surface; stable child tags remain for resize/status code.
+- Home: centered release header; left status chrome/right explainer removed; dashboard regions visually merge into one slate surface.
+- Home separators: three thin `BORDER_SOFT` separator items distinguish intro/sequence/status/actions without restoring nested cards.
 - Deployment controls retain 96px normal / 136px stacked budget; parent shell grows to required row budget up to 520px; stack below `main_width < 560`.
-- Activity Log: colored live output plus copy-all/selectable debug view; buttons use 108/132px widths, 30px height, 8px gap, 28px right inset; vertical position is derived from the 36px header.
+- Restore dialog: `backup_restore_button` is explicitly 180x30 for safe label fit on Windows.
+- Activity Log: colored live output plus copy-all/selectable debug view; buttons use 108/132px widths, 30px height, 8px gap, 28px right inset.
 - Mod Library footer: explicit safe widths for Error details/Open VPK folder/Restore backups/Review & Patch; Review & Patch hover changes ember -> lime, active darker green.
-- Developer tools: `GENERAL`/`DEVELOPER` tabs in Control Panel; action buttons/content combos fit their content; General `opt_` text fields clamp to 280-720px from measured contents; collapsing headers remain full-row because Dear PyGui has no width configuration for them.
+- Developer tools: `GENERAL`/`DEVELOPER` tabs in Control Panel; action buttons/content combos fit their content; General `opt_` text fields clamp to 280-720px; collapsing headers remain full-row.
 - Windows file browsing: native dialogs for D2PFX ZIP import, profile import, profile export; DPG fallback on native-start failure.
 - Mod discovery: bounded recursive scanner; no symlink traversal; stable nested IDs; top-level folders with VPK-backed immediate children become categories.
 - D2PFX: bounded catalogue/download/install/cursor paths; staged installs; confined metadata/cache.
