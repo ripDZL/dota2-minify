@@ -2,12 +2,12 @@
 - Baseline: exact upstream rc7 `d4b4520c945a9e1f8f5facc52a76ac5903babe90`; no current-main rebase during hardening.
 - Branches: exactly `v21.4-hardening` -> `beta` -> `main`; beta/main frozen.
 - UI: Dear PyGui Black-Plum Reactor; outer minimum `960x680`; responsive client-size budgeting and scroll bounds.
-- Control Panel: `GENERAL`/`DEVELOPER` tabs; Developer actions use measured content-fit widths (`150..360`px); section headers `150..360`px; General headers/buttons are content-fit and combos `220..520`px; fitting re-applies on Control Panel open/resize after settings rebuilds.
-- Home: centered release header; left status chrome/right explainer removed; patch sequence, status, and deployment controls are independent rows.
-- Deployment controls: runtime `dashboard_action_buttons`; action bar 96px normal / 136px stacked; parent shell grows to required row budget up to 520px; stack below `main_width < 560`.
+- Home: centered release header; left status chrome/right explainer removed; dashboard main/hero/sequence/status/action regions are visually merged into one borderless slate surface.
+- Home sequence table uses the same row/background color as the surrounding surface; stable child tags remain for resize/status code.
+- Deployment controls retain 96px normal / 136px stacked budget; parent shell grows to required row budget up to 520px; stack below `main_width < 560`.
 - Activity Log: colored live output plus copy-all/selectable debug view; buttons use 108/132px widths, 8px gap, 28px right inset.
 - Mod Library footer: explicit safe widths for Error details/Open VPK folder/Restore backups/Review & Patch; Review & Patch hover changes ember -> lime, active darker green.
-- Developer tools: advanced controls under Developer; no floating windows/viewport expansion.
+- Developer tools: `GENERAL`/`DEVELOPER` tabs in Control Panel; action buttons/content combos fit their content; collapsing headers remain full-row because Dear PyGui has no width configuration for them.
 - Windows file browsing: native dialogs for D2PFX ZIP import, profile import, profile export; DPG fallback on native-start failure.
 - Mod discovery: bounded recursive scanner; no symlink traversal; stable nested IDs; top-level folders with VPK-backed immediate children become categories.
 - D2PFX: bounded catalogue/download/install/cursor paths; staged installs; confined metadata/cache.

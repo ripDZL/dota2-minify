@@ -3,14 +3,14 @@
 - [x] Keep exactly three branches: `v21.4-hardening`, `beta`, `main`.
 - [x] Preserve hardened backend + v21.3.1 feature set; custom VPK-folder categories included.
 - [x] Harden Black-Plum Reactor minimum/responsive sizing at `960x680`.
-- [x] Fit Control Panel controls to content: Developer buttons `150..360`px; section headers `150..360`px; General headers/buttons content-fit; combos `220..520`px; reapply after settings rebuilds.
-- [x] Clean Home UI and prevent deployment-row clipping with responsive vertical budget/stacking.
-- [x] Add Activity Log copy/select tools and widen them to keep labels inside button frames.
-- [x] Widen Mod Library footer buttons; make Review & Patch visibly change ember -> lime on hover.
-- [x] Move Developer Tools behind Control Panel -> Developer; hide footer developer entry; retire floating dev panes.
+- [x] Make Home hero/sequence/status/deployment one continuous borderless slate surface.
+- [x] Retain responsive deployment-row vertical budget/stacking and Activity Log copy/select tools.
+- [x] Retain Mod Library footer safe widths and Review & Patch lime hover.
+- [x] Content-fit Control Panel action buttons/combos; keep collapsing headers full-row and never configure unsupported header `width`.
+- [x] Keep Developer Tools behind Control Panel -> Developer; floating dev panes retired.
 - [x] Replace themed browsing with native Windows picker for D2PFX ZIP/profile import/profile export directory.
-- [x] Product head `5af666024a12b8db08288a82180d3c1a9536db4a`; CI `34079072380`; **262/262 PASS**; Windows build PASS; artifact `10003087473`.
-- [ ] Human Windows smoke-test Control Panel content-fit sizing plus latest Home, Activity Log, Mod Library footer/hover state, native pickers, and every major surface at exactly `960x680`.
+- [x] Product head `9b96289ec8b385b1f542be5e370dbc88347decc8`; CI `34081159044`; **263/263 PASS**; Windows build PASS; artifact `10003748005`.
+- [ ] Human Windows smoke-test uniform Home surface, Control Panel, latest Home/Mod Library controls, native pickers, and every major surface at exactly `960x680`.
 - [ ] Smoke-test custom category discovery against real user-created folders/VPKs on Windows.
 - [ ] Continue hostile-input/path-race review; residual local filesystem races require explicit assessment.
 - [ ] Complete semantic core-overlay reconciliation and exact-rc7 diff review; never wholesale copy stale core.

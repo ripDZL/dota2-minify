@@ -3,16 +3,15 @@
 - Read `Docs/*.md` and re-fetch branch head before code changes.
 - Branch model: exactly `v21.4-hardening` -> `beta` -> `main`; keep beta/main frozen.
 - Exact upstream baseline: `Minify-v1.14rc7` / `d4b4520c945a9e1f8f5facc52a76ac5903babe90`; do not rebase current upstream main.
-- Exact validated product head: `5af666024a12b8db08288a82180d3c1a9536db4a`; later commits are Docs-only.
-- Control Panel content-fit pass: Developer buttons `150..360`px; section headers `150..360`px; General headers/buttons content-fit; combos `220..520`px; widths measured from rendered text and re-applied on open/resize after settings rebuilds.
-- Home header: centered `MINIFY` + `RELEASE: {base.VERSION}`; deployment controls reserve 96/136px and stack below `main_width < 560`.
-- Activity Log: `COPY LOG` 108px; `SELECT TEXT` 132px; 8px gap; 28px right inset; selectable read-only debug view retained.
-- Mod Library footer: Error details 146; Open VPK folder 166; Restore backups 166; Review & Patch 176; Review & Patch hover lime/active darker green.
-- Native Windows picker: D2PFX ZIP import, profile JSON import, profile export directory; DPG fallback on native startup failure.
-- CI `34079072380`: compileall/Ruff PASS; pytest **262/262 PASS**; Windows portable build PASS.
-- Artifact `10003087473`; digest `sha256:eadf825454e6de8f7b2a481aea070b5dd696b8a074bc693b396864a952491c92`; portable ZIP SHA-256 `221ac13a7ec891a6cf3ec22d560eeb6979aa52f55815bc9d0c54819fed49453b`.
+- Exact validated product head: `9b96289ec8b385b1f542be5e370dbc88347decc8`; later commits are Docs-only.
+- Home dashboard: main/hero/Analyze-Snapshot-Compose/status/deployment regions are one continuous borderless slate surface; sequence table rows use the same background.
+- Control Panel: buttons and combos are content-fit/bounded; collapsing headers must stay full-row because Dear PyGui rejects a `width` configuration for them.
+- Home header remains centered `MINIFY` + `RELEASE: {base.VERSION}`; deployment vertical budget/stacking, Activity Log copy/select, Mod Library footer safe widths and lime Review & Patch hover remain.
+- Developer tools remain under Control Panel -> Developer; native Windows picker remains for D2PFX ZIP/profile import/profile export directory.
+- CI `34081159044`: compileall/Ruff PASS; pytest **263/263 PASS**; Windows portable build PASS.
+- Artifact `10003748005`; digest `sha256:8854d08c96a10dd3c0b3127fcd9e7da6974b12708783c735543933e3b79c484a`; portable ZIP SHA-256 `4ab21d23cb66f7c7f09d0259dbd054c5fdafcea2f2e09b94d8f2234c38d0b562`.
 - Custom VPK-folder categories remain: `mods/<Category>/<Child>/.../*.vpk` exposes VPK-backed children as nested Local folder mods.
 - Preserve recursive/nested mods, Collections, profiles, D2PFX, backups/conflict review, Dark Terrain, Safe Foliage, Main Menu fix, manual rc7 `prelaunch`, no-auto-prelaunch.
 - Remove Foilage invariant: blacklist-only; never ship `manifest.json` or `maps/dota.vpk`.
-- Remaining gates: human Windows Control-Panel/Home/Mod-Library/native-picker/custom-category/960x680 smoke; residual filesystem race/security review; semantic core/exact-rc7 diff review; Dota smoke tests.
+- Remaining gates: human Windows Home-uniform/Control-Panel/Home/Mod-Library/log-copy/native-picker/custom-category/960x680 smoke; residual filesystem race/security review; semantic core/exact-rc7 diff review; Dota smoke tests.
 - Never promote beta/main without explicit user approval.
