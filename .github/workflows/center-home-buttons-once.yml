@@ -1,0 +1,151 @@
+name: Center Home deployment buttons once
+
+on:
+  push:
+    branches:
+      - v21.4-hardening
+    paths:
+      - .github/workflows/center-home-buttons-once.yml
+
+permissions:
+  contents: write
+
+jobs:
+  patch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Apply centered deployment-button patch
+        shell: bash
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+
+          path = Path("Minify/ui/dev_tools.py")
+          text = path.read_text(encoding="utf-8")
+
+          old = '''        dpg.add_spacer(parent="home_action_label_line", tag="home_action_label_spacer", width=0)
+                  dpg.move_item("dashboard_action_label", parent="home_action_label_line")
+
+
+          def _center_home_line(parent, spacer, text_tags, spacing=0):
+          '''
+          new = '''        dpg.add_spacer(parent="home_action_label_line", tag="home_action_label_spacer", width=0)
+                  dpg.move_item("dashboard_action_label", parent="home_action_label_line")
+
+              if (
+                  dpg.does_item_exist("dashboard_action_bar")
+                  and dpg.does_item_exist("dashboard_action_buttons")
+                  and not dpg.does_item_exist("home_action_buttons_row")
+              ):
+                  dpg.add_group(
+                      parent="dashboard_action_bar",
+                      tag="home_action_buttons_row",
+                      horizontal=True,
+                      horizontal_spacing=0,
+                  )
+                  dpg.add_spacer(parent="home_action_buttons_row", tag="home_action_buttons_spacer", width=0)
+                  dpg.move_item("dashboard_action_buttons", parent="home_action_buttons_row")
+
+
+          def _center_home_line(parent, spacer, text_tags, spacing=0):
+          '''
+          if old not in text:
+              raise SystemExit("center-group insertion anchor not found")
+          text = text.replace(old, new, 1)
+
+          old = '''    dpg.configure_item(spacer, width=spacer_width)
+
+
+          def _center_compact_home_text():
+              """Center Home status/count/section copy while leaving the action buttons intact."""
+          '''
+          new = '''    dpg.configure_item(spacer, width=spacer_width)
+
+
+          def _configured_width(tag, fallback):
+              try:
+                  width = int(dpg.get_item_configuration(tag).get("width", fallback))
+                  return width if width > 0 else fallback
+              except Exception:
+                  return fallback
+
+
+          def _center_home_action_buttons():
+              """Center the responsive Patch/Rescan cluster inside the deployment surface."""
+              required = (
+                  "dashboard_action_bar",
+                  "dashboard_action_buttons",
+                  "home_action_buttons_spacer",
+                  "button_patch",
+                  "button_refresh_main",
+              )
+              if any(not dpg.does_item_exist(tag) for tag in required):
+                  return
+
+              parent_width = _item_width("dashboard_action_bar", 0)
+              if parent_width <= 0:
+                  return
+
+              try:
+                  group_cfg = dpg.get_item_configuration("dashboard_action_buttons")
+              except Exception:
+                  group_cfg = {}
+              horizontal = bool(group_cfg.get("horizontal", True))
+              spacing = int(group_cfg.get("horizontal_spacing", 8) or 0)
+
+              patch_width = _item_width("button_patch", _configured_width("button_patch", 210))
+              refresh_width = _item_width("button_refresh_main", _configured_width("button_refresh_main", 146))
+              cluster_width = (
+                  patch_width + refresh_width + spacing if horizontal else max(patch_width, refresh_width)
+              )
+              available_width = max(0, parent_width - HOME_CENTER_SIDE_PADDING)
+              spacer_width = max(0, (available_width - cluster_width) // 2)
+              dpg.configure_item("home_action_buttons_spacer", width=spacer_width)
+
+
+          def _center_compact_home_text():
+              """Center Home status/count/section copy and the deployment button cluster."""
+          '''
+          if old not in text:
+              raise SystemExit("action-centering insertion anchor not found")
+          text = text.replace(old, new, 1)
+
+          old = '''    _center_home_line(
+                  "dashboard_action_bar",
+                  "home_action_label_spacer",
+                  ("dashboard_action_label",),
+              )
+          '''
+          new = '''    _center_home_line(
+                  "dashboard_action_bar",
+                  "home_action_label_spacer",
+                  ("dashboard_action_label",),
+              )
+              _center_home_action_buttons()
+          '''
+          if old not in text:
+              raise SystemExit("center-call insertion anchor not found")
+          text = text.replace(old, new, 1)
+          path.write_text(text, encoding="utf-8")
+
+          test_path = Path("tests/test_home_centered_copy.py")
+          tests = test_path.read_text(encoding="utf-8")
+          marker = "def test_home_deployment_buttons_are_centered_as_cluster():"
+          if marker not in tests:
+              tests += '''\n\ndef test_home_deployment_buttons_are_centered_as_cluster():\n    for token in (\n        'tag="home_action_buttons_row"',\n        'tag="home_action_buttons_spacer"',\n        'dpg.move_item("dashboard_action_buttons", parent="home_action_buttons_row")',\n        "def _center_home_action_buttons():",\n        'parent_width = _item_width("dashboard_action_bar", 0)',\n        'patch_width = _item_width("button_patch", _configured_width("button_patch", 210))',\n        'refresh_width = _item_width("button_refresh_main", _configured_width("button_refresh_main", 146))',\n        "cluster_width = (",\n        'dpg.configure_item("home_action_buttons_spacer", width=spacer_width)',\n        "_center_home_action_buttons()",\n    ):\n        assert token in DEVTOOLS\n'''
+              test_path.write_text(tests, encoding="utf-8")
+          PY
+
+      - name: Remove one-off workflow and commit product patch
+        shell: bash
+        run: |
+          rm .github/workflows/center-home-buttons-once.yml
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add Minify/ui/dev_tools.py tests/test_home_centered_copy.py .github/workflows/center-home-buttons-once.yml
+          git commit -m "fix(ui): center Home deployment buttons"
+          git push origin HEAD:v21.4-hardening
