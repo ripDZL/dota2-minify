@@ -22,6 +22,7 @@ D2PFX_HEADER_BUDGET = 188
 HEADER_BRAND_WIDTH = 340
 ACTIVITY_COPY_WIDTH = 108
 ACTIVITY_SELECT_WIDTH = 132
+ACTIVITY_BUTTON_HEIGHT = 30
 ACTIVITY_BUTTON_GAP = 8
 ACTIVITY_RIGHT_INSET = 28
 LIBRARY_ERROR_DETAILS_WIDTH = 146
@@ -189,7 +190,7 @@ def _configure_home_surface(content_width):
                 label="COPY LOG",
                 callback=terminal.copy_all,
                 width=ACTIVITY_COPY_WIDTH,
-                height=24,
+                height=ACTIVITY_BUTTON_HEIGHT,
             )
             if dpg.does_item_exist("main_secondary_button_theme"):
                 dpg.bind_item_theme("activity_copy_button", "main_secondary_button_theme")
@@ -200,7 +201,7 @@ def _configure_home_surface(content_width):
                 label="SELECT TEXT",
                 callback=terminal.show_copy_view,
                 width=ACTIVITY_SELECT_WIDTH,
-                height=24,
+                height=ACTIVITY_BUTTON_HEIGHT,
             )
             if dpg.does_item_exist("main_secondary_button_theme"):
                 dpg.bind_item_theme("activity_select_button", "main_secondary_button_theme")
@@ -208,8 +209,9 @@ def _configure_home_surface(content_width):
         right_edge = max(320, content_width - ACTIVITY_RIGHT_INSET)
         select_x = max(260, right_edge - ACTIVITY_SELECT_WIDTH)
         copy_x = max(140, select_x - ACTIVITY_BUTTON_GAP - ACTIVITY_COPY_WIDTH)
-        dpg.set_item_pos("activity_copy_button", (copy_x, 5))
-        dpg.set_item_pos("activity_select_button", (select_x, 5))
+        button_y = max(0, (36 - ACTIVITY_BUTTON_HEIGHT) // 2)
+        dpg.set_item_pos("activity_copy_button", (copy_x, button_y))
+        dpg.set_item_pos("activity_select_button", (select_x, button_y))
 
 
 def _configure_minimum_window_surfaces(content_width, compact_width):
