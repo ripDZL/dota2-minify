@@ -3,16 +3,16 @@
 - [x] Keep exactly three branches: `v21.4-hardening`, `beta`, `main`.
 - [x] Preserve hardened backend + v21.3.1 feature set; custom VPK-folder categories included.
 - [x] Harden Black-Plum Reactor minimum/responsive sizing at `960x680`.
-- [x] Keep Home as one slate surface with three subtle separators between intro/sequence/status/actions.
-- [x] Retain responsive deployment-row vertical budget/stacking and Activity Log copy/select tools.
+- [x] Compact Home to status/count + deployment actions only; hide hero/intro and `ANALYZE/SNAPSHOT/COMPOSE` at runtime.
+- [x] Reapply compact Home shell after resize and retain one subtle separator before deployment actions.
 - [x] Fit Restore backup action at 180x30 so its label stays inside the button.
 - [x] Retain Mod Library footer safe widths and Review & Patch lime hover.
 - [x] Content-fit Control Panel action buttons/combos and General `opt_` text fields (280-720px); keep collapsing headers full-row.
 - [x] Center Activity Log copy/select labels with 30px buttons inside the 36px header.
 - [x] Keep Developer Tools behind Control Panel -> Developer; floating dev panes retired.
 - [x] Replace themed browsing with native Windows picker for D2PFX ZIP/profile import/profile export directory.
-- [x] Product head `c6607667db8d1862612835423f4d4b3e23bce4b1`; CI `34154573475`; **267/267 PASS**; Windows build PASS; artifact `10030528705`.
-- [ ] Human Windows smoke-test restore-button fit, Home separators, Control Panel field widths, Activity Log centering, Home/Mod Library controls, native pickers, and every major surface at exactly `960x680`.
+- [x] Product head `7b38c2957aa412da7f37a8fe95269d265cc37288`; CI `34155677327`; **270/270 PASS**; Windows build PASS; artifact `10030898392`.
+- [ ] Human Windows smoke-test compact Home actual layout, restore-button fit, Control Panel field widths, Activity Log centering, Home/Mod Library controls, native pickers, and every major surface at exactly `960x680`.
 - [ ] Smoke-test custom category discovery against real user-created folders/VPKs on Windows.
 - [ ] Continue hostile-input/path-race review; residual local filesystem races require explicit assessment.
 - [ ] Complete semantic core-overlay reconciliation and exact-rc7 diff review; never wholesale copy stale core.
