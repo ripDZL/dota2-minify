@@ -1,20 +1,21 @@
 # Progress
 - [x] Exact rc7 baseline pinned; exactly `v21.4-hardening`, `beta`, `main` retained.
 - [x] Black-Plum Reactor UI + `960x680` client-size hardening retained.
-- [x] Home compacted to live status/count + deployment actions; explanatory hero and `ANALYZE/SNAPSHOT/COMPOSE` sequence hidden at runtime.
-- [x] Compact Home shell reapplies after resize so removed content does not leave a large empty workspace; one subtle separator remains before actions.
-- [x] Compact Home READY/message, selected/installed count, and `DEPLOYMENT COMMANDS` are centered with responsive live-width spacer rows.
-- [x] Restore backup action remains 180x30 so `Restore this backup` fits Windows font metrics.
-- [x] Activity Log supports copy-all plus selectable read-only text; controls use safe widths/right inset and 30px vertically centered button height.
-- [x] Mod Library footer controls use safe label widths; Review & Patch has distinct lime hover/darker-green active state.
-- [x] Control Panel action buttons/combos are content-fit; General `opt_` text fields clamp to 280-720px; invalid collapsing-header width configuration remains removed.
+- [x] Home compacted to live status/count + deployment actions; explanatory hero and `ANALYZE/SNAPSHOT/COMPOSE` hidden.
+- [x] Compact Home shell reapplies after resize; one subtle separator remains before actions.
+- [x] READY/message, selected/installed count, and `DEPLOYMENT COMMANDS` centered with responsive live-width spacer rows.
+- [x] Patch/Rescan action buttons centered as one responsive cluster; narrow stacked mode remains centered.
+- [x] Restore backup action remains 180x30.
+- [x] Activity Log supports copy-all/selectable read-only text; controls use safe widths/right inset and 30px centered height.
+- [x] Mod Library footer controls use safe widths; Review & Patch has lime hover/darker-green active state.
+- [x] Control Panel action buttons/combos content-fit; General `opt_` fields clamp 280-720px; collapsing headers stay full-row.
 - [x] Developer tools remain behind Control Panel -> Developer; floating/viewport-expansion panes removed.
 - [x] Recursive/nested mods, custom VPK-folder categories, Collections, profiles, D2PFX, backups/conflict review retained.
-- [x] Windows local browsing uses native system picker for D2PFX ZIP import, profile import, and profile export directory.
-- [x] Product head `e50625b1efabbc9a01a6379cd27cec862666b4bf` validated by CI `34161564938`: compileall/Ruff PASS; pytest **272/272 PASS**; Windows portable build PASS.
-- [x] Artifact `10032782594`; digest `sha256:f595f2dc9e37eda8cc54e2b621b744d0bad1df8364066ae7ea53ecb080b3998a`.
+- [x] Windows local browsing uses native system picker for D2PFX ZIP import, profile import, profile export directory.
+- [x] Product code `da8c52d8ca749514e3b302b4d194f98d3f78980e`; validation head `4b921d0073e240568ee92ee58cd61c28c9d9df64`; CI `34163085380`: compileall/Ruff PASS; pytest **273/273 PASS**; Windows portable build PASS.
+- [x] Artifact `10033267470`; digest `sha256:21b518627d4c6768ca160fe9f1a1fda24ca76b7440e81cfc51fb1ad6f29d30ed`; portable SHA-256 `ee3d8f1d6186bb981acc731c36542468b8ce75fad133589ad55739c1f75450a0`.
 - [x] `beta` and `main` remain frozen.
-- [ ] Human Windows smoke: centered compact Home actual layout, restore-button fit, Control Panel field sizing, Activity Log centering, Home/Mod Library controls, native picker, and all major `960x680` surfaces.
+- [ ] Human Windows smoke: centered Home/action cluster, restore, Control Panel, Activity Log, Home/Mod Library controls, native picker, all major `960x680` surfaces.
 - [ ] Continue hostile-input/path-race review and exact-rc7/semantic core reconciliation.
 - [ ] Dota startup/lobby/match/rollback/profiles/D2PFX/Dark-Terrain/Remove-Foilage smoke tests.
 - [ ] Promote hardening -> beta only after remaining gates/user approval; beta -> main only after beta validation.

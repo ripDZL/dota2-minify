@@ -3,14 +3,14 @@
 - Branches: exactly `v21.4-hardening` -> `beta` -> `main`; beta/main frozen.
 - UI: Dear PyGui Black-Plum Reactor; outer minimum `960x680`; responsive client-size budgeting and scroll bounds.
 - Home: centered release header; left status chrome/right explainer removed; visible workspace is live status/count plus deployment actions only.
-- Home hero and `ANALYZE/SNAPSHOT/COMPOSE` sequence remain as hidden compatibility tags; runtime compact pass hides them and keeps only the subtle separator before deployment actions.
-- Compact Home layout uses 68px status, >=96px actions, 22px gap, and >=250px shell; a next-frame callback reapplies compact heights after `window.on_resize`.
-- Compact Home copy is centered without heavy layout chrome: tagged horizontal rows use leading spacers calculated from live text width and current status/action panel width for READY/message, selected/installed count, and `DEPLOYMENT COMMANDS`.
-- Deployment buttons remain independently responsive and retain narrow-layout vertical stacking when required.
-- Restore dialog: `backup_restore_button` is explicitly 180x30 for safe label fit on Windows.
-- Activity Log: colored live output plus copy-all/selectable debug view; buttons use 108/132px widths, 30px height, 8px gap, 28px right inset.
-- Mod Library footer: explicit safe widths for Error details/Open VPK folder/Restore backups/Review & Patch; Review & Patch hover changes ember -> lime, active darker green.
-- Developer tools: `GENERAL`/`DEVELOPER` tabs in Control Panel; action buttons/content combos fit their content; General `opt_` text fields clamp to 280-720px; collapsing headers remain full-row.
+- Home hero and `ANALYZE/SNAPSHOT/COMPOSE` remain hidden compatibility tags; runtime compact pass hides them and keeps the subtle separator before deployment actions.
+- Compact Home: 68px status, >=96px actions, 22px gap, >=250px shell; next-frame callback reapplies compact heights after `window.on_resize`.
+- Compact Home copy uses tagged horizontal rows with calculated leading spacers from live text/panel widths for READY/message, selected/installed count, and `DEPLOYMENT COMMANDS`.
+- Deployment buttons are wrapped in an outer centering row; live Patch/Rescan widths plus group orientation/spacing determine cluster width, so horizontal and narrow stacked layouts center as a unit.
+- Restore dialog: `backup_restore_button` explicitly 180x30.
+- Activity Log: colored live output plus copy-all/selectable debug view; buttons 108/132px wide, 30px high, 8px gap, 28px right inset.
+- Mod Library footer: explicit safe widths; Review & Patch hover ember -> lime, active darker green.
+- Developer tools: `GENERAL`/`DEVELOPER` tabs in Control Panel; actions/combos content-fit; General `opt_` fields clamp 280-720px; collapsing headers full-row.
 - Windows file browsing: native dialogs for D2PFX ZIP import, profile import, profile export; DPG fallback on native-start failure.
 - Mod discovery: bounded recursive scanner; no symlink traversal; stable nested IDs; top-level folders with VPK-backed immediate children become categories.
 - D2PFX: bounded catalogue/download/install/cursor paths; staged installs; confined metadata/cache.

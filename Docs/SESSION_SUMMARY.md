@@ -1,17 +1,18 @@
 # Session Summary
 - Fork: `ripDZL/dota2-minify`; active `v21.4-hardening`; exact rc7 baseline `d4b4520c945a9e1f8f5facc52a76ac5903babe90`.
 - Branch model: exactly `v21.4-hardening` -> `beta` -> `main`; beta/main frozen.
-- Exact validated product head: `e50625b1efabbc9a01a6379cd27cec862666b4bf`; later commits are Docs-only.
-- Home is compact: hero/intro and `ANALYZE/SNAPSHOT/COMPOSE` are hidden; status/count and deployment controls remain with one subtle separator.
-- Compact Home surviving copy is centered: READY/message, selected/installed count, and `DEPLOYMENT COMMANDS`; responsive spacer rows use live text/panel widths.
-- Compact Home shell reapplies one frame after normal resize so the hidden content does not leave excess empty vertical space.
-- Restore dialog action `Restore this backup` remains 180x30 for safe Windows label fit.
-- Control Panel buttons/combos remain bounded/content-fit; General `opt_` text fields clamp to 280-720px; collapsing headers remain full-row.
-- Activity Log copy/select buttons use 30px height centered in the 36px header while retaining safe widths/right inset.
+- Exact centered-action product code head: `da8c52d8ca749514e3b302b4d194f98d3f78980e`; validation head `4b921d0073e240568ee92ee58cd61c28c9d9df64`; later commits are Docs-only.
+- Home is compact: hero/intro and `ANALYZE/SNAPSHOT/COMPOSE` hidden; status/count and deployment controls remain with one subtle separator.
+- READY/message, selected/installed count, and `DEPLOYMENT COMMANDS` are centered from responsive live-width spacer rows.
+- Patch/Rescan buttons are centered as one responsive cluster; narrow vertical stacking remains centered.
+- Compact Home shell reapplies one frame after normal resize so hidden content does not leave excess vertical space.
+- Restore dialog action `Restore this backup` remains 180x30.
+- Control Panel buttons/combos bounded/content-fit; General `opt_` fields clamp 280-720px; collapsing headers full-row.
+- Activity Log copy/select buttons use 30px height centered in 36px header with safe widths/right inset.
 - Home release header and Mod Library footer widths/Review & Patch lime hover remain.
-- Developer tools remain under Control Panel -> Developer; Windows browsing uses native system dialogs for D2PFX ZIP/profile import/profile export directory.
-- CI `34161564938`: compileall PASS; Ruff PASS; pytest **272/272 PASS**; Windows portable build PASS.
-- Artifact `10032782594`; 53,100,651 bytes; digest `sha256:f595f2dc9e37eda8cc54e2b621b744d0bad1df8364066ae7ea53ecb080b3998a`.
+- Developer tools remain under Control Panel -> Developer; Windows browsing uses native dialogs for D2PFX ZIP/profile import/profile export directory.
+- CI `34163085380`: compileall PASS; Ruff PASS; pytest **273/273 PASS**; Windows portable build PASS.
+- Artifact `10033267470`; 53,101,015 bytes; digest `sha256:21b518627d4c6768ca160fe9f1a1fda24ca76b7440e81cfc51fb1ad6f29d30ed`; portable 53,640,817 bytes; SHA-256 `ee3d8f1d6186bb981acc731c36542468b8ce75fad133589ad55739c1f75450a0`.
 - Custom VPK-folder category behavior remains intact.
-- Remaining gates: Windows smoke of centered compact Home/restore/Control Panel/Activity/Home-Mod-Library controls/log copy/native picker/custom categories/960x680; residual path-race/security review; semantic rc7 reconciliation; Dota smoke tests.
+- Remaining gates: Windows smoke of centered Home/action cluster/restore/Control Panel/Activity/Home-Mod-Library/log-copy/native picker/custom categories/960x680; residual path-race/security review; semantic rc7 reconciliation; Dota smoke tests.
 - Do not promote beta/main until remaining gates and explicit user approval.

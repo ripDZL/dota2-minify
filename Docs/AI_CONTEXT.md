@@ -2,20 +2,21 @@
 - Upstream baseline: `Egezenn/dota2-minify` tag `Minify-v1.14rc7`; exact commit `d4b4520c945a9e1f8f5facc52a76ac5903babe90`.
 - Fork: `ripDZL/dota2-minify`; active `v21.4-hardening`; promotion `v21.4-hardening` -> `beta` -> `main`.
 - Exactly three branches; `beta` frozen `af83bbb051edced195d5f55ba49ff060a8c76f3c`; `main` frozen `a26bc88a0d412e357965f29488b83a7f9093e11f`.
-- Exact validated product head: `e50625b1efabbc9a01a6379cd27cec862666b4bf`; later milestone commits are Docs-only.
-- Home is compact: explanatory hero plus `ANALYZE/SNAPSHOT/COMPOSE` sequence are hidden at runtime; visible workspace is status, selected/installed count, one subtle separator, and deployment actions.
-- Compact Home surviving copy is horizontally centered: READY/message row, selected/installed count, and `DEPLOYMENT COMMANDS`; centering uses live text widths plus responsive spacer rows and reapplies with compact layout.
-- Compact Home shell reapplies one frame after `window.on_resize` so legacy resize budgeting cannot restore excess vertical space; 250px shell minimum retained.
-- Restore dialog `backup_restore_button` remains 180x30 so `Restore this backup` fits Windows font metrics.
-- Control Panel sizing: developer/general action buttons and combos are bounded/content-fit; General `opt_` text fields clamp to 280-720px; collapsing headers stay full-row.
-- Activity Log copy/select buttons retain 108/132px widths and 30px centered height inside the 36px header.
-- Home header remains centered `MINIFY` + `RELEASE: {base.VERSION}`; Mod Library footer safe widths/Review & Patch hover retained.
-- Developer tools remain under Control Panel -> Developer; native Windows file picker retained for D2PFX/profile browsing.
+- Exact centered-action product code head: `da8c52d8ca749514e3b302b4d194f98d3f78980e`; validation head `4b921d0073e240568ee92ee58cd61c28c9d9df64`; later commits are Docs-only.
+- Home is compact: hero plus `ANALYZE/SNAPSHOT/COMPOSE` hidden; visible workspace is status, selected/installed count, one subtle separator, deployment label/actions.
+- Compact Home centers READY/message, selected/installed count, `DEPLOYMENT COMMANDS`, and the Patch/Rescan action cluster from live panel/control widths; narrow stacked actions remain centered as one cluster.
+- Compact Home shell reapplies one frame after `window.on_resize`; 250px shell minimum retained.
+- Restore dialog `backup_restore_button` remains 180x30 for Windows label fit.
+- Control Panel: action buttons/combos bounded/content-fit; General `opt_` text fields clamp 280-720px; collapsing headers stay full-row.
+- Activity Log copy/select buttons remain 108/132px wide, 30px high, centered in 36px header.
+- Home release header remains centered `MINIFY` + `RELEASE: {base.VERSION}`; Mod Library safe footer widths/Review & Patch hover retained.
+- Developer tools remain under Control Panel -> Developer; native Windows picker retained for D2PFX/profile browsing.
 - Custom categories: `mods/<Category>/<Child>/.../*.vpk` promotes top-level folder to category; VPK-backed immediate children become nested Local folder mods.
-- Hardening CI `34161564938`: compileall PASS; Ruff format/lint PASS; pytest **272/272 PASS**; Windows portable build/package/upload PASS.
-- Artifact `10032782594`; 53,100,651-byte GitHub artifact; digest `sha256:f595f2dc9e37eda8cc54e2b621b744d0bad1df8364066ae7ea53ecb080b3998a`.
-- Human Windows smoke remains required for centered compact Home actual rendering, restore-button fit, Control Panel, Activity Log, Home/Mod Library controls, and all major `960x680` surfaces; CI does not prove pixel rendering.
-- Preserve recursive/nested mods, Collections, profiles, D2PFX, backups/conflict review, Dark Terrain, Safe Foliage, Main Menu Background fix, manual rc7 `prelaunch`, and no-auto-prelaunch policy.
+- CI `34163085380`: compileall/Ruff PASS; pytest **273/273 PASS**; Windows portable build/package/upload PASS.
+- Artifact `10033267470`; 53,101,015-byte GitHub artifact; digest `sha256:21b518627d4c6768ca160fe9f1a1fda24ca76b7440e81cfc51fb1ad6f29d30ed`.
+- Portable ZIP: 53,640,817 bytes; SHA-256 `ee3d8f1d6186bb981acc731c36542468b8ce75fad133589ad55739c1f75450a0`.
+- Human Windows smoke remains required for centered Home/actions, restore, Control Panel, Activity Log, Home/Mod Library controls, and all major `960x680` surfaces; CI does not prove pixel rendering.
+- Preserve recursive/nested mods, Collections, profiles, D2PFX, backups/conflict review, Dark Terrain, Safe Foliage, Main Menu Background fix, manual rc7 `prelaunch`, no-auto-prelaunch.
 - Remove Foilage: blacklist-only; never ship `manifest.json` or `maps/dota.vpk`; retain both oak-leaf blacklist entries.
 - Security boundary: mod Python scripts trusted; archive/VPK/profile/backup/download/D2PFX data untrusted.
 - Remaining: Windows/Dota smoke; residual path-race/hostile-input review; semantic core/exact-rc7 reconciliation; no beta/main promotion without explicit user approval.

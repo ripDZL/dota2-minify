@@ -3,19 +3,19 @@
 - Read `Docs/*.md` and re-fetch branch head before code changes.
 - Branch model: exactly `v21.4-hardening` -> `beta` -> `main`; keep beta/main frozen.
 - Exact upstream baseline: `Minify-v1.14rc7` / `d4b4520c945a9e1f8f5facc52a76ac5903babe90`; do not rebase current upstream main.
-- Exact validated product head: `e50625b1efabbc9a01a6379cd27cec862666b4bf`; later commits are Docs-only.
-- Home is compact: hero/intro and `ANALYZE/SNAPSHOT/COMPOSE` are hidden; visible workspace is live status, selected/installed count, one subtle separator, and deployment actions.
-- Home surviving copy is centered: READY/message, selected/installed count, and `DEPLOYMENT COMMANDS`; centering uses live text widths/current panel widths through tagged horizontal rows with leading spacers.
-- Compact Home reapplies its reduced shell height one frame after the normal resize pass; preserve this unless `window.on_resize` is refactored directly.
-- Restore dialog button `Restore this backup` remains 180x30 for safe Windows label fit.
-- Control Panel: buttons/combos content-fit/bounded; General `opt_` text fields clamp to 280-720px; collapsing headers stay full-row.
-- Activity Log copy/select buttons use 108/132px widths and 30px height centered in the 36px header.
-- Home header remains centered `MINIFY` + `RELEASE: {base.VERSION}`; Mod Library footer safe widths/lime Review & Patch hover remain.
+- Exact centered-action product code head: `da8c52d8ca749514e3b302b4d194f98d3f78980e`; validation head `4b921d0073e240568ee92ee58cd61c28c9d9df64`; later commits are Docs-only.
+- Home is compact: hero/intro and `ANALYZE/SNAPSHOT/COMPOSE` hidden; visible workspace is live status, selected/installed count, one subtle separator, deployment label/actions.
+- Home centers READY/message, selected/installed count, `DEPLOYMENT COMMANDS`, and Patch/Rescan as a responsive cluster; horizontal and narrow stacked layouts center from live widths.
+- Compact Home reapplies reduced shell height one frame after normal resize; preserve unless `window.on_resize` is refactored directly.
+- Restore dialog button `Restore this backup` remains 180x30.
+- Control Panel: buttons/combos content-fit/bounded; General `opt_` fields clamp 280-720px; collapsing headers stay full-row.
+- Activity Log copy/select buttons use 108/132px widths and 30px height centered in 36px header.
+- Home header remains centered `MINIFY` + `RELEASE: {base.VERSION}`; Mod Library footer widths/lime Review & Patch hover remain.
 - Developer tools remain under Control Panel -> Developer; native Windows picker remains for D2PFX ZIP/profile import/profile export directory.
-- CI `34161564938`: compileall/Ruff PASS; pytest **272/272 PASS**; Windows portable build PASS.
-- Artifact `10032782594`; digest `sha256:f595f2dc9e37eda8cc54e2b621b744d0bad1df8364066ae7ea53ecb080b3998a`.
+- CI `34163085380`: compileall/Ruff PASS; pytest **273/273 PASS**; Windows portable build PASS.
+- Artifact `10033267470`; digest `sha256:21b518627d4c6768ca160fe9f1a1fda24ca76b7440e81cfc51fb1ad6f29d30ed`; portable ZIP SHA-256 `ee3d8f1d6186bb981acc731c36542468b8ce75fad133589ad55739c1f75450a0`.
 - Custom VPK-folder categories remain: `mods/<Category>/<Child>/.../*.vpk` exposes VPK-backed children as nested Local folder mods.
 - Preserve recursive/nested mods, Collections, profiles, D2PFX, backups/conflict review, Dark Terrain, Safe Foliage, Main Menu fix, manual rc7 `prelaunch`, no-auto-prelaunch.
 - Remove Foilage invariant: blacklist-only; never ship `manifest.json` or `maps/dota.vpk`.
-- Remaining gates: human Windows centered-compact-Home/restore/Control-Panel/Activity/Home-Mod-Library/log-copy/native-picker/custom-category/960x680 smoke; residual filesystem race/security review; semantic core/exact-rc7 diff review; Dota smoke tests.
+- Remaining gates: human Windows centered-Home/actions/restore/Control-Panel/Activity/Home-Mod-Library/log-copy/native-picker/custom-category/960x680 smoke; residual filesystem race/security review; semantic core/exact-rc7 diff review; Dota smoke tests.
 - Never promote beta/main without explicit user approval.
