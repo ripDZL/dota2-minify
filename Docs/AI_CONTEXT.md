@@ -2,17 +2,18 @@
 - Upstream baseline: `Egezenn/dota2-minify` tag `Minify-v1.14rc7`; exact commit `d4b4520c945a9e1f8f5facc52a76ac5903babe90`.
 - Fork: `ripDZL/dota2-minify`; active `v21.4-hardening`; promotion `v21.4-hardening` -> `beta` -> `main`.
 - Exactly three branches; `beta` frozen `af83bbb051edced195d5f55ba49ff060a8c76f3c`; `main` frozen `a26bc88a0d412e357965f29488b83a7f9093e11f`.
-- Exact validated product head: `c6607667db8d1862612835423f4d4b3e23bce4b1`; later milestone commits are Docs-only.
-- Home dashboard stays one continuous slate surface; three restrained `BORDER_SOFT` separators now distinguish intro/sequence/status/actions without nested cards.
-- Restore dialog `backup_restore_button` is 180x30 so `Restore this backup` fits Windows font metrics.
+- Exact validated product head: `7b38c2957aa412da7f37a8fe95269d265cc37288`; later milestone commits are Docs-only.
+- Home is compact: explanatory hero plus `ANALYZE/SNAPSHOT/COMPOSE` sequence are hidden at runtime; visible workspace is status, selected/installed count, one subtle separator, and deployment actions.
+- Compact Home shell reapplies one frame after `window.on_resize` so legacy resize budgeting cannot restore excess vertical space; 250px shell minimum retained.
+- Restore dialog `backup_restore_button` remains 180x30 so `Restore this backup` fits Windows font metrics.
 - Control Panel sizing: developer/general action buttons and combos are bounded/content-fit; General `opt_` text fields clamp to 280-720px; collapsing headers stay full-row.
 - Activity Log copy/select buttons retain 108/132px widths and 30px centered height inside the 36px header.
 - Home header remains centered `MINIFY` + `RELEASE: {base.VERSION}`; Mod Library footer safe widths/Review & Patch hover retained.
 - Developer tools remain under Control Panel -> Developer; native Windows file picker retained for D2PFX/profile browsing.
 - Custom categories: `mods/<Category>/<Child>/.../*.vpk` promotes top-level folder to category; VPK-backed immediate children become nested Local folder mods.
-- Hardening CI `34154573475`: compileall PASS; Ruff format/lint PASS; pytest **267/267 PASS**; Windows portable build/package/upload PASS.
-- Artifact `10030528705`; 53,097,925-byte GitHub artifact; digest `sha256:44d334a226a106eda5c3f55756765e3eaa353624033e50dc94f3411d238cb3ed`; portable ZIP 53,637,965 bytes; SHA-256 `3cac232708840286357be0df11ecbaa1a2ca2d03b7ea602ccc63041ae143287a`.
-- Human Windows smoke remains required for restore-button fit, new Home separators, Control Panel, Activity Log, Home/Mod Library controls, and all major `960x680` surfaces; CI does not prove pixel rendering.
+- Hardening CI `34155677327`: compileall PASS; Ruff format/lint PASS; pytest **270/270 PASS**; Windows portable build/package/upload PASS.
+- Artifact `10030898392`; 53,100,230-byte GitHub artifact; digest `sha256:094b70f06d3faae4e281a4a6ff57fa9cad2aaf043d254d261cd95993e1cf99bb`; portable ZIP 53,639,609 bytes; SHA-256 `a7de61dfc07ac57c98cbcc89c4f587cca71246125c0e363028c41b9a250edb06`.
+- Human Windows smoke remains required for compact Home actual rendering, restore-button fit, Control Panel, Activity Log, Home/Mod Library controls, and all major `960x680` surfaces; CI does not prove pixel rendering.
 - Preserve recursive/nested mods, Collections, profiles, D2PFX, backups/conflict review, Dark Terrain, Safe Foliage, Main Menu Background fix, manual rc7 `prelaunch`, and no-auto-prelaunch policy.
 - Remove Foilage: blacklist-only; never ship `manifest.json` or `maps/dota.vpk`; retain both oak-leaf blacklist entries.
 - Security boundary: mod Python scripts trusted; archive/VPK/profile/backup/download/D2PFX data untrusted.
