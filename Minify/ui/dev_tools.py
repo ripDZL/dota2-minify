@@ -22,9 +22,12 @@ TOOL_BUTTON_MAX_WIDTH = 360
 GENERAL_BUTTON_MIN_WIDTH = 84
 COMBO_MIN_WIDTH = 220
 COMBO_MAX_WIDTH = 520
+INPUT_TEXT_MIN_WIDTH = 280
+INPUT_TEXT_MAX_WIDTH = 720
 TEXT_WIDTH_FALLBACK = 8
 TOOL_BUTTON_PADDING = 38
 COMBO_PADDING = 58
+INPUT_TEXT_PADDING = 44
 HOME_SURFACE_TAGS = (
     "app_workspace_main",
     "dashboard_hero_card",
@@ -119,8 +122,16 @@ def _combo_display_text(item):
     return max(candidates, key=len) if candidates else "Select"
 
 
+def _input_display_text(item):
+    try:
+        current = dpg.get_value(item)
+    except Exception:
+        current = ""
+    return str(current or "")
+
+
 def _fit_general_control_panel_controls():
-    """Keep supported Settings combos and action buttons content-sized."""
+    """Keep supported Settings fields, combos and action buttons content-sized."""
     if not dpg.does_item_exist("settings_content_group"):
         return
 
@@ -128,11 +139,22 @@ def _fit_general_control_panel_controls():
         try:
             item_type = str(dpg.get_item_type(item))
             cfg = dpg.get_item_configuration(item)
+            alias = str(dpg.get_item_alias(item) or "")
         except Exception:
             continue
 
         label = str(cfg.get("label") or "")
-        if "mvCombo" in item_type:
+        if "mvInputText" in item_type and alias.startswith("opt_"):
+            dpg.configure_item(
+                item,
+                width=_fit_control_width(
+                    _input_display_text(item),
+                    INPUT_TEXT_MIN_WIDTH,
+                    INPUT_TEXT_MAX_WIDTH,
+                    INPUT_TEXT_PADDING,
+                ),
+            )
+        elif "mvCombo" in item_type:
             dpg.configure_item(
                 item,
                 width=_fit_control_width(_combo_display_text(item), COMBO_MIN_WIDTH, COMBO_MAX_WIDTH, COMBO_PADDING),
