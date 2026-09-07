@@ -1,16 +1,17 @@
 # Session Summary
 - Fork: `ripDZL/dota2-minify`; active `v21.4-hardening`; exact rc7 baseline `d4b4520c945a9e1f8f5facc52a76ac5903babe90`.
 - Branch model: exactly `v21.4-hardening` -> `beta` -> `main`; beta/main frozen.
-- Exact validated product head: `7b38c2957aa412da7f37a8fe95269d265cc37288`; later commits are Docs-only.
+- Exact validated product head: `e50625b1efabbc9a01a6379cd27cec862666b4bf`; later commits are Docs-only.
 - Home is compact: hero/intro and `ANALYZE/SNAPSHOT/COMPOSE` are hidden; status/count and deployment controls remain with one subtle separator.
+- Compact Home surviving copy is centered: READY/message, selected/installed count, and `DEPLOYMENT COMMANDS`; responsive spacer rows use live text/panel widths.
 - Compact Home shell reapplies one frame after normal resize so the hidden content does not leave excess empty vertical space.
 - Restore dialog action `Restore this backup` remains 180x30 for safe Windows label fit.
 - Control Panel buttons/combos remain bounded/content-fit; General `opt_` text fields clamp to 280-720px; collapsing headers remain full-row.
 - Activity Log copy/select buttons use 30px height centered in the 36px header while retaining safe widths/right inset.
 - Home release header and Mod Library footer widths/Review & Patch lime hover remain.
 - Developer tools remain under Control Panel -> Developer; Windows browsing uses native system dialogs for D2PFX ZIP/profile import/profile export directory.
-- CI `34155677327`: compileall PASS; Ruff PASS; pytest **270/270 PASS**; Windows portable build PASS.
-- Artifact `10030898392`; 53,100,230 bytes; digest `sha256:094b70f06d3faae4e281a4a6ff57fa9cad2aaf043d254d261cd95993e1cf99bb`; portable ZIP 53,639,609 bytes; SHA-256 `a7de61dfc07ac57c98cbcc89c4f587cca71246125c0e363028c41b9a250edb06`.
+- CI `34161564938`: compileall PASS; Ruff PASS; pytest **272/272 PASS**; Windows portable build PASS.
+- Artifact `10032782594`; 53,100,651 bytes; digest `sha256:f595f2dc9e37eda8cc54e2b621b744d0bad1df8364066ae7ea53ecb080b3998a`.
 - Custom VPK-folder category behavior remains intact.
-- Remaining gates: Windows smoke of compact Home/restore/Control Panel/Activity/Home-Mod-Library controls/log copy/native picker/custom categories/960x680; residual path-race/security review; semantic rc7 reconciliation; Dota smoke tests.
+- Remaining gates: Windows smoke of centered compact Home/restore/Control Panel/Activity/Home-Mod-Library controls/log copy/native picker/custom categories/960x680; residual path-race/security review; semantic rc7 reconciliation; Dota smoke tests.
 - Do not promote beta/main until remaining gates and explicit user approval.
