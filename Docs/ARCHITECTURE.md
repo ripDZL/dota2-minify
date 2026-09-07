@@ -3,14 +3,14 @@
 - Branches: exactly `v21.4-hardening` -> `beta` -> `main`; beta/main frozen.
 - UI: Dear PyGui Black-Plum Reactor; outer minimum `960x680`; responsive client-size budgeting and scroll bounds.
 - Home: single full-width action workspace; static right explainer removed; live library count stays in status panel.
-- Header cleanup is applied in `Minify/ui/window.py` after static UI creation: hide left status chrome; stack `MINIFY` over `RELEASE: {base.VERSION}`; retain old source tags only for compatibility.
-- Patch sequence is reparented at runtime from the hero card into `app_workspace_main` before the status panel; row height `94..116`; hero/status/action are independent rows; main workspace can scroll at constrained height.
-- Deployment command widths use `action_cluster_width` bounded to `360..620` rather than fixed narrow buttons.
-- Activity log keeps colored per-message rendering in `Minify/ui/terminal.py`; `COPY LOG` serializes current visible entries to clipboard; `SELECT TEXT` opens a read-only multiline selectable view; action controls use a right-edge safety inset.
-- Developer tools: `Minify/ui/dev_tools.py` installs `GENERAL`/`DEVELOPER` tabs into the existing Control Panel, moves `settings_content_group` under General, renders advanced controls under Developer, and no longer creates floating windows or expands the viewport.
-- Windows file browsing: `Minify/helper.py` intercepts only D2PFX ZIP import, profile import, and profile export file-dialog tags; uses Tk/Windows native file/folder dialogs; preserves callbacks; Dear PyGui dialog is fallback on native-start failure; non-Windows unchanged.
+- Header cleanup in `Minify/ui/window.py`: hide left status chrome; stack `MINIFY` over `RELEASE: {base.VERSION}`; retain old source tags for compatibility.
+- Patch sequence is reparented from hero into `app_workspace_main` before status; hero/sequence/status/action are independent rows.
+- Deployment commands: runtime tagged `dashboard_action_buttons`; 96px action bar normally, 136px when stacked; shell height is raised to fit required rows up to 520px; vertical stack activates only for `main_width < 560`; width budget remains confined to main client width.
+- Activity log keeps colored rendering in `Minify/ui/terminal.py`; `COPY LOG` serializes visible entries; `SELECT TEXT` opens read-only selectable multiline text; action controls retain right-edge safety inset.
+- Developer tools: `GENERAL`/`DEVELOPER` tabs in Control Panel; advanced controls under Developer; no floating windows/viewport expansion.
+- Windows file browsing: `Minify/helper.py` uses native file/folder dialogs for D2PFX ZIP import, profile import, and profile export; Dear PyGui fallback on native-start failure; non-Windows unchanged.
 - Mod discovery: bounded recursive scanner; no symlink traversal; stable nested IDs; ordinary top-level folders with VPK-backed immediate children become categories.
-- D2PFX: bounded catalogue/download/install/cursor paths; staged installs; confined metadata/cache; native picker only changes local ZIP selection UI.
+- D2PFX: bounded catalogue/download/install/cursor paths; staged installs; confined metadata/cache.
 - Patch transaction: nested-ID resolution, restore point, conflict preflight/report, compatibility exclusions, output validation, rollback.
 - Backups: managed-output allowlist; regular/no-follow manifest open with identity recheck; confined live-output preflight; rollback retained.
 - Security primitives: `Minify/core/security.py`; bounded downloads/decompression; path confinement; hashing; atomic writes.

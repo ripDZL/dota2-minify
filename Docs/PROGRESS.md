@@ -1,15 +1,16 @@
 # Progress
 - [x] Exact rc7 baseline pinned; exactly `v21.4-hardening`, `beta`, `main` retained.
 - [x] Black-Plum Reactor UI + `960x680` client-size hardening retained.
-- [x] Home cleaned: right explainer removed; centered release header; redundant left status chrome hidden; patch sequence vertical; selected/installed count kept; activity header simplified.
-- [x] Home clipping follow-up: patch sequence detached into its own responsive row; status/action rows independent; deployment buttons use responsive width budget; Activity Log action buttons inset from right edge.
-- [x] Developer tools moved behind Control Panel -> Developer tab; footer dev entry hidden; floating/viewport-expansion panes removed.
+- [x] Home cleaned: right explainer removed; centered release header; redundant left status chrome hidden; patch sequence detached into its own row; activity header simplified.
+- [x] Deployment action clipping fixed: dedicated runtime button group; 96/136px action height; shell reserves enough row height; narrow layouts stack buttons vertically.
+- [x] Developer tools moved behind Control Panel -> Developer; footer dev entry hidden; floating/viewport-expansion panes removed.
+- [x] Activity Log supports copy-all plus selectable read-only text view.
 - [x] Recursive/nested mods, custom VPK-folder categories, Collections, profiles, D2PFX, backups/conflict review retained.
 - [x] Windows local browsing uses native system picker for D2PFX ZIP import, profile import, and profile export directory.
-- [x] Product head `d28cc12d9be4616ecc5f6bf7e665e4e6392b45fd` validated by CI `34059436199`: compileall/Ruff PASS; pytest **258/258 PASS**; Windows portable build PASS.
-- [x] Artifact `9997008784`; digest `sha256:254178eccc85d24d0edc1fa39e416edf41acf642f80b45124552b2fcb5bf5765`.
+- [x] Product head `d682c2396f9e2984235c559e3df736086ed0b5c8` validated by CI `34074302712`: compileall/Ruff PASS; pytest **259/259 PASS**; Windows portable build PASS.
+- [x] Artifact `10001534140`; digest `sha256:a8f1703af303824cd8d8b7eb86788a3bcc7fe3eada3c78434f6adb397b9592b6`; portable ZIP SHA-256 `2f9486490199a435178f5160cfa31a190a120b2c584e3f4750636ab57f6e0691`.
 - [x] `beta` and `main` remain frozen.
-- [ ] Human Windows smoke: latest Home row sizing, Control Panel General/Developer tabs, Activity Log copy/select, native picker behavior, and all major `960x680` surfaces.
+- [ ] Human Windows smoke: latest Home deployment row at normal and minimum sizes, Control Panel tabs, Activity Log copy/select, native picker behavior, and all major `960x680` surfaces.
 - [ ] Continue hostile-input/path-race review and exact-rc7/semantic core reconciliation.
 - [ ] Dota startup/lobby/match/rollback/profiles/D2PFX/Dark-Terrain/Remove-Foilage smoke tests.
 - [ ] Promote hardening -> beta only after remaining gates/user approval; beta -> main only after beta validation.

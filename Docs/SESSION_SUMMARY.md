@@ -1,15 +1,13 @@
 # Session Summary
 - Fork: `ripDZL/dota2-minify`; active `v21.4-hardening`; exact rc7 baseline `d4b4520c945a9e1f8f5facc52a76ac5903babe90`.
 - Branch model: exactly `v21.4-hardening` -> `beta` -> `main`; beta/main frozen.
-- Exact validated product head: `d28cc12d9be4616ecc5f6bf7e665e4e6392b45fd`; later commits are Docs-only.
-- Home runtime header remains centered stacked `MINIFY` and `RELEASE: {base.VERSION}`; redundant left `COMMAND DECK` + `SYSTEM / PROTECTED` chrome hidden.
-- Analyze/Snapshot/Compose was moved out of the hero card into its own `app_workspace_main` row before status, removing hero-metric clipping; sequence height `94..116`; status/action rows independent; main area scrolls if minimum-height space is exhausted.
-- Deployment buttons use a bounded responsive width budget instead of the previous narrow fixed widths.
-- Activity header remains `ACTIVITY LOG`; `COPY LOG` and `SELECT TEXT` keep a 28px right-edge safety inset; selectable read-only log view and colored live output remain intact.
-- Developer footer button is hidden; Control Panel now has `GENERAL` and `DEVELOPER` tabs; path/mod/maintenance/debug tools are embedded under Developer; old floating dev windows and viewport expansion are removed.
-- Windows browsing uses native system file/folder dialogs for D2PFX ZIP import, profile JSON import, and profile export directory; DPG fallback only if native startup fails.
-- CI `34059436199`: compileall PASS; Ruff PASS; pytest **258/258 PASS**; Windows portable build PASS.
-- Artifact `9997008784`; 53,091,451 bytes; digest `sha256:254178eccc85d24d0edc1fa39e416edf41acf642f80b45124552b2fcb5bf5765`.
-- Custom VPK category behavior from `302c776e63c9ffa5771d065d619f511b89c08cd6` remains intact.
-- Remaining gates: real Windows smoke of Home/Control Panel/log copy/native picker/custom categories/960x680 surfaces; residual path-race/security review; semantic core/exact-rc7 reconciliation; Dota smoke tests.
+- Exact validated product head: `d682c2396f9e2984235c559e3df736086ed0b5c8`; later commits are Docs-only.
+- Latest user-reported Home bug was Deployment Commands buttons clipping into the bottom of the action surface.
+- Fix: runtime tagged `dashboard_action_buttons`; 96px normal action height / 136px stacked; Home shell expands to fit required hero/sequence/status/action rows up to 520px; vertical button stack only under `main_width < 560`; width budget constrained to main client surface.
+- Home header remains centered `MINIFY` + `RELEASE: {base.VERSION}`; redundant left status chrome hidden; patch sequence remains detached from hero.
+- Activity header remains `ACTIVITY LOG`; copy/select debug tools retained.
+- Developer tools remain under Control Panel -> Developer; native Windows picker/custom VPK categories remain intact.
+- CI `34074302712`: compileall PASS; Ruff PASS; pytest **259/259 PASS**; Windows portable build PASS.
+- Artifact `10001534140`; digest `sha256:a8f1703af303824cd8d8b7eb86788a3bcc7fe3eada3c78434f6adb397b9592b6`; portable ZIP SHA-256 `2f9486490199a435178f5160cfa31a190a120b2c584e3f4750636ab57f6e0691`.
+- Remaining gates: real Windows smoke of latest deployment-row fix and all major `960x680` surfaces; residual path-race/security review; semantic core/exact-rc7 reconciliation; Dota smoke tests.
 - Do not promote beta/main until remaining gates and explicit user approval.

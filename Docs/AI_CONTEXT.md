@@ -2,19 +2,18 @@
 - Upstream baseline: `Egezenn/dota2-minify` tag `Minify-v1.14rc7`; exact commit `d4b4520c945a9e1f8f5facc52a76ac5903babe90`.
 - Fork: `ripDZL/dota2-minify`; active `v21.4-hardening`; promotion `v21.4-hardening` -> `beta` -> `main`.
 - Exactly three branches; `beta` frozen `af83bbb051edced195d5f55ba49ff060a8c76f3c`; `main` frozen `a26bc88a0d412e357965f29488b83a7f9093e11f`.
-- Exact validated product head: `d28cc12d9be4616ecc5f6bf7e665e4e6392b45fd`; later milestone commits are Docs-only at this handoff.
-- Home header runtime presentation is two centered stacked lines: `MINIFY` and `RELEASE: {base.VERSION}`; old product subtitle/version tag remains hidden for compatibility.
-- Left `COMMAND DECK` heading and `SYSTEM / PROTECTED` status card are hidden; navigation actions remain; footer Developer button is hidden.
-- Patch sequence is moved out of the hero card into its own responsive row so Analyze/Snapshot/Compose cannot be cropped by hero padding/font metrics; sequence height is `94..116`px; status/action rows are independent; the main workspace becomes scrollable if minimum-height space is exhausted.
-- Deployment command widths use a bounded responsive row budget instead of fixed narrow widths.
-- Activity header is `ACTIVITY LOG`; `COPY LOG` copies the visible log; `SELECT TEXT` opens a read-only multiline view for highlighting/Ctrl+C; both controls keep a 28px right-edge safety inset.
-- Developer tools no longer create floating viewport-expansion panes. Control Panel now has `GENERAL` and `DEVELOPER` tabs; advanced path/mod/maintenance/debug tools live in Developer; maintenance is collapsed by default.
+- Exact validated product head: `d682c2396f9e2984235c559e3df736086ed0b5c8`; later milestone commits are Docs-only at this handoff.
+- Home header runtime presentation: centered `MINIFY` + `RELEASE: {base.VERSION}`; left `COMMAND DECK` and `SYSTEM / PROTECTED` chrome hidden.
+- Patch sequence remains detached from hero into its own responsive row; live status and deployment commands are independent rows.
+- Deployment clipping fix: buttons are moved into tagged `dashboard_action_buttons`; action bar reserves 96px normally / 136px when stacked; Home shell grows to fit required rows (cap 520px); buttons stack vertically only when `main_width < 560`.
+- Activity header is `ACTIVITY LOG`; `COPY LOG` copies visible log; `SELECT TEXT` opens read-only selectable text; controls retain right-edge inset.
+- Developer tools live under Control Panel -> Developer; footer dev entry hidden; floating/viewport-expansion panes retired.
 - Native Windows system picker handles D2PFX ZIP import, profile JSON import, and profile export-directory selection; themed Dear PyGui dialogs are fallback-only on native startup failure.
-- Custom mod categories: `mods/<Category>/<Child>/.../*.vpk` promotes the top-level folder to a category; each VPK-backed immediate child is a nested Local folder mod; recognized folder-mod siblings kept; unrelated/hidden/reserved/symlink entries excluded.
-- Hardening CI `34059436199`: compileall PASS; Ruff format/lint PASS; pytest **258/258 PASS**; Windows portable build/package/upload PASS.
-- Current artifact `9997008784`; 53,091,451-byte GitHub artifact; digest `sha256:254178eccc85d24d0edc1fa39e416edf41acf642f80b45124552b2fcb5bf5765`.
-- Human Windows smoke remains required for the latest Home/Control Panel layout and every major `960x680` surface; CI does not prove pixel-level rendering.
+- Custom mod categories: `mods/<Category>/<Child>/.../*.vpk` promotes top-level folder to a category; VPK-backed immediate children become nested Local folder mods; recognized siblings kept; unrelated/hidden/reserved/symlink entries excluded.
+- Hardening CI `34074302712`: compileall PASS; Ruff format/lint PASS; pytest **259/259 PASS**; Windows portable build/package/upload PASS.
+- Artifact `10001534140`; 53,092,277-byte GitHub artifact; digest `sha256:a8f1703af303824cd8d8b7eb86788a3bcc7fe3eada3c78434f6adb397b9592b6`; extracted portable ZIP SHA-256 `2f9486490199a435178f5160cfa31a190a120b2c584e3f4750636ab57f6e0691`.
+- Human Windows smoke remains required for latest Home action layout and every major `960x680` surface; CI does not prove pixel-level rendering.
 - Preserve recursive/nested mods, Collections, profiles, D2PFX, backups/conflict review, Dark Terrain, Safe Foliage, Main Menu Background fix, manual rc7 `prelaunch`, and no-auto-prelaunch policy.
 - Remove Foilage: blacklist-only; never ship `manifest.json` or `maps/dota.vpk`; retain both oak-leaf blacklist entries.
-- Security boundary: mod Python scripts are trusted code; archive/VPK/profile/backup/download/D2PFX data are untrusted.
+- Security boundary: mod Python scripts trusted; archive/VPK/profile/backup/download/D2PFX data untrusted.
 - Remaining work: human Windows/Dota smoke; residual path-race/hostile-input review; semantic core/exact-rc7 diff reconciliation; no beta/main promotion without explicit user approval.

@@ -3,16 +3,17 @@
 - Read `Docs/*.md` and re-fetch branch head before code changes.
 - Branch model: exactly `v21.4-hardening` -> `beta` -> `main`; keep beta/main frozen.
 - Exact upstream baseline: `Minify-v1.14rc7` / `d4b4520c945a9e1f8f5facc52a76ac5903babe90`; do not rebase current upstream main.
-- Exact validated product head: `d28cc12d9be4616ecc5f6bf7e665e4e6392b45fd`; later commits are Docs-only at this handoff.
-- Home runtime header: centered stacked `MINIFY` + `RELEASE: {base.VERSION}`; left `COMMAND DECK` and `SYSTEM / PROTECTED` chrome hidden.
-- Analyze/Snapshot/Compose is now a standalone responsive row before the status panel; sequence height `94..116`; workspace scrolls if constrained; deployment buttons use bounded responsive widths.
-- Activity header is `ACTIVITY LOG`; `COPY LOG` copies all visible entries; `SELECT TEXT` opens a selectable read-only log view; right-edge clipping guard retained.
-- Developer footer entry is hidden. Control Panel contains `GENERAL` and `DEVELOPER` tabs; advanced tools are embedded under Developer; legacy floating/viewport-expansion dev panes are retired.
-- Native Windows picker: D2PFX ZIP import, profile JSON import, and profile export directory use system dialogs; DPG dialog fallback on native startup failure; non-Windows unchanged.
-- CI `34059436199`: compileall/Ruff PASS; pytest **258/258 PASS**; Windows portable build PASS.
-- Artifact `9997008784`; digest `sha256:254178eccc85d24d0edc1fa39e416edf41acf642f80b45124552b2fcb5bf5765`.
+- Exact validated product head: `d682c2396f9e2984235c559e3df736086ed0b5c8`; later commits are Docs-only at this handoff.
+- Home header: centered stacked `MINIFY` + `RELEASE: {base.VERSION}`; left `COMMAND DECK` and `SYSTEM / PROTECTED` hidden.
+- Analyze/Snapshot/Compose remains detached from hero into its own row; status/action rows independent.
+- Latest action clipping fix: `dashboard_action_buttons` runtime group; action height 96px normal / 136px stacked; shell expands to fit row budget up to 520px; vertical button stack only below `main_width < 560`.
+- Activity header is `ACTIVITY LOG`; `COPY LOG` and `SELECT TEXT` retain right-edge safety inset and selectable read-only view.
+- Developer footer entry hidden; Control Panel has `GENERAL` and `DEVELOPER` tabs; advanced tools embedded under Developer; floating dev panes retired.
+- Native Windows picker: D2PFX ZIP import, profile JSON import, and profile export directory use system dialogs; DPG fallback on native startup failure; non-Windows unchanged.
+- CI `34074302712`: compileall/Ruff PASS; pytest **259/259 PASS**; Windows portable build PASS.
+- Artifact `10001534140`; digest `sha256:a8f1703af303824cd8d8b7eb86788a3bcc7fe3eada3c78434f6adb397b9592b6`; portable ZIP SHA-256 `2f9486490199a435178f5160cfa31a190a120b2c584e3f4750636ab57f6e0691`.
 - Custom VPK-folder categories remain: `mods/<Category>/<Child>/.../*.vpk` exposes VPK-backed children as nested Local folder mods.
 - Preserve recursive/nested mods, Collections, profiles, D2PFX, backups/conflict review, Dark Terrain, Safe Foliage, Main Menu fix, manual rc7 `prelaunch`, no-auto-prelaunch.
 - Remove Foilage invariant: blacklist-only; never ship `manifest.json` or `maps/dota.vpk`.
-- Remaining gates: human Windows Home/Control-Panel/log-copy/native-picker/custom-category/960x680 smoke; residual filesystem race/security review; semantic core/exact-rc7 diff review; Dota smoke tests.
+- Remaining gates: human Windows latest-Home/Control-Panel/log-copy/native-picker/custom-category/960x680 smoke; residual filesystem race/security review; semantic core/exact-rc7 diff review; Dota smoke tests.
 - Never promote beta/main without explicit user approval.
