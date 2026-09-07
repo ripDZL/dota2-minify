@@ -17,6 +17,18 @@ dev_mode_state = 0
 prev_width = None
 prev_height = None
 
+TOOL_BUTTON_MIN_WIDTH = 150
+TOOL_BUTTON_MAX_WIDTH = 360
+SECTION_HEADER_MIN_WIDTH = 150
+SECTION_HEADER_MAX_WIDTH = 360
+GENERAL_BUTTON_MIN_WIDTH = 84
+COMBO_MIN_WIDTH = 220
+COMBO_MAX_WIDTH = 520
+TEXT_WIDTH_FALLBACK = 8
+TOOL_BUTTON_PADDING = 38
+SECTION_HEADER_PADDING = 48
+COMBO_PADDING = 58
+
 
 def extract_workshop_tools():
     "Extracts the bare minimum requirements for resourcecompiler.exe"
@@ -50,8 +62,91 @@ def tick_batch(state: bool):
     checkboxes.setup_state()
 
 
+def _text_width(label):
+    label = str(label or "")
+    try:
+        measured = dpg.get_text_size(label)
+        width = int(measured[0]) if measured else 0
+        if width > 0:
+            return width
+    except Exception:
+        pass
+    return max(1, len(label)) * TEXT_WIDTH_FALLBACK
+
+
+def _fit_control_width(label, min_width, max_width, padding):
+    return max(min_width, min(max_width, _text_width(label) + padding))
+
+
 def _tool_button(parent, label, callback):
-    dpg.add_button(parent=parent, label=label, callback=callback, width=-1)
+    width = _fit_control_width(label, TOOL_BUTTON_MIN_WIDTH, TOOL_BUTTON_MAX_WIDTH, TOOL_BUTTON_PADDING)
+    return dpg.add_button(parent=parent, label=label, callback=callback, width=width)
+
+
+def _section_header(parent, label, default_open=False):
+    width = _fit_control_width(label, SECTION_HEADER_MIN_WIDTH, SECTION_HEADER_MAX_WIDTH, SECTION_HEADER_PADDING)
+    return dpg.add_collapsing_header(parent=parent, label=label, default_open=default_open, width=width)
+
+
+def _walk_descendants(parent):
+    for slot in range(4):
+        try:
+            children = dpg.get_item_children(parent, slot) or []
+        except Exception:
+            children = []
+        for child in children:
+            yield child
+            yield from _walk_descendants(child)
+
+
+def _combo_display_text(item):
+    try:
+        cfg = dpg.get_item_configuration(item)
+    except Exception:
+        cfg = {}
+    candidates = [str(value) for value in (cfg.get("items") or []) if value not in (None, "")]
+    try:
+        current = dpg.get_value(item)
+    except Exception:
+        current = ""
+    if current not in (None, ""):
+        candidates.append(str(current))
+    return max(candidates, key=len) if candidates else "Select"
+
+
+def _fit_general_control_panel_controls():
+    """Keep Settings section headers, combos and action buttons content-sized."""
+    if not dpg.does_item_exist("settings_content_group"):
+        return
+
+    for item in _walk_descendants("settings_content_group"):
+        try:
+            item_type = str(dpg.get_item_type(item))
+            cfg = dpg.get_item_configuration(item)
+        except Exception:
+            continue
+
+        label = str(cfg.get("label") or "")
+        if "mvCollapsingHeader" in item_type and label:
+            dpg.configure_item(
+                item,
+                width=_fit_control_width(
+                    label,
+                    SECTION_HEADER_MIN_WIDTH,
+                    SECTION_HEADER_MAX_WIDTH,
+                    SECTION_HEADER_PADDING,
+                ),
+            )
+        elif "mvCombo" in item_type:
+            dpg.configure_item(
+                item,
+                width=_fit_control_width(_combo_display_text(item), COMBO_MIN_WIDTH, COMBO_MAX_WIDTH, COMBO_PADDING),
+            )
+        elif "mvButton" in item_type and label:
+            dpg.configure_item(
+                item,
+                width=_fit_control_width(label, GENERAL_BUTTON_MIN_WIDTH, TOOL_BUTTON_MAX_WIDTH, TOOL_BUTTON_PADDING),
+            )
 
 
 def _wipe_language_paths():
@@ -74,7 +169,7 @@ def render_panel(parent):
         )
         dpg.add_separator()
 
-        paths = dpg.add_collapsing_header(label="Paths & files", default_open=True)
+        paths = _section_header("developer_tools_content", "Paths & files", default_open=True)
         _tool_button(paths, "Open compile output path", lambda: fs.open_thing(os.path.join(helper.output_path)))
         _tool_button(
             paths,
@@ -111,7 +206,7 @@ def render_panel(parent):
         )
         _tool_button(paths, "Create debug zip", log.create_debug_zip)
 
-        mod_tools = dpg.add_collapsing_header(label="Mod tools", default_open=False)
+        mod_tools = _section_header("developer_tools_content", "Mod tools", default_open=False)
         _tool_button(mod_tools, "Select path to compile", helper.select_compile_dir)
         _tool_button(
             mod_tools,
@@ -124,7 +219,7 @@ def render_panel(parent):
         _tool_button(mod_tools, "Untick all mods", lambda: tick_batch(False))
         _tool_button(mod_tools, "Tick all mods", lambda: tick_batch(True))
 
-        maintenance = dpg.add_collapsing_header(label="Maintenance", default_open=False)
+        maintenance = _section_header("developer_tools_content", "Maintenance", default_open=False)
         dpg.add_text("These actions can change local Steam/Dota state.", parent=maintenance, wrap=700)
         _tool_button(
             maintenance,
@@ -138,7 +233,7 @@ def render_panel(parent):
 
         debug_env = config.get("debug_env", False) if not base.FROZEN else False
         if not base.FROZEN and debug_env:
-            debug_tools = dpg.add_collapsing_header(label="Dear PyGui diagnostics", default_open=False)
+            debug_tools = _section_header("developer_tools_content", "Dear PyGui diagnostics", default_open=False)
             _tool_button(debug_tools, "Debug", dpg.show_debug)
             _tool_button(debug_tools, "Item registry", dpg.show_item_registry)
             _tool_button(debug_tools, "Metrics", dpg.show_metrics)
@@ -150,15 +245,21 @@ def install_control_panel_tab():
     """Install Preferences/Developer tabs into the existing Control Panel."""
     if not dpg.does_item_exist("settings_scroll") or not dpg.does_item_exist("settings_content_group"):
         return
-    if dpg.does_item_exist("settings_tabs"):
-        return
 
-    with dpg.tab_bar(parent="settings_scroll", tag="settings_tabs"):
-        dpg.add_tab(label="GENERAL", tag="settings_general_tab")
-        dpg.add_tab(label="DEVELOPER", tag="settings_developer_tab")
+    if not dpg.does_item_exist("settings_tabs"):
+        with dpg.tab_bar(parent="settings_scroll", tag="settings_tabs"):
+            dpg.add_tab(label="GENERAL", tag="settings_general_tab")
+            dpg.add_tab(label="DEVELOPER", tag="settings_developer_tab")
 
-    dpg.move_item("settings_content_group", parent="settings_general_tab")
-    render_panel("settings_developer_tab")
+        dpg.move_item("settings_content_group", parent="settings_general_tab")
+
+    if dpg.does_item_exist("settings_developer_tab"):
+        render_panel("settings_developer_tab")
+
+    # Settings can rebuild their children after Reload/Reset. Re-apply content
+    # fitting whenever the Control Panel is opened/resized so rebuilt controls
+    # do not return to full-row width.
+    _fit_general_control_panel_controls()
 
     # Remove any old floating developer panes if this build is reached from a
     # live/reloaded context rather than a clean process start.
