@@ -3,16 +3,17 @@
 - Read `Docs/*.md` and re-fetch branch head before code changes.
 - Branch model: exactly `v21.4-hardening` -> `beta` -> `main`; keep beta/main frozen.
 - Exact upstream baseline: `Minify-v1.14rc7` / `d4b4520c945a9e1f8f5facc52a76ac5903babe90`; do not rebase current upstream main.
-- Exact validated product head: `0bb7e2ef542e3173028ccfb821dab66c5a95e24c`; later commits are Docs-only.
-- Home dashboard: main/hero/Analyze-Snapshot-Compose/status/deployment regions are one continuous borderless slate surface; sequence table rows use the same background.
-- Control Panel: buttons/combos are content-fit/bounded; General `opt_` text fields clamp from measured contents to 280-720px; mod-specific text inputs are not resized by this pass; collapsing headers must stay full-row because Dear PyGui rejects a `width` configuration for them.
+- Exact validated product head: `c6607667db8d1862612835423f4d4b3e23bce4b1`; later commits are Docs-only.
+- Home dashboard remains one continuous slate surface; three subtle `BORDER_SOFT` separators distinguish intro/sequence/status/actions without nested cards.
+- Restore dialog button `Restore this backup` is explicitly 180x30 for safe Windows label fit.
+- Control Panel: buttons/combos content-fit/bounded; General `opt_` text fields clamp to 280-720px; collapsing headers stay full-row.
 - Activity Log copy/select buttons use 108/132px widths and 30px height centered in the 36px header.
-- Home header remains centered `MINIFY` + `RELEASE: {base.VERSION}`; deployment vertical budget/stacking and Mod Library footer safe widths/lime Review & Patch hover remain.
+- Home header remains centered `MINIFY` + `RELEASE: {base.VERSION}`; deployment budget/stacking and Mod Library footer safe widths/lime Review & Patch hover remain.
 - Developer tools remain under Control Panel -> Developer; native Windows picker remains for D2PFX ZIP/profile import/profile export directory.
-- CI `34150379061`: compileall/Ruff PASS; pytest **265/265 PASS**; Windows portable build PASS.
-- Artifact `10029165062`; digest `sha256:9ca74e71b5aeb87a3b0338d8577621851d3a7072cdbfecf3313e268a132b6e19`; portable ZIP SHA-256 `379dd4ac5627250da5a70dfe6f203a7c464da3b526f87cdbcfcfd066fe873603`.
+- CI `34154573475`: compileall/Ruff PASS; pytest **267/267 PASS**; Windows portable build PASS.
+- Artifact `10030528705`; digest `sha256:44d334a226a106eda5c3f55756765e3eaa353624033e50dc94f3411d238cb3ed`; portable ZIP SHA-256 `3cac232708840286357be0df11ecbaa1a2ca2d03b7ea602ccc63041ae143287a`.
 - Custom VPK-folder categories remain: `mods/<Category>/<Child>/.../*.vpk` exposes VPK-backed children as nested Local folder mods.
 - Preserve recursive/nested mods, Collections, profiles, D2PFX, backups/conflict review, Dark Terrain, Safe Foliage, Main Menu fix, manual rc7 `prelaunch`, no-auto-prelaunch.
 - Remove Foilage invariant: blacklist-only; never ship `manifest.json` or `maps/dota.vpk`.
-- Remaining gates: human Windows Control-Panel-field/Activity-button/Home/Mod-Library/log-copy/native-picker/custom-category/960x680 smoke; residual filesystem race/security review; semantic core/exact-rc7 diff review; Dota smoke tests.
+- Remaining gates: human Windows restore-button/Home-separator/Control-Panel/Activity/Home-Mod-Library/log-copy/native-picker/custom-category/960x680 smoke; residual filesystem race/security review; semantic core/exact-rc7 diff review; Dota smoke tests.
 - Never promote beta/main without explicit user approval.
