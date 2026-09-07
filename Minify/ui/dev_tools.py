@@ -250,7 +250,9 @@ def _apply_compact_home_layout():
     if dpg.does_item_exist("home_separator_before_actions"):
         dpg.configure_item("home_separator_before_actions", show=True)
 
-    action_height = max(HOME_ACTION_NORMAL_HEIGHT, _configured_height("dashboard_action_bar", HOME_ACTION_NORMAL_HEIGHT))
+    action_height = max(
+        HOME_ACTION_NORMAL_HEIGHT, _configured_height("dashboard_action_bar", HOME_ACTION_NORMAL_HEIGHT)
+    )
     inner_height = HOME_STATUS_HEIGHT + action_height + HOME_COMPACT_VERTICAL_GAP
     shell_height = max(HOME_COMPACT_MIN_SHELL_HEIGHT, inner_height + HOME_COMPACT_INNER_INSET)
 
