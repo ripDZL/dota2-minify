@@ -30,6 +30,11 @@ COMBO_PADDING = 58
 INPUT_TEXT_PADDING = 44
 RESTORE_BUTTON_WIDTH = 180
 RESTORE_BUTTON_HEIGHT = 30
+HOME_COMPACT_MIN_SHELL_HEIGHT = 250
+HOME_COMPACT_INNER_INSET = 34
+HOME_COMPACT_VERTICAL_GAP = 22
+HOME_STATUS_HEIGHT = 68
+HOME_ACTION_NORMAL_HEIGHT = 96
 HOME_SURFACE_TAGS = (
     "app_workspace_main",
     "dashboard_hero_card",
@@ -217,6 +222,69 @@ def _ensure_home_uniform_surface():
                 dpg.move_item(separator_tag, parent=parent, before=before)
             except Exception:
                 pass
+
+    # Hide the explanatory hero/sequence immediately. A one-frame delayed
+    # layout pass runs after window.on_resize finishes so the Home shell itself
+    # also collapses to the live status + deployment controls.
+    _apply_compact_home_layout()
+    _schedule_compact_home_layout()
+
+
+def _configured_height(tag, fallback):
+    try:
+        height = int(dpg.get_item_configuration(tag).get("height", fallback))
+        return height if height > 0 else fallback
+    except Exception:
+        return fallback
+
+
+def _apply_compact_home_layout():
+    """Keep Home focused on live status and deployment controls only."""
+    for tag in ("dashboard_hero_card", "dashboard_metric_strip"):
+        if dpg.does_item_exist(tag):
+            dpg.configure_item(tag, show=False)
+
+    for tag in ("home_separator_after_intro", "home_separator_before_status"):
+        if dpg.does_item_exist(tag):
+            dpg.configure_item(tag, show=False)
+    if dpg.does_item_exist("home_separator_before_actions"):
+        dpg.configure_item("home_separator_before_actions", show=True)
+
+    action_height = max(HOME_ACTION_NORMAL_HEIGHT, _configured_height("dashboard_action_bar", HOME_ACTION_NORMAL_HEIGHT))
+    inner_height = HOME_STATUS_HEIGHT + action_height + HOME_COMPACT_VERTICAL_GAP
+    shell_height = max(HOME_COMPACT_MIN_SHELL_HEIGHT, inner_height + HOME_COMPACT_INNER_INSET)
+
+    if dpg.does_item_exist("app_nav_rail"):
+        dpg.configure_item("app_nav_rail", height=shell_height)
+    if dpg.does_item_exist("app_workspace"):
+        dpg.configure_item("app_workspace", height=shell_height)
+    if dpg.does_item_exist("app_workspace_main"):
+        dpg.configure_item(
+            "app_workspace_main",
+            height=inner_height,
+            no_scrollbar=True,
+            no_scroll_with_mouse=True,
+        )
+    if dpg.does_item_exist("dashboard_status_panel"):
+        dpg.configure_item("dashboard_status_panel", height=HOME_STATUS_HEIGHT)
+    if dpg.does_item_exist("dashboard_action_bar"):
+        dpg.configure_item("dashboard_action_bar", height=action_height)
+
+
+def _schedule_compact_home_layout():
+    """Reapply compact Home dimensions after the parent resize pass completes."""
+    set_frame_callback = getattr(dpg, "set_frame_callback", None)
+    get_frame_count = getattr(dpg, "get_frame_count", None)
+    if callable(set_frame_callback) and callable(get_frame_count):
+        try:
+            set_frame_callback(
+                get_frame_count() + 1,
+                lambda sender=None, app_data=None: _apply_compact_home_layout(),
+            )
+            return
+        except Exception:
+            pass
+    _apply_compact_home_layout()
 
 
 def _ensure_restore_dialog_fit():
