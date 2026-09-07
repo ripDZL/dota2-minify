@@ -1,0 +1,48 @@
+name: Format Home button centering once
+
+on:
+  push:
+    branches:
+      - v21.4-hardening
+    paths:
+      - .github/workflows/format-home-buttons-once.yml
+
+permissions:
+  contents: write
+
+jobs:
+  patch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Apply Ruff-equivalent formatting fix
+        shell: bash
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+
+          path = Path("Minify/ui/dev_tools.py")
+          text = path.read_text(encoding="utf-8")
+          old = '''    cluster_width = (
+              patch_width + refresh_width + spacing if horizontal else max(patch_width, refresh_width)
+          )
+          '''
+          new = '''    cluster_width = patch_width + refresh_width + spacing if horizontal else max(patch_width, refresh_width)
+          '''
+          if old not in text:
+              raise SystemExit("Ruff formatting anchor not found")
+          path.write_text(text.replace(old, new, 1), encoding="utf-8")
+          PY
+
+      - name: Remove one-off workflow and commit fix
+        shell: bash
+        run: |
+          rm .github/workflows/format-home-buttons-once.yml
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add Minify/ui/dev_tools.py .github/workflows/format-home-buttons-once.yml
+          git commit -m "style(ui): format Home button centering"
+          git push origin HEAD:v21.4-hardening
