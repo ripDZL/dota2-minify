@@ -118,6 +118,21 @@ def _configure_home_surface(content_width):
         except Exception:
             pass
 
+    # Rebuild the deployment buttons into a tagged row. The original static
+    # group has no alias, so a tagged runtime group lets resize logic switch
+    # safely between a horizontal row and a vertical stack.
+    if dpg.does_item_exist("dashboard_action_bar") and not dpg.does_item_exist("dashboard_action_buttons"):
+        dpg.add_group(
+            parent="dashboard_action_bar",
+            tag="dashboard_action_buttons",
+            horizontal=True,
+            horizontal_spacing=8,
+        )
+        if dpg.does_item_exist("button_patch"):
+            dpg.move_item("button_patch", parent="dashboard_action_buttons")
+        if dpg.does_item_exist("button_refresh_main"):
+            dpg.move_item("button_refresh_main", parent="dashboard_action_buttons")
+
     # Keep only the product name and the real release version in the centered
     # header. The original source tags stay intact for compatibility, but the
     # runtime presentation is deliberately reduced to two stacked lines.
@@ -244,20 +259,31 @@ def on_resize():
     compact_width = shared.window_width <= 1000
     nav_min_width = 160 if compact_width else 176
     nav_width = max(nav_min_width, min(220, int(shared.window_width * 0.13)))
-    shell_body_height = max(360, min(520, shared.window_height - 300))
+    base_shell_height = max(360, min(520, shared.window_height - 300))
     workspace_width = max(430, content_width - nav_width - 18)
     main_width = max(360, workspace_width - 20)
-    inner_height = max(300, shell_body_height - 34)
+    base_inner_height = max(300, base_shell_height - 34)
 
     # Hero text, patch sequence, live state and commands are independent rows.
-    # This prevents any child from consuming another row's available height.
+    # Reserve enough parent height for all rows so the action buttons cannot be
+    # clipped by the bottom of app_workspace_main. Only genuinely narrow
+    # workspaces stack the two buttons vertically.
     hero_height = 124 if compact_width else 116
-    sequence_height = max(94, min(116, int(inner_height * 0.24)))
+    sequence_height = max(94, min(116, int(base_inner_height * 0.24)))
     status_height = 68
-    action_height = 74
-    action_cluster_width = max(360, min(620, main_width - 28))
-    patch_width = max(200, int(action_cluster_width * 0.58))
-    refresh_width = max(150, action_cluster_width - patch_width - 8)
+    stack_actions = main_width < 560
+    action_height = 136 if stack_actions else 96
+    required_inner_height = hero_height + sequence_height + status_height + action_height + 20
+    shell_body_height = min(520, max(base_shell_height, required_inner_height + 34))
+    inner_height = max(300, shell_body_height - 34)
+
+    action_cluster_width = max(260, min(620, main_width - 28))
+    if stack_actions:
+        patch_width = action_cluster_width
+        refresh_width = action_cluster_width
+    else:
+        patch_width = max(180, int(action_cluster_width * 0.58))
+        refresh_width = max(140, action_cluster_width - patch_width - 8)
 
     if dpg.does_item_exist("app_shell_header"):
         dpg.configure_item("app_shell_header", width=content_width, height=76)
@@ -288,6 +314,12 @@ def on_resize():
         dpg.configure_item("dashboard_status_panel", height=status_height)
     if dpg.does_item_exist("dashboard_action_bar"):
         dpg.configure_item("dashboard_action_bar", height=action_height)
+    if dpg.does_item_exist("dashboard_action_buttons"):
+        dpg.configure_item(
+            "dashboard_action_buttons",
+            horizontal=not stack_actions,
+            horizontal_spacing=8,
+        )
     if dpg.does_item_exist("button_patch"):
         dpg.configure_item("button_patch", width=patch_width)
     if dpg.does_item_exist("button_refresh_main"):

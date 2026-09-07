@@ -116,9 +116,11 @@ def test_activity_log_has_selectable_debug_view():
 def test_responsive_home_uses_independent_rows_before_clipping():
     assert "main_width = max(360, workspace_width - 20)" in WINDOW
     assert "hero_height = 124 if compact_width else 116" in WINDOW
-    assert "sequence_height = max(94, min(116, int(inner_height * 0.24)))" in WINDOW
+    assert "sequence_height = max(94, min(116, int(base_inner_height * 0.24)))" in WINDOW
     assert "status_height = 68" in WINDOW
-    assert "action_height = 74" in WINDOW
+    assert "action_height = 136 if stack_actions else 96" in WINDOW
+    assert "required_inner_height = hero_height + sequence_height + status_height + action_height + 20" in WINDOW
+    assert "shell_body_height = min(520, max(base_shell_height, required_inner_height + 34))" in WINDOW
     assert 'dpg.move_item(' in WINDOW
     assert 'parent="app_workspace_main"' in WINDOW
     assert 'before="dashboard_status_panel"' in WINDOW
@@ -130,11 +132,26 @@ def test_responsive_home_uses_independent_rows_before_clipping():
 
 
 def test_deployment_buttons_use_responsive_row_budget():
-    assert "action_cluster_width = max(360, min(620, main_width - 28))" in WINDOW
-    assert "patch_width = max(200, int(action_cluster_width * 0.58))" in WINDOW
-    assert "refresh_width = max(150, action_cluster_width - patch_width - 8)" in WINDOW
+    assert 'tag="dashboard_action_buttons"' in WINDOW
+    assert 'dpg.move_item("button_patch", parent="dashboard_action_buttons")' in WINDOW
+    assert 'dpg.move_item("button_refresh_main", parent="dashboard_action_buttons")' in WINDOW
+    assert "stack_actions = main_width < 560" in WINDOW
+    assert "action_cluster_width = max(260, min(620, main_width - 28))" in WINDOW
+    assert "patch_width = action_cluster_width" in WINDOW
+    assert "refresh_width = action_cluster_width" in WINDOW
+    assert "patch_width = max(180, int(action_cluster_width * 0.58))" in WINDOW
+    assert "refresh_width = max(140, action_cluster_width - patch_width - 8)" in WINDOW
+    assert 'horizontal=not stack_actions' in WINDOW
     assert 'dpg.configure_item("button_patch", width=patch_width)' in WINDOW
     assert 'dpg.configure_item("button_refresh_main", width=refresh_width)' in WINDOW
+
+
+def test_deployment_action_bar_has_non_clipping_vertical_budget():
+    assert "base_shell_height = max(360, min(520, shared.window_height - 300))" in WINDOW
+    assert "base_inner_height = max(300, base_shell_height - 34)" in WINDOW
+    assert "action_height = 136 if stack_actions else 96" in WINDOW
+    assert "required_inner_height = hero_height + sequence_height + status_height + action_height + 20" in WINDOW
+    assert 'dpg.configure_item("dashboard_action_bar", height=action_height)' in WINDOW
 
 
 def test_release_console_keeps_actionable_navigation():
@@ -195,13 +212,14 @@ def test_viewport_has_safe_minimum_layout_budget():
     assert "MIN_VIEWPORT_HEIGHT = 680" in MAIN
     assert "min_width=MIN_VIEWPORT_WIDTH" in MAIN
     assert "min_height=MIN_VIEWPORT_HEIGHT" in MAIN
-    assert "shell_body_height = max(360, min(520, shared.window_height - 300))" in WINDOW
+    assert "base_shell_height = max(360, min(520, shared.window_height - 300))" in WINDOW
+    assert "shell_body_height = min(520, max(base_shell_height, required_inner_height + 34))" in WINDOW
 
 
 def test_minimum_width_fit_contract_covers_primary_library_and_d2pfx():
     assert "compact_width = shared.window_width <= 1000" in WINDOW
     assert "nav_min_width = 160 if compact_width else 176" in WINDOW
-    assert "action_cluster_width = max(360, min(620, main_width - 28))" in WINDOW
+    assert "action_cluster_width = max(260, min(620, main_width - 28))" in WINDOW
     assert 'dpg.configure_item("activity_header", width=content_width, height=36)' in WINDOW
     assert "content_width = max(320, shared.window_width - CONTENT_INSET)" in WINDOW
     assert "settings_width = content_width" in WINDOW
