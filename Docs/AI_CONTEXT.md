@@ -2,16 +2,17 @@
 - Upstream baseline: `Egezenn/dota2-minify` tag `Minify-v1.14rc7`; exact commit `d4b4520c945a9e1f8f5facc52a76ac5903babe90`.
 - Fork: `ripDZL/dota2-minify`; active `v21.4-hardening`; promotion `v21.4-hardening` -> `beta` -> `main`.
 - Exactly three branches; `beta` frozen `af83bbb051edced195d5f55ba49ff060a8c76f3c`; `main` frozen `a26bc88a0d412e357965f29488b83a7f9093e11f`.
-- Exact validated product head: `0bb7e2ef542e3173028ccfb821dab66c5a95e24c`; later milestone commits are Docs-only.
-- Home dashboard is one continuous slate surface: main/hero/sequence/status/action child regions share one borderless theme; sequence table rows use the same background.
-- Control Panel sizing: developer/general action buttons and combos are bounded/content-fit; General `opt_` text fields now measure their value and clamp to 280-720px; mod-specific text inputs are not touched by this pass; collapsing headers stay full-row because Dear PyGui does not support a `width` field for them.
-- Activity Log copy/select buttons retain 108/132px widths and now use 30px height centered inside the 36px header so text is not bottom-clipped.
+- Exact validated product head: `c6607667db8d1862612835423f4d4b3e23bce4b1`; later milestone commits are Docs-only.
+- Home dashboard stays one continuous slate surface; three restrained `BORDER_SOFT` separators now distinguish intro/sequence/status/actions without nested cards.
+- Restore dialog `backup_restore_button` is 180x30 so `Restore this backup` fits Windows font metrics.
+- Control Panel sizing: developer/general action buttons and combos are bounded/content-fit; General `opt_` text fields clamp to 280-720px; collapsing headers stay full-row.
+- Activity Log copy/select buttons retain 108/132px widths and 30px centered height inside the 36px header.
 - Home header remains centered `MINIFY` + `RELEASE: {base.VERSION}`; Mod Library footer safe widths/Review & Patch hover retained.
 - Developer tools remain under Control Panel -> Developer; native Windows file picker retained for D2PFX/profile browsing.
 - Custom categories: `mods/<Category>/<Child>/.../*.vpk` promotes top-level folder to category; VPK-backed immediate children become nested Local folder mods.
-- Hardening CI `34150379061`: compileall PASS; Ruff format/lint PASS; pytest **265/265 PASS**; Windows portable build/package/upload PASS.
-- Artifact `10029165062`; 53,096,382-byte GitHub artifact; digest `sha256:9ca74e71b5aeb87a3b0338d8577621851d3a7072cdbfecf3313e268a132b6e19`; portable ZIP 53,636,634 bytes; SHA-256 `379dd4ac5627250da5a70dfe6f203a7c464da3b526f87cdbcfcfd066fe873603`.
-- Human Windows smoke remains required for latest Control Panel field sizing, Activity Log button centering, Home/Mod Library controls, and all major `960x680` surfaces; CI does not prove pixel rendering.
+- Hardening CI `34154573475`: compileall PASS; Ruff format/lint PASS; pytest **267/267 PASS**; Windows portable build/package/upload PASS.
+- Artifact `10030528705`; 53,097,925-byte GitHub artifact; digest `sha256:44d334a226a106eda5c3f55756765e3eaa353624033e50dc94f3411d238cb3ed`; portable ZIP 53,637,965 bytes; SHA-256 `3cac232708840286357be0df11ecbaa1a2ca2d03b7ea602ccc63041ae143287a`.
+- Human Windows smoke remains required for restore-button fit, new Home separators, Control Panel, Activity Log, Home/Mod Library controls, and all major `960x680` surfaces; CI does not prove pixel rendering.
 - Preserve recursive/nested mods, Collections, profiles, D2PFX, backups/conflict review, Dark Terrain, Safe Foliage, Main Menu Background fix, manual rc7 `prelaunch`, and no-auto-prelaunch policy.
 - Remove Foilage: blacklist-only; never ship `manifest.json` or `maps/dota.vpk`; retain both oak-leaf blacklist entries.
 - Security boundary: mod Python scripts trusted; archive/VPK/profile/backup/download/D2PFX data untrusted.
