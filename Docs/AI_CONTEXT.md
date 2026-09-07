@@ -2,16 +2,17 @@
 - Upstream baseline: `Egezenn/dota2-minify` tag `Minify-v1.14rc7`; exact commit `d4b4520c945a9e1f8f5facc52a76ac5903babe90`.
 - Fork: `ripDZL/dota2-minify`; active `v21.4-hardening`; promotion `v21.4-hardening` -> `beta` -> `main`.
 - Exactly three branches; `beta` frozen `af83bbb051edced195d5f55ba49ff060a8c76f3c`; `main` frozen `a26bc88a0d412e357965f29488b83a7f9093e11f`.
-- Exact validated product head: `c5cb0f15fc8868d00483a6a5723a01bd71a35381`; later milestone commits are Docs-only.
+- Exact validated product head: `5af666024a12b8db08288a82180d3c1a9536db4a`; later milestone commits are Docs-only.
+- Control Panel sizing: Developer tool buttons are content-fit `150..360`px; section headers `150..360`px; General collapsing headers/buttons are content-fit; combos `220..520`px. Widths use Dear PyGui text measurement with fallback and reapply when Control Panel opens/resizes so Reload/Reset does not restore full-row controls.
 - Home: centered `MINIFY` + `RELEASE: {base.VERSION}`; redundant left status chrome hidden; Analyze/Snapshot/Compose detached into its own responsive row; deployment action bar reserves 96px normal / 136px stacked and stacks below `main_width < 560`.
 - Activity Log controls: `COPY LOG` width 108, `SELECT TEXT` width 132, 8px gap, 28px right inset; selectable read-only debug view retained.
-- Mod Library footer widths: Error details 146, Open VPK folder 166, Restore backups 166, Review & Patch 176; Review & Patch changes from ember to lime on hover and darker green active.
+- Mod Library footer widths: Error details 146, Open VPK folder 166, Restore backups 166, Review & Patch 176; Review & Patch changes ember -> lime on hover and darker green active.
 - Developer tools live under Control Panel -> Developer; footer dev entry hidden; floating/viewport-expansion panes retired.
 - Native Windows picker handles D2PFX ZIP import, profile JSON import, and profile export-directory selection; DPG fallback only on native startup failure.
 - Custom categories: `mods/<Category>/<Child>/.../*.vpk` promotes top-level folder to category; VPK-backed immediate children become nested Local folder mods.
-- Hardening CI `34075661836`: compileall PASS; Ruff format/lint PASS; pytest **260/260 PASS**; Windows portable build/package/upload PASS.
-- Artifact `10001965090`; 53,092,300-byte GitHub artifact; digest `sha256:cad1913c0ca70d8f256a6ae19f3c0f78086aa829817d80521c58554b75d2b637`; portable ZIP SHA-256 `076a1b86b9231366162ec9a393acfde9265510f5c797c27df7239199b7ef6cbf`.
-- Human Windows smoke remains required for latest Home/Mod Library controls and all major `960x680` surfaces; CI does not prove pixel rendering.
+- Hardening CI `34079072380`: compileall PASS; Ruff format/lint PASS; pytest **262/262 PASS**; Windows portable build/package/upload PASS.
+- Artifact `10003087473`; 53,093,487-byte GitHub artifact; digest `sha256:eadf825454e6de8f7b2a481aea070b5dd696b8a074bc693b396864a952491c92`; portable ZIP SHA-256 `221ac13a7ec891a6cf3ec22d560eeb6979aa52f55815bc9d0c54819fed49453b`.
+- Human Windows smoke remains required for latest Control Panel/Home/Mod Library controls and all major `960x680` surfaces; CI does not prove pixel rendering.
 - Preserve recursive/nested mods, Collections, profiles, D2PFX, backups/conflict review, Dark Terrain, Safe Foliage, Main Menu Background fix, manual rc7 `prelaunch`, and no-auto-prelaunch policy.
 - Remove Foilage: blacklist-only; never ship `manifest.json` or `maps/dota.vpk`; retain both oak-leaf blacklist entries.
 - Security boundary: mod Python scripts trusted; archive/VPK/profile/backup/download/D2PFX data untrusted.

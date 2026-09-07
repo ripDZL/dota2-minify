@@ -3,16 +3,16 @@
 - Read `Docs/*.md` and re-fetch branch head before code changes.
 - Branch model: exactly `v21.4-hardening` -> `beta` -> `main`; keep beta/main frozen.
 - Exact upstream baseline: `Minify-v1.14rc7` / `d4b4520c945a9e1f8f5facc52a76ac5903babe90`; do not rebase current upstream main.
-- Exact validated product head: `c5cb0f15fc8868d00483a6a5723a01bd71a35381`; later commits are Docs-only.
-- Home header: centered `MINIFY` + `RELEASE: {base.VERSION}`; left status chrome hidden; Analyze/Snapshot/Compose detached into its own row; deployment controls reserve 96/136px and stack below `main_width < 560`.
-- Activity Log: `COPY LOG` width 108; `SELECT TEXT` width 132; 8px gap; 28px right inset; selectable read-only debug view retained.
-- Mod Library footer: Error details 146; Open VPK folder 166; Restore backups 166; Review & Patch 176; Review & Patch hover is lime, active darker green.
-- Developer footer entry hidden; Control Panel has `GENERAL` and `DEVELOPER` tabs; floating dev panes retired.
-- Native Windows picker: D2PFX ZIP import, profile JSON import, and profile export directory use system dialogs; DPG fallback on native startup failure.
-- CI `34075661836`: compileall/Ruff PASS; pytest **260/260 PASS**; Windows portable build PASS.
-- Artifact `10001965090`; digest `sha256:cad1913c0ca70d8f256a6ae19f3c0f78086aa829817d80521c58554b75d2b637`; portable ZIP SHA-256 `076a1b86b9231366162ec9a393acfde9265510f5c797c27df7239199b7ef6cbf`.
+- Exact validated product head: `5af666024a12b8db08288a82180d3c1a9536db4a`; later commits are Docs-only.
+- Control Panel content-fit pass: Developer buttons `150..360`px; section headers `150..360`px; General headers/buttons content-fit; combos `220..520`px; widths measured from rendered text and re-applied on open/resize after settings rebuilds.
+- Home header: centered `MINIFY` + `RELEASE: {base.VERSION}`; deployment controls reserve 96/136px and stack below `main_width < 560`.
+- Activity Log: `COPY LOG` 108px; `SELECT TEXT` 132px; 8px gap; 28px right inset; selectable read-only debug view retained.
+- Mod Library footer: Error details 146; Open VPK folder 166; Restore backups 166; Review & Patch 176; Review & Patch hover lime/active darker green.
+- Native Windows picker: D2PFX ZIP import, profile JSON import, profile export directory; DPG fallback on native startup failure.
+- CI `34079072380`: compileall/Ruff PASS; pytest **262/262 PASS**; Windows portable build PASS.
+- Artifact `10003087473`; digest `sha256:eadf825454e6de8f7b2a481aea070b5dd696b8a074bc693b396864a952491c92`; portable ZIP SHA-256 `221ac13a7ec891a6cf3ec22d560eeb6979aa52f55815bc9d0c54819fed49453b`.
 - Custom VPK-folder categories remain: `mods/<Category>/<Child>/.../*.vpk` exposes VPK-backed children as nested Local folder mods.
 - Preserve recursive/nested mods, Collections, profiles, D2PFX, backups/conflict review, Dark Terrain, Safe Foliage, Main Menu fix, manual rc7 `prelaunch`, no-auto-prelaunch.
 - Remove Foilage invariant: blacklist-only; never ship `manifest.json` or `maps/dota.vpk`.
-- Remaining gates: human Windows Home/Mod-Library/log-copy/native-picker/custom-category/960x680 smoke; residual filesystem race/security review; semantic core/exact-rc7 diff review; Dota smoke tests.
+- Remaining gates: human Windows Control-Panel/Home/Mod-Library/native-picker/custom-category/960x680 smoke; residual filesystem race/security review; semantic core/exact-rc7 diff review; Dota smoke tests.
 - Never promote beta/main without explicit user approval.
