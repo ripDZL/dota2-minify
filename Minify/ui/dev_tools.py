@@ -235,6 +235,20 @@ def _ensure_compact_home_center_groups():
         dpg.add_spacer(parent="home_action_label_line", tag="home_action_label_spacer", width=0)
         dpg.move_item("dashboard_action_label", parent="home_action_label_line")
 
+    if (
+        dpg.does_item_exist("dashboard_action_bar")
+        and dpg.does_item_exist("dashboard_action_buttons")
+        and not dpg.does_item_exist("home_action_buttons_row")
+    ):
+        dpg.add_group(
+            parent="dashboard_action_bar",
+            tag="home_action_buttons_row",
+            horizontal=True,
+            horizontal_spacing=0,
+        )
+        dpg.add_spacer(parent="home_action_buttons_row", tag="home_action_buttons_spacer", width=0)
+        dpg.move_item("dashboard_action_buttons", parent="home_action_buttons_row")
+
 
 def _center_home_line(parent, spacer, text_tags, spacing=0):
     if not dpg.does_item_exist(parent) or not dpg.does_item_exist(spacer):
@@ -254,8 +268,49 @@ def _center_home_line(parent, spacer, text_tags, spacing=0):
     dpg.configure_item(spacer, width=spacer_width)
 
 
+def _configured_width(tag, fallback):
+    try:
+        width = int(dpg.get_item_configuration(tag).get("width", fallback))
+        return width if width > 0 else fallback
+    except Exception:
+        return fallback
+
+
+def _center_home_action_buttons():
+    """Center the responsive Patch/Rescan cluster inside the deployment surface."""
+    required = (
+        "dashboard_action_bar",
+        "dashboard_action_buttons",
+        "home_action_buttons_spacer",
+        "button_patch",
+        "button_refresh_main",
+    )
+    if any(not dpg.does_item_exist(tag) for tag in required):
+        return
+
+    parent_width = _item_width("dashboard_action_bar", 0)
+    if parent_width <= 0:
+        return
+
+    try:
+        group_cfg = dpg.get_item_configuration("dashboard_action_buttons")
+    except Exception:
+        group_cfg = {}
+    horizontal = bool(group_cfg.get("horizontal", True))
+    spacing = int(group_cfg.get("horizontal_spacing", 8) or 0)
+
+    patch_width = _item_width("button_patch", _configured_width("button_patch", 210))
+    refresh_width = _item_width("button_refresh_main", _configured_width("button_refresh_main", 146))
+    cluster_width = (
+        patch_width + refresh_width + spacing if horizontal else max(patch_width, refresh_width)
+    )
+    available_width = max(0, parent_width - HOME_CENTER_SIDE_PADDING)
+    spacer_width = max(0, (available_width - cluster_width) // 2)
+    dpg.configure_item("home_action_buttons_spacer", width=spacer_width)
+
+
 def _center_compact_home_text():
-    """Center Home status/count/section copy while leaving the action buttons intact."""
+    """Center Home status/count/section copy and the deployment button cluster."""
     _ensure_compact_home_center_groups()
     _center_home_line(
         "dashboard_status_panel",
@@ -273,6 +328,7 @@ def _center_compact_home_text():
         "home_action_label_spacer",
         ("dashboard_action_label",),
     )
+    _center_home_action_buttons()
 
 
 def _ensure_home_uniform_surface():
