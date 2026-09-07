@@ -28,12 +28,19 @@ TEXT_WIDTH_FALLBACK = 8
 TOOL_BUTTON_PADDING = 38
 COMBO_PADDING = 58
 INPUT_TEXT_PADDING = 44
+RESTORE_BUTTON_WIDTH = 180
+RESTORE_BUTTON_HEIGHT = 30
 HOME_SURFACE_TAGS = (
     "app_workspace_main",
     "dashboard_hero_card",
     "dashboard_metric_strip",
     "dashboard_status_panel",
     "dashboard_action_bar",
+)
+HOME_SEPARATOR_PLACEMENTS = (
+    ("home_separator_after_intro", "dashboard_hero_card", "dashboard_metric_strip"),
+    ("home_separator_before_status", "app_workspace_main", "dashboard_status_panel"),
+    ("home_separator_before_actions", "app_workspace_main", "dashboard_action_bar"),
 )
 
 
@@ -167,7 +174,7 @@ def _fit_general_control_panel_controls():
 
 
 def _ensure_home_uniform_surface():
-    """Render the Home dashboard as one continuous slate surface."""
+    """Render Home as one slate surface with light section separators."""
     if not dpg.does_item_exist("home_uniform_surface_theme"):
         with dpg.theme(tag="home_uniform_surface_theme"):
             with dpg.theme_component(dpg.mvChildWindow):
@@ -186,6 +193,13 @@ def _ensure_home_uniform_surface():
                 dpg.add_theme_color(dpg.mvThemeCol_TableBorderStrong, theme.SURFACE)
                 dpg.add_theme_color(dpg.mvThemeCol_TableBorderLight, theme.SURFACE)
 
+    if not dpg.does_item_exist("home_subtle_separator_theme"):
+        with dpg.theme(tag="home_subtle_separator_theme"):
+            with dpg.theme_component(dpg.mvAll):
+                dpg.add_theme_color(dpg.mvThemeCol_Separator, theme.BORDER_SOFT)
+                dpg.add_theme_color(dpg.mvThemeCol_SeparatorHovered, theme.BORDER_SOFT)
+                dpg.add_theme_color(dpg.mvThemeCol_SeparatorActive, theme.BORDER_SOFT)
+
     for tag in HOME_SURFACE_TAGS:
         if dpg.does_item_exist(tag):
             dpg.bind_item_theme(tag, "home_uniform_surface_theme")
@@ -194,6 +208,25 @@ def _ensure_home_uniform_surface():
 
     if dpg.does_item_exist("dashboard_metric_table"):
         dpg.bind_item_theme("dashboard_metric_table", "home_uniform_table_theme")
+
+    for separator_tag, parent, before in HOME_SEPARATOR_PLACEMENTS:
+        if not dpg.does_item_exist(separator_tag) and dpg.does_item_exist(parent) and dpg.does_item_exist(before):
+            dpg.add_separator(parent=parent, tag=separator_tag)
+            dpg.bind_item_theme(separator_tag, "home_subtle_separator_theme")
+            try:
+                dpg.move_item(separator_tag, parent=parent, before=before)
+            except Exception:
+                pass
+
+
+def _ensure_restore_dialog_fit():
+    """Keep the restore action label inside its button on Windows font metrics."""
+    if dpg.does_item_exist("backup_restore_button"):
+        dpg.configure_item(
+            "backup_restore_button",
+            width=RESTORE_BUTTON_WIDTH,
+            height=RESTORE_BUTTON_HEIGHT,
+        )
 
 
 def _wipe_language_paths():
@@ -308,10 +341,11 @@ def install_control_panel_tab():
     # do not return to full-row width.
     _fit_general_control_panel_controls()
 
-    # Home is also revisited on resize. Keep its nested implementation details
-    # visually merged into one continuous surface without changing the stable
-    # tags used by patch/status code.
+    # Home is also revisited on resize. Keep its implementation visually merged
+    # into one continuous surface, then add restrained divider lines between the
+    # major user-facing stages so the page scans cleanly without nested cards.
     _ensure_home_uniform_surface()
+    _ensure_restore_dialog_fit()
 
     # Remove any old floating developer panes if this build is reached from a
     # live/reloaded context rather than a clean process start.
