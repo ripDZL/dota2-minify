@@ -95,6 +95,14 @@ def _text_width(label):
     return max(1, len(label)) * TEXT_WIDTH_FALLBACK
 
 
+def _item_width(tag, fallback):
+    try:
+        width = int(dpg.get_item_rect_size(tag)[0])
+        return width if width > 0 else fallback
+    except Exception:
+        return fallback
+
+
 def _fit_control_width(label, min_width, max_width, padding):
     return max(min_width, min(max_width, _text_width(label) + padding))
 
