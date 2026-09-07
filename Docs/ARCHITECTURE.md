@@ -2,9 +2,10 @@
 - Baseline: exact upstream rc7 `d4b4520c945a9e1f8f5facc52a76ac5903babe90`; no current-main rebase during hardening.
 - Branches: exactly `v21.4-hardening` -> `beta` -> `main`; beta/main frozen.
 - UI: Dear PyGui Black-Plum Reactor; outer minimum `960x680`; responsive client-size budgeting and scroll bounds.
-- Home: centered release header; left status chrome/right explainer removed; dashboard regions visually merge into one slate surface.
-- Home separators: three thin `BORDER_SOFT` separator items distinguish intro/sequence/status/actions without restoring nested cards.
-- Deployment controls retain 96px normal / 136px stacked budget; parent shell grows to required row budget up to 520px; stack below `main_width < 560`.
+- Home: centered release header; left status chrome/right explainer removed; visible workspace is live status/count plus deployment actions only.
+- Home hero and `ANALYZE/SNAPSHOT/COMPOSE` sequence remain as hidden compatibility tags; runtime compact pass hides them and keeps only the subtle separator before deployment actions.
+- Compact Home layout uses 68px status, >=96px actions, 22px gap, and >=250px shell; a next-frame callback reapplies compact heights after `window.on_resize`.
+- Deployment controls retain narrow-layout vertical stacking when required.
 - Restore dialog: `backup_restore_button` is explicitly 180x30 for safe label fit on Windows.
 - Activity Log: colored live output plus copy-all/selectable debug view; buttons use 108/132px widths, 30px height, 8px gap, 28px right inset.
 - Mod Library footer: explicit safe widths for Error details/Open VPK folder/Restore backups/Review & Patch; Review & Patch hover changes ember -> lime, active darker green.
