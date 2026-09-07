@@ -301,9 +301,7 @@ def _center_home_action_buttons():
 
     patch_width = _item_width("button_patch", _configured_width("button_patch", 210))
     refresh_width = _item_width("button_refresh_main", _configured_width("button_refresh_main", 146))
-    cluster_width = (
-        patch_width + refresh_width + spacing if horizontal else max(patch_width, refresh_width)
-    )
+    cluster_width = patch_width + refresh_width + spacing if horizontal else max(patch_width, refresh_width)
     available_width = max(0, parent_width - HOME_CENTER_SIDE_PADDING)
     spacer_width = max(0, (available_width - cluster_width) // 2)
     dpg.configure_item("home_action_buttons_spacer", width=spacer_width)
