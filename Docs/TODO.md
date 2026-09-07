@@ -6,11 +6,12 @@
 - [x] Make Home hero/sequence/status/deployment one continuous borderless slate surface.
 - [x] Retain responsive deployment-row vertical budget/stacking and Activity Log copy/select tools.
 - [x] Retain Mod Library footer safe widths and Review & Patch lime hover.
-- [x] Content-fit Control Panel action buttons/combos; keep collapsing headers full-row and never configure unsupported header `width`.
+- [x] Content-fit Control Panel action buttons/combos and General `opt_` text fields (280-720px measured-content clamp); keep collapsing headers full-row and never configure unsupported header `width`.
+- [x] Center Activity Log copy/select labels with 30px buttons inside the 36px header.
 - [x] Keep Developer Tools behind Control Panel -> Developer; floating dev panes retired.
 - [x] Replace themed browsing with native Windows picker for D2PFX ZIP/profile import/profile export directory.
-- [x] Product head `9b96289ec8b385b1f542be5e370dbc88347decc8`; CI `34081159044`; **263/263 PASS**; Windows build PASS; artifact `10003748005`.
-- [ ] Human Windows smoke-test uniform Home surface, Control Panel, latest Home/Mod Library controls, native pickers, and every major surface at exactly `960x680`.
+- [x] Product head `0bb7e2ef542e3173028ccfb821dab66c5a95e24c`; CI `34150379061`; **265/265 PASS**; Windows build PASS; artifact `10029165062`.
+- [ ] Human Windows smoke-test latest Control Panel field widths, Activity Log button centering, uniform Home surface, Home/Mod Library controls, native pickers, and every major surface at exactly `960x680`.
 - [ ] Smoke-test custom category discovery against real user-created folders/VPKs on Windows.
 - [ ] Continue hostile-input/path-race review; residual local filesystem races require explicit assessment.
 - [ ] Complete semantic core-overlay reconciliation and exact-rc7 diff review; never wholesale copy stale core.
