@@ -1,14 +1,15 @@
 # Session Summary
 - Fork: `ripDZL/dota2-minify`; active `v21.4-hardening`; exact rc7 baseline `d4b4520c945a9e1f8f5facc52a76ac5903babe90`.
 - Branch model: exactly `v21.4-hardening` -> `beta` -> `main`; beta/main frozen.
-- Exact validated product head: `0bb7e2ef542e3173028ccfb821dab66c5a95e24c`; later commits are Docs-only.
-- Home remains one continuous slate surface across hero/sequence/status/deployment; nested visual borders and table-row seams are removed while stable tags remain.
-- Control Panel invalid collapsing-header width sizing remains removed; buttons/combos are bounded/content-fit; General `opt_` text fields now measure their contents and clamp to 280-720px.
-- Activity Log copy/select buttons now use 30px height centered in the 36px header, fixing bottom-biased labels while retaining safe widths/right inset.
+- Exact validated product head: `c6607667db8d1862612835423f4d4b3e23bce4b1`; later commits are Docs-only.
+- Home remains one continuous slate surface; three restrained `BORDER_SOFT` separators distinguish intro/sequence/status/actions without nested cards.
+- Restore dialog action `Restore this backup` is 180x30 for safe Windows label fit.
+- Control Panel buttons/combos remain bounded/content-fit; General `opt_` text fields clamp to 280-720px; collapsing headers remain full-row.
+- Activity Log copy/select buttons use 30px height centered in the 36px header while retaining safe widths/right inset.
 - Home release header, deployment row budget/stacking, Mod Library footer widths/Review & Patch lime hover remain.
 - Developer tools remain under Control Panel -> Developer; Windows browsing uses native system dialogs for D2PFX ZIP/profile import/profile export directory.
-- CI `34150379061`: compileall PASS; Ruff PASS; pytest **265/265 PASS**; Windows portable build PASS.
-- Artifact `10029165062`; 53,096,382 bytes; digest `sha256:9ca74e71b5aeb87a3b0338d8577621851d3a7072cdbfecf3313e268a132b6e19`; portable ZIP 53,636,634 bytes; SHA-256 `379dd4ac5627250da5a70dfe6f203a7c464da3b526f87cdbcfcfd066fe873603`.
+- CI `34154573475`: compileall PASS; Ruff PASS; pytest **267/267 PASS**; Windows portable build PASS.
+- Artifact `10030528705`; 53,097,925 bytes; digest `sha256:44d334a226a106eda5c3f55756765e3eaa353624033e50dc94f3411d238cb3ed`; portable ZIP 53,637,965 bytes; SHA-256 `3cac232708840286357be0df11ecbaa1a2ca2d03b7ea602ccc63041ae143287a`.
 - Custom VPK-folder category behavior remains intact.
-- Remaining gates: Windows smoke of latest Control Panel fields/Activity buttons/uniform Home/Home-Mod-Library controls/log copy/native picker/custom categories/960x680; residual path-race/security review; semantic rc7 reconciliation; Dota smoke tests.
+- Remaining gates: Windows smoke of restore fit/Home separators/Control Panel/Activity/Home-Mod-Library controls/log copy/native picker/custom categories/960x680; residual path-race/security review; semantic rc7 reconciliation; Dota smoke tests.
 - Do not promote beta/main until remaining gates and explicit user approval.
