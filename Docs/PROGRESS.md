@@ -3,6 +3,7 @@
 - [x] Black-Plum Reactor UI + `960x680` client-size hardening retained.
 - [x] Home compacted to live status/count + deployment actions; explanatory hero and `ANALYZE/SNAPSHOT/COMPOSE` sequence hidden at runtime.
 - [x] Compact Home shell reapplies after resize so removed content does not leave a large empty workspace; one subtle separator remains before actions.
+- [x] Compact Home READY/message, selected/installed count, and `DEPLOYMENT COMMANDS` are centered with responsive live-width spacer rows.
 - [x] Restore backup action remains 180x30 so `Restore this backup` fits Windows font metrics.
 - [x] Activity Log supports copy-all plus selectable read-only text; controls use safe widths/right inset and 30px vertically centered button height.
 - [x] Mod Library footer controls use safe label widths; Review & Patch has distinct lime hover/darker-green active state.
@@ -10,10 +11,10 @@
 - [x] Developer tools remain behind Control Panel -> Developer; floating/viewport-expansion panes removed.
 - [x] Recursive/nested mods, custom VPK-folder categories, Collections, profiles, D2PFX, backups/conflict review retained.
 - [x] Windows local browsing uses native system picker for D2PFX ZIP import, profile import, and profile export directory.
-- [x] Product head `7b38c2957aa412da7f37a8fe95269d265cc37288` validated by CI `34155677327`: compileall/Ruff PASS; pytest **270/270 PASS**; Windows portable build PASS.
-- [x] Artifact `10030898392`; digest `sha256:094b70f06d3faae4e281a4a6ff57fa9cad2aaf043d254d261cd95993e1cf99bb`; portable ZIP SHA-256 `a7de61dfc07ac57c98cbcc89c4f587cca71246125c0e363028c41b9a250edb06`.
+- [x] Product head `e50625b1efabbc9a01a6379cd27cec862666b4bf` validated by CI `34161564938`: compileall/Ruff PASS; pytest **272/272 PASS**; Windows portable build PASS.
+- [x] Artifact `10032782594`; digest `sha256:f595f2dc9e37eda8cc54e2b621b744d0bad1df8364066ae7ea53ecb080b3998a`.
 - [x] `beta` and `main` remain frozen.
-- [ ] Human Windows smoke: compact Home actual layout, restore-button fit, Control Panel field sizing, Activity Log centering, Home/Mod Library controls, native picker, and all major `960x680` surfaces.
+- [ ] Human Windows smoke: centered compact Home actual layout, restore-button fit, Control Panel field sizing, Activity Log centering, Home/Mod Library controls, native picker, and all major `960x680` surfaces.
 - [ ] Continue hostile-input/path-race review and exact-rc7/semantic core reconciliation.
 - [ ] Dota startup/lobby/match/rollback/profiles/D2PFX/Dark-Terrain/Remove-Foilage smoke tests.
 - [ ] Promote hardening -> beta only after remaining gates/user approval; beta -> main only after beta validation.
