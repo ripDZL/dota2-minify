@@ -39,6 +39,7 @@ def test_home_centering_uses_live_text_widths_and_parent_width():
 
 
 def test_home_deployment_buttons_are_centered_as_cluster():
+    # The action pair stays centered as one responsive cluster, including narrow stacked layouts.
     for token in (
         'tag="home_action_buttons_row"',
         'tag="home_action_buttons_spacer"',
