@@ -26,12 +26,8 @@ jobs:
 
           path = Path("Minify/ui/dev_tools.py")
           text = path.read_text(encoding="utf-8")
-          old = '''    cluster_width = (
-              patch_width + refresh_width + spacing if horizontal else max(patch_width, refresh_width)
-          )
-          '''
-          new = '''    cluster_width = patch_width + refresh_width + spacing if horizontal else max(patch_width, refresh_width)
-          '''
+          old = "    cluster_width = (\n        patch_width + refresh_width + spacing if horizontal else max(patch_width, refresh_width)\n    )\n"
+          new = "    cluster_width = patch_width + refresh_width + spacing if horizontal else max(patch_width, refresh_width)\n"
           if old not in text:
               raise SystemExit("Ruff formatting anchor not found")
           path.write_text(text.replace(old, new, 1), encoding="utf-8")
