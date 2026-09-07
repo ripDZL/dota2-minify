@@ -35,6 +35,8 @@ HOME_COMPACT_INNER_INSET = 34
 HOME_COMPACT_VERTICAL_GAP = 22
 HOME_STATUS_HEIGHT = 68
 HOME_ACTION_NORMAL_HEIGHT = 96
+HOME_CENTER_SIDE_PADDING = 20
+HOME_STATUS_TEXT_GAP = 8
 HOME_SURFACE_TAGS = (
     "app_workspace_main",
     "dashboard_hero_card",
@@ -178,6 +180,93 @@ def _fit_general_control_panel_controls():
             )
 
 
+def _item_value(tag):
+    try:
+        return str(dpg.get_value(tag) or "")
+    except Exception:
+        return ""
+
+
+def _ensure_compact_home_center_groups():
+    """Place the surviving Home copy in tagged rows that can be centered safely."""
+    if dpg.does_item_exist("dashboard_status_panel"):
+        if not dpg.does_item_exist("home_status_line") and dpg.does_item_exist("dashboard_metric"):
+            dpg.add_group(
+                parent="dashboard_status_panel",
+                tag="home_status_line",
+                horizontal=True,
+                horizontal_spacing=HOME_STATUS_TEXT_GAP,
+                before="dashboard_metric",
+            )
+            dpg.add_spacer(parent="home_status_line", tag="home_status_line_spacer", width=0)
+            for tag in ("dashboard_status_label", "dashboard_status_message"):
+                if dpg.does_item_exist(tag):
+                    dpg.move_item(tag, parent="home_status_line")
+
+        if not dpg.does_item_exist("home_metric_line") and dpg.does_item_exist("dashboard_metric"):
+            dpg.add_group(
+                parent="dashboard_status_panel",
+                tag="home_metric_line",
+                horizontal=True,
+                before="dashboard_metric",
+            )
+            dpg.add_spacer(parent="home_metric_line", tag="home_metric_line_spacer", width=0)
+            dpg.move_item("dashboard_metric", parent="home_metric_line")
+
+    if (
+        dpg.does_item_exist("dashboard_action_bar")
+        and dpg.does_item_exist("dashboard_action_label")
+        and not dpg.does_item_exist("home_action_label_line")
+    ):
+        dpg.add_group(
+            parent="dashboard_action_bar",
+            tag="home_action_label_line",
+            horizontal=True,
+            before="dashboard_action_label",
+        )
+        dpg.add_spacer(parent="home_action_label_line", tag="home_action_label_spacer", width=0)
+        dpg.move_item("dashboard_action_label", parent="home_action_label_line")
+
+
+def _center_home_line(parent, spacer, text_tags, spacing=0):
+    if not dpg.does_item_exist(parent) or not dpg.does_item_exist(spacer):
+        return
+
+    parent_width = _item_width(parent, 0)
+    if parent_width <= 0:
+        return
+
+    visible_tags = [tag for tag in text_tags if dpg.does_item_exist(tag)]
+    text_width = sum(_text_width(_item_value(tag)) for tag in visible_tags)
+    if len(visible_tags) > 1:
+        text_width += spacing * (len(visible_tags) - 1)
+
+    available_width = max(0, parent_width - HOME_CENTER_SIDE_PADDING)
+    spacer_width = max(0, (available_width - text_width) // 2)
+    dpg.configure_item(spacer, width=spacer_width)
+
+
+def _center_compact_home_text():
+    """Center Home status/count/section copy while leaving the action buttons intact."""
+    _ensure_compact_home_center_groups()
+    _center_home_line(
+        "dashboard_status_panel",
+        "home_status_line_spacer",
+        ("dashboard_status_label", "dashboard_status_message"),
+        spacing=HOME_STATUS_TEXT_GAP,
+    )
+    _center_home_line(
+        "dashboard_status_panel",
+        "home_metric_line_spacer",
+        ("dashboard_metric",),
+    )
+    _center_home_line(
+        "dashboard_action_bar",
+        "home_action_label_spacer",
+        ("dashboard_action_label",),
+    )
+
+
 def _ensure_home_uniform_surface():
     """Render Home as one slate surface with light section separators."""
     if not dpg.does_item_exist("home_uniform_surface_theme"):
@@ -271,6 +360,8 @@ def _apply_compact_home_layout():
         dpg.configure_item("dashboard_status_panel", height=HOME_STATUS_HEIGHT)
     if dpg.does_item_exist("dashboard_action_bar"):
         dpg.configure_item("dashboard_action_bar", height=action_height)
+
+    _center_compact_home_text()
 
 
 def _schedule_compact_home_layout():
