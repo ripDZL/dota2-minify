@@ -9,7 +9,7 @@ import dearpygui.dearpygui as dpg
 import helper
 from core import base, config, constants, fs, log, output, steam
 
-from ui import checkboxes
+from ui import checkboxes, theme
 
 # Developer tools are embedded in Control Panel now. Keep the legacy state
 # variables because resize code and third-party integrations may still import them.
@@ -19,15 +19,19 @@ prev_height = None
 
 TOOL_BUTTON_MIN_WIDTH = 150
 TOOL_BUTTON_MAX_WIDTH = 360
-SECTION_HEADER_MIN_WIDTH = 150
-SECTION_HEADER_MAX_WIDTH = 360
 GENERAL_BUTTON_MIN_WIDTH = 84
 COMBO_MIN_WIDTH = 220
 COMBO_MAX_WIDTH = 520
 TEXT_WIDTH_FALLBACK = 8
 TOOL_BUTTON_PADDING = 38
-SECTION_HEADER_PADDING = 48
 COMBO_PADDING = 58
+HOME_SURFACE_TAGS = (
+    "app_workspace_main",
+    "dashboard_hero_card",
+    "dashboard_metric_strip",
+    "dashboard_status_panel",
+    "dashboard_action_bar",
+)
 
 
 def extract_workshop_tools():
@@ -84,8 +88,9 @@ def _tool_button(parent, label, callback):
 
 
 def _section_header(parent, label, default_open=False):
-    width = _fit_control_width(label, SECTION_HEADER_MIN_WIDTH, SECTION_HEADER_MAX_WIDTH, SECTION_HEADER_PADDING)
-    return dpg.add_collapsing_header(parent=parent, label=label, default_open=default_open, width=width)
+    # Dear PyGui collapsing headers do not expose a width configuration field.
+    # Keep headers full-row and content-fit the actionable controls inside them.
+    return dpg.add_collapsing_header(parent=parent, label=label, default_open=default_open)
 
 
 def _walk_descendants(parent):
@@ -115,7 +120,7 @@ def _combo_display_text(item):
 
 
 def _fit_general_control_panel_controls():
-    """Keep Settings section headers, combos and action buttons content-sized."""
+    """Keep supported Settings combos and action buttons content-sized."""
     if not dpg.does_item_exist("settings_content_group"):
         return
 
@@ -127,17 +132,7 @@ def _fit_general_control_panel_controls():
             continue
 
         label = str(cfg.get("label") or "")
-        if "mvCollapsingHeader" in item_type and label:
-            dpg.configure_item(
-                item,
-                width=_fit_control_width(
-                    label,
-                    SECTION_HEADER_MIN_WIDTH,
-                    SECTION_HEADER_MAX_WIDTH,
-                    SECTION_HEADER_PADDING,
-                ),
-            )
-        elif "mvCombo" in item_type:
+        if "mvCombo" in item_type:
             dpg.configure_item(
                 item,
                 width=_fit_control_width(_combo_display_text(item), COMBO_MIN_WIDTH, COMBO_MAX_WIDTH, COMBO_PADDING),
@@ -147,6 +142,36 @@ def _fit_general_control_panel_controls():
                 item,
                 width=_fit_control_width(label, GENERAL_BUTTON_MIN_WIDTH, TOOL_BUTTON_MAX_WIDTH, TOOL_BUTTON_PADDING),
             )
+
+
+def _ensure_home_uniform_surface():
+    """Render the Home dashboard as one continuous slate surface."""
+    if not dpg.does_item_exist("home_uniform_surface_theme"):
+        with dpg.theme(tag="home_uniform_surface_theme"):
+            with dpg.theme_component(dpg.mvChildWindow):
+                dpg.add_theme_color(dpg.mvThemeCol_ChildBg, theme.SURFACE)
+                dpg.add_theme_color(dpg.mvThemeCol_Border, theme.SURFACE)
+                dpg.add_theme_color(dpg.mvThemeCol_BorderShadow, theme.SURFACE)
+                dpg.add_theme_style(dpg.mvStyleVar_ChildBorderSize, 0)
+                dpg.add_theme_style(dpg.mvStyleVar_ChildRounding, 0)
+                dpg.add_theme_style(dpg.mvStyleVar_WindowPadding, x=10, y=8)
+
+    if not dpg.does_item_exist("home_uniform_table_theme"):
+        with dpg.theme(tag="home_uniform_table_theme"):
+            with dpg.theme_component(dpg.mvTable):
+                dpg.add_theme_color(dpg.mvThemeCol_TableRowBg, theme.SURFACE)
+                dpg.add_theme_color(dpg.mvThemeCol_TableRowBgAlt, theme.SURFACE)
+                dpg.add_theme_color(dpg.mvThemeCol_TableBorderStrong, theme.SURFACE)
+                dpg.add_theme_color(dpg.mvThemeCol_TableBorderLight, theme.SURFACE)
+
+    for tag in HOME_SURFACE_TAGS:
+        if dpg.does_item_exist(tag):
+            dpg.bind_item_theme(tag, "home_uniform_surface_theme")
+            if tag != "app_workspace_main":
+                dpg.configure_item(tag, border=False)
+
+    if dpg.does_item_exist("dashboard_metric_table"):
+        dpg.bind_item_theme("dashboard_metric_table", "home_uniform_table_theme")
 
 
 def _wipe_language_paths():
@@ -260,6 +285,11 @@ def install_control_panel_tab():
     # fitting whenever the Control Panel is opened/resized so rebuilt controls
     # do not return to full-row width.
     _fit_general_control_panel_controls()
+
+    # Home is also revisited on resize. Keep its nested implementation details
+    # visually merged into one continuous surface without changing the stable
+    # tags used by patch/status code.
+    _ensure_home_uniform_surface()
 
     # Remove any old floating developer panes if this build is reached from a
     # live/reloaded context rather than a clean process start.
