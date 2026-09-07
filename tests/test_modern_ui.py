@@ -99,7 +99,13 @@ def test_activity_header_uses_plain_language_and_copy_tools():
     assert 'label="SELECT TEXT"' in WINDOW
     assert "callback=terminal.copy_all" in WINDOW
     assert "callback=terminal.show_copy_view" in WINDOW
-    assert "right_edge = max(270, content_width - 28)" in WINDOW
+    assert "ACTIVITY_COPY_WIDTH = 108" in WINDOW
+    assert "ACTIVITY_SELECT_WIDTH = 132" in WINDOW
+    assert "ACTIVITY_BUTTON_GAP = 8" in WINDOW
+    assert "ACTIVITY_RIGHT_INSET = 28" in WINDOW
+    assert "right_edge = max(320, content_width - ACTIVITY_RIGHT_INSET)" in WINDOW
+    assert "select_x = max(260, right_edge - ACTIVITY_SELECT_WIDTH)" in WINDOW
+    assert "copy_x = max(140, select_x - ACTIVITY_BUTTON_GAP - ACTIVITY_COPY_WIDTH)" in WINDOW
 
 
 def test_activity_log_has_selectable_debug_view():
@@ -152,6 +158,26 @@ def test_deployment_action_bar_has_non_clipping_vertical_budget():
     assert "action_height = 136 if stack_actions else 96" in WINDOW
     assert "required_inner_height = hero_height + sequence_height + status_height + action_height + 20" in WINDOW
     assert 'dpg.configure_item("dashboard_action_bar", height=action_height)' in WINDOW
+
+
+def test_library_footer_buttons_have_safe_width_and_distinct_review_hover():
+    for token in (
+        "LIBRARY_ERROR_DETAILS_WIDTH = 146",
+        "LIBRARY_OPEN_VPK_WIDTH = 166",
+        "LIBRARY_BACKUPS_WIDTH = 166",
+        "LIBRARY_REVIEW_WIDTH = 176",
+        '("status_error_details_button", LIBRARY_ERROR_DETAILS_WIDTH)',
+        '("open_vpk_folder_button", LIBRARY_OPEN_VPK_WIDTH)',
+        '("backups_button", LIBRARY_BACKUPS_WIDTH)',
+        '("review_patch_button", LIBRARY_REVIEW_WIDTH)',
+    ):
+        assert token in WINDOW
+    assert "REVIEW_PATCH_BASE = (223, 80, 59, 255)" in WINDOW
+    assert "REVIEW_PATCH_HOVER = (122, 193, 67, 255)" in WINDOW
+    assert "REVIEW_PATCH_ACTIVE = (104, 169, 53, 255)" in WINDOW
+    assert "def _ensure_review_patch_hover_theme():" in WINDOW
+    assert "dpg.add_theme_color(dpg.mvThemeCol_ButtonHovered, REVIEW_PATCH_HOVER)" in WINDOW
+    assert 'dpg.bind_item_theme("review_patch_button", "review_patch_hover_theme")' in WINDOW
 
 
 def test_release_console_keeps_actionable_navigation():

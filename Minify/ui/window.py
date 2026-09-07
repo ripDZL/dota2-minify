@@ -20,6 +20,18 @@ CONTENT_INSET = 16
 MIN_D2PFX_CONTENT_HEIGHT = 260
 D2PFX_HEADER_BUDGET = 188
 HEADER_BRAND_WIDTH = 340
+ACTIVITY_COPY_WIDTH = 108
+ACTIVITY_SELECT_WIDTH = 132
+ACTIVITY_BUTTON_GAP = 8
+ACTIVITY_RIGHT_INSET = 28
+LIBRARY_ERROR_DETAILS_WIDTH = 146
+LIBRARY_OPEN_VPK_WIDTH = 166
+LIBRARY_BACKUPS_WIDTH = 166
+LIBRARY_REVIEW_WIDTH = 176
+REVIEW_PATCH_BASE = (223, 80, 59, 255)
+REVIEW_PATCH_HOVER = (122, 193, 67, 255)
+REVIEW_PATCH_ACTIVE = (104, 169, 53, 255)
+REVIEW_PATCH_TEXT = (25, 13, 10, 255)
 
 
 def drag(sender, app_data, user_data):
@@ -87,6 +99,22 @@ def _item_width(tag, fallback):
         return width if width > 0 else fallback
     except Exception:
         return fallback
+
+
+def _ensure_review_patch_hover_theme():
+    """Give the Mod Library primary action an unmistakable hover state."""
+    if dpg.does_item_exist("review_patch_hover_theme"):
+        return
+    with dpg.theme(tag="review_patch_hover_theme"):
+        with dpg.theme_component(dpg.mvButton):
+            dpg.add_theme_color(dpg.mvThemeCol_Text, REVIEW_PATCH_TEXT)
+            dpg.add_theme_color(dpg.mvThemeCol_Button, REVIEW_PATCH_BASE)
+            dpg.add_theme_color(dpg.mvThemeCol_ButtonHovered, REVIEW_PATCH_HOVER)
+            dpg.add_theme_color(dpg.mvThemeCol_ButtonActive, REVIEW_PATCH_ACTIVE)
+            dpg.add_theme_color(dpg.mvThemeCol_Border, REVIEW_PATCH_BASE)
+            dpg.add_theme_color(dpg.mvThemeCol_BorderShadow, (0, 0, 0, 210))
+            dpg.add_theme_style(dpg.mvStyleVar_FrameBorderSize, 1)
+            dpg.add_theme_style(dpg.mvStyleVar_FrameRounding, 6)
 
 
 def _configure_home_surface(content_width):
@@ -160,7 +188,7 @@ def _configure_home_surface(content_width):
                 tag="activity_copy_button",
                 label="COPY LOG",
                 callback=terminal.copy_all,
-                width=86,
+                width=ACTIVITY_COPY_WIDTH,
                 height=24,
             )
             if dpg.does_item_exist("main_secondary_button_theme"):
@@ -171,15 +199,15 @@ def _configure_home_surface(content_width):
                 tag="activity_select_button",
                 label="SELECT TEXT",
                 callback=terminal.show_copy_view,
-                width=94,
+                width=ACTIVITY_SELECT_WIDTH,
                 height=24,
             )
             if dpg.does_item_exist("main_secondary_button_theme"):
                 dpg.bind_item_theme("activity_select_button", "main_secondary_button_theme")
 
-        right_edge = max(270, content_width - 28)
-        select_x = max(242, right_edge - 94)
-        copy_x = max(150, select_x - 94)
+        right_edge = max(320, content_width - ACTIVITY_RIGHT_INSET)
+        select_x = max(260, right_edge - ACTIVITY_SELECT_WIDTH)
+        copy_x = max(140, select_x - ACTIVITY_BUTTON_GAP - ACTIVITY_COPY_WIDTH)
         dpg.set_item_pos("activity_copy_button", (copy_x, 5))
         dpg.set_item_pos("activity_select_button", (select_x, 5))
 
@@ -190,6 +218,21 @@ def _configure_minimum_window_surfaces(content_width, compact_width):
         # The source rail is taller than the minimum-height library body. A
         # scrollbar keeps Restore/selection/navigation controls reachable.
         dpg.configure_item("mod_source_rail", no_scrollbar=False, no_scroll_with_mouse=False)
+
+    # The Library status strip uses the same mono font as the rest of the UI;
+    # reserve enough horizontal padding so labels never bleed past the button
+    # frame on Windows font metrics.
+    for tag, width in (
+        ("status_error_details_button", LIBRARY_ERROR_DETAILS_WIDTH),
+        ("open_vpk_folder_button", LIBRARY_OPEN_VPK_WIDTH),
+        ("backups_button", LIBRARY_BACKUPS_WIDTH),
+        ("review_patch_button", LIBRARY_REVIEW_WIDTH),
+    ):
+        if dpg.does_item_exist(tag):
+            dpg.configure_item(tag, width=width)
+    if dpg.does_item_exist("review_patch_button"):
+        _ensure_review_patch_hover_theme()
+        dpg.bind_item_theme("review_patch_button", "review_patch_hover_theme")
 
     if dpg.does_item_exist("terminal_window"):
         dpg.configure_item("terminal_window", width=content_width)
