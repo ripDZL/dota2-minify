@@ -48,7 +48,7 @@ def test_home_deployment_buttons_are_centered_as_cluster():
         'parent_width = _item_width("dashboard_action_bar", 0)',
         'patch_width = _item_width("button_patch", _configured_width("button_patch", 210))',
         'refresh_width = _item_width("button_refresh_main", _configured_width("button_refresh_main", 146))',
-        "cluster_width = (",
+        "cluster_width = patch_width + refresh_width + spacing if horizontal else max(patch_width, refresh_width)",
         'dpg.configure_item("home_action_buttons_spacer", width=spacer_width)',
         "_center_home_action_buttons()",
     ):
