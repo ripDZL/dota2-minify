@@ -3,15 +3,16 @@
 - [x] Keep exactly three branches: `v21.4-hardening`, `beta`, `main`.
 - [x] Preserve hardened backend + v21.3.1 feature set; custom VPK-folder categories included.
 - [x] Harden Black-Plum Reactor minimum/responsive sizing at `960x680`.
-- [x] Make Home hero/sequence/status/deployment one continuous borderless slate surface.
+- [x] Keep Home as one slate surface with three subtle separators between intro/sequence/status/actions.
 - [x] Retain responsive deployment-row vertical budget/stacking and Activity Log copy/select tools.
+- [x] Fit Restore backup action at 180x30 so its label stays inside the button.
 - [x] Retain Mod Library footer safe widths and Review & Patch lime hover.
-- [x] Content-fit Control Panel action buttons/combos and General `opt_` text fields (280-720px measured-content clamp); keep collapsing headers full-row and never configure unsupported header `width`.
+- [x] Content-fit Control Panel action buttons/combos and General `opt_` text fields (280-720px); keep collapsing headers full-row.
 - [x] Center Activity Log copy/select labels with 30px buttons inside the 36px header.
 - [x] Keep Developer Tools behind Control Panel -> Developer; floating dev panes retired.
 - [x] Replace themed browsing with native Windows picker for D2PFX ZIP/profile import/profile export directory.
-- [x] Product head `0bb7e2ef542e3173028ccfb821dab66c5a95e24c`; CI `34150379061`; **265/265 PASS**; Windows build PASS; artifact `10029165062`.
-- [ ] Human Windows smoke-test latest Control Panel field widths, Activity Log button centering, uniform Home surface, Home/Mod Library controls, native pickers, and every major surface at exactly `960x680`.
+- [x] Product head `c6607667db8d1862612835423f4d4b3e23bce4b1`; CI `34154573475`; **267/267 PASS**; Windows build PASS; artifact `10030528705`.
+- [ ] Human Windows smoke-test restore-button fit, Home separators, Control Panel field widths, Activity Log centering, Home/Mod Library controls, native pickers, and every major surface at exactly `960x680`.
 - [ ] Smoke-test custom category discovery against real user-created folders/VPKs on Windows.
 - [ ] Continue hostile-input/path-race review; residual local filesystem races require explicit assessment.
 - [ ] Complete semantic core-overlay reconciliation and exact-rc7 diff review; never wholesale copy stale core.
