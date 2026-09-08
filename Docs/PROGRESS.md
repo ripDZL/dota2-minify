@@ -1,8 +1,9 @@
 # Progress
 - [x] Exact rc7 baseline pinned; exactly `v21.4-hardening`, `beta`, `main` retained.
 - [x] Black-Plum Reactor UI + `960x680` client-size hardening retained.
-- [x] Home compacted to live status/count + deployment actions; explanatory hero and `ANALYZE/SNAPSHOT/COMPOSE` hidden.
-- [x] Compact Home shell reapplies after resize; one subtle separator remains before actions.
+- [x] Home compacted to live status/count + deployment actions; explanatory hero and `ANALYZE/SNAPSHOT/COMPOSE` removed from the startup item tree.
+- [x] Retired startup chrome removed at construction: `COMMAND DECK`, `SYSTEM/PROTECTED`, old release-engine branding, hero/sequence never render as initial widgets.
+- [x] Compact Home starts at reduced dimensions before first render; one subtle separator remains before actions.
 - [x] READY/message, selected/installed count, and `DEPLOYMENT COMMANDS` centered with responsive live-width spacer rows.
 - [x] Patch/Rescan action buttons centered as one responsive cluster; narrow stacked mode remains centered.
 - [x] Restore backup action remains 180x30.
@@ -12,9 +13,10 @@
 - [x] Developer tools remain behind Control Panel -> Developer; floating/viewport-expansion panes removed.
 - [x] Recursive/nested mods, custom VPK-folder categories, Collections, profiles, D2PFX, backups/conflict review retained.
 - [x] Windows local browsing uses native system picker for D2PFX ZIP import, profile import, profile export directory.
-- [x] Product code `da8c52d8ca749514e3b302b4d194f98d3f78980e`; validation head `4b921d0073e240568ee92ee58cd61c28c9d9df64`; CI `34163085380`: compileall/Ruff PASS; pytest **273/273 PASS**; Windows portable build PASS.
-- [x] Artifact `10033267470`; digest `sha256:21b518627d4c6768ca160fe9f1a1fda24ca76b7440e81cfc51fb1ad6f29d30ed`; portable SHA-256 `ee3d8f1d6186bb981acc731c36542468b8ce75fad133589ad55739c1f75450a0`.
+- [x] Product code `4cd49610eff6a17670fabfe5eb757b82b9dc1cb4`; validation head `2724757140677ef7aa9c40799629377bc57971bc`; CI `34173898936`: compileall/Ruff PASS; pytest **276/276 PASS**; Windows portable build PASS.
+- [x] Artifact `10036612769`; digest `sha256:e5c9b66227bd1d3c08d748412071db4b0daeea7b68507c8eda295361e7d72131`; portable SHA-256 `15ad1d41f32f9a85d1ab37dfd0537b5e79400041f3282306117fe353b7a70565`.
 - [x] `beta` and `main` remain frozen.
+- [ ] Human Windows boot smoke: verify legacy Home startup flash is gone and no visible frame shift remains.
 - [ ] Human Windows smoke: centered Home/action cluster, restore, Control Panel, Activity Log, Home/Mod Library controls, native picker, all major `960x680` surfaces.
 - [ ] Continue hostile-input/path-race review and exact-rc7/semantic core reconciliation.
 - [ ] Dota startup/lobby/match/rollback/profiles/D2PFX/Dark-Terrain/Remove-Foilage smoke tests.
