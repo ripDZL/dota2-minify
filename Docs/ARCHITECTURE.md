@@ -1,17 +1,15 @@
 # Architecture
 - Baseline: exact upstream rc7 `d4b4520c945a9e1f8f5facc52a76ac5903babe90`; no current-main rebase during hardening.
-- Branches: exactly `v21.4-hardening` -> `beta` -> `main`; beta/main frozen.
+- Branches: exactly `v21.4-hardening` -> `beta` -> `main`; hardening -> beta promotion completed from source head `36bf3b8c7edc9e92ca60c876e69e40c60c95aad8`; main remains frozen.
+- Release: prerelease tag `v21.4-beta.1` targets promoted source head `36bf3b8c7edc9e92ca60c876e69e40c60c95aad8`; Windows asset is the validated build from `4f9edd479283e0cc20d60421163f4c108b88c349`; subsequent source changes are tests/Docs only.
 - UI: Dear PyGui Black-Plum Reactor; outer minimum `960x680`; responsive client-size budgeting and scroll bounds.
-- Home: centered release header; visible workspace is live status/count plus deployment actions only.
-- Home startup tree is final-at-construction: `Minify/__main__.py` no longer creates old release-engine copy, `COMMAND DECK`/`SYSTEM`/`PROTECTED`, hero, or `ANALYZE/SNAPSHOT/COMPOSE` widgets.
-- Compact Home copy uses tagged horizontal rows with calculated leading spacers from live text/panel widths for READY/message, selected/installed count, and `DEPLOYMENT COMMANDS`.
-- Deployment buttons are a tagged centered action group. Patch/Rescan both construct at 210px; normal responsive layout divides the available cluster equally; narrow stacked layout gives both the same full cluster width.
-- One subtle `home_separator_before_actions` remains in the initial item tree.
-- Source-contract tests assert retired Home tags/copy are absent, final compact structure exists before runtime helpers, and Home action widths remain symmetric.
+- Home startup tree is final-at-construction: only centered release header, live status/count, one separator, deployment label/actions.
+- Retired Home release-engine copy, `COMMAND DECK`/`SYSTEM`/`PROTECTED`, hero, and `ANALYZE/SNAPSHOT/COMPOSE` nodes are absent.
+- Compact Home copy uses tagged horizontal rows with live-width spacers; Patch/Rescan both construct at 210px and share equal responsive widths in horizontal/stacked modes.
 - Restore dialog: `backup_restore_button` explicitly 180x30.
-- Activity Log: colored live output plus copy-all/selectable debug view; buttons 108/132px wide, 30px high, 8px gap, 28px right inset.
+- Activity Log: colored output plus copy-all/selectable debug view; controls remain bounded/centered.
 - Mod Library footer: explicit safe widths; Review & Patch hover ember -> lime, active darker green.
-- Developer tools: `GENERAL`/`DEVELOPER` tabs in Control Panel; actions/combos content-fit; General `opt_` fields clamp 280-720px; collapsing headers full-row.
+- Developer tools: `GENERAL`/`DEVELOPER` tabs in Control Panel; actions/combos content-fit; General `opt_` fields clamp 280-720px.
 - Windows file browsing: native dialogs for D2PFX ZIP import, profile import, profile export; DPG fallback on native-start failure.
 - Mod discovery: bounded recursive scanner; no symlink traversal; stable nested IDs; top-level folders with VPK-backed immediate children become categories.
 - D2PFX: bounded catalogue/download/install/cursor paths; staged installs; confined metadata/cache.

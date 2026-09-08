@@ -1,22 +1,15 @@
 # New Chat Handoff Prompt
-- Work only in `ripDZL/dota2-minify` branch `v21.4-hardening` unless user explicitly changes plan.
-- Read `Docs/*.md` and re-fetch branch head before code changes.
-- Branch model: exactly `v21.4-hardening` -> `beta` -> `main`; keep beta/main frozen.
+- Work in `ripDZL/dota2-minify`; promotion path is exactly `v21.4-hardening` -> `beta` -> `main`.
+- Read `Docs/*.md` and re-fetch branch heads before code changes.
 - Exact upstream baseline: `Minify-v1.14rc7` / `d4b4520c945a9e1f8f5facc52a76ac5903babe90`; do not rebase current upstream main.
-- Uniform-Home product code: `c985195836c18226d9f1166c0d5c3619caf9de64`; validation head `4f9edd479283e0cc20d60421163f4c108b88c349`; later commits are Docs-only.
-- Home startup constructs the final compact view directly: centered `MINIFY` + `RELEASE: {base.VERSION}`, live status/count, one separator, deployment label/actions.
-- Retired startup widgets/copy are absent from `Minify/__main__.py`: no old release-engine branding, `COMMAND DECK`, `SYSTEM/PROTECTED`, hero, or `ANALYZE/SNAPSHOT/COMPOSE` sequence.
-- Home centers READY/message, selected/installed count, `DEPLOYMENT COMMANDS`, and Patch/Rescan from live widths.
-- Patch/Rescan are symmetric: 210px each at construction; equal normal responsive widths; equal centered narrow-stack widths.
-- Restore dialog button `Restore this backup` remains 180x30.
-- Control Panel: buttons/combos content-fit/bounded; General `opt_` fields clamp 280-720px; collapsing headers stay full-row.
-- Activity Log copy/select buttons use 108/132px widths and 30px height centered in 36px header.
-- Mod Library footer widths/lime Review & Patch hover remain.
-- Developer tools remain under Control Panel -> Developer; native Windows picker remains for D2PFX ZIP/profile import/profile export directory.
-- CI `34269151229`: compileall/Ruff PASS; pytest **277/277 PASS**; Windows portable build PASS.
-- Artifact `10073128239`; digest `sha256:2bd7d869b184a7b198b1bbacb9fd18911b4ba5acaab5e99743b22c01aa8b4b7b`; portable ZIP SHA-256 `024f98c3a44a663ce33f4efd0f770f9c77097c498ed361f4d2ea7e430973d5d2`.
-- Custom VPK-folder categories remain: `mods/<Category>/<Child>/.../*.vpk` exposes VPK-backed children as nested Local folder mods.
-- Preserve recursive/nested mods, Collections, profiles, D2PFX, backups/conflict review, Dark Terrain, Safe Foliage, Main Menu fix, manual rc7 `prelaunch`, no-auto-prelaunch.
+- Product code: `c985195836c18226d9f1166c0d5c3619caf9de64`; validation head `4f9edd479283e0cc20d60421163f4c108b88c349`; CI `34269151229`; **277/277 PASS**; Windows build PASS.
+- Hardening -> beta promotion completed from source head `36bf3b8c7edc9e92ca60c876e69e40c60c95aad8`; `main` remains frozen at `a26bc88a0d412e357965f29488b83a7f9093e11f`.
+- Beta prerelease published: tag `v21.4-beta.1`, title `Minify v21.4 Beta 1`, release ID `385014125`, target `36bf3b8c7edc9e92ca60c876e69e40c60c95aad8`.
+- Release asset `Minify-v21.4-beta.1-windows.zip`: 53,639,888 bytes; SHA-256 `024f98c3a44a663ce33f4efd0f770f9c77097c498ed361f4d2ea7e430973d5d2`; checksum asset included.
+- Home constructs only compact centered status/count + deployment actions; retired startup chrome is absent.
+- Patch/Rescan are symmetric: 210px each at construction, equal normal responsive widths, equal centered narrow-stack widths.
+- Restore remains 180x30; Control Panel, Activity Log, Mod Library, D2PFX, native Windows pickers, nested mods/custom categories remain.
+- Preserve Collections, profiles, backups/conflict review, Dark Terrain, Safe Foliage, Main Menu fix, manual rc7 `prelaunch`, no-auto-prelaunch.
 - Remove Foilage invariant: blacklist-only; never ship `manifest.json` or `maps/dota.vpk`.
-- Remaining gates: human Windows/Dota smoke, centered/equal Home/actions/restore/Control-Panel/Activity/Home-Mod-Library/native-picker/custom-category/960x680 smoke; residual filesystem race/security review; semantic core/exact-rc7 diff review.
-- Never promote beta/main without explicit user approval.
+- Remaining gates: beta Windows/Dota smoke; centered/equal Home/actions/restore/Control-Panel/Activity/Home-Mod-Library/native-picker/custom-category/960x680 smoke; residual filesystem race/security review; semantic core/exact-rc7 diff review.
+- Never promote beta -> main without explicit user approval.

@@ -1,20 +1,18 @@
 # Progress
 - [x] Exact rc7 baseline pinned; exactly `v21.4-hardening`, `beta`, `main` retained.
-- [x] Black-Plum Reactor UI + `960x680` client-size hardening retained.
-- [x] Home compacted to live status/count + deployment actions; explanatory/legacy startup chrome removed from construction.
-- [x] READY/message, selected/installed count, and `DEPLOYMENT COMMANDS` centered from live widths.
-- [x] Patch/Rescan centered as one responsive cluster and now symmetric: 210px each at construction, equal horizontal resize split, equal centered narrow stack.
-- [x] Restore backup action remains 180x30.
-- [x] Activity Log supports copy-all/selectable read-only text; controls use safe widths/right inset and 30px centered height.
-- [x] Mod Library footer controls use safe widths; Review & Patch has lime hover/darker-green active state.
-- [x] Control Panel action buttons/combos content-fit; General `opt_` fields clamp 280-720px; collapsing headers stay full-row.
-- [x] Developer tools remain behind Control Panel -> Developer; floating/viewport-expansion panes removed.
-- [x] Recursive/nested mods, custom VPK-folder categories, Collections, profiles, D2PFX, backups/conflict review retained.
-- [x] Windows local browsing uses native system picker for D2PFX ZIP import, profile import, profile export directory.
-- [x] Product `c985195836c18226d9f1166c0d5c3619caf9de64`; validation `4f9edd479283e0cc20d60421163f4c108b88c349`; CI `34269151229`: compileall/Ruff PASS; pytest **277/277 PASS**; Windows portable build PASS.
-- [x] Artifact `10073128239`; digest `sha256:2bd7d869b184a7b198b1bbacb9fd18911b4ba5acaab5e99743b22c01aa8b4b7b`; portable SHA-256 `024f98c3a44a663ce33f4efd0f770f9c77097c498ed361f4d2ea7e430973d5d2`.
-- [x] `beta` and `main` remain frozen.
-- [ ] Human Windows smoke: startup, centered/equal Home actions, restore, Control Panel, Activity Log, Home/Mod Library controls, native picker, all major `960x680` surfaces.
+- [x] Black-Plum Reactor `960x680` hardening retained.
+- [x] Home compacted to live status/count + deployment actions; retired startup chrome removed from construction.
+- [x] Home status/count/label/actions centered; Patch/Rescan symmetric at startup and resize.
+- [x] Restore, Control Panel, Activity Log, Mod Library, D2PFX, native picker, nested mods/custom categories retained.
+- [x] Product `c985195836c18226d9f1166c0d5c3619caf9de64`; validation `4f9edd479283e0cc20d60421163f4c108b88c349`.
+- [x] CI `34269151229`: compileall/Ruff PASS; pytest **277/277 PASS**; Windows portable build PASS.
+- [x] CI artifact `10073128239`; portable SHA-256 `024f98c3a44a663ce33f4efd0f770f9c77097c498ed361f4d2ea7e430973d5d2`.
+- [x] Promoted `v21.4-hardening` -> `beta` from source head `36bf3b8c7edc9e92ca60c876e69e40c60c95aad8`.
+- [x] Published prerelease `v21.4-beta.1` / `Minify v21.4 Beta 1` (release ID `385014125`) targeting `36bf3b8c7edc9e92ca60c876e69e40c60c95aad8`.
+- [x] Release asset `Minify-v21.4-beta.1-windows.zip` uploaded with SHA-256 checksum asset.
+- [x] `main` remains frozen at `a26bc88a0d412e357965f29488b83a7f9093e11f`.
+- [ ] Beta Windows smoke: startup, centered/equal Home actions, restore, Control Panel, Activity Log, Home/Mod Library controls, native picker, all major `960x680` surfaces.
+- [ ] Beta custom-category smoke against real user-created folders/VPKs.
 - [ ] Continue hostile-input/path-race review and exact-rc7/semantic core reconciliation.
 - [ ] Dota startup/lobby/match/rollback/profiles/D2PFX/Dark-Terrain/Remove-Foilage smoke tests.
-- [ ] Promote hardening -> beta only after remaining gates/user approval; beta -> main only after beta validation.
+- [ ] Promote beta -> main only after beta validation and explicit user approval.

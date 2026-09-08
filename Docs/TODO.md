@@ -3,21 +3,16 @@
 - [x] Keep exactly three branches: `v21.4-hardening`, `beta`, `main`.
 - [x] Preserve hardened backend + v21.3.1 feature set; custom VPK-folder categories included.
 - [x] Harden Black-Plum Reactor minimum/responsive sizing at `960x680`.
-- [x] Compact Home to status/count + deployment actions only.
-- [x] Remove retired Home startup widgets/copy from initial item tree.
-- [x] Center READY/message, selected/installed count, `DEPLOYMENT COMMANDS`, and Patch/Rescan from live widths.
+- [x] Compact Home to centered status/count + deployment actions only; remove retired startup chrome.
 - [x] Make Patch/Rescan equal-width controls: 210px each initially, equal responsive horizontal split, equal centered stack when narrow.
-- [x] Fit Restore backup action at 180x30.
-- [x] Retain Mod Library footer safe widths and Review & Patch lime hover.
-- [x] Content-fit Control Panel action buttons/combos and General `opt_` fields (280-720px); keep collapsing headers full-row.
-- [x] Center Activity Log copy/select labels with 30px buttons inside 36px header.
-- [x] Keep Developer Tools behind Control Panel -> Developer; floating dev panes retired.
-- [x] Replace themed browsing with native Windows picker for D2PFX ZIP/profile import/profile export directory.
-- [x] Product `c985195836c18226d9f1166c0d5c3619caf9de64`; validation `4f9edd479283e0cc20d60421163f4c108b88c349`; CI `34269151229`; **277/277 PASS**; Windows build PASS; artifact `10073128239`.
-- [ ] Human Windows smoke-test startup, centered/equal Home actions, restore-button fit, Control Panel widths, Activity Log, Home/Mod Library controls, native pickers, and every major surface at exactly `960x680`.
+- [x] Fit Restore backup action at 180x30; retain Control Panel/Activity Log/Mod Library/D2PFX sizing fixes.
+- [x] Retain native Windows pickers for D2PFX ZIP/profile import/profile export directory.
+- [x] Product `c985195836c18226d9f1166c0d5c3619caf9de64`; validation `4f9edd479283e0cc20d60421163f4c108b88c349`; CI `34269151229`; **277/277 PASS**; Windows build PASS.
+- [x] Promote hardening -> beta from `36bf3b8c7edc9e92ca60c876e69e40c60c95aad8`.
+- [x] Publish prerelease `v21.4-beta.1` with Windows portable asset + SHA-256 checksum.
+- [ ] Beta Windows smoke-test startup, centered/equal Home actions, restore, Control Panel widths, Activity Log, Home/Mod Library controls, native pickers, and every major surface at exactly `960x680`.
 - [ ] Smoke-test custom category discovery against real user-created folders/VPKs on Windows.
 - [ ] Continue hostile-input/path-race review; residual local filesystem races require explicit assessment.
 - [ ] Complete semantic core-overlay reconciliation and exact-rc7 diff review; never wholesale copy stale core.
-- [ ] Clean temp/pycache artifacts before publication.
 - [ ] Dota smoke: startup/layout, library/settings, Collections/profiles, D2PFX, lobby/match, rollback, Dark Terrain, Remove Foilage.
-- [ ] Promote hardening -> beta only after remaining gates/user approval; beta -> main only after beta validation.
+- [ ] Promote beta -> main only after beta validation and explicit user approval.

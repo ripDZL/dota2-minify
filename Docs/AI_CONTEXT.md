@@ -1,22 +1,20 @@
 # AI Context
 - Upstream baseline: `Egezenn/dota2-minify` tag `Minify-v1.14rc7`; exact commit `d4b4520c945a9e1f8f5facc52a76ac5903babe90`.
-- Fork: `ripDZL/dota2-minify`; active `v21.4-hardening`; promotion `v21.4-hardening` -> `beta` -> `main`.
-- Exactly three branches; `beta` frozen `af83bbb051edced195d5f55ba49ff060a8c76f3c`; `main` frozen `a26bc88a0d412e357965f29488b83a7f9093e11f`.
-- Uniform-Home product code: `c985195836c18226d9f1166c0d5c3619caf9de64`; validation head `4f9edd479283e0cc20d60421163f4c108b88c349`; later commits are Docs-only.
-- Home startup constructs only the compact presentation: centered `MINIFY` + `RELEASE: {base.VERSION}`, live status/count, one separator, deployment label/actions.
-- Retired Home widgets/copy are absent from initial `Minify/__main__.py`: no `COMMAND DECK`, `SYSTEM/PROTECTED`, old release-engine branding, hero, or `ANALYZE/SNAPSHOT/COMPOSE` sequence.
-- READY/message, selected/installed count, `DEPLOYMENT COMMANDS`, and Patch/Rescan cluster center from live widths.
-- Patch and Rescan start at equal 210px widths and remain equal under responsive horizontal sizing; narrow stacked mode remains equal/full-width and centered.
-- Restore dialog `backup_restore_button` remains 180x30 for Windows label fit.
-- Control Panel: action buttons/combos bounded/content-fit; General `opt_` fields clamp 280-720px; collapsing headers stay full-row.
-- Activity Log copy/select buttons remain 108/132px wide, 30px high, centered in 36px header.
-- Mod Library safe footer widths/Review & Patch lime hover retained.
+- Fork: `ripDZL/dota2-minify`; promotion path `v21.4-hardening` -> `beta` -> `main`.
+- Exactly three branches; `v21.4-hardening` and `beta` promoted from source head `36bf3b8c7edc9e92ca60c876e69e40c60c95aad8`; `main` remains frozen at `a26bc88a0d412e357965f29488b83a7f9093e11f`.
+- Uniform-Home product code: `c985195836c18226d9f1166c0d5c3619caf9de64`; validation head `4f9edd479283e0cc20d60421163f4c108b88c349`; changes after validation are tests/Docs only.
+- Home startup constructs only compact status/count + deployment actions; retired startup chrome is absent.
+- READY/message, selected/installed count, `DEPLOYMENT COMMANDS`, and Patch/Rescan center from live widths.
+- Patch and Rescan start at equal 210px widths and remain equal under responsive horizontal/stacked sizing.
+- Restore action remains 180x30; Control Panel fields/buttons are bounded; Activity Log copy/select controls remain centered; Mod Library/D2PFX minimum-size hardening retained.
 - Developer tools remain under Control Panel -> Developer; native Windows picker retained for D2PFX/profile browsing.
-- Custom categories: `mods/<Category>/<Child>/.../*.vpk` promotes top-level folder to category; VPK-backed immediate children become nested Local folder mods.
-- CI `34269151229`: compileall/Ruff PASS; pytest **277/277 PASS**; Windows portable build/package/upload PASS.
-- Artifact `10073128239`; 53,100,305-byte GitHub artifact; digest `sha256:2bd7d869b184a7b198b1bbacb9fd18911b4ba5acaab5e99743b22c01aa8b4b7b`.
+- Custom VPK-folder categories, recursive/nested mods, Collections, profiles, D2PFX, backups/conflict review, Dark Terrain, Safe Foliage, Main Menu Background fix, manual rc7 `prelaunch`, and no-auto-prelaunch remain.
+- CI `34269151229`: compileall/Ruff PASS; pytest **277/277 PASS**; Windows portable build PASS.
+- CI artifact `10073128239`; digest `sha256:2bd7d869b184a7b198b1bbacb9fd18911b4ba5acaab5e99743b22c01aa8b4b7b`.
 - Portable bundle: 53,639,888 bytes; SHA-256 `024f98c3a44a663ce33f4efd0f770f9c77097c498ed361f4d2ea7e430973d5d2`.
-- Preserve recursive/nested mods, Collections, profiles, D2PFX, backups/conflict review, Dark Terrain, Safe Foliage, Main Menu Background fix, manual rc7 `prelaunch`, no-auto-prelaunch.
+- Beta prerelease published: tag `v21.4-beta.1`, release `Minify v21.4 Beta 1`, release ID `385014125`, target `36bf3b8c7edc9e92ca60c876e69e40c60c95aad8`.
+- Release asset `Minify-v21.4-beta.1-windows.zip`: 53,639,888 bytes; SHA-256 `024f98c3a44a663ce33f4efd0f770f9c77097c498ed361f4d2ea7e430973d5d2`; checksum asset included.
+- Release is a prerelease; `main` was not promoted.
 - Remove Foilage: blacklist-only; never ship `manifest.json` or `maps/dota.vpk`; retain both oak-leaf blacklist entries.
 - Security boundary: mod Python scripts trusted; archive/VPK/profile/backup/download/D2PFX data untrusted.
-- Remaining: Windows/Dota smoke; residual path-race/hostile-input review; semantic core/exact-rc7 reconciliation; no beta/main promotion without explicit user approval.
+- Remaining: beta Windows/Dota smoke; residual path-race/hostile-input review; semantic core/exact-rc7 reconciliation; beta -> main only with explicit user approval.

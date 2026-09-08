@@ -1,17 +1,15 @@
 # Session Summary
-- Fork: `ripDZL/dota2-minify`; active `v21.4-hardening`; exact rc7 baseline `d4b4520c945a9e1f8f5facc52a76ac5903babe90`.
-- Branch model: exactly `v21.4-hardening` -> `beta` -> `main`; beta/main frozen.
-- Uniform-Home product code: `c985195836c18226d9f1166c0d5c3619caf9de64`; validation head `4f9edd479283e0cc20d60421163f4c108b88c349`; later commits are Docs-only.
-- Home no longer constructs the old startup presentation: release-engine branding, `COMMAND DECK`, `SYSTEM/PROTECTED`, hero, and `ANALYZE/SNAPSHOT/COMPOSE` are absent from initial item tree.
-- READY/message, selected/installed count, `DEPLOYMENT COMMANDS`, and deployment actions remain centered from live widths.
-- Patch and Rescan are now visually uniform: both 210px initially, equal normal responsive widths, equal centered narrow-stack widths.
-- Restore dialog action `Restore this backup` remains 180x30.
-- Control Panel buttons/combos bounded/content-fit; General `opt_` fields clamp 280-720px; collapsing headers full-row.
-- Activity Log copy/select buttons use 30px height centered in 36px header with safe widths/right inset.
-- Mod Library footer widths/Review & Patch lime hover remain.
-- Developer tools remain under Control Panel -> Developer; Windows browsing uses native dialogs for D2PFX ZIP/profile import/profile export directory.
+- Fork: `ripDZL/dota2-minify`; exact rc7 baseline `d4b4520c945a9e1f8f5facc52a76ac5903babe90`.
+- Branch model: exactly `v21.4-hardening` -> `beta` -> `main`.
+- Product `c985195836c18226d9f1166c0d5c3619caf9de64`; validation `4f9edd479283e0cc20d60421163f4c108b88c349`.
+- Home legacy startup chrome removed; compact centered status/count/deployment layout retained.
+- Patch/Rescan now visually uniform: equal 210px startup widths and equal responsive widths/stack widths.
+- Restore 180x30; Control Panel/Activity Log/Mod Library/D2PFX/native-picker sizing fixes retained.
 - CI `34269151229`: compileall PASS; Ruff PASS; pytest **277/277 PASS**; Windows portable build PASS.
-- Artifact `10073128239`; 53,100,305 bytes; digest `sha256:2bd7d869b184a7b198b1bbacb9fd18911b4ba5acaab5e99743b22c01aa8b4b7b`; portable 53,639,888 bytes; SHA-256 `024f98c3a44a663ce33f4efd0f770f9c77097c498ed361f4d2ea7e430973d5d2`.
-- Custom VPK-folder category behavior remains intact.
-- Remaining gates: Windows/Dota smoke; centered/equal Home actions/restore/Control Panel/Activity/Home-Mod-Library/native picker/custom categories/960x680 visual smoke; residual path-race/security review; semantic rc7 reconciliation.
-- Do not promote beta/main until remaining gates and explicit user approval.
+- CI artifact `10073128239`; portable SHA-256 `024f98c3a44a663ce33f4efd0f770f9c77097c498ed361f4d2ea7e430973d5d2`.
+- Promoted hardening -> beta from source head `36bf3b8c7edc9e92ca60c876e69e40c60c95aad8`.
+- Published GitHub prerelease `v21.4-beta.1` / `Minify v21.4 Beta 1`; release ID `385014125`; target `36bf3b8c7edc9e92ca60c876e69e40c60c95aad8`.
+- Release asset `Minify-v21.4-beta.1-windows.zip`: 53,639,888 bytes; SHA-256 `024f98c3a44a663ce33f4efd0f770f9c77097c498ed361f4d2ea7e430973d5d2`; checksum asset included.
+- `main` remains frozen at `a26bc88a0d412e357965f29488b83a7f9093e11f`.
+- Remaining gates: beta Windows/Dota smoke; centered/equal Home actions/restore/Control Panel/Activity/Home-Mod-Library/native picker/custom categories/960x680 visual smoke; residual path-race/security review; semantic rc7 reconciliation.
+- Beta -> main requires explicit user approval.
