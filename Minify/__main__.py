@@ -66,8 +66,8 @@ def create_ui():
         no_saved_settings=True,
         pos=(0, 0),
     ):
-        # v21.4 responsive command console. Keep the home surface focused on
-        # actions, live state, and the patch sequence rather than static help.
+        # v21.4 compact command console. Build the final Home surface before
+        # the viewport can render so retired dashboard widgets never flash at startup.
         dpg.add_child_window(
             tag="app_shell_header",
             height=76,
@@ -88,12 +88,10 @@ def create_ui():
             dpg.add_table_column(tag="header_right_gutter", width_stretch=True, init_width_or_weight=1.0)
             with dpg.table_row():
                 dpg.add_spacer(width=1)
-                with dpg.group(tag="header_brand_group", horizontal=True, horizontal_spacing=10):
+                with dpg.group(tag="header_brand_group", horizontal=False):
                     dpg.add_text("MINIFY", tag="app_title")
                     dpg.bind_item_font("app_title", "large_font")
-                    with dpg.group():
-                        dpg.add_text("DOTA 2 MOD ORCHESTRATION", tag="app_product_name")
-                        dpg.add_text(f"RELEASE ENGINE  //  v{base.VERSION}", tag="app_version")
+                    dpg.add_text(f"RELEASE: {base.VERSION}", tag="app_product_name")
                 dpg.add_spacer(width=1)
 
         dpg.add_child_window(
@@ -111,25 +109,11 @@ def create_ui():
             parent="app_shell_body",
             tag="app_nav_rail",
             width=188,
-            height=380,
+            height=250,
             border=True,
             no_scrollbar=True,
             no_scroll_with_mouse=True,
         )
-        dpg.add_text("COMMAND DECK", parent="app_nav_rail", tag="nav_workspace_label")
-        dpg.add_child_window(
-            parent="app_nav_rail",
-            tag="nav_status_card",
-            width=-1,
-            height=66,
-            border=True,
-            no_scrollbar=True,
-            no_scroll_with_mouse=True,
-        )
-        dpg.add_text("SYSTEM", parent="nav_status_card", tag="nav_status_title")
-        dpg.add_text("● PROTECTED", parent="nav_status_card", tag="nav_status_value")
-
-        dpg.add_spacer(parent="app_nav_rail", height=7)
         dpg.add_button(
             parent="app_nav_rail",
             tag="nav_patch_button",
@@ -186,7 +170,7 @@ def create_ui():
             parent="app_shell_body",
             tag="app_workspace",
             width=-1,
-            height=380,
+            height=250,
             border=True,
             no_scrollbar=True,
             no_scroll_with_mouse=True,
@@ -196,60 +180,15 @@ def create_ui():
                 parent="workspace_columns",
                 tag="app_workspace_main",
                 width=-1,
-                height=-1,
+                height=186,
                 border=False,
                 no_scrollbar=True,
                 no_scroll_with_mouse=True,
             )
             dpg.add_child_window(
                 parent="app_workspace_main",
-                tag="dashboard_hero_card",
-                height=168,
-                width=-1,
-                border=True,
-                no_scrollbar=True,
-                no_scroll_with_mouse=True,
-            )
-            dpg.add_text("PATCH MATRIX  /  RELEASE CONSOLE", parent="dashboard_hero_card", tag="workspace_eyebrow")
-            dpg.add_text("Orchestrate your Dota build", parent="dashboard_hero_card", tag="dashboard_focus_title")
-            dpg.bind_item_font("dashboard_focus_title", "large_font")
-            dpg.add_text(
-                "Select, inspect and deploy mods through a guarded patch transaction with collision review and rollback.",
-                parent="dashboard_hero_card",
-                tag="dashboard_focus_hint",
-                wrap=460,
-            )
-            dpg.add_spacer(parent="dashboard_hero_card", height=3)
-            dpg.add_child_window(
-                parent="dashboard_hero_card",
-                tag="dashboard_metric_strip",
-                height=66,
-                width=-1,
-                border=True,
-                no_scrollbar=True,
-                no_scroll_with_mouse=True,
-            )
-            with dpg.table(parent="dashboard_metric_strip", tag="dashboard_metric_table", header_row=False, width=-1):
-                dpg.add_table_column(width_fixed=True, init_width_or_weight=28)
-                dpg.add_table_column(width_fixed=True, init_width_or_weight=92)
-                dpg.add_table_column()
-                with dpg.table_row():
-                    dpg.add_text("01", tag="dashboard_step_1_index")
-                    dpg.add_text("ANALYZE", tag="dashboard_step_1")
-                    dpg.add_text("Shared files", tag="dashboard_step_1_detail")
-                with dpg.table_row():
-                    dpg.add_text("02", tag="dashboard_step_2_index")
-                    dpg.add_text("SNAPSHOT", tag="dashboard_step_2")
-                    dpg.add_text("Restore point", tag="dashboard_step_2_detail")
-                with dpg.table_row():
-                    dpg.add_text("03", tag="dashboard_step_3_index")
-                    dpg.add_text("COMPOSE", tag="dashboard_step_3")
-                    dpg.add_text("Selected mods", tag="dashboard_step_3_detail")
-
-            dpg.add_child_window(
-                parent="app_workspace_main",
                 tag="dashboard_status_panel",
-                height=60,
+                height=68,
                 width=-1,
                 border=True,
                 no_scrollbar=True,
@@ -259,18 +198,24 @@ def create_ui():
                 dpg.add_text("● READY", tag="dashboard_status_label")
                 dpg.add_text("Getting your mod library ready...", tag="dashboard_status_message", wrap=420)
             dpg.add_text("0 selected • 0 installed", parent="dashboard_status_panel", tag="dashboard_metric")
+            dpg.add_separator(parent="app_workspace_main", tag="home_separator_before_actions")
 
             dpg.add_child_window(
                 parent="app_workspace_main",
                 tag="dashboard_action_bar",
-                height=76,
+                height=96,
                 width=-1,
                 border=True,
                 no_scrollbar=True,
                 no_scroll_with_mouse=True,
             )
             dpg.add_text("DEPLOYMENT COMMANDS", parent="dashboard_action_bar", tag="dashboard_action_label")
-            with dpg.group(parent="dashboard_action_bar", horizontal=True):
+            with dpg.group(
+                parent="dashboard_action_bar",
+                tag="dashboard_action_buttons",
+                horizontal=True,
+                horizontal_spacing=8,
+            ):
                 dpg.add_button(
                     tag="button_patch",
                     label="REVIEW + DEPLOY",
