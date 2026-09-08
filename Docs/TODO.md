@@ -3,17 +3,18 @@
 - [x] Keep exactly three branches: `v21.4-hardening`, `beta`, `main`.
 - [x] Preserve hardened backend + v21.3.1 feature set; custom VPK-folder categories included.
 - [x] Harden Black-Plum Reactor minimum/responsive sizing at `960x680`.
-- [x] Compact Home to status/count + deployment actions only; hide hero/intro and `ANALYZE/SNAPSHOT/COMPOSE`.
-- [x] Reapply compact Home shell after resize and retain one subtle separator before deployment actions.
-- [x] Center READY/message, selected/installed count, and `DEPLOYMENT COMMANDS` from live widths.
-- [x] Center Patch/Rescan as one responsive action cluster; retain centered narrow stacked layout.
+- [x] Compact Home to status/count + deployment actions only.
+- [x] Remove retired Home startup widgets/copy from the initial item tree; final compact header/status/actions now exist before first render.
+- [x] Center READY/message, selected/installed count, `DEPLOYMENT COMMANDS`, and Patch/Rescan from live widths.
+- [x] Retain centered narrow stacked Patch/Rescan layout.
 - [x] Fit Restore backup action at 180x30.
 - [x] Retain Mod Library footer safe widths and Review & Patch lime hover.
 - [x] Content-fit Control Panel action buttons/combos and General `opt_` fields (280-720px); keep collapsing headers full-row.
 - [x] Center Activity Log copy/select labels with 30px buttons inside 36px header.
 - [x] Keep Developer Tools behind Control Panel -> Developer; floating dev panes retired.
 - [x] Replace themed browsing with native Windows picker for D2PFX ZIP/profile import/profile export directory.
-- [x] Product code `da8c52d8ca749514e3b302b4d194f98d3f78980e`; validation head `4b921d0073e240568ee92ee58cd61c28c9d9df64`; CI `34163085380`; **273/273 PASS**; Windows build PASS; artifact `10033267470`.
+- [x] Product code `4cd49610eff6a17670fabfe5eb757b82b9dc1cb4`; validation head `2724757140677ef7aa9c40799629377bc57971bc`; CI `34173898936`; **276/276 PASS**; Windows build PASS; artifact `10036612769`.
+- [ ] Human Windows boot smoke: verify old Home UI no longer flashes during startup and no visible layout jump remains.
 - [ ] Human Windows smoke-test centered Home/action cluster, restore-button fit, Control Panel widths, Activity Log, Home/Mod Library controls, native pickers, every major surface at exactly `960x680`.
 - [ ] Smoke-test custom category discovery against real user-created folders/VPKs on Windows.
 - [ ] Continue hostile-input/path-race review; residual local filesystem races require explicit assessment.
