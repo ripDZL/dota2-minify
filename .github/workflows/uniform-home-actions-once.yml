@@ -1,0 +1,111 @@
+name: Uniform Home actions once
+
+on:
+  push:
+    branches: [v21.4-hardening]
+    paths:
+      - .github/workflows/uniform-home-actions-once.yml
+
+permissions:
+  contents: write
+
+jobs:
+  patch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: v21.4-hardening
+          fetch-depth: 0
+      - uses: astral-sh/setup-uv@v5
+        with:
+          python-version: '3.13'
+      - name: Patch uniform Home action widths
+        shell: python
+        run: |
+          from pathlib import Path
+
+          main_path = Path("Minify/__main__.py")
+          main = main_path.read_text(encoding="utf-8")
+          old_refresh = '''                dpg.add_button(
+                    tag="button_refresh_main",
+                    label="RESCAN LIBRARY",
+                    callback=checkboxes.refresh,
+                    width=146,
+                    height=34,
+                )'''
+          new_refresh = '''                dpg.add_button(
+                    tag="button_refresh_main",
+                    label="RESCAN LIBRARY",
+                    callback=checkboxes.refresh,
+                    width=210,
+                    height=34,
+                )'''
+          if main.count(old_refresh) != 1:
+              raise SystemExit("expected one static Rescan button block")
+          main_path.write_text(main.replace(old_refresh, new_refresh), encoding="utf-8")
+
+          window_path = Path("Minify/ui/window.py")
+          window = window_path.read_text(encoding="utf-8")
+          old_resize = '''    if stack_actions:
+        patch_width = action_cluster_width
+        refresh_width = action_cluster_width
+    else:
+        patch_width = max(180, int(action_cluster_width * 0.58))
+        refresh_width = max(140, action_cluster_width - patch_width - 8)
+'''
+          new_resize = '''    if stack_actions:
+        patch_width = action_cluster_width
+        refresh_width = action_cluster_width
+    else:
+        equal_action_width = max(180, (action_cluster_width - 8) // 2)
+        patch_width = equal_action_width
+        refresh_width = equal_action_width
+'''
+          if window.count(old_resize) != 1:
+              raise SystemExit("expected one Home action width calculation")
+          window_path.write_text(window.replace(old_resize, new_resize), encoding="utf-8")
+
+          test_path = Path("tests/test_home_uniform_actions.py")
+          test_path.write_text('''from pathlib import Path
+
+
+ROOT = Path(__file__).resolve().parents[1]
+MAIN = (ROOT / "Minify" / "__main__.py").read_text(encoding="utf-8")
+WINDOW = (ROOT / "Minify" / "ui" / "window.py").read_text(encoding="utf-8")
+
+
+def _button_block(tag):
+    start = MAIN.index(f'tag="{tag}"')
+    return MAIN[start : start + 320]
+
+
+def test_home_action_buttons_start_with_uniform_widths():
+    assert "width=210" in _button_block("button_patch")
+    assert "width=210" in _button_block("button_refresh_main")
+
+
+def test_home_action_buttons_resize_with_uniform_widths():
+    for token in (
+        "equal_action_width = max(180, (action_cluster_width - 8) // 2)",
+        "patch_width = equal_action_width",
+        "refresh_width = equal_action_width",
+    ):
+        assert token in WINDOW
+    assert "int(action_cluster_width * 0.58)" not in WINDOW
+''', encoding="utf-8")
+      - name: Validate source
+        run: |
+          uv sync --group dev
+          uv run python -m compileall -q Minify tests
+          uv run ruff format --check Minify/ui/window.py Minify/__main__.py tests/test_home_uniform_actions.py
+          uv run ruff check Minify/ui/window.py Minify/__main__.py tests/test_home_uniform_actions.py
+          uv run pytest tests/test_home_uniform_actions.py tests/test_home_centered_copy.py tests/test_home_startup_tree.py
+      - name: Remove temporary workflow and commit
+        run: |
+          rm .github/workflows/uniform-home-actions-once.yml
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add Minify/__main__.py Minify/ui/window.py tests/test_home_uniform_actions.py .github/workflows/uniform-home-actions-once.yml
+          git commit -m "fix(ui): uniform Home action button widths"
+          git push origin HEAD:v21.4-hardening
