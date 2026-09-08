@@ -2,7 +2,8 @@ name: Uniform Home actions once
 
 on:
   push:
-    branches: [v21.4-hardening]
+    branches:
+      - v21.4-hardening
     paths:
       - .github/workflows/uniform-home-actions-once.yml
 
@@ -15,14 +16,17 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          ref: v21.4-hardening
           fetch-depth: 0
+
       - uses: astral-sh/setup-uv@v5
         with:
-          python-version: '3.13'
+          enable-cache: true
+          python-version: "3.13"
+
       - name: Patch uniform Home action widths
-        shell: python
+        shell: bash
         run: |
+          python - <<'PY'
           from pathlib import Path
 
           main_path = Path("Minify/__main__.py")
@@ -94,14 +98,19 @@ def test_home_action_buttons_resize_with_uniform_widths():
         assert token in WINDOW
     assert "int(action_cluster_width * 0.58)" not in WINDOW
 ''', encoding="utf-8")
+          PY
+
       - name: Validate source
+        shell: bash
         run: |
           uv sync --group dev
+          uv run ruff format Minify/ui/window.py Minify/__main__.py tests/test_home_uniform_actions.py
           uv run python -m compileall -q Minify tests
-          uv run ruff format --check Minify/ui/window.py Minify/__main__.py tests/test_home_uniform_actions.py
-          uv run ruff check Minify/ui/window.py Minify/__main__.py tests/test_home_uniform_actions.py
+          uv run ruff check Minify
           uv run pytest tests/test_home_uniform_actions.py tests/test_home_centered_copy.py tests/test_home_startup_tree.py
+
       - name: Remove temporary workflow and commit
+        shell: bash
         run: |
           rm .github/workflows/uniform-home-actions-once.yml
           git config user.name "github-actions[bot]"
