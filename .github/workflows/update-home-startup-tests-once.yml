@@ -1,0 +1,128 @@
+name: Update Home startup tests once
+
+on:
+  push:
+    branches:
+      - v21.4-hardening
+    paths:
+      - .github/workflows/update-home-startup-tests-once.yml
+
+permissions:
+  contents: write
+
+jobs:
+  patch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: astral-sh/setup-uv@v5
+        with:
+          enable-cache: true
+          python-version: "3.13"
+
+      - name: Update retired Home assertions
+        shell: bash
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import re
+
+          path = Path("tests/test_modern_ui.py")
+          text = path.read_text(encoding="utf-8")
+
+          def replace_test(name, lines):
+              global text
+              pattern = rf"def {re.escape(name)}\(\):\n.*?(?=\ndef |\Z)"
+              replacement = "\n".join(lines) + "\n\n"
+              text, count = re.subn(pattern, replacement, text, count=1, flags=re.S)
+              if count != 1:
+                  raise SystemExit(f"{name}: expected one function, found {count}")
+
+          replace_test(
+              "test_release_console_uses_real_alignment_tables",
+              [
+                  "def test_release_console_uses_real_alignment_tables():",
+                  "    assert 'tag=\"header_layout\"' in MAIN",
+                  "    for tag in (\"header_left_gutter\", \"header_brand_column\", \"header_right_gutter\"):",
+                  "        assert f'tag=\"{tag}\"' in MAIN",
+                  "    assert 'tag=\"dashboard_metric_table\"' not in MAIN",
+                  "    assert 'tag=\"dashboard_flow_table\"' not in MAIN",
+                  "    assert 'tag=\"dashboard_guard_table\"' not in MAIN",
+              ],
+          )
+          replace_test(
+              "test_release_console_has_dense_command_hierarchy",
+              [
+                  "def test_release_console_has_dense_command_hierarchy():",
+                  "    for tag in (",
+                  "        \"header_brand_group\",",
+                  "        \"header_accent_rail\",",
+                  "        \"dashboard_status_panel\",",
+                  "        \"home_separator_before_actions\",",
+                  "        \"dashboard_action_bar\",",
+                  "        \"dashboard_action_buttons\",",
+                  "        \"activity_header\",",
+                  "    ):",
+                  "        assert f'tag=\"{tag}\"' in MAIN",
+                  "    for tag in (\"dashboard_hero_card\", \"dashboard_metric_strip\", \"nav_status_card\"):",
+                  "        assert f'tag=\"{tag}\"' not in MAIN",
+              ],
+          )
+          replace_test(
+              "test_home_explainer_panel_removed_and_patch_sequence_is_vertical",
+              [
+                  "def test_home_explainer_panel_removed_and_patch_sequence_is_vertical():",
+                  "    for tag in (",
+                  "        \"app_workspace_side\",",
+                  "        \"dashboard_flow_card\",",
+                  "        \"dashboard_signal_card\",",
+                  "        \"dashboard_safety_card\",",
+                  "        \"dashboard_hero_card\",",
+                  "        \"dashboard_metric_strip\",",
+                  "        \"dashboard_metric_table\",",
+                  "    ):",
+                  "        assert f'tag=\"{tag}\"' not in MAIN",
+                  "    for label in (\"ANALYZE\", \"Shared files\", \"SNAPSHOT\", \"Restore point\", \"COMPOSE\", \"Selected mods\"):",
+                  "        assert label not in MAIN",
+              ],
+          )
+          replace_test(
+              "test_alignment_labels_do_not_depend_on_space_padding",
+              [
+                  "def test_alignment_labels_do_not_depend_on_space_padding():",
+                  "    for stale in (",
+                  "        \"Shared files\",",
+                  "        \"Restore point\",",
+                  "        \"Selected mods\",",
+                  "        \"Shared-file collision scan\",",
+                  "        \"ROLLBACK        AUTOMATIC\",",
+                  "        \"GUARD MATRIX\",",
+                  "        \"FAIL-SAFE\",",
+                  "    ):",
+                  "        assert stale not in MAIN",
+              ],
+          )
+          path.write_text(text, encoding="utf-8")
+          PY
+
+      - name: Validate tests
+        shell: bash
+        run: |
+          uv sync --group dev
+          uv run ruff format tests/test_modern_ui.py
+          uv run python -m compileall -q Minify tests
+          uv run ruff check Minify
+          uv run pytest
+
+      - name: Remove workflow and commit
+        shell: bash
+        run: |
+          rm .github/workflows/update-home-startup-tests-once.yml
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add tests/test_modern_ui.py .github/workflows/update-home-startup-tests-once.yml
+          git commit -m "test(ui): update Home startup contracts"
+          git push origin HEAD:v21.4-hardening
