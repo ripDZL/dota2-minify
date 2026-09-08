@@ -1,18 +1,18 @@
 # Session Summary
 - Fork: `ripDZL/dota2-minify`; active `v21.4-hardening`; exact rc7 baseline `d4b4520c945a9e1f8f5facc52a76ac5903babe90`.
 - Branch model: exactly `v21.4-hardening` -> `beta` -> `main`; beta/main frozen.
-- Exact centered-action product code head: `da8c52d8ca749514e3b302b4d194f98d3f78980e`; validation head `4b921d0073e240568ee92ee58cd61c28c9d9df64`; later commits are Docs-only.
-- Home is compact: hero/intro and `ANALYZE/SNAPSHOT/COMPOSE` hidden; status/count and deployment controls remain with one subtle separator.
-- READY/message, selected/installed count, and `DEPLOYMENT COMMANDS` are centered from responsive live-width spacer rows.
-- Patch/Rescan buttons are centered as one responsive cluster; narrow vertical stacking remains centered.
-- Compact Home shell reapplies one frame after normal resize so hidden content does not leave excess vertical space.
+- Startup-tree product code: `4cd49610eff6a17670fabfe5eb757b82b9dc1cb4`; validation head `2724757140677ef7aa9c40799629377bc57971bc`; later commits are Docs-only.
+- Home no longer constructs the old startup presentation: old release-engine branding, `COMMAND DECK`, `SYSTEM/PROTECTED`, hero, and `ANALYZE/SNAPSHOT/COMPOSE` are absent from the initial item tree.
+- Final compact Home header/status/count/separator/deployment controls now exist at construction time with compact initial dimensions.
+- READY/message, selected/installed count, `DEPLOYMENT COMMANDS`, and Patch/Rescan remain centered from responsive live widths; narrow vertical stacking remains centered.
+- Runtime compatibility/layout guards remain safe no-ops for removed tags; old Home content cannot render because those nodes no longer exist.
 - Restore dialog action `Restore this backup` remains 180x30.
 - Control Panel buttons/combos bounded/content-fit; General `opt_` fields clamp 280-720px; collapsing headers full-row.
 - Activity Log copy/select buttons use 30px height centered in 36px header with safe widths/right inset.
-- Home release header and Mod Library footer widths/Review & Patch lime hover remain.
+- Mod Library footer widths/Review & Patch lime hover remain.
 - Developer tools remain under Control Panel -> Developer; Windows browsing uses native dialogs for D2PFX ZIP/profile import/profile export directory.
-- CI `34163085380`: compileall PASS; Ruff PASS; pytest **273/273 PASS**; Windows portable build PASS.
-- Artifact `10033267470`; 53,101,015 bytes; digest `sha256:21b518627d4c6768ca160fe9f1a1fda24ca76b7440e81cfc51fb1ad6f29d30ed`; portable 53,640,817 bytes; SHA-256 `ee3d8f1d6186bb981acc731c36542468b8ce75fad133589ad55739c1f75450a0`.
+- CI `34173898936`: compileall PASS; Ruff PASS; pytest **276/276 PASS**; Windows portable build PASS.
+- Artifact `10036612769`; 53,100,729 bytes; digest `sha256:e5c9b66227bd1d3c08d748412071db4b0daeea7b68507c8eda295361e7d72131`; portable 53,640,956 bytes; SHA-256 `15ad1d41f32f9a85d1ab37dfd0537b5e79400041f3282306117fe353b7a70565`.
 - Custom VPK-folder category behavior remains intact.
-- Remaining gates: Windows smoke of centered Home/action cluster/restore/Control Panel/Activity/Home-Mod-Library/log-copy/native picker/custom categories/960x680; residual path-race/security review; semantic rc7 reconciliation; Dota smoke tests.
+- Remaining gates: Windows boot smoke for startup flash/frame shift plus centered Home/action cluster/restore/Control Panel/Activity/Home-Mod-Library/log-copy/native picker/custom categories/960x680; residual path-race/security review; semantic rc7 reconciliation; Dota smoke tests.
 - Do not promote beta/main until remaining gates and explicit user approval.
