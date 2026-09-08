@@ -48,10 +48,10 @@ def test_primary_action_uses_json_button_role():
 
 
 def test_release_console_uses_real_alignment_tables():
-    for tag in ("header_layout", "dashboard_metric_table"):
-        assert f'tag="{tag}"' in MAIN
+    assert 'tag="header_layout"' in MAIN
     for tag in ("header_left_gutter", "header_brand_column", "header_right_gutter"):
         assert f'tag="{tag}"' in MAIN
+    assert 'tag="dashboard_metric_table"' not in MAIN
     assert 'tag="dashboard_flow_table"' not in MAIN
     assert 'tag="dashboard_guard_table"' not in MAIN
 
@@ -60,30 +60,42 @@ def test_release_console_has_dense_command_hierarchy():
     for tag in (
         "header_brand_group",
         "header_accent_rail",
-        "dashboard_hero_card",
-        "dashboard_metric_strip",
         "dashboard_status_panel",
+        "home_separator_before_actions",
         "dashboard_action_bar",
+        "dashboard_action_buttons",
         "activity_header",
     ):
         assert f'tag="{tag}"' in MAIN
+    for tag in ("dashboard_hero_card", "dashboard_metric_strip", "nav_status_card"):
+        assert f'tag="{tag}"' not in MAIN
 
 
 def test_home_explainer_panel_removed_and_patch_sequence_is_vertical():
-    for tag in ("app_workspace_side", "dashboard_flow_card", "dashboard_signal_card", "dashboard_safety_card"):
+    for tag in (
+        "app_workspace_side",
+        "dashboard_flow_card",
+        "dashboard_signal_card",
+        "dashboard_safety_card",
+        "dashboard_hero_card",
+        "dashboard_metric_strip",
+        "dashboard_metric_table",
+    ):
         assert f'tag="{tag}"' not in MAIN
-    sequence_start = MAIN.index('tag="dashboard_metric_table"')
-    sequence_end = MAIN.index('tag="dashboard_status_panel"', sequence_start)
-    sequence = MAIN[sequence_start:sequence_end]
-    assert sequence.count("with dpg.table_row():") == 3
     for label in ("ANALYZE", "Shared files", "SNAPSHOT", "Restore point", "COMPOSE", "Selected mods"):
-        assert label in sequence
+        assert label not in MAIN
 
 
 def test_alignment_labels_do_not_depend_on_space_padding():
-    for label in ("Shared files", "Restore point", "Selected mods"):
-        assert label in MAIN
-    for stale in ("Shared-file collision scan", "ROLLBACK        AUTOMATIC", "GUARD MATRIX", "FAIL-SAFE"):
+    for stale in (
+        "Shared files",
+        "Restore point",
+        "Selected mods",
+        "Shared-file collision scan",
+        "ROLLBACK        AUTOMATIC",
+        "GUARD MATRIX",
+        "FAIL-SAFE",
+    ):
         assert stale not in MAIN
 
 
@@ -127,11 +139,14 @@ def test_responsive_home_uses_independent_rows_before_clipping():
     assert "action_height = 136 if stack_actions else 96" in WINDOW
     assert "required_inner_height = hero_height + sequence_height + status_height + action_height + 20" in WINDOW
     assert "shell_body_height = min(520, max(base_shell_height, required_inner_height + 34))" in WINDOW
-    assert 'dpg.move_item(' in WINDOW
+    assert "dpg.move_item(" in WINDOW
     assert 'parent="app_workspace_main"' in WINDOW
     assert 'before="dashboard_status_panel"' in WINDOW
     assert 'dpg.configure_item("dashboard_metric_strip", height=sequence_height)' in WINDOW
-    assert '"app_workspace_main",\n            width=main_width,\n            height=inner_height,\n            no_scrollbar=False' in WINDOW
+    assert (
+        '"app_workspace_main",\n            width=main_width,\n            height=inner_height,\n            no_scrollbar=False'
+        in WINDOW
+    )
     assert "wide_workspace" not in WINDOW
     assert 'dpg.configure_item("app_workspace_side"' not in WINDOW
     assert 'dpg.configure_item("dashboard_hero_card", height=hero_height)' in WINDOW
@@ -147,7 +162,7 @@ def test_deployment_buttons_use_responsive_row_budget():
     assert "refresh_width = action_cluster_width" in WINDOW
     assert "patch_width = max(180, int(action_cluster_width * 0.58))" in WINDOW
     assert "refresh_width = max(140, action_cluster_width - patch_width - 8)" in WINDOW
-    assert 'horizontal=not stack_actions' in WINDOW
+    assert "horizontal=not stack_actions" in WINDOW
     assert 'dpg.configure_item("button_patch", width=patch_width)' in WINDOW
     assert 'dpg.configure_item("button_refresh_main", width=refresh_width)' in WINDOW
 
@@ -257,7 +272,10 @@ def test_minimum_width_fit_contract_covers_primary_library_and_d2pfx():
 
 
 def test_minimum_height_contract_keeps_navigation_and_library_controls_accessible():
-    assert '"app_nav_rail",\n            width=nav_width,\n            height=shell_body_height,\n            no_scrollbar=False' in WINDOW
+    assert (
+        '"app_nav_rail",\n            width=nav_width,\n            height=shell_body_height,\n            no_scrollbar=False'
+        in WINDOW
+    )
     assert 'dpg.configure_item("mod_source_rail", no_scrollbar=False, no_scroll_with_mouse=False)' in WINDOW
     assert 'dpg.configure_item("terminal_window", width=content_width)' in WINDOW
     assert 'dpg.configure_item("footer", width=content_width)' in WINDOW
