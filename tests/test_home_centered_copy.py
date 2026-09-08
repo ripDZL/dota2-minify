@@ -56,6 +56,7 @@ def test_home_deployment_buttons_are_centered_as_cluster():
 
 
 def test_home_deployment_buttons_use_uniform_widths():
+    # Keep the pair symmetric both at construction and through responsive resize passes.
     main = (ROOT / "Minify" / "__main__.py").read_text(encoding="utf-8")
     window = (ROOT / "Minify" / "ui" / "window.py").read_text(encoding="utf-8")
     patch_start = main.index('tag="button_patch"')
