@@ -1,0 +1,142 @@
+name: Remove legacy Home startup v6 once
+
+on:
+  push:
+    branches:
+      - v21.4-hardening
+    paths:
+      - .github/workflows/remove-legacy-home-startup-v6-once.yml
+
+permissions:
+  contents: write
+
+jobs:
+  patch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: astral-sh/setup-uv@v5
+        with:
+          enable-cache: true
+          python-version: "3.13"
+
+      - name: Patch initial Home tree
+        shell: bash
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+
+          path = Path("Minify/__main__.py")
+          text = path.read_text(encoding="utf-8")
+
+          def once(old, new, label):
+              global text
+              count = text.count(old)
+              if count != 1:
+                  raise SystemExit(f"{label}: expected 1 anchor, found {count}")
+              text = text.replace(old, new, 1)
+
+          def replace_in_block(start_marker, end_marker, old, new, label):
+              global text
+              start = text.index(start_marker)
+              end = text.index(end_marker, start)
+              block = text[start:end]
+              count = block.count(old)
+              if count != 1:
+                  raise SystemExit(f"{label}: expected 1 block anchor, found {count}")
+              text = text[:start] + block.replace(old, new, 1) + text[end:]
+
+          once('with dpg.group(tag="header_brand_group", horizontal=True, horizontal_spacing=10):', 'with dpg.group(tag="header_brand_group", horizontal=False):', "header orientation")
+          once(
+              '                    with dpg.group():\n                        dpg.add_text("DOTA 2 MOD ORCHESTRATION", tag="app_product_name")\n                        dpg.add_text(f"RELEASE ENGINE  //  v{base.VERSION}", tag="app_version")',
+              '                    dpg.add_text(f"RELEASE: {base.VERSION}", tag="app_product_name")',
+              "header copy",
+          )
+
+          nav_start = text.index('        dpg.add_text("COMMAND DECK", parent="app_nav_rail", tag="nav_workspace_label")')
+          nav_end = text.index('        dpg.add_button(\n            parent="app_nav_rail",\n            tag="nav_patch_button",', nav_start)
+          text = text[:nav_start] + text[nav_end:]
+
+          replace_in_block(
+              '        dpg.add_child_window(\n            parent="app_shell_body",\n            tag="app_nav_rail",',
+              '        dpg.add_child_window(\n            parent="app_shell_body",\n            tag="app_workspace",',
+              "height=380", "height=250", "nav height",
+          )
+          replace_in_block(
+              '        dpg.add_child_window(\n            parent="app_shell_body",\n            tag="app_workspace",',
+              '            dpg.add_child_window(\n                parent="workspace_columns",\n                tag="app_workspace_main",',
+              "height=380", "height=250", "workspace height",
+          )
+          replace_in_block(
+              '            dpg.add_child_window(\n                parent="workspace_columns",\n                tag="app_workspace_main",',
+              '            dpg.add_child_window(\n                parent="app_workspace_main",\n                tag="dashboard_hero_card",',
+              "height=-1", "height=186", "main height",
+          )
+
+          hero_start = text.index('            dpg.add_child_window(\n                parent="app_workspace_main",\n                tag="dashboard_hero_card",')
+          status_start = text.index('            dpg.add_child_window(\n                parent="app_workspace_main",\n                tag="dashboard_status_panel",', hero_start)
+          text = text[:hero_start] + text[status_start:]
+
+          replace_in_block(
+              '            dpg.add_child_window(\n                parent="app_workspace_main",\n                tag="dashboard_status_panel",',
+              '            dpg.add_child_window(\n                parent="app_workspace_main",\n                tag="dashboard_action_bar",',
+              "height=60", "height=68", "status height",
+          )
+          once(
+              '            dpg.add_text("0 selected • 0 installed", parent="dashboard_status_panel", tag="dashboard_metric")\n\n            dpg.add_child_window(',
+              '            dpg.add_text("0 selected • 0 installed", parent="dashboard_status_panel", tag="dashboard_metric")\n            dpg.add_separator(parent="app_workspace_main", tag="home_separator_before_actions")\n\n            dpg.add_child_window(',
+              "action separator",
+          )
+          replace_in_block(
+              '            dpg.add_child_window(\n                parent="app_workspace_main",\n                tag="dashboard_action_bar",',
+              '        dpg.add_spacer(height=8)\n        dpg.add_child_window(\n            tag="activity_header",',
+              "height=76", "height=96", "action height",
+          )
+          once(
+              '            with dpg.group(parent="dashboard_action_bar", horizontal=True):',
+              '            with dpg.group(\n                parent="dashboard_action_bar",\n                tag="dashboard_action_buttons",\n                horizontal=True,\n                horizontal_spacing=8,\n            ):',
+              "deployment group",
+          )
+
+          dev_start = text.index('            tag="button_dev",')
+          dev_end = text.index('        dpg.add_text(tag="language_select"', dev_start)
+          dev_block = text[dev_start:dev_end]
+          if "show=False" not in dev_block:
+              changed = dev_block.replace('            parent="footer_left_group",\n', '            parent="footer_left_group",\n            show=False,\n', 1)
+              if changed == dev_block:
+                  raise SystemExit("button_dev parent anchor not found")
+              text = text[:dev_start] + changed + text[dev_end:]
+
+          text = text.replace(
+              "# v21.4 responsive command console. Keep the home surface focused on\n        # actions, live state, and the patch sequence rather than static help.",
+              "# v21.4 compact command console. Build the final Home surface before\n        # the viewport can render so retired dashboard widgets never flash at startup.",
+              1,
+          )
+          path.write_text(text, encoding="utf-8")
+          PY
+
+      - name: Validate source
+        shell: bash
+        run: |
+          uv sync --group dev
+          uv run ruff format Minify/__main__.py
+          uv run python -m compileall -q Minify
+          uv run ruff check Minify
+
+      - name: Remove temporary workflows and commit
+        shell: bash
+        run: |
+          rm -f .github/workflows/remove-legacy-home-startup-once.yml
+          rm -f .github/workflows/remove-legacy-home-startup-v2-once.yml
+          rm -f .github/workflows/remove-legacy-home-startup-v3-once.yml
+          rm -f .github/workflows/remove-legacy-home-startup-v4-once.yml
+          rm -f .github/workflows/remove-legacy-home-startup-v5-once.yml
+          rm -f .github/workflows/remove-legacy-home-startup-v6-once.yml
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add Minify/__main__.py .github/workflows/
+          git commit -m "fix(ui): remove legacy Home startup tree"
+          git push origin HEAD:v21.4-hardening
