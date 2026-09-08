@@ -4,6 +4,9 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 MAIN = (ROOT / "Minify" / "__main__.py").read_text(encoding="utf-8")
 
+# Startup must construct only the final compact Home tree; retired widgets may
+# not exist even briefly before runtime layout helpers execute.
+
 
 def test_retired_home_widgets_are_not_constructed():
     for tag in (
