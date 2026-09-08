@@ -3,19 +3,20 @@
 - Read `Docs/*.md` and re-fetch branch head before code changes.
 - Branch model: exactly `v21.4-hardening` -> `beta` -> `main`; keep beta/main frozen.
 - Exact upstream baseline: `Minify-v1.14rc7` / `d4b4520c945a9e1f8f5facc52a76ac5903babe90`; do not rebase current upstream main.
-- Exact centered-action product code head: `da8c52d8ca749514e3b302b4d194f98d3f78980e`; validation head `4b921d0073e240568ee92ee58cd61c28c9d9df64`; later commits are Docs-only.
-- Home is compact: hero/intro and `ANALYZE/SNAPSHOT/COMPOSE` hidden; visible workspace is live status, selected/installed count, one subtle separator, deployment label/actions.
+- Startup-tree product code: `4cd49610eff6a17670fabfe5eb757b82b9dc1cb4`; validation head `2724757140677ef7aa9c40799629377bc57971bc`; later commits are Docs-only.
+- Home startup now constructs the final compact view directly: centered `MINIFY` + `RELEASE: {base.VERSION}`, live status/count, one separator, deployment label/actions.
+- Retired startup widgets/copy are absent from `Minify/__main__.py`: no old release-engine branding, `COMMAND DECK`, `SYSTEM/PROTECTED`, hero, or `ANALYZE/SNAPSHOT/COMPOSE` sequence.
 - Home centers READY/message, selected/installed count, `DEPLOYMENT COMMANDS`, and Patch/Rescan as a responsive cluster; horizontal and narrow stacked layouts center from live widths.
-- Compact Home reapplies reduced shell height one frame after normal resize; preserve unless `window.on_resize` is refactored directly.
+- Initial compact dimensions are present before first render; guarded runtime compatibility/layout helpers remain but cannot render removed legacy nodes.
 - Restore dialog button `Restore this backup` remains 180x30.
 - Control Panel: buttons/combos content-fit/bounded; General `opt_` fields clamp 280-720px; collapsing headers stay full-row.
 - Activity Log copy/select buttons use 108/132px widths and 30px height centered in 36px header.
-- Home header remains centered `MINIFY` + `RELEASE: {base.VERSION}`; Mod Library footer widths/lime Review & Patch hover remain.
+- Mod Library footer widths/lime Review & Patch hover remain.
 - Developer tools remain under Control Panel -> Developer; native Windows picker remains for D2PFX ZIP/profile import/profile export directory.
-- CI `34163085380`: compileall/Ruff PASS; pytest **273/273 PASS**; Windows portable build PASS.
-- Artifact `10033267470`; digest `sha256:21b518627d4c6768ca160fe9f1a1fda24ca76b7440e81cfc51fb1ad6f29d30ed`; portable ZIP SHA-256 `ee3d8f1d6186bb981acc731c36542468b8ce75fad133589ad55739c1f75450a0`.
+- CI `34173898936`: compileall/Ruff PASS; pytest **276/276 PASS**; Windows portable build PASS.
+- Artifact `10036612769`; digest `sha256:e5c9b66227bd1d3c08d748412071db4b0daeea7b68507c8eda295361e7d72131`; portable ZIP SHA-256 `15ad1d41f32f9a85d1ab37dfd0537b5e79400041f3282306117fe353b7a70565`.
 - Custom VPK-folder categories remain: `mods/<Category>/<Child>/.../*.vpk` exposes VPK-backed children as nested Local folder mods.
 - Preserve recursive/nested mods, Collections, profiles, D2PFX, backups/conflict review, Dark Terrain, Safe Foliage, Main Menu fix, manual rc7 `prelaunch`, no-auto-prelaunch.
 - Remove Foilage invariant: blacklist-only; never ship `manifest.json` or `maps/dota.vpk`.
-- Remaining gates: human Windows centered-Home/actions/restore/Control-Panel/Activity/Home-Mod-Library/log-copy/native-picker/custom-category/960x680 smoke; residual filesystem race/security review; semantic core/exact-rc7 diff review; Dota smoke tests.
+- Remaining gates: human Windows startup-flash/frame-shift check plus centered-Home/actions/restore/Control-Panel/Activity/Home-Mod-Library/log-copy/native-picker/custom-category/960x680 smoke; residual filesystem race/security review; semantic core/exact-rc7 diff review; Dota smoke tests.
 - Never promote beta/main without explicit user approval.
