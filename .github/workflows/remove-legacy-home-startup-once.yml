@@ -1,0 +1,602 @@
+name: Remove legacy Home startup once
+
+on:
+  push:
+    branches:
+      - v21.4-hardening
+    paths:
+      - .github/workflows/remove-legacy-home-startup-once.yml
+
+permissions:
+  contents: write
+
+jobs:
+  patch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: astral-sh/setup-uv@v5
+        with:
+          enable-cache: true
+          python-version: "3.13"
+
+      - name: Apply final-at-construction Home UI
+        shell: bash
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import re
+
+          def replace_once(text, old, new, label):
+              if old not in text:
+                  raise SystemExit(f"missing anchor: {label}")
+              return text.replace(old, new, 1)
+
+          def replace_function(text, name, body):
+              pattern = rf"def {re.escape(name)}\(\):\n.*?(?=\ndef |\Z)"
+              updated, count = re.subn(pattern, body.rstrip() + "\n\n", text, count=1, flags=re.S)
+              if count != 1:
+                  raise SystemExit(f"function anchor count for {name}: {count}")
+              return updated
+
+          # Build the final Home presentation directly in __main__.py so the
+          # first visible frame cannot contain the retired dashboard.
+          path = Path("Minify/__main__.py")
+          text = path.read_text(encoding="utf-8")
+          text = replace_once(
+              text,
+              '''                with dpg.group(tag="header_brand_group", horizontal=True, horizontal_spacing=10):
+                              dpg.add_text("MINIFY", tag="app_title")
+                              dpg.bind_item_font("app_title", "large_font")
+                              with dpg.group():
+                                  dpg.add_text("DOTA 2 MOD ORCHESTRATION", tag="app_product_name")
+                                  dpg.add_text(f"RELEASE ENGINE  //  v{base.VERSION}", tag="app_version")
+          ''',
+              '''                with dpg.group(tag="header_brand_group", horizontal=False):
+                              dpg.add_text("MINIFY", tag="app_title")
+                              dpg.bind_item_font("app_title", "large_font")
+                              dpg.add_text(f"RELEASE: {base.VERSION}", tag="app_product_name")
+          ''',
+              "final header",
+          )
+          text = replace_once(
+              text,
+              '''        dpg.add_text("COMMAND DECK", parent="app_nav_rail", tag="nav_workspace_label")
+                  dpg.add_child_window(
+                      parent="app_nav_rail",
+                      tag="nav_status_card",
+                      width=-1,
+                      height=66,
+                      border=True,
+                      no_scrollbar=True,
+                      no_scroll_with_mouse=True,
+                  )
+                  dpg.add_text("SYSTEM", parent="nav_status_card", tag="nav_status_title")
+                  dpg.add_text("● PROTECTED", parent="nav_status_card", tag="nav_status_value")
+
+                  dpg.add_spacer(parent="app_nav_rail", height=7)
+          ''',
+              "",
+              "retired nav status",
+          )
+          text = replace_once(
+              text,
+              '''            tag="app_nav_rail",
+                      width=188,
+                      height=380,
+          ''',
+              '''            tag="app_nav_rail",
+                      width=188,
+                      height=250,
+          ''',
+              "initial nav height",
+          )
+          text = replace_once(
+              text,
+              '''            tag="app_workspace",
+                      width=-1,
+                      height=380,
+          ''',
+              '''            tag="app_workspace",
+                      width=-1,
+                      height=250,
+          ''',
+              "initial workspace height",
+          )
+          text = replace_once(
+              text,
+              '''                tag="app_workspace_main",
+                          width=-1,
+                          height=-1,
+          ''',
+              '''                tag="app_workspace_main",
+                          width=-1,
+                          height=186,
+          ''',
+              "initial main height",
+          )
+          hero_start = text.index('            dpg.add_child_window(\n                parent="app_workspace_main",\n                tag="dashboard_hero_card",')
+          status_start = text.index('            dpg.add_child_window(\n                parent="app_workspace_main",\n                tag="dashboard_status_panel",', hero_start)
+          text = text[:hero_start] + text[status_start:]
+          text = replace_once(
+              text,
+              '''                tag="dashboard_status_panel",
+                          height=60,
+          ''',
+              '''                tag="dashboard_status_panel",
+                          height=68,
+          ''',
+              "initial status height",
+          )
+          text = replace_once(
+              text,
+              '''            dpg.add_text("0 selected • 0 installed", parent="dashboard_status_panel", tag="dashboard_metric")
+
+                      dpg.add_child_window(
+          ''',
+              '''            dpg.add_text("0 selected • 0 installed", parent="dashboard_status_panel", tag="dashboard_metric")
+                      dpg.add_separator(parent="app_workspace_main", tag="home_separator_before_actions")
+
+                      dpg.add_child_window(
+          ''',
+              "initial action separator",
+          )
+          text = replace_once(
+              text,
+              '''                tag="dashboard_action_bar",
+                          height=76,
+          ''',
+              '''                tag="dashboard_action_bar",
+                          height=96,
+          ''',
+              "initial action height",
+          )
+          text = replace_once(
+              text,
+              '            with dpg.group(parent="dashboard_action_bar", horizontal=True):\n',
+              '            with dpg.group(\n                parent="dashboard_action_bar",\n                tag="dashboard_action_buttons",\n                horizontal=True,\n                horizontal_spacing=8,\n            ):\n',
+              "tagged action buttons",
+          )
+          text = replace_once(
+              text,
+              '''            tag="button_dev",
+                      parent="footer_left_group",
+                      width=button_size_x,
+          ''',
+              '''            tag="button_dev",
+                      parent="footer_left_group",
+                      show=False,
+                      width=button_size_x,
+          ''',
+              "hidden footer dev entry",
+          )
+          text = text.replace(
+              "# v21.4 responsive command console. Keep the home surface focused on\n        # actions, live state, and the patch sequence rather than static help.",
+              "# v21.4 compact command console. Build the final Home surface before\n        # the viewport can render so no retired dashboard flashes at startup.",
+              1,
+          )
+          path.write_text(text, encoding="utf-8")
+
+          # Window resizing now owns the compact dimensions directly. Runtime
+          # Home setup only adds responsive helpers/centering; it no longer
+          # transforms a legacy dashboard or waits one extra frame.
+          path = Path("Minify/ui/window.py")
+          text = path.read_text(encoding="utf-8")
+          text = text.replace("_home_sequence_detached = False\n", "", 1)
+          text = replace_once(
+              text,
+              "HEADER_BRAND_WIDTH = 340\n",
+              "HEADER_BRAND_WIDTH = 340\nHOME_COMPACT_MIN_SHELL_HEIGHT = 250\nHOME_COMPACT_INNER_INSET = 34\nHOME_COMPACT_VERTICAL_GAP = 22\nHOME_STATUS_HEIGHT = 68\nHOME_ACTION_NORMAL_HEIGHT = 96\nHOME_ACTION_STACKED_HEIGHT = 136\n",
+              "home sizing constants",
+          )
+          start = text.index("def _configure_home_surface(content_width):")
+          activity = text.index("    # Keep the colored live log", start)
+          prefix = '''def _configure_home_surface(content_width):
+              """Finish responsive Home helpers after the final static UI exists."""
+              if dpg.does_item_exist("button_dev"):
+                  dpg.configure_item("button_dev", show=False)
+
+              # Developer controls belong behind the Control Panel rather than an exposed
+              # footer button and floating viewport-expansion panes.
+              dev_tools.install_control_panel_tab()
+
+              # Header content is final at construction time; resize only centers it.
+              if dpg.does_item_exist("app_title"):
+                  title_width = _item_width("app_title", 58)
+                  dpg.configure_item("app_title", indent=max(0, (HEADER_BRAND_WIDTH - title_width) // 2))
+              if dpg.does_item_exist("app_product_name"):
+                  release_width = _item_width("app_product_name", 132)
+                  dpg.configure_item("app_product_name", indent=max(0, (HEADER_BRAND_WIDTH - release_width) // 2))
+
+          '''
+          text = text[:start] + prefix + text[activity:]
+          shell_start = text.index("    # v21.4 adaptive shell.")
+          cluster_start = text.index("    action_cluster_width =", shell_start)
+          shell = '''    # v21.4 compact shell. Final Home content exists from construction;
+              # resize only budgets the live status and deployment controls.
+              compact_width = shared.window_width <= 1000
+              nav_min_width = 160 if compact_width else 176
+              nav_width = max(nav_min_width, min(220, int(shared.window_width * 0.13)))
+              workspace_width = max(430, content_width - nav_width - 18)
+              main_width = max(360, workspace_width - 20)
+              status_height = HOME_STATUS_HEIGHT
+              stack_actions = main_width < 560
+              action_height = HOME_ACTION_STACKED_HEIGHT if stack_actions else HOME_ACTION_NORMAL_HEIGHT
+              inner_height = status_height + action_height + HOME_COMPACT_VERTICAL_GAP
+              shell_body_height = max(HOME_COMPACT_MIN_SHELL_HEIGHT, inner_height + HOME_COMPACT_INNER_INSET)
+
+          '''
+          text = text[:shell_start] + shell + text[cluster_start:]
+          text = replace_once(
+              text,
+              '''            "app_workspace_main",
+                      width=main_width,
+                      height=inner_height,
+                      no_scrollbar=False,
+                      no_scroll_with_mouse=False,
+          ''',
+              '''            "app_workspace_main",
+                      width=main_width,
+                      height=inner_height,
+                      no_scrollbar=True,
+                      no_scroll_with_mouse=True,
+          ''',
+              "compact main scroll policy",
+          )
+          for dead in (
+              '''    if dpg.does_item_exist("dashboard_hero_card"):
+                  dpg.configure_item("dashboard_hero_card", height=hero_height)
+          ''',
+              '''    if dpg.does_item_exist("dashboard_metric_strip"):
+                  dpg.configure_item("dashboard_metric_strip", height=sequence_height)
+          ''',
+              '''    if dpg.does_item_exist("dashboard_focus_hint"):
+                  dpg.configure_item("dashboard_focus_hint", wrap=max(240, main_width - 28))
+          ''',
+          ):
+              text = replace_once(text, dead, "", "retired Home resize branch")
+          text = replace_once(
+              text,
+              '''    if dpg.does_item_exist("button_refresh_main"):
+                  dpg.configure_item("button_refresh_main", width=refresh_width)
+          ''',
+              '''    if dpg.does_item_exist("button_refresh_main"):
+                  dpg.configure_item("button_refresh_main", width=refresh_width)
+              dev_tools._center_compact_home_text()
+          ''',
+              "synchronous Home centering",
+          )
+          path.write_text(text, encoding="utf-8")
+
+          # Remove all legacy-dashboard hiding/delayed-layout machinery. The
+          # surviving Home surface helper now only styles and centers real items.
+          path = Path("Minify/ui/dev_tools.py")
+          text = path.read_text(encoding="utf-8")
+          constants_start = text.index("HOME_COMPACT_MIN_SHELL_HEIGHT = 250")
+          constants_end = text.index("\n\n\ndef extract_workshop_tools", constants_start)
+          replacement = '''HOME_CENTER_SIDE_PADDING = 20
+          HOME_STATUS_TEXT_GAP = 8
+          HOME_SURFACE_TAGS = (
+              "app_workspace_main",
+              "dashboard_status_panel",
+              "dashboard_action_bar",
+          )
+          HOME_SEPARATOR_PLACEMENTS = (
+              ("home_separator_before_actions", "app_workspace_main", "dashboard_action_bar"),
+          )'''
+          text = text[:constants_start] + replacement + text[constants_end:]
+          table_theme_start = text.index('    if not dpg.does_item_exist("home_uniform_table_theme"):')
+          separator_theme_start = text.index('    if not dpg.does_item_exist("home_subtle_separator_theme"):', table_theme_start)
+          text = text[:table_theme_start] + text[separator_theme_start:]
+          metric_bind = '''    if dpg.does_item_exist("dashboard_metric_table"):
+              dpg.bind_item_theme("dashboard_metric_table", "home_uniform_table_theme")
+
+          '''
+          text = replace_once(text, metric_bind, "", "retired metric table theme")
+          old_loop = '''    for separator_tag, parent, before in HOME_SEPARATOR_PLACEMENTS:
+              if not dpg.does_item_exist(separator_tag) and dpg.does_item_exist(parent) and dpg.does_item_exist(before):
+                  dpg.add_separator(parent=parent, tag=separator_tag)
+                  dpg.bind_item_theme(separator_tag, "home_subtle_separator_theme")
+                  try:
+                      dpg.move_item(separator_tag, parent=parent, before=before)
+                  except Exception:
+                      pass
+
+              # Hide the explanatory hero/sequence immediately. A one-frame delayed
+              # layout pass runs after window.on_resize finishes so the Home shell itself
+              # also collapses to the live status + deployment controls.
+              _apply_compact_home_layout()
+              _schedule_compact_home_layout()
+
+
+          def _configured_height(tag, fallback):
+              try:
+                  height = int(dpg.get_item_configuration(tag).get("height", fallback))
+                  return height if height > 0 else fallback
+              except Exception:
+                  return fallback
+
+
+          def _apply_compact_home_layout():
+              """Keep Home focused on live status and deployment controls only."""
+              for tag in ("dashboard_hero_card", "dashboard_metric_strip"):
+                  if dpg.does_item_exist(tag):
+                      dpg.configure_item(tag, show=False)
+
+              for tag in ("home_separator_after_intro", "home_separator_before_status"):
+                  if dpg.does_item_exist(tag):
+                      dpg.configure_item(tag, show=False)
+              if dpg.does_item_exist("home_separator_before_actions"):
+                  dpg.configure_item("home_separator_before_actions", show=True)
+
+              action_height = max(
+                  HOME_ACTION_NORMAL_HEIGHT, _configured_height("dashboard_action_bar", HOME_ACTION_NORMAL_HEIGHT)
+              )
+              inner_height = HOME_STATUS_HEIGHT + action_height + HOME_COMPACT_VERTICAL_GAP
+              shell_height = max(HOME_COMPACT_MIN_SHELL_HEIGHT, inner_height + HOME_COMPACT_INNER_INSET)
+
+              if dpg.does_item_exist("app_nav_rail"):
+                  dpg.configure_item("app_nav_rail", height=shell_height)
+              if dpg.does_item_exist("app_workspace"):
+                  dpg.configure_item("app_workspace", height=shell_height)
+              if dpg.does_item_exist("app_workspace_main"):
+                  dpg.configure_item(
+                      "app_workspace_main",
+                      height=inner_height,
+                      no_scrollbar=True,
+                      no_scroll_with_mouse=True,
+                  )
+              if dpg.does_item_exist("dashboard_status_panel"):
+                  dpg.configure_item("dashboard_status_panel", height=HOME_STATUS_HEIGHT)
+              if dpg.does_item_exist("dashboard_action_bar"):
+                  dpg.configure_item("dashboard_action_bar", height=action_height)
+
+              _center_compact_home_text()
+
+
+          def _schedule_compact_home_layout():
+              """Reapply compact Home dimensions after the parent resize pass completes."""
+              set_frame_callback = getattr(dpg, "set_frame_callback", None)
+              get_frame_count = getattr(dpg, "get_frame_count", None)
+              if callable(set_frame_callback) and callable(get_frame_count):
+                  try:
+                      set_frame_callback(
+                          get_frame_count() + 1,
+                          lambda sender=None, app_data=None: _apply_compact_home_layout(),
+                      )
+                      return
+                  except Exception:
+                      pass
+              _apply_compact_home_layout()
+
+
+          '''
+          new_loop = '''    for separator_tag, parent, before in HOME_SEPARATOR_PLACEMENTS:
+              if not dpg.does_item_exist(separator_tag) and dpg.does_item_exist(parent) and dpg.does_item_exist(before):
+                  dpg.add_separator(parent=parent, tag=separator_tag)
+                  try:
+                      dpg.move_item(separator_tag, parent=parent, before=before)
+                  except Exception:
+                      pass
+              if dpg.does_item_exist(separator_tag):
+                  dpg.bind_item_theme(separator_tag, "home_subtle_separator_theme")
+
+              _center_compact_home_text()
+
+
+          '''
+          text = replace_once(text, old_loop, new_loop, "legacy compact/delayed Home machinery")
+          path.write_text(text, encoding="utf-8")
+
+          # Rewrite compact-surface tests around the new invariant: obsolete Home
+          # widgets never enter the item tree, and sizing/centering is synchronous.
+          Path("tests/test_home_compact_surface.py").write_text(
+              '''from pathlib import Path
+
+
+          ROOT = Path(__file__).resolve().parents[1]
+          MAIN = (ROOT / "Minify" / "__main__.py").read_text(encoding="utf-8")
+          WINDOW = (ROOT / "Minify" / "ui" / "window.py").read_text(encoding="utf-8")
+          DEVTOOLS = (ROOT / "Minify" / "ui" / "dev_tools.py").read_text(encoding="utf-8")
+
+
+          def test_legacy_home_never_enters_initial_ui_tree():
+              for tag in (
+                  "dashboard_hero_card",
+                  "dashboard_metric_strip",
+                  "dashboard_metric_table",
+                  "nav_workspace_label",
+                  "nav_status_card",
+                  "nav_status_title",
+                  "nav_status_value",
+                  "app_version",
+              ):
+                  assert f'tag="{tag}"' not in MAIN
+              for copy in (
+                  "DOTA 2 MOD ORCHESTRATION",
+                  "RELEASE ENGINE",
+                  "PATCH MATRIX  /  RELEASE CONSOLE",
+                  "Orchestrate your Dota build",
+                  "ANALYZE",
+                  "SNAPSHOT",
+                  "COMPOSE",
+                  "COMMAND DECK",
+                  "● PROTECTED",
+              ):
+                  assert copy not in MAIN
+
+
+          def test_compact_home_is_built_at_final_dimensions():
+              for token in (
+                  'tag="app_nav_rail",\n            width=188,\n            height=250',
+                  'tag="app_workspace",\n            width=-1,\n            height=250',
+                  'tag="app_workspace_main",\n                width=-1,\n                height=186',
+                  'tag="dashboard_status_panel",\n                height=68',
+                  'tag="home_separator_before_actions"',
+                  'tag="dashboard_action_bar",\n                height=96',
+                  'tag="dashboard_action_buttons"',
+              ):
+                  assert token in MAIN
+
+
+          def test_home_resize_is_synchronous_without_next_frame_cleanup():
+              for token in (
+                  "HOME_COMPACT_MIN_SHELL_HEIGHT = 250",
+                  "HOME_COMPACT_INNER_INSET = 34",
+                  "HOME_COMPACT_VERTICAL_GAP = 22",
+                  "HOME_STATUS_HEIGHT = 68",
+                  "HOME_ACTION_NORMAL_HEIGHT = 96",
+                  "HOME_ACTION_STACKED_HEIGHT = 136",
+                  "inner_height = status_height + action_height + HOME_COMPACT_VERTICAL_GAP",
+                  "shell_body_height = max(HOME_COMPACT_MIN_SHELL_HEIGHT, inner_height + HOME_COMPACT_INNER_INSET)",
+                  "dev_tools._center_compact_home_text()",
+              ):
+                  assert token in WINDOW
+              assert "_schedule_compact_home_layout" not in DEVTOOLS
+              assert 'configure_item(tag, show=False)' not in DEVTOOLS
+          ''',
+              encoding="utf-8",
+          )
+
+          # Update source-contract tests that described the retired startup tree.
+          path = Path("tests/test_modern_ui.py")
+          text = path.read_text(encoding="utf-8")
+          replacements = {
+              "test_release_console_uses_real_alignment_tables": '''def test_release_console_uses_real_alignment_tables():
+              assert 'tag="header_layout"' in MAIN
+              for tag in ("header_left_gutter", "header_brand_column", "header_right_gutter"):
+                  assert f'tag="{tag}"' in MAIN
+              assert 'tag="dashboard_metric_table"' not in MAIN
+              assert 'tag="dashboard_flow_table"' not in MAIN
+              assert 'tag="dashboard_guard_table"' not in MAIN
+          ''',
+              "test_release_console_has_dense_command_hierarchy": '''def test_release_console_has_dense_command_hierarchy():
+              for tag in (
+                  "header_brand_group",
+                  "header_accent_rail",
+                  "dashboard_status_panel",
+                  "home_separator_before_actions",
+                  "dashboard_action_bar",
+                  "dashboard_action_buttons",
+                  "activity_header",
+              ):
+                  assert f'tag="{tag}"' in MAIN
+              for retired in ("dashboard_hero_card", "dashboard_metric_strip", "nav_status_card"):
+                  assert f'tag="{retired}"' not in MAIN
+          ''',
+              "test_home_explainer_panel_removed_and_patch_sequence_is_vertical": '''def test_home_explainer_panel_removed_and_patch_sequence_is_vertical():
+              for tag in (
+                  "app_workspace_side",
+                  "dashboard_flow_card",
+                  "dashboard_signal_card",
+                  "dashboard_safety_card",
+                  "dashboard_hero_card",
+                  "dashboard_metric_strip",
+                  "dashboard_metric_table",
+              ):
+                  assert f'tag="{tag}"' not in MAIN
+              for label in ("ANALYZE", "Shared files", "SNAPSHOT", "Restore point", "COMPOSE", "Selected mods"):
+                  assert label not in MAIN
+          ''',
+              "test_alignment_labels_do_not_depend_on_space_padding": '''def test_alignment_labels_do_not_depend_on_space_padding():
+              for stale in (
+                  "Shared files",
+                  "Restore point",
+                  "Selected mods",
+                  "Shared-file collision scan",
+                  "ROLLBACK        AUTOMATIC",
+                  "GUARD MATRIX",
+                  "FAIL-SAFE",
+              ):
+                  assert stale not in MAIN
+          ''',
+              "test_responsive_home_uses_independent_rows_before_clipping": '''def test_responsive_home_uses_independent_rows_before_clipping():
+              assert "main_width = max(360, workspace_width - 20)" in WINDOW
+              assert "HOME_COMPACT_MIN_SHELL_HEIGHT = 250" in WINDOW
+              assert "HOME_STATUS_HEIGHT = 68" in WINDOW
+              assert "HOME_ACTION_NORMAL_HEIGHT = 96" in WINDOW
+              assert "HOME_ACTION_STACKED_HEIGHT = 136" in WINDOW
+              assert "inner_height = status_height + action_height + HOME_COMPACT_VERTICAL_GAP" in WINDOW
+              assert "shell_body_height = max(HOME_COMPACT_MIN_SHELL_HEIGHT, inner_height + HOME_COMPACT_INNER_INSET)" in WINDOW
+              assert '"app_workspace_main",\n            width=main_width,\n            height=inner_height,\n            no_scrollbar=True' in WINDOW
+              assert "dashboard_hero_card" not in WINDOW
+              assert "dashboard_metric_strip" not in WINDOW
+          ''',
+              "test_deployment_buttons_use_responsive_row_budget": '''def test_deployment_buttons_use_responsive_row_budget():
+              assert 'tag="dashboard_action_buttons"' in MAIN
+              assert 'dpg.move_item("button_patch", parent="dashboard_action_buttons")' not in WINDOW
+              assert 'dpg.move_item("button_refresh_main", parent="dashboard_action_buttons")' not in WINDOW
+              assert "stack_actions = main_width < 560" in WINDOW
+              assert "action_cluster_width = max(260, min(620, main_width - 28))" in WINDOW
+              assert "patch_width = action_cluster_width" in WINDOW
+              assert "refresh_width = action_cluster_width" in WINDOW
+              assert "patch_width = max(180, int(action_cluster_width * 0.58))" in WINDOW
+              assert "refresh_width = max(140, action_cluster_width - patch_width - 8)" in WINDOW
+              assert 'horizontal=not stack_actions' in WINDOW
+              assert 'dpg.configure_item("button_patch", width=patch_width)' in WINDOW
+              assert 'dpg.configure_item("button_refresh_main", width=refresh_width)' in WINDOW
+              assert "dev_tools._center_compact_home_text()" in WINDOW
+          ''',
+              "test_deployment_action_bar_has_non_clipping_vertical_budget": '''def test_deployment_action_bar_has_non_clipping_vertical_budget():
+              assert "HOME_COMPACT_MIN_SHELL_HEIGHT = 250" in WINDOW
+              assert "HOME_COMPACT_INNER_INSET = 34" in WINDOW
+              assert "HOME_COMPACT_VERTICAL_GAP = 22" in WINDOW
+              assert "action_height = HOME_ACTION_STACKED_HEIGHT if stack_actions else HOME_ACTION_NORMAL_HEIGHT" in WINDOW
+              assert "inner_height = status_height + action_height + HOME_COMPACT_VERTICAL_GAP" in WINDOW
+              assert 'dpg.configure_item("dashboard_action_bar", height=action_height)' in WINDOW
+          ''',
+              "test_redundant_left_status_and_footer_dev_entry_are_hidden_at_runtime": '''def test_redundant_left_status_and_footer_dev_entry_are_hidden_at_runtime():
+              for tag in ("nav_workspace_label", "nav_status_card", "nav_status_title", "nav_status_value"):
+                  assert f'tag="{tag}"' not in MAIN
+              dev_start = MAIN.index('tag="button_dev"')
+              assert "show=False" in MAIN[dev_start : dev_start + 180]
+              assert 'dpg.configure_item("nav_workspace_label", show=False)' not in WINDOW
+              assert 'dpg.configure_item("nav_status_card", show=False)' not in WINDOW
+          ''',
+              "test_header_is_reduced_to_centered_minify_release_lines": '''def test_header_is_reduced_to_centered_minify_release_lines():
+              assert 'with dpg.group(tag="header_brand_group", horizontal=False):' in MAIN
+              assert 'dpg.add_text("MINIFY", tag="app_title")' in MAIN
+              assert 'dpg.add_text(f"RELEASE: {base.VERSION}", tag="app_product_name")' in MAIN
+              assert 'tag="app_version"' not in MAIN
+              assert "DOTA 2 MOD ORCHESTRATION" not in MAIN
+              assert "RELEASE ENGINE" not in MAIN
+              assert "HEADER_BRAND_WIDTH = 340" in WINDOW
+              assert 'dpg.configure_item("app_title", indent=max(0, (HEADER_BRAND_WIDTH - title_width) // 2))' in WINDOW
+              assert 'dpg.configure_item("app_product_name", indent=max(0, (HEADER_BRAND_WIDTH - release_width) // 2))' in WINDOW
+              assert 'dpg.set_value("app_product_name"' not in WINDOW
+          ''',
+              "test_viewport_has_safe_minimum_layout_budget": '''def test_viewport_has_safe_minimum_layout_budget():
+              assert "MIN_VIEWPORT_WIDTH = 960" in MAIN
+              assert "MIN_VIEWPORT_HEIGHT = 680" in MAIN
+              assert "min_width=MIN_VIEWPORT_WIDTH" in MAIN
+              assert "min_height=MIN_VIEWPORT_HEIGHT" in MAIN
+              assert "HOME_COMPACT_MIN_SHELL_HEIGHT = 250" in WINDOW
+              assert "shell_body_height = max(HOME_COMPACT_MIN_SHELL_HEIGHT, inner_height + HOME_COMPACT_INNER_INSET)" in WINDOW
+          ''',
+          }
+          for name, body in replacements.items():
+              text = replace_function(text, name, body)
+          path.write_text(text, encoding="utf-8")
+          PY
+
+      - name: Validate patch
+        shell: bash
+        run: |
+          uv sync --group dev
+          uv run ruff format Minify/__main__.py Minify/ui/window.py Minify/ui/dev_tools.py tests/test_home_compact_surface.py tests/test_modern_ui.py
+          uv run python -m compileall -q Minify tests
+          uv run ruff check Minify
+          uv run pytest
+
+      - name: Remove one-off workflow and commit product patch
+        shell: bash
+        run: |
+          rm .github/workflows/remove-legacy-home-startup-once.yml
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add Minify/__main__.py Minify/ui/window.py Minify/ui/dev_tools.py tests/test_home_compact_surface.py tests/test_modern_ui.py .github/workflows/remove-legacy-home-startup-once.yml
+          git commit -m "fix(ui): build compact Home before first frame"
+          git push origin HEAD:v21.4-hardening
