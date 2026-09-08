@@ -1,0 +1,275 @@
+name: Remove legacy Home startup v3 once
+
+on:
+  push:
+    branches:
+      - v21.4-hardening
+    paths:
+      - .github/workflows/remove-legacy-home-startup-v3-once.yml
+
+permissions:
+  contents: write
+
+jobs:
+  patch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: astral-sh/setup-uv@v5
+        with:
+          enable-cache: true
+          python-version: "3.13"
+
+      - name: Remove legacy Home widgets from initial tree
+        shell: bash
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import re
+
+          def once(text, old, new, label):
+              count = text.count(old)
+              if count != 1:
+                  raise SystemExit(f"{label}: expected one anchor, found {count}")
+              return text.replace(old, new, 1)
+
+          main_path = Path("Minify/__main__.py")
+          main = main_path.read_text(encoding="utf-8")
+
+          # Header is born in its final two-line form.
+          main = once(
+              main,
+              'with dpg.group(tag="header_brand_group", horizontal=True, horizontal_spacing=10):',
+              'with dpg.group(tag="header_brand_group", horizontal=False):',
+              "header orientation",
+          )
+          main = once(
+              main,
+              '                    with dpg.group():\n                        dpg.add_text("DOTA 2 MOD ORCHESTRATION", tag="app_product_name")\n                        dpg.add_text(f"RELEASE ENGINE  //  v{base.VERSION}", tag="app_version")',
+              '                    dpg.add_text(f"RELEASE: {base.VERSION}", tag="app_product_name")',
+              "legacy header copy",
+          )
+
+          # Retired left status card is never constructed.
+          nav_start = main.index('        dpg.add_text("COMMAND DECK", parent="app_nav_rail", tag="nav_workspace_label")')
+          nav_end = main.index('        dpg.add_button(\n            parent="app_nav_rail",\n            tag="nav_patch_button",', nav_start)
+          main = main[:nav_start] + main[nav_end:]
+
+          # Final compact shell dimensions are used before first render.
+          main = once(main, '            height=380,\n            border=True,\n            no_scrollbar=True,', '            height=250,\n            border=True,\n            no_scrollbar=True,', "nav initial height")
+          # The next height=380 is the workspace.
+          main = once(main, '            tag="app_workspace",\n            width=-1,\n            height=380,', '            tag="app_workspace",\n            width=-1,\n            height=250,', "workspace initial height")
+          main = once(main, '                tag="app_workspace_main",\n                width=-1,\n                height=-1,', '                tag="app_workspace_main",\n                width=-1,\n                height=186,', "workspace main initial height")
+
+          # Retired hero and ANALYZE/SNAPSHOT/COMPOSE sequence are deleted from
+          # the static item tree instead of being hidden a frame later.
+          hero_start = main.index('            dpg.add_child_window(\n                parent="app_workspace_main",\n                tag="dashboard_hero_card",')
+          status_start = main.index('            dpg.add_child_window(\n                parent="app_workspace_main",\n                tag="dashboard_status_panel",', hero_start)
+          main = main[:hero_start] + main[status_start:]
+
+          main = once(
+              main,
+              '                tag="dashboard_status_panel",\n                height=60,',
+              '                tag="dashboard_status_panel",\n                height=68,',
+              "status initial height",
+          )
+          main = once(
+              main,
+              '            dpg.add_text("0 selected • 0 installed", parent="dashboard_status_panel", tag="dashboard_metric")\n\n            dpg.add_child_window(',
+              '            dpg.add_text("0 selected • 0 installed", parent="dashboard_status_panel", tag="dashboard_metric")\n            dpg.add_separator(parent="app_workspace_main", tag="home_separator_before_actions")\n\n            dpg.add_child_window(',
+              "action separator",
+          )
+          main = once(
+              main,
+              '                tag="dashboard_action_bar",\n                height=76,',
+              '                tag="dashboard_action_bar",\n                height=96,',
+              "action initial height",
+          )
+          main = once(
+              main,
+              '            with dpg.group(parent="dashboard_action_bar", horizontal=True):',
+              '            with dpg.group(\n                parent="dashboard_action_bar",\n                tag="dashboard_action_buttons",\n                horizontal=True,\n                horizontal_spacing=8,\n            ):',
+              "tagged deployment group",
+          )
+          main = once(
+              main,
+              '            tag="button_dev",\n            parent="footer_left_group",\n            width=button_size_x,',
+              '            tag="button_dev",\n            parent="footer_left_group",\n            show=False,\n            width=button_size_x,',
+              "hidden footer dev button",
+          )
+          main = main.replace(
+              "# v21.4 responsive command console. Keep the home surface focused on\n        # actions, live state, and the patch sequence rather than static help.",
+              "# v21.4 compact command console. Build the final Home surface before\n        # the viewport can render so retired dashboard widgets never flash at startup.",
+              1,
+          )
+          main_path.write_text(main, encoding="utf-8")
+
+          # Update only tests whose contract was the retired static tree. Runtime
+          # compatibility guards may remain no-op for now; no old widget exists.
+          test_path = Path("tests/test_modern_ui.py")
+          tests = test_path.read_text(encoding="utf-8")
+
+          def replace_test(name, lines):
+              global tests
+              pattern = rf"def {re.escape(name)}\(\):\n.*?(?=\ndef |\Z)"
+              body = "\n".join(lines) + "\n\n"
+              tests, count = re.subn(pattern, body, tests, count=1, flags=re.S)
+              if count != 1:
+                  raise SystemExit(f"test {name}: expected one function, found {count}")
+
+          replace_test(
+              "test_release_console_uses_real_alignment_tables",
+              [
+                  "def test_release_console_uses_real_alignment_tables():",
+                  "    assert 'tag=\"header_layout\"' in MAIN",
+                  "    for tag in (\"header_left_gutter\", \"header_brand_column\", \"header_right_gutter\"):",
+                  "        assert f'tag=\"{tag}\"' in MAIN",
+                  "    assert 'tag=\"dashboard_metric_table\"' not in MAIN",
+                  "    assert 'tag=\"dashboard_flow_table\"' not in MAIN",
+                  "    assert 'tag=\"dashboard_guard_table\"' not in MAIN",
+              ],
+          )
+          replace_test(
+              "test_release_console_has_dense_command_hierarchy",
+              [
+                  "def test_release_console_has_dense_command_hierarchy():",
+                  "    for tag in (",
+                  "        \"header_brand_group\",",
+                  "        \"header_accent_rail\",",
+                  "        \"dashboard_status_panel\",",
+                  "        \"home_separator_before_actions\",",
+                  "        \"dashboard_action_bar\",",
+                  "        \"dashboard_action_buttons\",",
+                  "        \"activity_header\",",
+                  "    ):",
+                  "        assert f'tag=\"{tag}\"' in MAIN",
+                  "    for tag in (\"dashboard_hero_card\", \"dashboard_metric_strip\", \"nav_status_card\"):",
+                  "        assert f'tag=\"{tag}\"' not in MAIN",
+              ],
+          )
+          replace_test(
+              "test_home_explainer_panel_removed_and_patch_sequence_is_vertical",
+              [
+                  "def test_home_explainer_panel_removed_and_patch_sequence_is_vertical():",
+                  "    for tag in (",
+                  "        \"app_workspace_side\",",
+                  "        \"dashboard_flow_card\",",
+                  "        \"dashboard_signal_card\",",
+                  "        \"dashboard_safety_card\",",
+                  "        \"dashboard_hero_card\",",
+                  "        \"dashboard_metric_strip\",",
+                  "        \"dashboard_metric_table\",",
+                  "    ):",
+                  "        assert f'tag=\"{tag}\"' not in MAIN",
+                  "    for label in (\"ANALYZE\", \"Shared files\", \"SNAPSHOT\", \"Restore point\", \"COMPOSE\", \"Selected mods\"):",
+                  "        assert label not in MAIN",
+              ],
+          )
+          replace_test(
+              "test_alignment_labels_do_not_depend_on_space_padding",
+              [
+                  "def test_alignment_labels_do_not_depend_on_space_padding():",
+                  "    for stale in (",
+                  "        \"Shared files\",",
+                  "        \"Restore point\",",
+                  "        \"Selected mods\",",
+                  "        \"Shared-file collision scan\",",
+                  "        \"ROLLBACK        AUTOMATIC\",",
+                  "        \"GUARD MATRIX\",",
+                  "        \"FAIL-SAFE\",",
+                  "    ):",
+                  "        assert stale not in MAIN",
+              ],
+          )
+          test_path.write_text(tests, encoding="utf-8")
+
+          # Add a focused regression test that proves these nodes/copy never
+          # enter the initial tree, which directly protects against startup flash.
+          Path("tests/test_home_startup_tree.py").write_text(
+              "\n".join(
+                  [
+                      "from pathlib import Path",
+                      "",
+                      "",
+                      "ROOT = Path(__file__).resolve().parents[1]",
+                      "MAIN = (ROOT / \"Minify\" / \"__main__.py\").read_text(encoding=\"utf-8\")",
+                      "",
+                      "",
+                      "def test_retired_home_widgets_are_not_constructed():",
+                      "    for tag in (",
+                      "        \"dashboard_hero_card\",",
+                      "        \"dashboard_metric_strip\",",
+                      "        \"dashboard_metric_table\",",
+                      "        \"nav_workspace_label\",",
+                      "        \"nav_status_card\",",
+                      "        \"nav_status_title\",",
+                      "        \"nav_status_value\",",
+                      "        \"app_version\",",
+                      "    ):",
+                      "        assert f'tag=\"{tag}\"' not in MAIN",
+                      "",
+                      "",
+                      "def test_retired_home_copy_is_not_constructed():",
+                      "    for copy in (",
+                      "        \"DOTA 2 MOD ORCHESTRATION\",",
+                      "        \"RELEASE ENGINE\",",
+                      "        \"PATCH MATRIX  /  RELEASE CONSOLE\",",
+                      "        \"Orchestrate your Dota build\",",
+                      "        \"ANALYZE\",",
+                      "        \"SNAPSHOT\",",
+                      "        \"COMPOSE\",",
+                      "        \"COMMAND DECK\",",
+                      "        \"● PROTECTED\",",
+                      "    ):",
+                      "        assert copy not in MAIN",
+                      "",
+                      "",
+                      "def test_final_home_structure_exists_at_construction():",
+                      "    for tag in (",
+                      "        \"dashboard_status_panel\",",
+                      "        \"home_separator_before_actions\",",
+                      "        \"dashboard_action_bar\",",
+                      "        \"dashboard_action_buttons\",",
+                      "    ):",
+                      "        assert f'tag=\"{tag}\"' in MAIN",
+                      "    assert 'with dpg.group(tag=\"header_brand_group\", horizontal=False):' in MAIN",
+                      "    assert 'dpg.add_text(f\"RELEASE: {base.VERSION}\", tag=\"app_product_name\")' in MAIN",
+                      "",
+                  ]
+              ),
+              encoding="utf-8",
+          )
+          PY
+
+      - name: Validate patch
+        shell: bash
+        run: |
+          uv sync --group dev
+          uv run ruff format Minify/__main__.py tests/test_modern_ui.py tests/test_home_startup_tree.py
+          uv run python -m compileall -q Minify tests
+          mapfile -t files < <(
+            find Minify -type f -name '*.py' \
+              ! -path 'Minify/core/mod_compat.py' \
+              ! -path 'Minify/core/mod_library.py' \
+              ! -path 'Minify/core/security.py' \
+              ! -path 'Minify/ui/settings.py' \
+              -print
+          )
+          uv run ruff format --check "${files[@]}"
+          uv run ruff check Minify
+          uv run pytest
+
+      - name: Remove one-off workflows and commit product patch
+        shell: bash
+        run: |
+          rm -f .github/workflows/remove-legacy-home-startup-once.yml
+          rm -f .github/workflows/remove-legacy-home-startup-v2-once.yml
+          rm -f .github/workflows/remove-legacy-home-startup-v3-once.yml
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add Minify/__main__.py tests/test_modern_ui.py tests/test_home_startup_tree.py .github/workflows/
+          git commit -m "fix(ui): remove legacy Home startup tree"
+          git push origin HEAD:v21.4-hardening
