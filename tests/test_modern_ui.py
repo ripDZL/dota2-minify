@@ -160,8 +160,9 @@ def test_deployment_buttons_use_responsive_row_budget():
     assert "action_cluster_width = max(260, min(620, main_width - 28))" in WINDOW
     assert "patch_width = action_cluster_width" in WINDOW
     assert "refresh_width = action_cluster_width" in WINDOW
-    assert "patch_width = max(180, int(action_cluster_width * 0.58))" in WINDOW
-    assert "refresh_width = max(140, action_cluster_width - patch_width - 8)" in WINDOW
+    assert "equal_action_width = max(180, (action_cluster_width - 8) // 2)" in WINDOW
+    assert "patch_width = equal_action_width" in WINDOW
+    assert "refresh_width = equal_action_width" in WINDOW
     assert "horizontal=not stack_actions" in WINDOW
     assert 'dpg.configure_item("button_patch", width=patch_width)' in WINDOW
     assert 'dpg.configure_item("button_refresh_main", width=refresh_width)' in WINDOW
