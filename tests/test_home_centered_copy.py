@@ -69,3 +69,4 @@ def test_home_deployment_buttons_use_uniform_widths():
     ):
         assert token in window
     assert "int(action_cluster_width * 0.58)" not in window
+    assert "refresh_width = max(140" not in window
