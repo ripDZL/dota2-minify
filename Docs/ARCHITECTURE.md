@@ -4,11 +4,10 @@
 - UI: Dear PyGui Black-Plum Reactor; outer minimum `960x680`; responsive client-size budgeting and scroll bounds.
 - Home: centered release header; visible workspace is live status/count plus deployment actions only.
 - Home startup tree is final-at-construction: `Minify/__main__.py` no longer creates old release-engine copy, `COMMAND DECK`/`SYSTEM`/`PROTECTED`, hero, or `ANALYZE/SNAPSHOT/COMPOSE` widgets.
-- Initial compact Home geometry is 250px nav/workspace, 186px workspace-main, 68px status, 96px actions; runtime responsive helpers can resize but cannot expose retired widgets because those nodes are absent.
 - Compact Home copy uses tagged horizontal rows with calculated leading spacers from live text/panel widths for READY/message, selected/installed count, and `DEPLOYMENT COMMANDS`.
-- Deployment buttons are a tagged action group wrapped in an outer centering row; live Patch/Rescan widths plus group orientation/spacing determine cluster width, so horizontal and narrow stacked layouts center as a unit.
-- One subtle `home_separator_before_actions` is part of the initial item tree.
-- Source-contract tests assert retired Home tags/copy are absent and final compact structure exists before runtime layout helpers.
+- Deployment buttons are a tagged centered action group. Patch/Rescan both construct at 210px; normal responsive layout divides the available cluster equally; narrow stacked layout gives both the same full cluster width.
+- One subtle `home_separator_before_actions` remains in the initial item tree.
+- Source-contract tests assert retired Home tags/copy are absent, final compact structure exists before runtime helpers, and Home action widths remain symmetric.
 - Restore dialog: `backup_restore_button` explicitly 180x30.
 - Activity Log: colored live output plus copy-all/selectable debug view; buttons 108/132px wide, 30px high, 8px gap, 28px right inset.
 - Mod Library footer: explicit safe widths; Review & Patch hover ember -> lime, active darker green.

@@ -2,22 +2,20 @@
 - Upstream baseline: `Egezenn/dota2-minify` tag `Minify-v1.14rc7`; exact commit `d4b4520c945a9e1f8f5facc52a76ac5903babe90`.
 - Fork: `ripDZL/dota2-minify`; active `v21.4-hardening`; promotion `v21.4-hardening` -> `beta` -> `main`.
 - Exactly three branches; `beta` frozen `af83bbb051edced195d5f55ba49ff060a8c76f3c`; `main` frozen `a26bc88a0d412e357965f29488b83a7f9093e11f`.
-- Startup-tree product code: `4cd49610eff6a17670fabfe5eb757b82b9dc1cb4`; validation head `2724757140677ef7aa9c40799629377bc57971bc`; later commits are Docs-only.
-- Home startup now constructs only the compact presentation: centered `MINIFY` + `RELEASE: {base.VERSION}`, live status/count, one separator, deployment label/actions.
-- Retired Home widgets/copy are absent from the initial `Minify/__main__.py` item tree: no `COMMAND DECK`, `SYSTEM/PROTECTED`, old release-engine branding, hero, or `ANALYZE/SNAPSHOT/COMPOSE` sequence.
-- Compact Home centers READY/message, selected/installed count, `DEPLOYMENT COMMANDS`, and the Patch/Rescan action cluster from live panel/control widths; narrow stacked actions remain centered.
-- Initial Home shell uses compact dimensions before first render; guarded runtime compatibility/layout helpers remain but cannot render the removed legacy widgets.
+- Uniform-Home product code: `c985195836c18226d9f1166c0d5c3619caf9de64`; validation head `4f9edd479283e0cc20d60421163f4c108b88c349`; later commits are Docs-only.
+- Home startup constructs only the compact presentation: centered `MINIFY` + `RELEASE: {base.VERSION}`, live status/count, one separator, deployment label/actions.
+- Retired Home widgets/copy are absent from initial `Minify/__main__.py`: no `COMMAND DECK`, `SYSTEM/PROTECTED`, old release-engine branding, hero, or `ANALYZE/SNAPSHOT/COMPOSE` sequence.
+- READY/message, selected/installed count, `DEPLOYMENT COMMANDS`, and Patch/Rescan cluster center from live widths.
+- Patch and Rescan start at equal 210px widths and remain equal under responsive horizontal sizing; narrow stacked mode remains equal/full-width and centered.
 - Restore dialog `backup_restore_button` remains 180x30 for Windows label fit.
-- Control Panel: action buttons/combos bounded/content-fit; General `opt_` text fields clamp 280-720px; collapsing headers stay full-row.
+- Control Panel: action buttons/combos bounded/content-fit; General `opt_` fields clamp 280-720px; collapsing headers stay full-row.
 - Activity Log copy/select buttons remain 108/132px wide, 30px high, centered in 36px header.
 - Mod Library safe footer widths/Review & Patch lime hover retained.
 - Developer tools remain under Control Panel -> Developer; native Windows picker retained for D2PFX/profile browsing.
 - Custom categories: `mods/<Category>/<Child>/.../*.vpk` promotes top-level folder to category; VPK-backed immediate children become nested Local folder mods.
-- CI `34173898936`: compileall/Ruff PASS; pytest **276/276 PASS**; Windows portable build/package/upload PASS.
-- Artifact `10036612769`; 53,100,729-byte GitHub artifact; digest `sha256:e5c9b66227bd1d3c08d748412071db4b0daeea7b68507c8eda295361e7d72131`.
-- Portable ZIP: 53,640,956 bytes; SHA-256 `15ad1d41f32f9a85d1ab37dfd0537b5e79400041f3282306117fe353b7a70565`.
-- New startup-tree tests assert retired Home tags/copy are never constructed; human Windows boot smoke still required to visually confirm no startup flash/frame shift.
-- Human Windows smoke remains required for centered Home/actions, restore, Control Panel, Activity Log, Home/Mod Library controls, and all major `960x680` surfaces; CI does not prove pixel rendering.
+- CI `34269151229`: compileall/Ruff PASS; pytest **277/277 PASS**; Windows portable build/package/upload PASS.
+- Artifact `10073128239`; 53,100,305-byte GitHub artifact; digest `sha256:2bd7d869b184a7b198b1bbacb9fd18911b4ba5acaab5e99743b22c01aa8b4b7b`.
+- Portable bundle: 53,639,888 bytes; SHA-256 `024f98c3a44a663ce33f4efd0f770f9c77097c498ed361f4d2ea7e430973d5d2`.
 - Preserve recursive/nested mods, Collections, profiles, D2PFX, backups/conflict review, Dark Terrain, Safe Foliage, Main Menu Background fix, manual rc7 `prelaunch`, no-auto-prelaunch.
 - Remove Foilage: blacklist-only; never ship `manifest.json` or `maps/dota.vpk`; retain both oak-leaf blacklist entries.
 - Security boundary: mod Python scripts trusted; archive/VPK/profile/backup/download/D2PFX data untrusted.
