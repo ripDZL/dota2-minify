@@ -53,3 +53,19 @@ def test_home_deployment_buttons_are_centered_as_cluster():
         "_center_home_action_buttons()",
     ):
         assert token in DEVTOOLS
+
+
+def test_home_deployment_buttons_use_uniform_widths():
+    main = (ROOT / "Minify" / "__main__.py").read_text(encoding="utf-8")
+    window = (ROOT / "Minify" / "ui" / "window.py").read_text(encoding="utf-8")
+    patch_start = main.index('tag="button_patch"')
+    refresh_start = main.index('tag="button_refresh_main"')
+    assert "width=210" in main[patch_start : patch_start + 320]
+    assert "width=210" in main[refresh_start : refresh_start + 320]
+    for token in (
+        "equal_action_width = max(180, (action_cluster_width - 8) // 2)",
+        "patch_width = equal_action_width",
+        "refresh_width = equal_action_width",
+    ):
+        assert token in window
+    assert "int(action_cluster_width * 0.58)" not in window

@@ -327,8 +327,9 @@ def on_resize():
         patch_width = action_cluster_width
         refresh_width = action_cluster_width
     else:
-        patch_width = max(180, int(action_cluster_width * 0.58))
-        refresh_width = max(140, action_cluster_width - patch_width - 8)
+        equal_action_width = max(180, (action_cluster_width - 8) // 2)
+        patch_width = equal_action_width
+        refresh_width = equal_action_width
 
     if dpg.does_item_exist("app_shell_header"):
         dpg.configure_item("app_shell_header", width=content_width, height=76)

@@ -228,7 +228,7 @@ def create_ui():
                     tag="button_refresh_main",
                     label="RESCAN LIBRARY",
                     callback=checkboxes.refresh,
-                    width=146,
+                    width=210,
                     height=34,
                 )
 
