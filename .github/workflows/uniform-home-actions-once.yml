@@ -31,83 +31,36 @@ jobs:
 
           main_path = Path("Minify/__main__.py")
           main = main_path.read_text(encoding="utf-8")
-          old_refresh = '''                dpg.add_button(
-                    tag="button_refresh_main",
-                    label="RESCAN LIBRARY",
-                    callback=checkboxes.refresh,
-                    width=146,
-                    height=34,
-                )'''
-          new_refresh = '''                dpg.add_button(
-                    tag="button_refresh_main",
-                    label="RESCAN LIBRARY",
-                    callback=checkboxes.refresh,
-                    width=210,
-                    height=34,
-                )'''
+          old_refresh = 'tag="button_refresh_main",\n                    label="RESCAN LIBRARY",\n                    callback=checkboxes.refresh,\n                    width=146,\n                    height=34,'
+          new_refresh = 'tag="button_refresh_main",\n                    label="RESCAN LIBRARY",\n                    callback=checkboxes.refresh,\n                    width=210,\n                    height=34,'
           if main.count(old_refresh) != 1:
               raise SystemExit("expected one static Rescan button block")
           main_path.write_text(main.replace(old_refresh, new_refresh), encoding="utf-8")
 
           window_path = Path("Minify/ui/window.py")
           window = window_path.read_text(encoding="utf-8")
-          old_resize = '''    if stack_actions:
-        patch_width = action_cluster_width
-        refresh_width = action_cluster_width
-    else:
-        patch_width = max(180, int(action_cluster_width * 0.58))
-        refresh_width = max(140, action_cluster_width - patch_width - 8)
-'''
-          new_resize = '''    if stack_actions:
-        patch_width = action_cluster_width
-        refresh_width = action_cluster_width
-    else:
-        equal_action_width = max(180, (action_cluster_width - 8) // 2)
-        patch_width = equal_action_width
-        refresh_width = equal_action_width
-'''
+          old_resize = '    else:\n        patch_width = max(180, int(action_cluster_width * 0.58))\n        refresh_width = max(140, action_cluster_width - patch_width - 8)\n'
+          new_resize = '    else:\n        equal_action_width = max(180, (action_cluster_width - 8) // 2)\n        patch_width = equal_action_width\n        refresh_width = equal_action_width\n'
           if window.count(old_resize) != 1:
               raise SystemExit("expected one Home action width calculation")
           window_path.write_text(window.replace(old_resize, new_resize), encoding="utf-8")
 
-          test_path = Path("tests/test_home_uniform_actions.py")
-          test_path.write_text('''from pathlib import Path
-
-
-ROOT = Path(__file__).resolve().parents[1]
-MAIN = (ROOT / "Minify" / "__main__.py").read_text(encoding="utf-8")
-WINDOW = (ROOT / "Minify" / "ui" / "window.py").read_text(encoding="utf-8")
-
-
-def _button_block(tag):
-    start = MAIN.index(f'tag="{tag}"')
-    return MAIN[start : start + 320]
-
-
-def test_home_action_buttons_start_with_uniform_widths():
-    assert "width=210" in _button_block("button_patch")
-    assert "width=210" in _button_block("button_refresh_main")
-
-
-def test_home_action_buttons_resize_with_uniform_widths():
-    for token in (
-        "equal_action_width = max(180, (action_cluster_width - 8) // 2)",
-        "patch_width = equal_action_width",
-        "refresh_width = equal_action_width",
-    ):
-        assert token in WINDOW
-    assert "int(action_cluster_width * 0.58)" not in WINDOW
-''', encoding="utf-8")
+          test_path = Path("tests/test_home_centered_copy.py")
+          tests = test_path.read_text(encoding="utf-8")
+          marker = "def test_home_deployment_buttons_use_uniform_widths():"
+          if marker not in tests:
+              tests += '\n\ndef test_home_deployment_buttons_use_uniform_widths():\n    main = (ROOT / "Minify" / "__main__.py").read_text(encoding="utf-8")\n    window = (ROOT / "Minify" / "ui" / "window.py").read_text(encoding="utf-8")\n    patch_start = main.index(\'tag="button_patch"\')\n    refresh_start = main.index(\'tag="button_refresh_main"\')\n    assert "width=210" in main[patch_start : patch_start + 320]\n    assert "width=210" in main[refresh_start : refresh_start + 320]\n    for token in (\n        "equal_action_width = max(180, (action_cluster_width - 8) // 2)",\n        "patch_width = equal_action_width",\n        "refresh_width = equal_action_width",\n    ):\n        assert token in window\n    assert "int(action_cluster_width * 0.58)" not in window\n'
+          test_path.write_text(tests, encoding="utf-8")
           PY
 
       - name: Validate source
         shell: bash
         run: |
           uv sync --group dev
-          uv run ruff format Minify/ui/window.py Minify/__main__.py tests/test_home_uniform_actions.py
+          uv run ruff format Minify/ui/window.py Minify/__main__.py tests/test_home_centered_copy.py
           uv run python -m compileall -q Minify tests
           uv run ruff check Minify
-          uv run pytest tests/test_home_uniform_actions.py tests/test_home_centered_copy.py tests/test_home_startup_tree.py
+          uv run pytest tests/test_home_centered_copy.py tests/test_home_startup_tree.py
 
       - name: Remove temporary workflow and commit
         shell: bash
@@ -115,6 +68,6 @@ def test_home_action_buttons_resize_with_uniform_widths():
           rm .github/workflows/uniform-home-actions-once.yml
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add Minify/__main__.py Minify/ui/window.py tests/test_home_uniform_actions.py .github/workflows/uniform-home-actions-once.yml
+          git add Minify/__main__.py Minify/ui/window.py tests/test_home_centered_copy.py .github/workflows/uniform-home-actions-once.yml
           git commit -m "fix(ui): uniform Home action button widths"
           git push origin HEAD:v21.4-hardening
