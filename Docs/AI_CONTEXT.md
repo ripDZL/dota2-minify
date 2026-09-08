@@ -2,19 +2,21 @@
 - Upstream baseline: `Egezenn/dota2-minify` tag `Minify-v1.14rc7`; exact commit `d4b4520c945a9e1f8f5facc52a76ac5903babe90`.
 - Fork: `ripDZL/dota2-minify`; active `v21.4-hardening`; promotion `v21.4-hardening` -> `beta` -> `main`.
 - Exactly three branches; `beta` frozen `af83bbb051edced195d5f55ba49ff060a8c76f3c`; `main` frozen `a26bc88a0d412e357965f29488b83a7f9093e11f`.
-- Exact centered-action product code head: `da8c52d8ca749514e3b302b4d194f98d3f78980e`; validation head `4b921d0073e240568ee92ee58cd61c28c9d9df64`; later commits are Docs-only.
-- Home is compact: hero plus `ANALYZE/SNAPSHOT/COMPOSE` hidden; visible workspace is status, selected/installed count, one subtle separator, deployment label/actions.
-- Compact Home centers READY/message, selected/installed count, `DEPLOYMENT COMMANDS`, and the Patch/Rescan action cluster from live panel/control widths; narrow stacked actions remain centered as one cluster.
-- Compact Home shell reapplies one frame after `window.on_resize`; 250px shell minimum retained.
+- Startup-tree product code: `4cd49610eff6a17670fabfe5eb757b82b9dc1cb4`; validation head `2724757140677ef7aa9c40799629377bc57971bc`; later commits are Docs-only.
+- Home startup now constructs only the compact presentation: centered `MINIFY` + `RELEASE: {base.VERSION}`, live status/count, one separator, deployment label/actions.
+- Retired Home widgets/copy are absent from the initial `Minify/__main__.py` item tree: no `COMMAND DECK`, `SYSTEM/PROTECTED`, old release-engine branding, hero, or `ANALYZE/SNAPSHOT/COMPOSE` sequence.
+- Compact Home centers READY/message, selected/installed count, `DEPLOYMENT COMMANDS`, and the Patch/Rescan action cluster from live panel/control widths; narrow stacked actions remain centered.
+- Initial Home shell uses compact dimensions before first render; guarded runtime compatibility/layout helpers remain but cannot render the removed legacy widgets.
 - Restore dialog `backup_restore_button` remains 180x30 for Windows label fit.
 - Control Panel: action buttons/combos bounded/content-fit; General `opt_` text fields clamp 280-720px; collapsing headers stay full-row.
 - Activity Log copy/select buttons remain 108/132px wide, 30px high, centered in 36px header.
-- Home release header remains centered `MINIFY` + `RELEASE: {base.VERSION}`; Mod Library safe footer widths/Review & Patch hover retained.
+- Mod Library safe footer widths/Review & Patch lime hover retained.
 - Developer tools remain under Control Panel -> Developer; native Windows picker retained for D2PFX/profile browsing.
 - Custom categories: `mods/<Category>/<Child>/.../*.vpk` promotes top-level folder to category; VPK-backed immediate children become nested Local folder mods.
-- CI `34163085380`: compileall/Ruff PASS; pytest **273/273 PASS**; Windows portable build/package/upload PASS.
-- Artifact `10033267470`; 53,101,015-byte GitHub artifact; digest `sha256:21b518627d4c6768ca160fe9f1a1fda24ca76b7440e81cfc51fb1ad6f29d30ed`.
-- Portable ZIP: 53,640,817 bytes; SHA-256 `ee3d8f1d6186bb981acc731c36542468b8ce75fad133589ad55739c1f75450a0`.
+- CI `34173898936`: compileall/Ruff PASS; pytest **276/276 PASS**; Windows portable build/package/upload PASS.
+- Artifact `10036612769`; 53,100,729-byte GitHub artifact; digest `sha256:e5c9b66227bd1d3c08d748412071db4b0daeea7b68507c8eda295361e7d72131`.
+- Portable ZIP: 53,640,956 bytes; SHA-256 `15ad1d41f32f9a85d1ab37dfd0537b5e79400041f3282306117fe353b7a70565`.
+- New startup-tree tests assert retired Home tags/copy are never constructed; human Windows boot smoke still required to visually confirm no startup flash/frame shift.
 - Human Windows smoke remains required for centered Home/actions, restore, Control Panel, Activity Log, Home/Mod Library controls, and all major `960x680` surfaces; CI does not prove pixel rendering.
 - Preserve recursive/nested mods, Collections, profiles, D2PFX, backups/conflict review, Dark Terrain, Safe Foliage, Main Menu Background fix, manual rc7 `prelaunch`, no-auto-prelaunch.
 - Remove Foilage: blacklist-only; never ship `manifest.json` or `maps/dota.vpk`; retain both oak-leaf blacklist entries.
