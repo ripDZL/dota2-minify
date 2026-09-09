@@ -1,15 +1,16 @@
 # Session Summary
 - Repo: `ripDZL/dota2-minify`; exact rc7 baseline `d4b4520c945a9e1f8f5facc52a76ac5903babe90`.
 - Branch model: exactly `v21.4-hardening` -> `beta` -> `main`; beta/main untouched.
-- Dark Terrain direct fix `340cbb69bd2b62c922aa8de116ed3df7f74c1435` removes automatic Remove Foilage dependency; user says terrain fix seems fine.
-- User tested Remove Foilage + byte-identical vanilla-tree override VPK; invisible-tree problem remained.
-- Stock tree/reference scan found `tree_oak_00_blank.vmdl_c` depends on blacklisted `tree_oak_leaves_blank.vmat_c`.
-- Current repair `049c549730846b7b100f5d5e22a6c2d3aaabad46` preserves blank leaf material and removes stale `_08.vmdl_c` blacklist entry.
-- Only `materials/models/props_tree/tree_oak_leaves_08.vmat_c` remains blacklisted under `props_tree`.
-- Ground foliage entries remain blacklisted.
-- CI `34392881410` run 164: compileall/Ruff PASS; pytest **279/279 PASS**; Windows portable PASS.
-- Artifact `10120380045`; portable `53,641,222` bytes; SHA-256 `ec1915f57dd5bc727df05d71ad2117931e92a5ff89d922b8856981a4d92a04a0`.
-- User chose independent Remove Foilage repair as next focus; Dark Terrain decoupling stays.
-- Next: test Remove Foilage alone with custom trees OFF; success = foliage gone and stock collision/tree visible.
-- If still invisible, next narrow preservation test is `ivy_branch001.vmat_c` + `ivy_leaf001.vmat_c`.
-- Handoff prepared `2026-09-09 16:11 EDT`.
+- Dark Terrain direct fix `340cbb69bd2b62c922aa8de116ed3df7f74c1435`; user says terrain fix seems fine.
+- Stable Remove Foilage product remains `049c549730846b7b100f5d5e22a6c2d3aaabad46`.
+- Stable repair preserves `tree_oak_leaves_blank.vmat_c`; stock blank-oak tree renders, but unwanted bright-green foliage remains.
+- Map-worldnode aggregate blacklist tests for `blank`, `_08`, and `_05` had no visible effect.
+- Shared-material conflict confirmed: blacklisting `tree_oak_leaves_blank.vmat_c` removes target foliage but makes `tree_oak_00_blank.vmdl_c` invisible.
+- User supplied exact current-stock resource bundle: model, blank-leaf material, and four texture dependencies.
+- Direct compiled model/material byte-remap diagnostic is rejected: user reports Dota breaks/stalls at `Looking for coordinator`.
+- Do not reuse binary compiled-resource mutation, even with RERL/resource-ID repair.
+- Next implementation route: Source2Viewer decompile -> edit source `.vmdl/.vmat` -> Dota `resourcecompiler.exe` -> package and validate.
+- Minify already uses Source2Viewer CLI and Dota `game/bin/win64/resourcecompiler.exe`; reuse supported toolchain.
+- Stable CI `34392881410` run 164: **279/279 PASS**; Windows portable PASS.
+- Stable artifact `10120380045`; portable SHA-256 `ec1915f57dd5bc727df05d71ad2117931e92a5ff89d922b8856981a4d92a04a0`.
+- Keep Dark Terrain independent; no beta/main promotion without explicit approval.
