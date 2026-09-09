@@ -4,10 +4,13 @@
 - [x] Decouple Dark Terrain from `Remove Foilage`; user reports terrain fix seems fine.
 - [x] Test byte-identical vanilla-tree override; user reports it did not restore the invisible tree.
 - [x] Trace current stock tree references against Remove Foilage blacklist.
-- [x] Preserve `tree_oak_leaves_blank.vmat_c`; remove stale `_08.vmdl_c` blacklist entry; keep only `_08.vmat_c` blacklisted under `props_tree`.
-- [x] CI `34392881410`: **279/279 PASS**; Windows portable PASS; artifact `10120380045`.
-- [x] Refresh session docs and handoff prompt for new chat.
-- [ ] Dota smoke Remove Foilage alone, custom tree mods OFF: unwanted foliage removed; stock trees visible.
-- [ ] If invisible tree remains, test preserving only `ivy_branch001.vmat_c` and `ivy_leaf001.vmat_c` next.
+- [x] Preserve `tree_oak_leaves_blank.vmat_c`; remove stale `_08.vmdl_c`; keep only `_08.vmat_c` blacklisted under `props_tree` in stable product `049c549...`.
+- [x] Confirm stable repair keeps stock tree visible but unwanted bright-green foliage remains.
+- [x] Rule out `blank`/`_08`/`_05` map-worldnode aggregate blacklist experiments; no visible effect.
+- [x] Confirm shared-material conflict around `tree_oak_leaves_blank.vmat_c`.
+- [x] Reject direct compiled `.vmdl_c/.vmat_c` byte remap; user reports Dota stalls at `Looking for coordinator`.
+- [ ] Build safe automation: current-stock extract -> Source2Viewer decompile -> source-path remap -> Dota `resourcecompiler.exe` -> package.
+- [ ] Validate decompiled source output and compiled candidate before another Dota smoke.
+- [ ] Human Dota smoke: Remove Foilage alone; foliage removed, stock trees visible, collision correct, coordinator/game startup normal.
 - [ ] General Windows/Dota smoke and residual hostile-input/path-race review.
 - [ ] Do not update `beta` or `main` until explicitly approved.
