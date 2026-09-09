@@ -28,7 +28,7 @@ def test_remove_foilage_keeps_only_targeted_tree_leaf_resources():
     assert "materials/models/props_nature/fern001.vmat_c" in entries
 
 
-def test_dark_terrain_keeps_remove_foilage_dependency():
+def test_dark_terrain_does_not_force_remove_foilage():
     manifest = json.loads((DARK_TERRAIN / "manifest.json").read_text(encoding="utf-8"))
 
-    assert manifest.get("dependencies") == ["Remove Foilage"]
+    assert manifest.get("dependencies") == []
