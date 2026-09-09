@@ -4,12 +4,15 @@
 - UI: Dear PyGui Black-Plum Reactor; minimum `960x680`; compact Home; equal Patch/Rescan.
 - Mod discovery/security/profile/D2PFX/backup hardening unchanged.
 - Dark Terrain is independent: `manifest.json` has `dependencies: []`.
-- Remove Foilage is separately selectable and blacklist-only; no `manifest.json`, no `maps/dota.vpk`.
-- Current Remove Foilage tree policy: under `materials/models/props_tree/` / `models/props_tree/`, blacklist only `materials/models/props_tree/tree_oak_leaves_08.vmat_c`.
+- Remove Foilage is separately selectable and blacklist-only in the stable product; no `manifest.json`, no `maps/dota.vpk`.
+- Stable Remove Foilage tree policy: under `materials/models/props_tree/` / `models/props_tree/`, blacklist only `materials/models/props_tree/tree_oak_leaves_08.vmat_c`.
 - Preserve `tree_oak_leaves_05` assets, `tree_oak_leaves_blank.vmat_c`, stock tree/static/destruction models, and stale/nonexistent `_08.vmdl_c` path.
-- Current-stock evidence: `tree_oak_00_blank.vmdl_c` depends on `tree_oak_leaves_blank.vmat_c`; blanking that material can produce a non-rendering stock tree while collision remains.
+- Current-stock evidence: `tree_oak_00_blank.vmdl_c` directly references `tree_oak_leaves_blank.vmat_c`.
+- Shared-material conflict: blanking `tree_oak_leaves_blank.vmat_c` removes intended foliage but also makes the stock blank-oak visual disappear; preserving it restores both.
+- Worldnode aggregate blacklist experiments do not solve this conflict; current map-internal aggregate paths did not change the observed foliage.
 - Byte-identical vanilla-tree VPK cannot override Minify's higher-priority blank output; user confirmed that diagnostic failed.
-- Remaining direct stock-tree/blacklist overlaps are `ivy_branch001.vmat_c` and `ivy_leaf001.vmat_c`; preserve only if current candidate still fails.
-- Current route: repair Remove Foilage independently; do not re-couple Dark Terrain.
-- Validation product: `049c549730846b7b100f5d5e22a6c2d3aaabad46`; CI `34392881410`; **279/279 PASS**; Windows portable PASS.
+- Direct byte editing of compiled `.vmdl_c/.vmat_c` is prohibited for this repair; a remap candidate caused Dota to stall at `Looking for coordinator` despite RERL/resource-ID repair.
+- Safe remap architecture must use source resources: current-stock extract -> Source2Viewer decompile -> edit `.vmdl/.vmat` -> Dota `resourcecompiler.exe` -> package -> validation.
+- Reuse Minify's existing Source2Viewer CLI integration and Dota `game/bin/win64/resourcecompiler.exe` path.
+- Stable validation product: `049c549730846b7b100f5d5e22a6c2d3aaabad46`; CI `34392881410`; **279/279 PASS**; Windows portable PASS.
 - Security boundary: local mod Python scripts trusted; archive/VPK/profile/backup/download/D2PFX data untrusted.
