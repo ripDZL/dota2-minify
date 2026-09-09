@@ -2,17 +2,15 @@
 - [x] Pin exact rc7 baseline `d4b4520c945a9e1f8f5facc52a76ac5903babe90`.
 - [x] Keep exactly three branches: `v21.4-hardening`, `beta`, `main`.
 - [x] Preserve hardened backend + v21.3.1 feature set; custom VPK-folder categories included.
-- [x] Harden Black-Plum Reactor minimum/responsive sizing at `960x680`.
-- [x] Compact Home to centered status/count + deployment actions only; remove retired startup chrome.
-- [x] Make Patch/Rescan equal-width controls: 210px each initially, equal responsive horizontal split, equal centered stack when narrow.
-- [x] Fit Restore backup action at 180x30; retain Control Panel/Activity Log/Mod Library/D2PFX sizing fixes.
-- [x] Retain native Windows pickers for D2PFX ZIP/profile import/profile export directory.
-- [x] Product `c985195836c18226d9f1166c0d5c3619caf9de64`; validation `4f9edd479283e0cc20d60421163f4c108b88c349`; CI `34269151229`; **277/277 PASS**; Windows build PASS.
-- [x] Promote hardening -> beta from `36bf3b8c7edc9e92ca60c876e69e40c60c95aad8`.
-- [x] Publish prerelease `v21.4-beta.1` with Windows portable asset + SHA-256 checksum.
-- [ ] Beta Windows smoke-test startup, centered/equal Home actions, restore, Control Panel widths, Activity Log, Home/Mod Library controls, native pickers, and every major surface at exactly `960x680`.
-- [ ] Smoke-test custom category discovery against real user-created folders/VPKs on Windows.
+- [x] Harden Black-Plum Reactor minimum/responsive sizing at `960x680` and compact Home presentation.
+- [x] Correct Remove Foilage invisible-tree regression: keep `_05` oak leaf material/model OUT of blacklist; keep `_08` entries.
+- [x] Keep Dark Terrain dependency on `Remove Foilage`; regression-test dependency and foliage asset contract.
+- [x] Keep Remove Foilage blacklist-only; no `manifest.json` or `maps/dota.vpk`.
+- [x] Product `161d6f4a92b01e591dd9df610a93e7a6f96a1d13`; CI `34375240188`; **279/279 PASS**; Windows build PASS; artifact `10113629889`.
+- [ ] Test Remove Foilage alone in Dota: intended ground foliage removed, actual trees still visible/collidable normally.
+- [ ] Test Dark Terrain in Dota: dependency auto-enables Remove Foilage; trees remain visible; terrain/fog/water changes still work.
+- [ ] Human Windows smoke-test restore, Control Panel, Activity Log, Home/Mod Library controls, native pickers, custom categories, and `960x680` surfaces.
 - [ ] Continue hostile-input/path-race review; residual local filesystem races require explicit assessment.
 - [ ] Complete semantic core-overlay reconciliation and exact-rc7 diff review; never wholesale copy stale core.
-- [ ] Dota smoke: startup/layout, library/settings, Collections/profiles, D2PFX, lobby/match, rollback, Dark Terrain, Remove Foilage.
-- [ ] Promote beta -> main only after beta validation and explicit user approval.
+- [ ] Dota smoke: startup/layout, Collections/profiles, D2PFX, lobby/match, rollback, Dark Terrain, Remove Foilage.
+- [ ] Do not update `beta` again until user approves corrected foliage behavior; beta -> main only after beta validation.

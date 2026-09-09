@@ -1,15 +1,18 @@
 # New Chat Handoff Prompt
-- Work in `ripDZL/dota2-minify`; promotion path is exactly `v21.4-hardening` -> `beta` -> `main`.
-- Read `Docs/*.md` and re-fetch branch heads before code changes.
+- Work only in `ripDZL/dota2-minify` branch `v21.4-hardening` unless user explicitly changes plan.
+- Read `Docs/*.md` and re-fetch branch head before code changes.
+- Branch model: exactly `v21.4-hardening` -> `beta` -> `main`; beta/main require explicit user approval.
 - Exact upstream baseline: `Minify-v1.14rc7` / `d4b4520c945a9e1f8f5facc52a76ac5903babe90`; do not rebase current upstream main.
-- Product code: `c985195836c18226d9f1166c0d5c3619caf9de64`; validation head `4f9edd479283e0cc20d60421163f4c108b88c349`; CI `34269151229`; **277/277 PASS**; Windows build PASS.
-- Hardening -> beta promotion completed from source head `36bf3b8c7edc9e92ca60c876e69e40c60c95aad8`; `main` remains frozen at `a26bc88a0d412e357965f29488b83a7f9093e11f`.
-- Beta prerelease published: tag `v21.4-beta.1`, title `Minify v21.4 Beta 1`, release ID `385014125`, target `36bf3b8c7edc9e92ca60c876e69e40c60c95aad8`.
-- Release asset `Minify-v21.4-beta.1-windows.zip`: 53,639,888 bytes; SHA-256 `024f98c3a44a663ce33f4efd0f770f9c77097c498ed361f4d2ea7e430973d5d2`; checksum asset included.
-- Home constructs only compact centered status/count + deployment actions; retired startup chrome is absent.
-- Patch/Rescan are symmetric: 210px each at construction, equal normal responsive widths, equal centered narrow-stack widths.
-- Restore remains 180x30; Control Panel, Activity Log, Mod Library, D2PFX, native Windows pickers, nested mods/custom categories remain.
-- Preserve Collections, profiles, backups/conflict review, Dark Terrain, Safe Foliage, Main Menu fix, manual rc7 `prelaunch`, no-auto-prelaunch.
-- Remove Foilage invariant: blacklist-only; never ship `manifest.json` or `maps/dota.vpk`.
-- Remaining gates: beta Windows/Dota smoke; centered/equal Home/actions/restore/Control-Panel/Activity/Home-Mod-Library/native-picker/custom-category/960x680 smoke; residual filesystem race/security review; semantic core/exact-rc7 diff review.
-- Never promote beta -> main without explicit user approval.
+- Current foliage-corrected product commit: `161d6f4a92b01e591dd9df610a93e7a6f96a1d13`.
+- Remove Foilage MUST preserve `tree_oak_leaves_05`: both `_05.vmat_c` and `_05.vmdl_c` are absent from blacklist; `_08` material/model remain blacklisted.
+- Upstream commit `8afd759b8e631c689fe4a1fc4d7177ceabfe6379` removed `_05` specifically to fix an invisible referenced tree.
+- Dark Terrain intentionally depends on `Remove Foilage`; keep that dependency. Dark Terrain surfaced the regression because dependency resolution auto-enables Remove Foilage.
+- Remove Foilage remains blacklist-only; never add `manifest.json` or `maps/dota.vpk`.
+- Regression tests cover `_05` absence, `_08` presence, and Dark Terrain dependency.
+- CI `34375240188` / run 151: compileall/Ruff PASS; pytest **279/279 PASS**; Windows portable build PASS.
+- Artifact `10113629889`; digest `sha256:fc98101d029f454de99009e02a19ebe2f335fa40b83c630b923addeb103cee95`; portable SHA-256 `479c90d5e43112b5287e4d90c90f00c3cf9fa06930b9e533ccde3aadd82b0ae6`.
+- `beta` remains at `442d36dcc902f6436c6404f2947091663c254cc5` and published Beta 1 predates this correction; `main` remains `a26bc88a0d412e357965f29488b83a7f9093e11f`.
+- Home/UI state retained: compact startup Home, centered status/actions, equal Patch/Rescan, Restore 180x30, bounded Control Panel, Activity Log safe controls, Mod Library polish, 960x680 contract.
+- Preserve recursive/nested mods, custom VPK categories, Collections, profiles, D2PFX, backups/conflict review, Dark Terrain, Safe Foliage, Main Menu fix, manual rc7 `prelaunch`, no-auto-prelaunch.
+- Next gate: user Dota test of Remove Foilage alone and Dark Terrain + dependency; trees must remain visible while intended foliage is removed.
+- Never update beta/main without explicit user approval.

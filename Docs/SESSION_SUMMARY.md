@@ -1,15 +1,15 @@
 # Session Summary
 - Fork: `ripDZL/dota2-minify`; exact rc7 baseline `d4b4520c945a9e1f8f5facc52a76ac5903babe90`.
 - Branch model: exactly `v21.4-hardening` -> `beta` -> `main`.
-- Product `c985195836c18226d9f1166c0d5c3619caf9de64`; validation `4f9edd479283e0cc20d60421163f4c108b88c349`.
-- Home legacy startup chrome removed; compact centered status/count/deployment layout retained.
-- Patch/Rescan now visually uniform: equal 210px startup widths and equal responsive widths/stack widths.
-- Restore 180x30; Control Panel/Activity Log/Mod Library/D2PFX/native-picker sizing fixes retained.
-- CI `34269151229`: compileall PASS; Ruff PASS; pytest **277/277 PASS**; Windows portable build PASS.
-- CI artifact `10073128239`; portable SHA-256 `024f98c3a44a663ce33f4efd0f770f9c77097c498ed361f4d2ea7e430973d5d2`.
-- Promoted hardening -> beta from source head `36bf3b8c7edc9e92ca60c876e69e40c60c95aad8`.
-- Published GitHub prerelease `v21.4-beta.1` / `Minify v21.4 Beta 1`; release ID `385014125`; target `36bf3b8c7edc9e92ca60c876e69e40c60c95aad8`.
-- Release asset `Minify-v21.4-beta.1-windows.zip`: 53,639,888 bytes; SHA-256 `024f98c3a44a663ce33f4efd0f770f9c77097c498ed361f4d2ea7e430973d5d2`; checksum asset included.
-- `main` remains frozen at `a26bc88a0d412e357965f29488b83a7f9093e11f`.
-- Remaining gates: beta Windows/Dota smoke; centered/equal Home actions/restore/Control Panel/Activity/Home-Mod-Library/native picker/custom categories/960x680 visual smoke; residual path-race/security review; semantic rc7 reconciliation.
-- Beta -> main requires explicit user approval.
+- Corrected product commit: `161d6f4a92b01e591dd9df610a93e7a6f96a1d13`.
+- Remove Foilage invisible-tree regression corrected by restoring upstream rc7 behavior: `_05` oak-leaf material/model are NOT blacklisted; `_08` entries remain blacklisted.
+- Dark Terrain dependency on `Remove Foilage` is intentional and retained; dependency resolution was why users observed the foliage bug while using Dark Terrain.
+- Remove Foilage remains blacklist-only with no `manifest.json` and no `maps/dota.vpk`.
+- Added regression coverage for `_05` absence, `_08` presence, and Dark Terrain dependency; stale compatibility assertion corrected.
+- CI `34375240188` run 151: compileall PASS; Ruff PASS; pytest **279/279 PASS**; Windows portable build PASS.
+- Artifact `10113629889`; 53,100,187 bytes; digest `sha256:fc98101d029f454de99009e02a19ebe2f335fa40b83c630b923addeb103cee95`.
+- Portable test ZIP: 53,639,992 bytes; SHA-256 `479c90d5e43112b5287e4d90c90f00c3cf9fa06930b9e533ccde3aadd82b0ae6`.
+- Temporary workflow attempts were removed from final branch history; final product commit is directly based on prior milestone `442d36dcc902f6436c6404f2947091663c254cc5`.
+- `beta` remains `442d36dcc902f6436c6404f2947091663c254cc5`; Beta 1 predates foliage correction. `main` remains `a26bc88a0d412e357965f29488b83a7f9093e11f`.
+- Existing compact Home/equal action/UI/security/nested-mod functionality retained unchanged.
+- Next: user Dota smoke Remove Foilage alone and Dark Terrain + dependency; then decide whether to promote corrected hardening to beta.

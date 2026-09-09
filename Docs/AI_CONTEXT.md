@@ -1,20 +1,18 @@
 # AI Context
 - Upstream baseline: `Egezenn/dota2-minify` tag `Minify-v1.14rc7`; exact commit `d4b4520c945a9e1f8f5facc52a76ac5903babe90`.
-- Fork: `ripDZL/dota2-minify`; promotion path `v21.4-hardening` -> `beta` -> `main`.
-- Exactly three branches; `v21.4-hardening` and `beta` promoted from source head `36bf3b8c7edc9e92ca60c876e69e40c60c95aad8`; `main` remains frozen at `a26bc88a0d412e357965f29488b83a7f9093e11f`.
-- Uniform-Home product code: `c985195836c18226d9f1166c0d5c3619caf9de64`; validation head `4f9edd479283e0cc20d60421163f4c108b88c349`; changes after validation are tests/Docs only.
-- Home startup constructs only compact status/count + deployment actions; retired startup chrome is absent.
-- READY/message, selected/installed count, `DEPLOYMENT COMMANDS`, and Patch/Rescan center from live widths.
-- Patch and Rescan start at equal 210px widths and remain equal under responsive horizontal/stacked sizing.
-- Restore action remains 180x30; Control Panel fields/buttons are bounded; Activity Log copy/select controls remain centered; Mod Library/D2PFX minimum-size hardening retained.
-- Developer tools remain under Control Panel -> Developer; native Windows picker retained for D2PFX/profile browsing.
-- Custom VPK-folder categories, recursive/nested mods, Collections, profiles, D2PFX, backups/conflict review, Dark Terrain, Safe Foliage, Main Menu Background fix, manual rc7 `prelaunch`, and no-auto-prelaunch remain.
-- CI `34269151229`: compileall/Ruff PASS; pytest **277/277 PASS**; Windows portable build PASS.
-- CI artifact `10073128239`; digest `sha256:2bd7d869b184a7b198b1bbacb9fd18911b4ba5acaab5e99743b22c01aa8b4b7b`.
-- Portable bundle: 53,639,888 bytes; SHA-256 `024f98c3a44a663ce33f4efd0f770f9c77097c498ed361f4d2ea7e430973d5d2`.
-- Beta prerelease published: tag `v21.4-beta.1`, release `Minify v21.4 Beta 1`, release ID `385014125`, target `36bf3b8c7edc9e92ca60c876e69e40c60c95aad8`.
-- Release asset `Minify-v21.4-beta.1-windows.zip`: 53,639,888 bytes; SHA-256 `024f98c3a44a663ce33f4efd0f770f9c77097c498ed361f4d2ea7e430973d5d2`; checksum asset included.
-- Release is a prerelease; `main` was not promoted.
-- Remove Foilage: blacklist-only; never ship `manifest.json` or `maps/dota.vpk`; retain both oak-leaf blacklist entries.
+- Fork: `ripDZL/dota2-minify`; active `v21.4-hardening`; promotion `v21.4-hardening` -> `beta` -> `main`.
+- Exactly three branches; `beta` remains at Beta 1 source/docs head `442d36dcc902f6436c6404f2947091663c254cc5`; `main` remains `a26bc88a0d412e357965f29488b83a7f9093e11f`.
+- Current hardening product commit: `161d6f4a92b01e591dd9df610a93e7a6f96a1d13` (`fix(mod): preserve referenced oak tree leaves`).
+- Remove Foilage correction: `tree_oak_leaves_05.vmat_c` and `tree_oak_leaves_05.vmdl_c` MUST remain absent from `blacklist.txt`; `_08` material/model entries remain blacklisted.
+- Reason: upstream commit `8afd759b8e631c689fe4a1fc4d7177ceabfe6379` removed `_05` to fix an invisible tree referenced by that asset.
+- Dark Terrain legitimately depends on `Remove Foilage`; keep `Minify/mods/Dark Terrain/manifest.json` dependency intact. The invisible-tree regression was in Remove Foilage, not the dependency declaration.
+- Remove Foilage remains blacklist-only; never add `manifest.json` or `maps/dota.vpk` to that mod.
+- Regression tests cover `_05` absence, `_08` presence, and Dark Terrain -> Remove Foilage dependency.
+- CI `34375240188` (run 151): compileall PASS; Ruff PASS; pytest **279/279 PASS**; Windows portable build/package/upload PASS.
+- Artifact `10113629889`; size `53,100,187` bytes; digest `sha256:fc98101d029f454de99009e02a19ebe2f335fa40b83c630b923addeb103cee95`.
+- Portable ZIP: `53,639,992` bytes; SHA-256 `479c90d5e43112b5287e4d90c90f00c3cf9fa06930b9e533ccde3aadd82b0ae6`.
+- Beta 1 predates this foliage correction; do not promote/update beta again until user explicitly approves after Dota smoke.
+- Home/UI hardening remains unchanged: compact startup Home, equal Patch/Rescan, 960x680 contract, Control Panel/Activity/Restore/Mod Library polish.
+- Preserve recursive/nested mods, Collections, profiles, D2PFX, backups/conflict review, Dark Terrain, Safe Foliage, Main Menu Background fix, manual rc7 `prelaunch`, no-auto-prelaunch.
 - Security boundary: mod Python scripts trusted; archive/VPK/profile/backup/download/D2PFX data untrusted.
-- Remaining: beta Windows/Dota smoke; residual path-race/hostile-input review; semantic core/exact-rc7 reconciliation; beta -> main only with explicit user approval.
+- Remaining: human Dota smoke for Remove Foilage + Dark Terrain tree visibility/foliage removal; general Windows/Dota smoke; residual path-race/hostile-input review; semantic exact-rc7 reconciliation.

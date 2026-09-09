@@ -1,18 +1,17 @@
 # Progress
 - [x] Exact rc7 baseline pinned; exactly `v21.4-hardening`, `beta`, `main` retained.
-- [x] Black-Plum Reactor `960x680` hardening retained.
-- [x] Home compacted to live status/count + deployment actions; retired startup chrome removed from construction.
-- [x] Home status/count/label/actions centered; Patch/Rescan symmetric at startup and resize.
-- [x] Restore, Control Panel, Activity Log, Mod Library, D2PFX, native picker, nested mods/custom categories retained.
-- [x] Product `c985195836c18226d9f1166c0d5c3619caf9de64`; validation `4f9edd479283e0cc20d60421163f4c108b88c349`.
-- [x] CI `34269151229`: compileall/Ruff PASS; pytest **277/277 PASS**; Windows portable build PASS.
-- [x] CI artifact `10073128239`; portable SHA-256 `024f98c3a44a663ce33f4efd0f770f9c77097c498ed361f4d2ea7e430973d5d2`.
-- [x] Promoted `v21.4-hardening` -> `beta` from source head `36bf3b8c7edc9e92ca60c876e69e40c60c95aad8`.
-- [x] Published prerelease `v21.4-beta.1` / `Minify v21.4 Beta 1` (release ID `385014125`) targeting `36bf3b8c7edc9e92ca60c876e69e40c60c95aad8`.
-- [x] Release asset `Minify-v21.4-beta.1-windows.zip` uploaded with SHA-256 checksum asset.
-- [x] `main` remains frozen at `a26bc88a0d412e357965f29488b83a7f9093e11f`.
-- [ ] Beta Windows smoke: startup, centered/equal Home actions, restore, Control Panel, Activity Log, Home/Mod Library controls, native picker, all major `960x680` surfaces.
-- [ ] Beta custom-category smoke against real user-created folders/VPKs.
+- [x] Black-Plum Reactor UI + `960x680` client-size hardening retained.
+- [x] Home compacted to live status/count + deployment actions; legacy startup chrome removed; Patch/Rescan symmetric.
+- [x] Restore/Control Panel/Activity Log/Mod Library/native picker hardening retained.
+- [x] Recursive/nested mods, custom VPK-folder categories, Collections, profiles, D2PFX, backups/conflict review retained.
+- [x] Corrected Remove Foilage invisible-tree regression: `_05` oak leaf material/model removed from blacklist; `_08` entries retained.
+- [x] Dark Terrain -> `Remove Foilage` dependency retained and regression-tested.
+- [x] Remove Foilage remains blacklist-only; no `manifest.json` or `maps/dota.vpk`.
+- [x] Product `161d6f4a92b01e591dd9df610a93e7a6f96a1d13`; CI `34375240188`: compileall/Ruff PASS; pytest **279/279 PASS**; Windows portable build PASS.
+- [x] Artifact `10113629889`; digest `sha256:fc98101d029f454de99009e02a19ebe2f335fa40b83c630b923addeb103cee95`; portable SHA-256 `479c90d5e43112b5287e4d90c90f00c3cf9fa06930b9e533ccde3aadd82b0ae6`.
+- [x] `beta`/Beta 1 left untouched by foliage correction; `main` untouched.
+- [ ] Human Dota smoke: Remove Foilage alone and Dark Terrain + dependency; verify trees visible while intended bushes/ground props are removed.
+- [ ] Human Windows smoke: startup, Home actions, restore, Control Panel, Activity Log, Mod Library, native picker, all major `960x680` surfaces.
 - [ ] Continue hostile-input/path-race review and exact-rc7/semantic core reconciliation.
-- [ ] Dota startup/lobby/match/rollback/profiles/D2PFX/Dark-Terrain/Remove-Foilage smoke tests.
-- [ ] Promote beta -> main only after beta validation and explicit user approval.
+- [ ] Dota startup/lobby/match/rollback/profiles/D2PFX/Dark-Terrain/general smoke tests.
+- [ ] Promote hardening -> beta only after user approval; beta -> main only after beta validation.

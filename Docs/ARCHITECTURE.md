@@ -1,19 +1,18 @@
 # Architecture
 - Baseline: exact upstream rc7 `d4b4520c945a9e1f8f5facc52a76ac5903babe90`; no current-main rebase during hardening.
-- Branches: exactly `v21.4-hardening` -> `beta` -> `main`; hardening -> beta promotion completed from source head `36bf3b8c7edc9e92ca60c876e69e40c60c95aad8`; main remains frozen.
-- Release: prerelease tag `v21.4-beta.1` targets promoted source head `36bf3b8c7edc9e92ca60c876e69e40c60c95aad8`; Windows asset is the validated build from `4f9edd479283e0cc20d60421163f4c108b88c349`; subsequent source changes are tests/Docs only.
+- Branches: exactly `v21.4-hardening` -> `beta` -> `main`; beta/main change only with explicit approval.
 - UI: Dear PyGui Black-Plum Reactor; outer minimum `960x680`; responsive client-size budgeting and scroll bounds.
-- Home startup tree is final-at-construction: only centered release header, live status/count, one separator, deployment label/actions.
-- Retired Home release-engine copy, `COMMAND DECK`/`SYSTEM`/`PROTECTED`, hero, and `ANALYZE/SNAPSHOT/COMPOSE` nodes are absent.
-- Compact Home copy uses tagged horizontal rows with live-width spacers; Patch/Rescan both construct at 210px and share equal responsive widths in horizontal/stacked modes.
-- Restore dialog: `backup_restore_button` explicitly 180x30.
-- Activity Log: colored output plus copy-all/selectable debug view; controls remain bounded/centered.
-- Mod Library footer: explicit safe widths; Review & Patch hover ember -> lime, active darker green.
-- Developer tools: `GENERAL`/`DEVELOPER` tabs in Control Panel; actions/combos content-fit; General `opt_` fields clamp 280-720px.
-- Windows file browsing: native dialogs for D2PFX ZIP import, profile import, profile export; DPG fallback on native-start failure.
+- Home: final compact startup tree; centered release header/status/count/deployment label/actions; Patch/Rescan equal-width responsive cluster.
+- Restore/Activity Log/Mod Library/Control Panel/native file-dialog hardening retained.
 - Mod discovery: bounded recursive scanner; no symlink traversal; stable nested IDs; top-level folders with VPK-backed immediate children become categories.
+- Dark Terrain is a directory-backed mod with `files/` and `manifest.json`; its manifest intentionally declares `dependencies: ["Remove Foilage"]`.
+- Dependency resolution auto-enables Remove Foilage when Dark Terrain is selected; this dependency is correct and must remain.
+- Remove Foilage is blacklist-only. It MUST NOT contain `manifest.json` or `maps/dota.vpk`.
+- Remove Foilage asset invariant: preserve referenced oak-tree `_05` assets by keeping `materials/models/props_tree/tree_oak_leaves_05.vmat_c` and `models/props_tree/tree_oak_leaves_05.vmdl_c` out of the blacklist; `_08` material/model remain blacklisted.
+- Invisible-tree cause: upstream identified `_05` as a referenced tree asset and removed both blacklist entries in `8afd759b8e631c689fe4a1fc4d7177ceabfe6379`; Dark Terrain exposed the issue because it depends on Remove Foilage.
+- Source-contract tests assert `_05` absence, `_08` presence, Remove Foilage blacklist-only packaging, and Dark Terrain dependency retention.
 - D2PFX: bounded catalogue/download/install/cursor paths; staged installs; confined metadata/cache.
-- Patch transaction: nested-ID resolution, restore point, conflict preflight/report, compatibility exclusions, output validation, rollback.
+- Patch transaction: dependency resolution, nested-ID resolution, restore point, conflict preflight/report, compatibility exclusions, output validation, rollback.
 - Backups: managed-output allowlist; regular/no-follow manifest open with identity recheck; confined live-output preflight; rollback retained.
 - Security primitives: `Minify/core/security.py`; bounded downloads/decompression; path confinement; hashing; atomic writes.
 - Profiles: bounded/validated imports; native picker only changes local browse UI.
