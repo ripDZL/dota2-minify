@@ -3,18 +3,18 @@
 - Fork: `ripDZL/dota2-minify`; branch flow exactly `v21.4-hardening` -> `beta` -> `main`.
 - `beta`: `442d36dcc902f6436c6404f2947091663c254cc5`; `main`: `a26bc88a0d412e357965f29488b83a7f9093e11f`; untouched by current work.
 - Dark Terrain direct fix: `340cbb69bd2b62c922aa8de116ed3df7f74c1435`; manifest `dependencies: []`; user reports terrain fix seems fine.
-- Vanilla stock-tree override test failed: `Remove Foilage + Minify-Vanilla-Default-Trees-Override.vpk` did not restore the invisible tree.
-- Current Remove Foilage repair product: `049c549730846b7b100f5d5e22a6c2d3aaabad46`.
-- Current tree blacklist under `props_tree`: only `materials/models/props_tree/tree_oak_leaves_08.vmat_c`.
-- Preserve `_05` oak leaf assets, `tree_oak_leaves_blank.vmat_c`, all stock tree/static/destruction models, and stale/nonexistent `_08.vmdl_c` path.
-- Current-stock reference scan: `tree_oak_00_blank.vmdl_c` references `tree_oak_leaves_blank.vmat_c`; this is the primary repaired dependency.
-- Other blacklisted resources directly referenced by extracted stock trees: `materials/models/props_nature/ivy_branch001.vmat_c` and `ivy_leaf001.vmat_c`; keep as next narrow candidates only if current repair still fails.
-- Ground foliage blacklist remains intact; `materials/models/props_nature/fern001.vmat_c` still blacklisted.
-- CI `34392881410` run 164: compileall/Ruff PASS; pytest **279/279 PASS**; Windows portable PASS.
-- Artifact `10120380045`; artifact digest `sha256:dd69b28437b852d21b35c65796ab61428f65fd1173c28d4f58e0bc4469134d8d`.
-- Portable: `53,641,222` bytes; SHA-256 `ec1915f57dd5bc727df05d71ad2117931e92a5ff89d922b8856981a4d92a04a0`.
-- Next task: repair `Remove Foilage` independently; first human smoke is Remove Foilage alone with custom tree mods OFF.
-- Success = unwanted foliage removed and stock collision/tree visible.
-- If still invisible, preserve only `ivy_branch001.vmat_c` + `ivy_leaf001.vmat_c` next; do not broadly preserve `props_nature`.
-- Session handoff prepared `2026-09-09 16:11 EDT`.
-- Do not promote `beta` or `main` without explicit user approval.
+- Stable Remove Foilage product remains `049c549730846b7b100f5d5e22a6c2d3aaabad46`.
+- Stable tree policy: only `materials/models/props_tree/tree_oak_leaves_08.vmat_c` blacklisted under `props_tree`; preserve `tree_oak_leaves_blank.vmat_c` so `tree_oak_00_blank.vmdl_c` renders.
+- Human smoke: stable repair keeps stock tree visible but unwanted bright-green foliage still remains.
+- Worldnode aggregate blacklist experiments (`blank`, `_08`, `_05`) had no visible gameplay effect; do not pursue map-worldnode blacklist guesses.
+- Shared-material conflict confirmed: blacklisting `tree_oak_leaves_blank.vmat_c` removes target foliage but also makes the stock blank oak tree invisible; preserving it restores both tree and foliage.
+- Byte-identical vanilla-tree override VPK did not beat Minify's blank output and did not repair the invisible tree.
+- User supplied current-stock resource bundle containing `tree_oak_00_blank.vmdl_c`, `tree_oak_leaves_blank.vmat_c`, and four texture dependencies.
+- Experimental direct binary `.vmdl_c/.vmat_c` material-remap candidate is INVALID: user reports Dota breaks/stalls at `Looking for coordinator`.
+- Never patch Source 2 compiled model/material bytes directly for this fix, even if RERL strings/resource IDs appear internally consistent.
+- Next route: supported pipeline only — extract current stock -> Source2Viewer decompile -> edit source `.vmdl/.vmat` -> Dota `resourcecompiler.exe` -> package -> validate -> human smoke.
+- Minify already uses Source2Viewer CLI and Dota `game/bin/win64/resourcecompiler.exe`; reuse those paths/toolchain.
+- Ground foliage blacklist remains intact; `materials/models/props_nature/fern001.vmat_c` remains blacklisted.
+- CI for stable product: `34392881410` run 164; compileall/Ruff PASS; pytest **279/279 PASS**; Windows portable PASS.
+- Stable artifact `10120380045`; portable SHA-256 `ec1915f57dd5bc727df05d71ad2117931e92a5ff89d922b8856981a4d92a04a0`.
+- Keep Dark Terrain decoupled. Do not promote `beta` or `main` without explicit user approval.
