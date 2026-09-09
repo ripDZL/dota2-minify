@@ -23,6 +23,7 @@ jobs:
         run: |
           python - <<'PY'
           from pathlib import Path
+          from textwrap import dedent
 
           blacklist_path = Path("Minify/mods/Remove Foilage/blacklist.txt")
           entries = blacklist_path.read_text(encoding="utf-8-sig").splitlines()
@@ -40,7 +41,8 @@ jobs:
           entries[model_anchor:model_anchor] = desired[2:]
           blacklist_path.write_text("\n".join(entries) + "\n", encoding="utf-8")
 
-          regression = '''import json
+          regression = dedent('''\
+          import json
           from pathlib import Path
 
 
@@ -73,51 +75,41 @@ jobs:
               manifest = json.loads((DARK_TERRAIN / "manifest.json").read_text(encoding="utf-8"))
 
               assert manifest.get("dependencies") == ["Remove Foilage"]
-          '''
-          Path("tests/test_remove_foilage_regression.py").write_text(
-              "\n".join(line[10:] if line.startswith("          ") else line for line in regression.splitlines()) + "\n",
-              encoding="utf-8",
-          )
+          ''')
+          Path("tests/test_remove_foilage_regression.py").write_text(regression, encoding="utf-8")
 
           compat_path = Path("tests/test_v2131_compatibility.py")
           source = compat_path.read_text(encoding="utf-8")
-          old = '''    def test_remove_foilage_is_blacklist_only_and_preserves_stock_tree_assets(self):
-              self.assertFalse((FOILAGE / "manifest.json").exists())
-              self.assertFalse((FOILAGE / "maps" / "dota.vpk").exists())
-              entries = (FOILAGE / "blacklist.txt").read_text(encoding="utf-8-sig").splitlines()
-              tree_prefixes = (
-                  "materials/models/props_tree/",
-                  "models/props_tree/",
-              )
-              self.assertFalse(any(entry.startswith(tree_prefixes) for entry in entries))
-              self.assertIn("materials/models/props_nature/fern001.vmat_c", entries)
-          '''
-          new = '''    def test_remove_foilage_is_blacklist_only_and_targets_tree_leaves_only(self):
-              self.assertFalse((FOILAGE / "manifest.json").exists())
-              self.assertFalse((FOILAGE / "maps" / "dota.vpk").exists())
-              entries = (FOILAGE / "blacklist.txt").read_text(encoding="utf-8-sig").splitlines()
-              tree_entries = {
-                  entry
-                  for entry in entries
-                  if entry.startswith("materials/models/props_tree/")
-                  or entry.startswith("models/props_tree/")
-              }
-              self.assertEqual(
-                  tree_entries,
-                  {
-                      "materials/models/props_tree/tree_oak_leaves_08.vmat_c",
-                      "materials/models/props_tree/tree_oak_leaves_blank.vmat_c",
-                      "models/props_tree/tree_oak_leaves_08.vmdl_c",
-                  },
-              )
-              self.assertNotIn("materials/models/props_tree/tree_oak_leaves_05.vmat_c", entries)
-              self.assertNotIn("models/props_tree/tree_oak_leaves_05.vmdl_c", entries)
-              self.assertIn("materials/models/props_nature/fern001.vmat_c", entries)
-          '''
-          old = "\n".join(line[10:] if line.startswith("          ") else line for line in old.splitlines())
-          new = "\n".join(line[10:] if line.startswith("          ") else line for line in new.splitlines())
-          assert old in source
-          compat_path.write_text(source.replace(old, new, 1), encoding="utf-8")
+          start_marker = "    def test_remove_foilage_is_blacklist_only_and_preserves_stock_tree_assets(self):\n"
+          end_marker = "    def test_main_menu_background_keeps_both_collapse_rules(self):\n"
+          start = source.index(start_marker)
+          end = source.index(end_marker, start)
+          replacement = dedent('''\
+              def test_remove_foilage_is_blacklist_only_and_targets_tree_leaves_only(self):
+                  self.assertFalse((FOILAGE / "manifest.json").exists())
+                  self.assertFalse((FOILAGE / "maps" / "dota.vpk").exists())
+                  entries = (FOILAGE / "blacklist.txt").read_text(encoding="utf-8-sig").splitlines()
+                  tree_entries = {
+                      entry
+                      for entry in entries
+                      if entry.startswith("materials/models/props_tree/")
+                      or entry.startswith("models/props_tree/")
+                  }
+                  self.assertEqual(
+                      tree_entries,
+                      {
+                          "materials/models/props_tree/tree_oak_leaves_08.vmat_c",
+                          "materials/models/props_tree/tree_oak_leaves_blank.vmat_c",
+                          "models/props_tree/tree_oak_leaves_08.vmdl_c",
+                      },
+                  )
+                  self.assertNotIn("materials/models/props_tree/tree_oak_leaves_05.vmat_c", entries)
+                  self.assertNotIn("models/props_tree/tree_oak_leaves_05.vmdl_c", entries)
+                  self.assertIn("materials/models/props_nature/fern001.vmat_c", entries)
+
+          ''')
+          replacement = "\n".join(("    " + line if line else line) for line in replacement.splitlines()) + "\n"
+          compat_path.write_text(source[:start] + replacement + source[end:], encoding="utf-8")
           PY
           rm .github/workflows/apply-remove-foilage-leaf-test-once.yml
           git config user.name "github-actions[bot]"
