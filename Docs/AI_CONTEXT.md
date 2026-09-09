@@ -1,15 +1,10 @@
 # AI Context
 - Baseline: `Egezenn/dota2-minify` tag `Minify-v1.14rc7`, commit `d4b4520c945a9e1f8f5facc52a76ac5903babe90`.
 - Fork: `ripDZL/dota2-minify`; branch flow `v21.4-hardening` -> `beta` -> `main`; exactly three branches.
-- `beta`: `442d36dcc902f6436c6404f2947091663c254cc5`; `main`: `a26bc88a0d412e357965f29488b83a7f9093e11f`; both untouched by current foliage tests.
-- Latest validated hardening head: `ae18e5aa027c1a40ffb45c50939366e4df2f88f7`.
-- User result: full `props_tree` preservation build kept unwanted foliage visible; that approach failed the gameplay goal.
-- Current Remove Foilage test split: blacklist only `tree_oak_leaves_08.vmat_c`, `tree_oak_leaves_blank.vmat_c`, and `tree_oak_leaves_08.vmdl_c` under tree namespaces.
-- Keep `_05` oak leaf material/model out of blacklist; keep all stock tree/static/destruction models out of blacklist.
-- Ground foliage blacklist remains otherwise intact; Dark Terrain -> `Remove Foilage` dependency remains intact.
-- Remove Foilage remains blacklist-only; no `manifest.json`, no `maps/dota.vpk`.
-- CI `34381400564` run 158: compileall PASS; Ruff PASS; pytest **279/279 PASS**; Windows portable build PASS.
-- Artifact `10116036501`; digest `sha256:2f23f33ab1571a19681a317d563d098ed5e6cf0529357ba2ff694c7d38ab9aa0`.
-- Portable ZIP: `53,640,387` bytes; SHA-256 `0a9cb76adc7905f2b7aa20454df2350ecd4a9759809520efd1bb2f98f1e4458e`.
-- Human Dota smoke required: Remove Foilage alone first; verify unwanted foliage removed and stock trees visible.
+- `beta`: `442d36dcc902f6436c6404f2947091663c254cc5`; `main`: `a26bc88a0d412e357965f29488b83a7f9093e11f`; both untouched by current foliage work.
+- Current Remove Foilage split: blacklist only `tree_oak_leaves_08.vmat_c`, `tree_oak_leaves_blank.vmat_c`, and `tree_oak_leaves_08.vmdl_c` under tree namespaces; keep `_05` and stock tree/static/destruction models preserved.
+- Dark Terrain is being decoupled from automatic `Remove Foilage` activation so terrain can run without inheriting foliage/tree side effects.
+- Vanilla-tree compatibility mod goal: preserve every default tree resource at stock paths and apply only a microscopic saturation change; source payload must be extracted from the user's local Dota `pak01` archives.
+- User supplied `pak01_dir.vpk`; full compiled tree payloads still require the referenced `pak01_###.vpk` data chunks or a local extraction step.
+- Human Dota smoke remains required for Remove Foilage alone, Dark Terrain alone, and Dark Terrain + optional Remove Foilage/tree override.
 - Do not promote `beta` until user approves gameplay behavior.
