@@ -1,16 +1,17 @@
 # AI Context
 - Baseline: `Egezenn/dota2-minify` tag `Minify-v1.14rc7`, commit `d4b4520c945a9e1f8f5facc52a76ac5903babe90`.
 - Fork: `ripDZL/dota2-minify`; branch flow exactly `v21.4-hardening` -> `beta` -> `main`.
-- `beta`: `442d36dcc902f6436c6404f2947091663c254cc5`; `main`: `a26bc88a0d412e357965f29488b83a7f9093e11f`; both untouched by current tree work.
-- Dark Terrain direct-fix product commit: `340cbb69bd2b62c922aa8de116ed3df7f74c1435`.
-- Dark Terrain manifest now has `dependencies: []`; `Remove Foilage` remains separately selectable.
-- Remove Foilage targeted policy remains: blacklist `_08` leaf material/model plus blank leaf material; `_05` leaf material remains preserved.
-- CI `34386411321` run 160: compileall/Ruff PASS; pytest **279/279 PASS**; Windows portable PASS.
-- Human Dota smoke still required for Dark Terrain direct fix and Remove Foilage behavior.
-- User supplied current `pak01_dir.vpk`; local extractor produced 827 stock tree-related resources from 141 archive chunks.
-- Stock tree override VPK built from those 827 resources at original virtual paths; asset bytes are unchanged from current Dota.
-- Local override VPK: `Minify-Vanilla-Default-Trees-Override.vpk`; size `377,140,356`; SHA-256 `ff1a9bd6b366a4aa7508030208dea387ac220a7675a7590ce84f07a57c65d8fe`.
-- Current stock index contains `tree_oak_leaves_05.vmat_c` and `_08.vmat_c`, but not `models/props_tree/tree_oak_leaves_05.vmdl_c` or `_08.vmdl_c`.
-- First tree override intentionally uses byte-identical stock assets; +1 saturation is deferred because safe Source 2 texture/material recompilation is required.
-- Next smoke order: Dark Terrain alone; Remove Foilage alone; then Remove Foilage + vanilla-tree override VPK.
+- `beta`: `442d36dcc902f6436c6404f2947091663c254cc5`; `main`: `a26bc88a0d412e357965f29488b83a7f9093e11f`; untouched by current work.
+- Dark Terrain direct fix: `340cbb69bd2b62c922aa8de116ed3df7f74c1435`; manifest `dependencies: []`; user reports terrain fix seems fine.
+- Vanilla stock-tree override test failed: `Remove Foilage + Minify-Vanilla-Default-Trees-Override.vpk` did not restore the invisible tree.
+- Current Remove Foilage repair product: `049c549730846b7b100f5d5e22a6c2d3aaabad46`.
+- Current tree blacklist under `props_tree`: only `materials/models/props_tree/tree_oak_leaves_08.vmat_c`.
+- Preserve `_05` oak leaf assets, `tree_oak_leaves_blank.vmat_c`, all stock tree/static/destruction models, and stale/nonexistent `_08.vmdl_c` path.
+- Current-stock reference scan: `tree_oak_00_blank.vmdl_c` references `tree_oak_leaves_blank.vmat_c`; this is the primary repaired dependency.
+- Other blacklisted resources directly referenced by extracted stock trees: `materials/models/props_nature/ivy_branch001.vmat_c` and `ivy_leaf001.vmat_c`; keep as next narrow candidates only if current repair still fails.
+- Ground foliage blacklist remains intact; `materials/models/props_nature/fern001.vmat_c` still blacklisted.
+- CI `34392881410` run 164: compileall/Ruff PASS; pytest **279/279 PASS**; Windows portable PASS.
+- Artifact `10120380045`; artifact digest `sha256:dd69b28437b852d21b35c65796ab61428f65fd1173c28d4f58e0bc4469134d8d`.
+- Portable: `53,641,222` bytes; SHA-256 `ec1915f57dd5bc727df05d71ad2117931e92a5ff89d922b8856981a4d92a04a0`.
+- Next human smoke: `Remove Foilage` alone, custom tree mods OFF; success = unwanted foliage removed and stock collision/tree visible.
 - Do not promote `beta` or `main` without explicit user approval.

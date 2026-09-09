@@ -1,15 +1,12 @@
 # TODO
 - [x] Pin exact rc7 baseline and keep exactly `v21.4-hardening`, `beta`, `main`.
 - [x] Preserve hardened UI/backend/features and `960x680` contract.
-- [x] Build targeted Remove Foilage leaf variant; keep `_05` oak leaf material preserved.
-- [x] Decouple Dark Terrain from `Remove Foilage`; dependency is now empty.
-- [x] CI `34386411321`: **279/279 PASS**; Windows portable PASS.
-- [x] Extract 827 current-stock tree resources from user's Dota VPK set.
-- [x] Build byte-identical stock-tree override VPK for load-order diagnosis.
-- [ ] Dota smoke Dark Terrain alone: terrain works; stock trees visible.
-- [ ] Dota smoke Remove Foilage alone: unwanted foliage removed; stock trees visible.
-- [ ] Dota smoke Remove Foilage + stock-tree override VPK: determine whether override restores any remaining invisible tree.
-- [ ] If override succeeds, decide whether to retain it as optional compatibility mod.
-- [ ] If a +1 saturation cosmetic variant is still wanted, use a proper Source 2 compile pipeline; do not binary-patch compiled resources.
+- [x] Decouple Dark Terrain from `Remove Foilage`; user reports terrain fix seems fine.
+- [x] Test byte-identical vanilla-tree override; user reports it did not restore the invisible tree.
+- [x] Trace current stock tree references against Remove Foilage blacklist.
+- [x] Preserve `tree_oak_leaves_blank.vmat_c`; remove stale `_08.vmdl_c` blacklist entry; keep only `_08.vmat_c` blacklisted under `props_tree`.
+- [x] CI `34392881410`: **279/279 PASS**; Windows portable PASS; artifact `10120380045`.
+- [ ] Dota smoke Remove Foilage alone, custom tree mods OFF: unwanted foliage removed; stock trees visible.
+- [ ] If invisible tree remains, test preserving only `ivy_branch001.vmat_c` and `ivy_leaf001.vmat_c` next.
 - [ ] General Windows/Dota smoke and residual hostile-input/path-race review.
 - [ ] Do not update `beta` or `main` until explicitly approved.

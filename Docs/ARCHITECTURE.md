@@ -3,11 +3,12 @@
 - Branches: exactly `v21.4-hardening` -> `beta` -> `main`; beta/main only by explicit approval.
 - UI: Dear PyGui Black-Plum Reactor; minimum `960x680`; compact Home; equal Patch/Rescan.
 - Mod discovery/security/profile/D2PFX/backup hardening unchanged.
-- Dark Terrain is now independent: `manifest.json` has `dependencies: []`.
-- Remove Foilage remains separately selectable and blacklist-only; no `manifest.json`, no `maps/dota.vpk`.
-- Current Remove Foilage tree policy stays targeted: `_08` leaf material/model plus blank leaf material are blacklisted; `_05` leaf material is preserved.
-- User's current stock `pak01` contains `_05` and `_08` oak leaf materials but does not contain `models/props_tree/tree_oak_leaves_05.vmdl_c` or `_08.vmdl_c`; those blacklist model paths are stale against current stock data.
-- Vanilla tree compatibility VPK is diagnostic/fallback only: 827 byte-identical current-stock resources at original virtual paths, single VPK v2 archive.
-- No saturation mutation is applied in the diagnostic VPK; safe visual edits require Source 2 resource recompilation.
-- Validation product: `340cbb69bd2b62c922aa8de116ed3df7f74c1435`; CI `34386411321`; **279/279 PASS**; Windows portable PASS.
+- Dark Terrain is independent: `manifest.json` has `dependencies: []`.
+- Remove Foilage is separately selectable and blacklist-only; no `manifest.json`, no `maps/dota.vpk`.
+- Current Remove Foilage tree policy: under `materials/models/props_tree/` / `models/props_tree/`, blacklist only `materials/models/props_tree/tree_oak_leaves_08.vmat_c`.
+- Preserve `tree_oak_leaves_05` assets, `tree_oak_leaves_blank.vmat_c`, stock tree/static/destruction models, and stale/nonexistent `_08.vmdl_c` path.
+- Current-stock evidence: `tree_oak_00_blank.vmdl_c` depends on `tree_oak_leaves_blank.vmat_c`; blanking that material can produce a non-rendering stock tree while collision remains.
+- Byte-identical vanilla-tree VPK cannot override Minify's higher-priority blank output; user confirmed that diagnostic failed.
+- Remaining direct stock-tree/blacklist overlaps are `ivy_branch001.vmat_c` and `ivy_leaf001.vmat_c`; preserve only if current candidate still fails.
+- Validation product: `049c549730846b7b100f5d5e22a6c2d3aaabad46`; CI `34392881410`; **279/279 PASS**; Windows portable PASS.
 - Security boundary: local mod Python scripts trusted; archive/VPK/profile/backup/download/D2PFX data untrusted.

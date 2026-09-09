@@ -1,13 +1,14 @@
 # Handoff Prompt
 - Continue `ripDZL/dota2-minify` from exact upstream rc7 baseline `d4b4520c945a9e1f8f5facc52a76ac5903babe90`.
 - Branch flow must remain exactly `v21.4-hardening` -> `beta` -> `main`; work only on hardening unless explicitly approved.
-- Current product commit: `340cbb69bd2b62c922aa8de116ed3df7f74c1435` (`fix(mod): decouple Dark Terrain from Remove Foilage`).
-- Dark Terrain now has no Remove Foilage dependency; Remove Foilage is separately selectable.
-- Current Remove Foilage targeted blacklist keeps `_05` oak leaf material out and `_08`/blank leaf material entries in.
-- CI `34386411321` run 160: **279/279 PASS**; Windows portable PASS.
-- User supplied current Dota tree source; 827 tree-related resources were extracted and packed into `Minify-Vanilla-Default-Trees-Override.vpk`.
-- Override VPK: `377,140,356` bytes; SHA-256 `ff1a9bd6b366a4aa7508030208dea387ac220a7675a7590ce84f07a57c65d8fe`.
-- VPK assets are byte-identical stock resources; no +1 saturation applied.
-- Important stock-data finding: `_05`/`_08` oak leaf materials exist, but `models/props_tree/tree_oak_leaves_05.vmdl_c` and `_08.vmdl_c` do not in current `pak01`.
-- Next gate is human Dota smoke: Dark Terrain alone; Remove Foilage alone; Remove Foilage + vanilla-tree override VPK.
+- Current product commit: `049c549730846b7b100f5d5e22a6c2d3aaabad46` (`fix(mod): preserve current stock tree leaf dependencies`).
+- Dark Terrain direct fix remains: `dependencies: []`; user reports terrain fix seems fine.
+- User confirmed Remove Foilage + byte-identical vanilla-tree override VPK did NOT repair the invisible tree.
+- Current Remove Foilage `props_tree` blacklist contains only `materials/models/props_tree/tree_oak_leaves_08.vmat_c`.
+- Preserve `tree_oak_leaves_blank.vmat_c`; stock `tree_oak_00_blank.vmdl_c` directly references it.
+- `_05` oak leaf assets remain preserved; stale/nonexistent `_08.vmdl_c` blacklist path removed.
+- CI `34392881410` run 164: **279/279 PASS**; Windows portable PASS; artifact `10120380045`.
+- Portable SHA-256: `ec1915f57dd5bc727df05d71ad2117931e92a5ff89d922b8856981a4d92a04a0`.
+- Next gate: Remove Foilage alone, custom trees OFF; foliage must disappear and stock tree/collision must render.
+- If still invisible, preserve only `materials/models/props_nature/ivy_branch001.vmat_c` and `ivy_leaf001.vmat_c` next; do not broadly preserve `props_nature`.
 - Do not promote beta/main until user explicitly approves gameplay behavior.

@@ -1,13 +1,13 @@
 # Session Summary
 - Repo: `ripDZL/dota2-minify`; exact rc7 baseline `d4b4520c945a9e1f8f5facc52a76ac5903babe90`.
 - Branch model: exactly `v21.4-hardening` -> `beta` -> `main`; beta/main untouched.
-- User requested both a direct Dark Terrain fix and a full-stock-tree compatibility VPK.
-- Dark Terrain direct fix completed at `340cbb69bd2b62c922aa8de116ed3df7f74c1435`: dependency on Remove Foilage removed.
-- Remove Foilage remains independent with targeted leaf blacklist behavior.
-- CI `34386411321` run 160: compileall/Ruff PASS; pytest **279/279 PASS**; Windows portable PASS.
-- User supplied current Dota `pak01_dir.vpk`; extractor gathered 827 tree-related resources from 141 archive chunks.
-- Built `Minify-Vanilla-Default-Trees-Override.vpk`: 827 stock resources, original paths, byte-identical content.
-- VPK size `377,140,356`; SHA-256 `ff1a9bd6b366a4aa7508030208dea387ac220a7675a7590ce84f07a57c65d8fe`.
-- Current stock finding: oak leaf `_05`/`_08` materials exist; `models/props_tree/tree_oak_leaves_05.vmdl_c` and `_08.vmdl_c` do not.
-- +1 saturation not applied; first diagnostic tests pure override/load-order behavior.
-- Next: user smoke Dark Terrain alone, Remove Foilage alone, then Remove Foilage + vanilla-tree VPK.
+- Dark Terrain direct fix `340cbb69bd2b62c922aa8de116ed3df7f74c1435` removes automatic Remove Foilage dependency; user says terrain fix seems fine.
+- User tested Remove Foilage + byte-identical vanilla-tree override VPK; invisible-tree problem remained.
+- Stock tree/reference scan found `tree_oak_00_blank.vmdl_c` depends on blacklisted `tree_oak_leaves_blank.vmat_c`.
+- Current repair `049c549730846b7b100f5d5e22a6c2d3aaabad46` preserves blank leaf material and removes stale `_08.vmdl_c` blacklist entry.
+- Only `materials/models/props_tree/tree_oak_leaves_08.vmat_c` remains blacklisted under `props_tree`.
+- Ground foliage entries remain blacklisted.
+- CI `34392881410` run 164: compileall/Ruff PASS; pytest **279/279 PASS**; Windows portable PASS.
+- Artifact `10120380045`; portable `53,641,222` bytes; SHA-256 `ec1915f57dd5bc727df05d71ad2117931e92a5ff89d922b8856981a4d92a04a0`.
+- Next: user tests Remove Foilage alone with custom trees OFF; success = foliage gone and stock collision/tree visible.
+- If still invisible, next narrow preservation test is `ivy_branch001.vmat_c` + `ivy_leaf001.vmat_c`.
