@@ -1,18 +1,19 @@
 # AI Context
 - Upstream baseline: `Egezenn/dota2-minify` tag `Minify-v1.14rc7`; exact commit `d4b4520c945a9e1f8f5facc52a76ac5903babe90`.
 - Fork: `ripDZL/dota2-minify`; active `v21.4-hardening`; promotion `v21.4-hardening` -> `beta` -> `main`.
-- Exactly three branches; `beta` remains at Beta 1 source/docs head `442d36dcc902f6436c6404f2947091663c254cc5`; `main` remains `a26bc88a0d412e357965f29488b83a7f9093e11f`.
-- Current hardening product commit: `161d6f4a92b01e591dd9df610a93e7a6f96a1d13` (`fix(mod): preserve referenced oak tree leaves`).
-- Remove Foilage correction: `tree_oak_leaves_05.vmat_c` and `tree_oak_leaves_05.vmdl_c` MUST remain absent from `blacklist.txt`; `_08` material/model entries remain blacklisted.
-- Reason: upstream commit `8afd759b8e631c689fe4a1fc4d7177ceabfe6379` removed `_05` to fix an invisible tree referenced by that asset.
-- Dark Terrain legitimately depends on `Remove Foilage`; keep `Minify/mods/Dark Terrain/manifest.json` dependency intact. The invisible-tree regression was in Remove Foilage, not the dependency declaration.
-- Remove Foilage remains blacklist-only; never add `manifest.json` or `maps/dota.vpk` to that mod.
-- Regression tests cover `_05` absence, `_08` presence, and Dark Terrain -> Remove Foilage dependency.
-- CI `34375240188` (run 151): compileall PASS; Ruff PASS; pytest **279/279 PASS**; Windows portable build/package/upload PASS.
-- Artifact `10113629889`; size `53,100,187` bytes; digest `sha256:fc98101d029f454de99009e02a19ebe2f335fa40b83c630b923addeb103cee95`.
-- Portable ZIP: `53,639,992` bytes; SHA-256 `479c90d5e43112b5287e4d90c90f00c3cf9fa06930b9e533ccde3aadd82b0ae6`.
-- Beta 1 predates this foliage correction; do not promote/update beta again until user explicitly approves after Dota smoke.
+- Exactly three branches; `beta` remains Beta 1 source/docs head `442d36dcc902f6436c6404f2947091663c254cc5`; `main` remains `a26bc88a0d412e357965f29488b83a7f9093e11f`.
+- Current hardening product commit: `35ca9bfde509d6f3f012f72fe0eeecc2eb7a117e` (`test(mod): preserve all stock tree assets from Remove Foilage`).
+- Remove Foilage test variant: no blacklist entries may start with `materials/models/props_tree/` or `models/props_tree/`; 17 stock-tree entries were removed from the prior corrected build.
+- Test rationale: user observed enabling a custom tree mod makes the invisible stock tree visible, pointing to a stock-tree blacklist/resource-replacement interaction.
+- Ground foliage removal remains active; regression asserts `materials/models/props_nature/fern001.vmat_c` is still blacklisted.
+- Dark Terrain still intentionally depends on `Remove Foilage`; dependency resolution remains unchanged.
+- Remove Foilage remains blacklist-only; never add `manifest.json` or `maps/dota.vpk`.
+- Regression tests cover full stock-tree namespace preservation, blacklist-only packaging, retained ground-foliage removal, and Dark Terrain -> Remove Foilage dependency.
+- CI `34377599700` (run 155): compileall PASS; Ruff PASS; pytest **279/279 PASS**; Windows portable build/package/upload PASS.
+- Artifact `10114575803`; size `53,099,505` bytes; digest `sha256:32c052fdb7ff63a6a20e08fbdc294ab5b92b0375d1622ddcf3921959925373c4`.
+- Portable ZIP: `53,639,213` bytes; SHA-256 `3a3f72f6b6c764b55d577dd4cb9e81b12a9f8943a6a1776a0e5b245846c6ca9d`.
+- Beta 1 predates this test variant; do not promote/update beta until user approves Dota smoke results.
 - Home/UI hardening remains unchanged: compact startup Home, equal Patch/Rescan, 960x680 contract, Control Panel/Activity/Restore/Mod Library polish.
-- Preserve recursive/nested mods, Collections, profiles, D2PFX, backups/conflict review, Dark Terrain, Safe Foliage, Main Menu Background fix, manual rc7 `prelaunch`, no-auto-prelaunch.
+- Preserve recursive/nested mods, Collections, profiles, D2PFX, backups/conflict review, Dark Terrain, Main Menu Background fix, manual rc7 `prelaunch`, no-auto-prelaunch.
 - Security boundary: mod Python scripts trusted; archive/VPK/profile/backup/download/D2PFX data untrusted.
-- Remaining: human Dota smoke for Remove Foilage + Dark Terrain tree visibility/foliage removal; general Windows/Dota smoke; residual path-race/hostile-input review; semantic exact-rc7 reconciliation.
+- Remaining: human Dota smoke for Remove Foilage alone, Dark Terrain + dependency, and comparison with/without a custom tree mod; general Windows/Dota smoke; residual path-race/hostile-input review; semantic exact-rc7 reconciliation.

@@ -1,15 +1,16 @@
 # Session Summary
 - Fork: `ripDZL/dota2-minify`; exact rc7 baseline `d4b4520c945a9e1f8f5facc52a76ac5903babe90`.
 - Branch model: exactly `v21.4-hardening` -> `beta` -> `main`.
-- Corrected product commit: `161d6f4a92b01e591dd9df610a93e7a6f96a1d13`.
-- Remove Foilage invisible-tree regression corrected by restoring upstream rc7 behavior: `_05` oak-leaf material/model are NOT blacklisted; `_08` entries remain blacklisted.
-- Dark Terrain dependency on `Remove Foilage` is intentional and retained; dependency resolution was why users observed the foliage bug while using Dark Terrain.
+- Current product commit: `35ca9bfde509d6f3f012f72fe0eeecc2eb7a117e`.
+- User clue: enabling a custom tree mod made the invisible stock tree visible; this suggests replacement tree assets were compensating for stock tree resources blacklisted by Remove Foilage.
+- New test variant removes all 17 blacklist entries under `materials/models/props_tree/` and `models/props_tree/`; ground-foliage entries remain.
+- Dark Terrain dependency on `Remove Foilage` is intentional and retained.
 - Remove Foilage remains blacklist-only with no `manifest.json` and no `maps/dota.vpk`.
-- Added regression coverage for `_05` absence, `_08` presence, and Dark Terrain dependency; stale compatibility assertion corrected.
-- CI `34375240188` run 151: compileall PASS; Ruff PASS; pytest **279/279 PASS**; Windows portable build PASS.
-- Artifact `10113629889`; 53,100,187 bytes; digest `sha256:fc98101d029f454de99009e02a19ebe2f335fa40b83c630b923addeb103cee95`.
-- Portable test ZIP: 53,639,992 bytes; SHA-256 `479c90d5e43112b5287e4d90c90f00c3cf9fa06930b9e533ccde3aadd82b0ae6`.
-- Temporary workflow attempts were removed from final branch history; final product commit is directly based on prior milestone `442d36dcc902f6436c6404f2947091663c254cc5`.
-- `beta` remains `442d36dcc902f6436c6404f2947091663c254cc5`; Beta 1 predates foliage correction. `main` remains `a26bc88a0d412e357965f29488b83a7f9093e11f`.
+- Regression coverage now asserts complete stock-tree namespace preservation, retained representative ground-foliage removal, and Dark Terrain dependency.
+- CI `34377599700` run 155: compileall PASS; Ruff PASS; pytest **279/279 PASS**; Windows portable build PASS.
+- Artifact `10114575803`; 53,099,505 bytes; digest `sha256:32c052fdb7ff63a6a20e08fbdc294ab5b92b0375d1622ddcf3921959925373c4`.
+- Portable test ZIP: 53,639,213 bytes; SHA-256 `3a3f72f6b6c764b55d577dd4cb9e81b12a9f8943a6a1776a0e5b245846c6ca9d`.
+- Temporary one-shot workflow commits were removed from final branch history; clean product commit directly follows `8e06c82ab50aa898750535e01e0df951ec11b8f2`.
+- `beta` remains `442d36dcc902f6436c6404f2947091663c254cc5`; `main` remains `a26bc88a0d412e357965f29488b83a7f9093e11f`.
 - Existing compact Home/equal action/UI/security/nested-mod functionality retained unchanged.
-- Next: user Dota smoke Remove Foilage alone and Dark Terrain + dependency; then decide whether to promote corrected hardening to beta.
+- Next: user Dota smoke Remove Foilage alone, Dark Terrain + dependency, and with/without custom trees; only then decide whether whole-tree namespace preservation is the final fix and whether to promote to beta.

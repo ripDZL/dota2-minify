@@ -3,14 +3,15 @@
 - [x] Keep exactly three branches: `v21.4-hardening`, `beta`, `main`.
 - [x] Preserve hardened backend + v21.3.1 feature set; custom VPK-folder categories included.
 - [x] Harden Black-Plum Reactor minimum/responsive sizing at `960x680` and compact Home presentation.
-- [x] Correct Remove Foilage invisible-tree regression: keep `_05` oak leaf material/model OUT of blacklist; keep `_08` entries.
-- [x] Keep Dark Terrain dependency on `Remove Foilage`; regression-test dependency and foliage asset contract.
+- [x] Build stock-tree-preservation Remove Foilage test variant: remove every blacklist entry under `materials/models/props_tree/` and `models/props_tree/` while retaining ground-foliage entries.
+- [x] Keep Dark Terrain dependency on `Remove Foilage`; regression-test dependency and foliage/tree asset contract.
 - [x] Keep Remove Foilage blacklist-only; no `manifest.json` or `maps/dota.vpk`.
-- [x] Product `161d6f4a92b01e591dd9df610a93e7a6f96a1d13`; CI `34375240188`; **279/279 PASS**; Windows build PASS; artifact `10113629889`.
-- [ ] Test Remove Foilage alone in Dota: intended ground foliage removed, actual trees still visible/collidable normally.
-- [ ] Test Dark Terrain in Dota: dependency auto-enables Remove Foilage; trees remain visible; terrain/fog/water changes still work.
+- [x] Product `35ca9bfde509d6f3f012f72fe0eeecc2eb7a117e`; CI `34377599700`; **279/279 PASS**; Windows build PASS; artifact `10114575803`.
+- [ ] Test Remove Foilage alone in Dota: ground clutter removed; all stock trees visible and collidable normally.
+- [ ] Test Dark Terrain in Dota: dependency auto-enables Remove Foilage; stock trees remain visible; terrain/fog/water changes still work.
+- [ ] Compare with and without the custom tree mod that previously restored visibility; custom trees should no longer be required for stock-tree visibility.
 - [ ] Human Windows smoke-test restore, Control Panel, Activity Log, Home/Mod Library controls, native pickers, custom categories, and `960x680` surfaces.
 - [ ] Continue hostile-input/path-race review; residual local filesystem races require explicit assessment.
 - [ ] Complete semantic core-overlay reconciliation and exact-rc7 diff review; never wholesale copy stale core.
 - [ ] Dota smoke: startup/layout, Collections/profiles, D2PFX, lobby/match, rollback, Dark Terrain, Remove Foilage.
-- [ ] Do not update `beta` again until user approves corrected foliage behavior; beta -> main only after beta validation.
+- [ ] Do not update `beta` again until user approves corrected foliage/tree behavior; beta -> main only after beta validation.

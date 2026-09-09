@@ -6,11 +6,13 @@
 - Restore/Activity Log/Mod Library/Control Panel/native file-dialog hardening retained.
 - Mod discovery: bounded recursive scanner; no symlink traversal; stable nested IDs; top-level folders with VPK-backed immediate children become categories.
 - Dark Terrain is a directory-backed mod with `files/` and `manifest.json`; its manifest intentionally declares `dependencies: ["Remove Foilage"]`.
-- Dependency resolution auto-enables Remove Foilage when Dark Terrain is selected; this dependency is correct and must remain.
+- Dependency resolution auto-enables Remove Foilage when Dark Terrain is selected; this dependency remains correct.
 - Remove Foilage is blacklist-only. It MUST NOT contain `manifest.json` or `maps/dota.vpk`.
-- Remove Foilage asset invariant: preserve referenced oak-tree `_05` assets by keeping `materials/models/props_tree/tree_oak_leaves_05.vmat_c` and `models/props_tree/tree_oak_leaves_05.vmdl_c` out of the blacklist; `_08` material/model remain blacklisted.
-- Invisible-tree cause: upstream identified `_05` as a referenced tree asset and removed both blacklist entries in `8afd759b8e631c689fe4a1fc4d7177ceabfe6379`; Dark Terrain exposed the issue because it depends on Remove Foilage.
-- Source-contract tests assert `_05` absence, `_08` presence, Remove Foilage blacklist-only packaging, and Dark Terrain dependency retention.
+- Current Dota-smoke candidate: Remove Foilage preserves the entire stock-tree namespaces by keeping every `materials/models/props_tree/*` and `models/props_tree/*` path out of `blacklist.txt`.
+- Candidate rationale: a custom tree mod restoring an otherwise invisible stock tree indicates the prior blacklist was suppressing stock tree resources that a replacement tree payload reintroduced.
+- Ground-clutter removal remains blacklist-driven and active outside the stock-tree namespaces; tests retain a representative fern blacklist entry.
+- This whole-tree namespace rule is a test candidate until human Dota smoke confirms stock trees render correctly without breaking intended foliage removal.
+- Source-contract tests assert no stock-tree namespace entries, Remove Foilage blacklist-only packaging, retained ground-foliage removal, and Dark Terrain dependency retention.
 - D2PFX: bounded catalogue/download/install/cursor paths; staged installs; confined metadata/cache.
 - Patch transaction: dependency resolution, nested-ID resolution, restore point, conflict preflight/report, compatibility exclusions, output validation, rollback.
 - Backups: managed-output allowlist; regular/no-follow manifest open with identity recheck; confined live-output preflight; rollback retained.

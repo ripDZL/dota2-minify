@@ -4,13 +4,14 @@
 - [x] Home compacted to live status/count + deployment actions; legacy startup chrome removed; Patch/Rescan symmetric.
 - [x] Restore/Control Panel/Activity Log/Mod Library/native picker hardening retained.
 - [x] Recursive/nested mods, custom VPK-folder categories, Collections, profiles, D2PFX, backups/conflict review retained.
-- [x] Corrected Remove Foilage invisible-tree regression: `_05` oak leaf material/model removed from blacklist; `_08` entries retained.
+- [x] Built Remove Foilage stock-tree-preservation test variant: all 17 blacklist entries under `materials/models/props_tree/` and `models/props_tree/` removed; ground-foliage blacklist retained.
 - [x] Dark Terrain -> `Remove Foilage` dependency retained and regression-tested.
 - [x] Remove Foilage remains blacklist-only; no `manifest.json` or `maps/dota.vpk`.
-- [x] Product `161d6f4a92b01e591dd9df610a93e7a6f96a1d13`; CI `34375240188`: compileall/Ruff PASS; pytest **279/279 PASS**; Windows portable build PASS.
-- [x] Artifact `10113629889`; digest `sha256:fc98101d029f454de99009e02a19ebe2f335fa40b83c630b923addeb103cee95`; portable SHA-256 `479c90d5e43112b5287e4d90c90f00c3cf9fa06930b9e533ccde3aadd82b0ae6`.
-- [x] `beta`/Beta 1 left untouched by foliage correction; `main` untouched.
-- [ ] Human Dota smoke: Remove Foilage alone and Dark Terrain + dependency; verify trees visible while intended bushes/ground props are removed.
+- [x] Product `35ca9bfde509d6f3f012f72fe0eeecc2eb7a117e`; CI `34377599700`: compileall/Ruff PASS; pytest **279/279 PASS**; Windows portable build PASS.
+- [x] Artifact `10114575803`; digest `sha256:32c052fdb7ff63a6a20e08fbdc294ab5b92b0375d1622ddcf3921959925373c4`; portable SHA-256 `3a3f72f6b6c764b55d577dd4cb9e81b12a9f8943a6a1776a0e5b245846c6ca9d`.
+- [x] Temporary one-shot workflow commits removed from final branch history; clean product commit directly follows prior docs head `8e06c82ab50aa898750535e01e0df951ec11b8f2`.
+- [x] `beta`/Beta 1 and `main` left untouched by this test variant.
+- [ ] Human Dota smoke: Remove Foilage alone, Dark Terrain + dependency, and comparison with/without custom trees; verify stock trees visible while intended ground clutter is removed.
 - [ ] Human Windows smoke: startup, Home actions, restore, Control Panel, Activity Log, Mod Library, native picker, all major `960x680` surfaces.
 - [ ] Continue hostile-input/path-race review and exact-rc7/semantic core reconciliation.
 - [ ] Dota startup/lobby/match/rollback/profiles/D2PFX/Dark-Terrain/general smoke tests.
