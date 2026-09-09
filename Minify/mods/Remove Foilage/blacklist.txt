@@ -198,7 +198,6 @@ materials/models/props_structures/waterfall_stone_block_color.vmat_c
 materials/models/props_structures/wood_wall001.vmat_c
 materials/models/props_structures/wood_wall001b.vmat_c
 materials/models/props_tree/tree_oak_leaves_08.vmat_c
-materials/models/props_tree/tree_oak_leaves_blank.vmat_c
 materials/models/props_wildlife/badside_hands001.vmat_c
 materials/water/water_flow.vmat_c
 models/effects/fountain_dire_00.vmdl_c
@@ -574,7 +573,6 @@ models/props_structures/wood_wall003.vmdl_c
 models/props_structures/wood_wall004.vmdl_c
 models/props_teams/banner_dire_small.vmdl_c
 models/props_teams/banner_radiant.vmdl_c
-models/props_tree/tree_oak_leaves_08.vmdl_c
 models/props_wildlife/badside_hands001.vmdl_c
 models/props_wildlife/crow001.vmdl_c
 models/props_wildlife/wildlife_birdsmall003.vmdl_c

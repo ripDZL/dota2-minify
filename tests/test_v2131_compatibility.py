@@ -186,14 +186,12 @@ class SafeFoliageAndMenuTests(unittest.TestCase):
         }
         self.assertEqual(
             tree_entries,
-            {
-                "materials/models/props_tree/tree_oak_leaves_08.vmat_c",
-                "materials/models/props_tree/tree_oak_leaves_blank.vmat_c",
-                "models/props_tree/tree_oak_leaves_08.vmdl_c",
-            },
+            {"materials/models/props_tree/tree_oak_leaves_08.vmat_c"},
         )
         self.assertNotIn("materials/models/props_tree/tree_oak_leaves_05.vmat_c", entries)
         self.assertNotIn("models/props_tree/tree_oak_leaves_05.vmdl_c", entries)
+        self.assertNotIn("materials/models/props_tree/tree_oak_leaves_blank.vmat_c", entries)
+        self.assertNotIn("models/props_tree/tree_oak_leaves_08.vmdl_c", entries)
         self.assertIn("materials/models/props_nature/fern001.vmat_c", entries)
 
     def test_main_menu_background_keeps_both_collapse_rules(self):

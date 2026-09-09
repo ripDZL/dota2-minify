@@ -5,9 +5,13 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 REMOVE_FOILAGE = ROOT / "Minify" / "mods" / "Remove Foilage"
 DARK_TERRAIN = ROOT / "Minify" / "mods" / "Dark Terrain"
-# Keep only the targeted leaf resources; stock tree/static/destruction models stay untouched.
+# Current Dota tree-safe split: only the unreferenced _08 leaf material stays blanked.
 EXPECTED_TREE_FOLIAGE = {
     "materials/models/props_tree/tree_oak_leaves_08.vmat_c",
+}
+PRESERVED_TREE_RESOURCES = {
+    "materials/models/props_tree/tree_oak_leaves_05.vmat_c",
+    "models/props_tree/tree_oak_leaves_05.vmdl_c",
     "materials/models/props_tree/tree_oak_leaves_blank.vmat_c",
     "models/props_tree/tree_oak_leaves_08.vmdl_c",
 }
@@ -23,8 +27,8 @@ def test_remove_foilage_keeps_only_targeted_tree_leaf_resources():
     }
 
     assert tree_entries == EXPECTED_TREE_FOLIAGE
-    assert "materials/models/props_tree/tree_oak_leaves_05.vmat_c" not in entries
-    assert "models/props_tree/tree_oak_leaves_05.vmdl_c" not in entries
+    for resource in PRESERVED_TREE_RESOURCES:
+        assert resource not in entries
     assert "materials/models/props_nature/fern001.vmat_c" in entries
 
 
