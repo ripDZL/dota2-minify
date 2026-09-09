@@ -1,22 +1,13 @@
 # Architecture
-- Baseline: exact upstream rc7 `d4b4520c945a9e1f8f5facc52a76ac5903babe90`; no current-main rebase during hardening.
-- Branches: exactly `v21.4-hardening` -> `beta` -> `main`; beta/main change only with explicit approval.
-- UI: Dear PyGui Black-Plum Reactor; outer minimum `960x680`; responsive client-size budgeting and scroll bounds.
-- Home: final compact startup tree; centered release header/status/count/deployment label/actions; Patch/Rescan equal-width responsive cluster.
-- Restore/Activity Log/Mod Library/Control Panel/native file-dialog hardening retained.
-- Mod discovery: bounded recursive scanner; no symlink traversal; stable nested IDs; top-level folders with VPK-backed immediate children become categories.
-- Dark Terrain is a directory-backed mod with `files/` and `manifest.json`; its manifest intentionally declares `dependencies: ["Remove Foilage"]`.
-- Dependency resolution auto-enables Remove Foilage when Dark Terrain is selected; this dependency remains correct.
-- Remove Foilage is blacklist-only. It MUST NOT contain `manifest.json` or `maps/dota.vpk`.
-- Current Dota-smoke candidate: Remove Foilage preserves the entire stock-tree namespaces by keeping every `materials/models/props_tree/*` and `models/props_tree/*` path out of `blacklist.txt`.
-- Candidate rationale: a custom tree mod restoring an otherwise invisible stock tree indicates the prior blacklist was suppressing stock tree resources that a replacement tree payload reintroduced.
-- Ground-clutter removal remains blacklist-driven and active outside the stock-tree namespaces; tests retain a representative fern blacklist entry.
-- This whole-tree namespace rule is a test candidate until human Dota smoke confirms stock trees render correctly without breaking intended foliage removal.
-- Source-contract tests assert no stock-tree namespace entries, Remove Foilage blacklist-only packaging, retained ground-foliage removal, and Dark Terrain dependency retention.
-- D2PFX: bounded catalogue/download/install/cursor paths; staged installs; confined metadata/cache.
-- Patch transaction: dependency resolution, nested-ID resolution, restore point, conflict preflight/report, compatibility exclusions, output validation, rollback.
-- Backups: managed-output allowlist; regular/no-follow manifest open with identity recheck; confined live-output preflight; rollback retained.
-- Security primitives: `Minify/core/security.py`; bounded downloads/decompression; path confinement; hashing; atomic writes.
-- Profiles: bounded/validated imports; native picker only changes local browse UI.
-- Steam: manual rc7 `prelaunch`; automatic launch-option injection disabled.
+- Baseline: exact upstream rc7 `d4b4520c945a9e1f8f5facc52a76ac5903babe90`; no current-main rebase.
+- Branches: exactly `v21.4-hardening` -> `beta` -> `main`; beta/main only by explicit approval.
+- UI: Dear PyGui Black-Plum Reactor; minimum `960x680`; compact Home; equal Patch/Rescan.
+- Mod discovery/security/profile/D2PFX/backup hardening unchanged.
+- Dark Terrain intentionally declares `dependencies: ["Remove Foilage"]`; keep it.
+- Remove Foilage is blacklist-only; no `manifest.json`, no `maps/dota.vpk`.
+- Current tree-resource policy is targeted, not namespace-wide: blacklist only `materials/models/props_tree/tree_oak_leaves_08.vmat_c`, `materials/models/props_tree/tree_oak_leaves_blank.vmat_c`, and `models/props_tree/tree_oak_leaves_08.vmdl_c`.
+- Preserve `tree_oak_leaves_05` material/model and every stock tree/static/destruction model.
+- Rationale: full `props_tree` preservation made unwanted foliage remain; custom tree mod previously restored invisible-tree rendering, indicating tree-resource replacement interaction.
+- Tests assert exact three-entry tree allowlist in blacklist, `_05` absence, retained ground-foliage blacklist, blacklist-only packaging, and Dark Terrain dependency.
+- Validation: `ae18e5aa027c1a40ffb45c50939366e4df2f88f7`; CI `34381400564`; **279/279 PASS**; Windows build PASS.
 - Security boundary: local mod Python scripts trusted; archive/VPK/profile/backup/download/D2PFX data untrusted.

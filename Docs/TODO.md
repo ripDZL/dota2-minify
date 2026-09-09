@@ -1,17 +1,13 @@
 # TODO
-- [x] Pin exact rc7 baseline `d4b4520c945a9e1f8f5facc52a76ac5903babe90`.
-- [x] Keep exactly three branches: `v21.4-hardening`, `beta`, `main`.
-- [x] Preserve hardened backend + v21.3.1 feature set; custom VPK-folder categories included.
-- [x] Harden Black-Plum Reactor minimum/responsive sizing at `960x680` and compact Home presentation.
-- [x] Build stock-tree-preservation Remove Foilage test variant: remove every blacklist entry under `materials/models/props_tree/` and `models/props_tree/` while retaining ground-foliage entries.
-- [x] Keep Dark Terrain dependency on `Remove Foilage`; regression-test dependency and foliage/tree asset contract.
-- [x] Keep Remove Foilage blacklist-only; no `manifest.json` or `maps/dota.vpk`.
-- [x] Product `35ca9bfde509d6f3f012f72fe0eeecc2eb7a117e`; CI `34377599700`; **279/279 PASS**; Windows build PASS; artifact `10114575803`.
-- [ ] Test Remove Foilage alone in Dota: ground clutter removed; all stock trees visible and collidable normally.
-- [ ] Test Dark Terrain in Dota: dependency auto-enables Remove Foilage; stock trees remain visible; terrain/fog/water changes still work.
-- [ ] Compare with and without the custom tree mod that previously restored visibility; custom trees should no longer be required for stock-tree visibility.
-- [ ] Human Windows smoke-test restore, Control Panel, Activity Log, Home/Mod Library controls, native pickers, custom categories, and `960x680` surfaces.
-- [ ] Continue hostile-input/path-race review; residual local filesystem races require explicit assessment.
-- [ ] Complete semantic core-overlay reconciliation and exact-rc7 diff review; never wholesale copy stale core.
-- [ ] Dota smoke: startup/layout, Collections/profiles, D2PFX, lobby/match, rollback, Dark Terrain, Remove Foilage.
-- [ ] Do not update `beta` again until user approves corrected foliage/tree behavior; beta -> main only after beta validation.
+- [x] Pin exact rc7 baseline and keep exactly `v21.4-hardening`, `beta`, `main`.
+- [x] Preserve hardened UI/backend/features and `960x680` contract.
+- [x] Record failed gameplay result: preserving all `props_tree` resources leaves unwanted foliage visible.
+- [x] Build targeted leaf variant: only `_08` leaf material/model plus blank leaf material blacklisted under tree namespaces.
+- [x] Keep `_05` oak leaf assets and stock tree/static/destruction models out of blacklist.
+- [x] Keep Dark Terrain -> `Remove Foilage` dependency and blacklist-only packaging.
+- [x] CI `34381400564`: **279/279 PASS**; Windows build PASS; artifact `10116036501`.
+- [ ] Dota smoke Remove Foilage alone: unwanted foliage removed; stock trees visible.
+- [ ] Dota smoke Dark Terrain: dependency works; stock trees visible; terrain changes intact.
+- [ ] If targeted leaf variant still fails, identify exact foliage model/material from gameplay evidence before broadening blacklist.
+- [ ] General Windows/Dota smoke and residual hostile-input/path-race review.
+- [ ] Do not update `beta` until user approves current foliage behavior.

@@ -1,18 +1,11 @@
 # Progress
-- [x] Exact rc7 baseline pinned; exactly `v21.4-hardening`, `beta`, `main` retained.
-- [x] Black-Plum Reactor UI + `960x680` client-size hardening retained.
-- [x] Home compacted to live status/count + deployment actions; legacy startup chrome removed; Patch/Rescan symmetric.
-- [x] Restore/Control Panel/Activity Log/Mod Library/native picker hardening retained.
-- [x] Recursive/nested mods, custom VPK-folder categories, Collections, profiles, D2PFX, backups/conflict review retained.
-- [x] Built Remove Foilage stock-tree-preservation test variant: all 17 blacklist entries under `materials/models/props_tree/` and `models/props_tree/` removed; ground-foliage blacklist retained.
-- [x] Dark Terrain -> `Remove Foilage` dependency retained and regression-tested.
-- [x] Remove Foilage remains blacklist-only; no `manifest.json` or `maps/dota.vpk`.
-- [x] Product `35ca9bfde509d6f3f012f72fe0eeecc2eb7a117e`; CI `34377599700`: compileall/Ruff PASS; pytest **279/279 PASS**; Windows portable build PASS.
-- [x] Artifact `10114575803`; digest `sha256:32c052fdb7ff63a6a20e08fbdc294ab5b92b0375d1622ddcf3921959925373c4`; portable SHA-256 `3a3f72f6b6c764b55d577dd4cb9e81b12a9f8943a6a1776a0e5b245846c6ca9d`.
-- [x] Temporary one-shot workflow commits removed from final branch history; clean product commit directly follows prior docs head `8e06c82ab50aa898750535e01e0df951ec11b8f2`.
-- [x] `beta`/Beta 1 and `main` left untouched by this test variant.
-- [ ] Human Dota smoke: Remove Foilage alone, Dark Terrain + dependency, and comparison with/without custom trees; verify stock trees visible while intended ground clutter is removed.
-- [ ] Human Windows smoke: startup, Home actions, restore, Control Panel, Activity Log, Mod Library, native picker, all major `960x680` surfaces.
-- [ ] Continue hostile-input/path-race review and exact-rc7/semantic core reconciliation.
-- [ ] Dota startup/lobby/match/rollback/profiles/D2PFX/Dark-Terrain/general smoke tests.
-- [ ] Promote hardening -> beta only after user approval; beta -> main only after beta validation.
+- [x] Exact rc7 baseline and three-branch model retained.
+- [x] UI/security/nested-mod/profile/D2PFX/backup hardening unchanged.
+- [x] Full stock-tree namespace preservation test completed; user reported unwanted foliage remained.
+- [x] Targeted leaf variant now blacklists only `tree_oak_leaves_08.vmat_c`, `tree_oak_leaves_blank.vmat_c`, and `tree_oak_leaves_08.vmdl_c` under tree namespaces.
+- [x] `_05` leaf assets and all stock tree/static/destruction models remain preserved.
+- [x] Dark Terrain dependency and Remove Foilage blacklist-only packaging retained.
+- [x] Validation head `ae18e5aa027c1a40ffb45c50939366e4df2f88f7`; CI `34381400564`: **279/279 PASS**; Windows portable PASS.
+- [x] Artifact `10116036501`; portable SHA-256 `0a9cb76adc7905f2b7aa20454df2350ecd4a9759809520efd1bb2f98f1e4458e`.
+- [ ] Human Dota smoke current targeted leaf variant.
+- [ ] Promote only after user confirms foliage removal + tree visibility.

@@ -1,19 +1,15 @@
 # AI Context
-- Upstream baseline: `Egezenn/dota2-minify` tag `Minify-v1.14rc7`; exact commit `d4b4520c945a9e1f8f5facc52a76ac5903babe90`.
-- Fork: `ripDZL/dota2-minify`; active `v21.4-hardening`; promotion `v21.4-hardening` -> `beta` -> `main`.
-- Exactly three branches; `beta` remains Beta 1 source/docs head `442d36dcc902f6436c6404f2947091663c254cc5`; `main` remains `a26bc88a0d412e357965f29488b83a7f9093e11f`.
-- Current hardening product commit: `35ca9bfde509d6f3f012f72fe0eeecc2eb7a117e` (`test(mod): preserve all stock tree assets from Remove Foilage`).
-- Remove Foilage test variant: no blacklist entries may start with `materials/models/props_tree/` or `models/props_tree/`; 17 stock-tree entries were removed from the prior corrected build.
-- Test rationale: user observed enabling a custom tree mod makes the invisible stock tree visible, pointing to a stock-tree blacklist/resource-replacement interaction.
-- Ground foliage removal remains active; regression asserts `materials/models/props_nature/fern001.vmat_c` is still blacklisted.
-- Dark Terrain still intentionally depends on `Remove Foilage`; dependency resolution remains unchanged.
-- Remove Foilage remains blacklist-only; never add `manifest.json` or `maps/dota.vpk`.
-- Regression tests cover full stock-tree namespace preservation, blacklist-only packaging, retained ground-foliage removal, and Dark Terrain -> Remove Foilage dependency.
-- CI `34377599700` (run 155): compileall PASS; Ruff PASS; pytest **279/279 PASS**; Windows portable build/package/upload PASS.
-- Artifact `10114575803`; size `53,099,505` bytes; digest `sha256:32c052fdb7ff63a6a20e08fbdc294ab5b92b0375d1622ddcf3921959925373c4`.
-- Portable ZIP: `53,639,213` bytes; SHA-256 `3a3f72f6b6c764b55d577dd4cb9e81b12a9f8943a6a1776a0e5b245846c6ca9d`.
-- Beta 1 predates this test variant; do not promote/update beta until user approves Dota smoke results.
-- Home/UI hardening remains unchanged: compact startup Home, equal Patch/Rescan, 960x680 contract, Control Panel/Activity/Restore/Mod Library polish.
-- Preserve recursive/nested mods, Collections, profiles, D2PFX, backups/conflict review, Dark Terrain, Main Menu Background fix, manual rc7 `prelaunch`, no-auto-prelaunch.
-- Security boundary: mod Python scripts trusted; archive/VPK/profile/backup/download/D2PFX data untrusted.
-- Remaining: human Dota smoke for Remove Foilage alone, Dark Terrain + dependency, and comparison with/without a custom tree mod; general Windows/Dota smoke; residual path-race/hostile-input review; semantic exact-rc7 reconciliation.
+- Baseline: `Egezenn/dota2-minify` tag `Minify-v1.14rc7`, commit `d4b4520c945a9e1f8f5facc52a76ac5903babe90`.
+- Fork: `ripDZL/dota2-minify`; branch flow `v21.4-hardening` -> `beta` -> `main`; exactly three branches.
+- `beta`: `442d36dcc902f6436c6404f2947091663c254cc5`; `main`: `a26bc88a0d412e357965f29488b83a7f9093e11f`; both untouched by current foliage tests.
+- Latest validated hardening head: `ae18e5aa027c1a40ffb45c50939366e4df2f88f7`.
+- User result: full `props_tree` preservation build kept unwanted foliage visible; that approach failed the gameplay goal.
+- Current Remove Foilage test split: blacklist only `tree_oak_leaves_08.vmat_c`, `tree_oak_leaves_blank.vmat_c`, and `tree_oak_leaves_08.vmdl_c` under tree namespaces.
+- Keep `_05` oak leaf material/model out of blacklist; keep all stock tree/static/destruction models out of blacklist.
+- Ground foliage blacklist remains otherwise intact; Dark Terrain -> `Remove Foilage` dependency remains intact.
+- Remove Foilage remains blacklist-only; no `manifest.json`, no `maps/dota.vpk`.
+- CI `34381400564` run 158: compileall PASS; Ruff PASS; pytest **279/279 PASS**; Windows portable build PASS.
+- Artifact `10116036501`; digest `sha256:2f23f33ab1571a19681a317d563d098ed5e6cf0529357ba2ff694c7d38ab9aa0`.
+- Portable ZIP: `53,640,387` bytes; SHA-256 `0a9cb76adc7905f2b7aa20454df2350ecd4a9759809520efd1bb2f98f1e4458e`.
+- Human Dota smoke required: Remove Foilage alone first; verify unwanted foliage removed and stock trees visible.
+- Do not promote `beta` until user approves gameplay behavior.

@@ -1,16 +1,12 @@
 # Session Summary
-- Fork: `ripDZL/dota2-minify`; exact rc7 baseline `d4b4520c945a9e1f8f5facc52a76ac5903babe90`.
-- Branch model: exactly `v21.4-hardening` -> `beta` -> `main`.
-- Current product commit: `35ca9bfde509d6f3f012f72fe0eeecc2eb7a117e`.
-- User clue: enabling a custom tree mod made the invisible stock tree visible; this suggests replacement tree assets were compensating for stock tree resources blacklisted by Remove Foilage.
-- New test variant removes all 17 blacklist entries under `materials/models/props_tree/` and `models/props_tree/`; ground-foliage entries remain.
-- Dark Terrain dependency on `Remove Foilage` is intentional and retained.
-- Remove Foilage remains blacklist-only with no `manifest.json` and no `maps/dota.vpk`.
-- Regression coverage now asserts complete stock-tree namespace preservation, retained representative ground-foliage removal, and Dark Terrain dependency.
-- CI `34377599700` run 155: compileall PASS; Ruff PASS; pytest **279/279 PASS**; Windows portable build PASS.
-- Artifact `10114575803`; 53,099,505 bytes; digest `sha256:32c052fdb7ff63a6a20e08fbdc294ab5b92b0375d1622ddcf3921959925373c4`.
-- Portable test ZIP: 53,639,213 bytes; SHA-256 `3a3f72f6b6c764b55d577dd4cb9e81b12a9f8943a6a1776a0e5b245846c6ca9d`.
-- Temporary one-shot workflow commits were removed from final branch history; clean product commit directly follows `8e06c82ab50aa898750535e01e0df951ec11b8f2`.
-- `beta` remains `442d36dcc902f6436c6404f2947091663c254cc5`; `main` remains `a26bc88a0d412e357965f29488b83a7f9093e11f`.
-- Existing compact Home/equal action/UI/security/nested-mod functionality retained unchanged.
-- Next: user Dota smoke Remove Foilage alone, Dark Terrain + dependency, and with/without custom trees; only then decide whether whole-tree namespace preservation is the final fix and whether to promote to beta.
+- Repo: `ripDZL/dota2-minify`; exact rc7 baseline `d4b4520c945a9e1f8f5facc52a76ac5903babe90`.
+- Branch model: exactly `v21.4-hardening` -> `beta` -> `main`; beta/main untouched by current foliage work.
+- Prior `_05`-only correction kept invisible-tree dependency assets out of blacklist.
+- Full stock-tree preservation test then removed all 17 `props_tree` blacklist entries; user reported unwanted foliage remained.
+- Current targeted variant restores only three leaf resources to blacklist: `_08.vmat_c`, `leaves_blank.vmat_c`, `_08.vmdl_c`.
+- Stock tree/static/destruction models and `_05` assets remain preserved.
+- Dark Terrain -> `Remove Foilage` dependency unchanged; Remove Foilage remains blacklist-only.
+- Validation head `ae18e5aa027c1a40ffb45c50939366e4df2f88f7`.
+- CI `34381400564` run 158: compileall/Ruff PASS; pytest **279/279 PASS**; Windows portable PASS.
+- Artifact `10116036501`; portable `53,640,387` bytes; SHA-256 `0a9cb76adc7905f2b7aa20454df2350ecd4a9759809520efd1bb2f98f1e4458e`.
+- Next: user tests Remove Foilage alone; success criterion = unwanted foliage gone + stock trees visible without custom tree mod.
