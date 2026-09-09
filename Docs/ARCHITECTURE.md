@@ -3,11 +3,11 @@
 - Branches: exactly `v21.4-hardening` -> `beta` -> `main`; beta/main only by explicit approval.
 - UI: Dear PyGui Black-Plum Reactor; minimum `960x680`; compact Home; equal Patch/Rescan.
 - Mod discovery/security/profile/D2PFX/backup hardening unchanged.
-- Dark Terrain intentionally declares `dependencies: ["Remove Foilage"]`; keep it.
-- Remove Foilage is blacklist-only; no `manifest.json`, no `maps/dota.vpk`.
-- Current tree-resource policy is targeted, not namespace-wide: blacklist only `materials/models/props_tree/tree_oak_leaves_08.vmat_c`, `materials/models/props_tree/tree_oak_leaves_blank.vmat_c`, and `models/props_tree/tree_oak_leaves_08.vmdl_c`.
-- Preserve `tree_oak_leaves_05` material/model and every stock tree/static/destruction model.
-- Rationale: full `props_tree` preservation made unwanted foliage remain; custom tree mod previously restored invisible-tree rendering, indicating tree-resource replacement interaction.
-- Tests assert exact three-entry tree allowlist in blacklist, `_05` absence, retained ground-foliage blacklist, blacklist-only packaging, and Dark Terrain dependency.
-- Validation: `ae18e5aa027c1a40ffb45c50939366e4df2f88f7`; CI `34381400564`; **279/279 PASS**; Windows build PASS.
+- Dark Terrain is now independent: `manifest.json` has `dependencies: []`.
+- Remove Foilage remains separately selectable and blacklist-only; no `manifest.json`, no `maps/dota.vpk`.
+- Current Remove Foilage tree policy stays targeted: `_08` leaf material/model plus blank leaf material are blacklisted; `_05` leaf material is preserved.
+- User's current stock `pak01` contains `_05` and `_08` oak leaf materials but does not contain `models/props_tree/tree_oak_leaves_05.vmdl_c` or `_08.vmdl_c`; those blacklist model paths are stale against current stock data.
+- Vanilla tree compatibility VPK is diagnostic/fallback only: 827 byte-identical current-stock resources at original virtual paths, single VPK v2 archive.
+- No saturation mutation is applied in the diagnostic VPK; safe visual edits require Source 2 resource recompilation.
+- Validation product: `340cbb69bd2b62c922aa8de116ed3df7f74c1435`; CI `34386411321`; **279/279 PASS**; Windows portable PASS.
 - Security boundary: local mod Python scripts trusted; archive/VPK/profile/backup/download/D2PFX data untrusted.

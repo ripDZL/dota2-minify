@@ -1,11 +1,13 @@
 # Handoff Prompt
-- Work only on `v21.4-hardening`; never touch `beta`/`main` without explicit approval.
-- Exact baseline: upstream `Minify-v1.14rc7` commit `d4b4520c945a9e1f8f5facc52a76ac5903babe90`.
-- Current validated foliage test head: `ae18e5aa027c1a40ffb45c50939366e4df2f88f7`.
-- User reported full `props_tree` preservation left unwanted foliage visible.
-- Current Remove Foilage tree blacklist is exactly three entries: `tree_oak_leaves_08.vmat_c`, `tree_oak_leaves_blank.vmat_c`, `tree_oak_leaves_08.vmdl_c`.
-- Keep `_05` leaf assets plus all tree/static/destruction models OUT of blacklist.
-- Keep Dark Terrain dependency on `Remove Foilage`; keep Remove Foilage blacklist-only.
-- CI `34381400564`: **279/279 PASS**; Windows portable PASS; artifact `10116036501`.
-- Portable SHA-256: `0a9cb76adc7905f2b7aa20454df2350ecd4a9759809520efd1bb2f98f1e4458e`.
-- Await Dota smoke: Remove Foilage alone must remove unwanted foliage while stock trees stay visible without a custom tree mod.
+- Continue `ripDZL/dota2-minify` from exact upstream rc7 baseline `d4b4520c945a9e1f8f5facc52a76ac5903babe90`.
+- Branch flow must remain exactly `v21.4-hardening` -> `beta` -> `main`; work only on hardening unless explicitly approved.
+- Current product commit: `340cbb69bd2b62c922aa8de116ed3df7f74c1435` (`fix(mod): decouple Dark Terrain from Remove Foilage`).
+- Dark Terrain now has no Remove Foilage dependency; Remove Foilage is separately selectable.
+- Current Remove Foilage targeted blacklist keeps `_05` oak leaf material out and `_08`/blank leaf material entries in.
+- CI `34386411321` run 160: **279/279 PASS**; Windows portable PASS.
+- User supplied current Dota tree source; 827 tree-related resources were extracted and packed into `Minify-Vanilla-Default-Trees-Override.vpk`.
+- Override VPK: `377,140,356` bytes; SHA-256 `ff1a9bd6b366a4aa7508030208dea387ac220a7675a7590ce84f07a57c65d8fe`.
+- VPK assets are byte-identical stock resources; no +1 saturation applied.
+- Important stock-data finding: `_05`/`_08` oak leaf materials exist, but `models/props_tree/tree_oak_leaves_05.vmdl_c` and `_08.vmdl_c` do not in current `pak01`.
+- Next gate is human Dota smoke: Dark Terrain alone; Remove Foilage alone; Remove Foilage + vanilla-tree override VPK.
+- Do not promote beta/main until user explicitly approves gameplay behavior.

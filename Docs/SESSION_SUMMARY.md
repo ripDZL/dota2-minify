@@ -1,12 +1,13 @@
 # Session Summary
 - Repo: `ripDZL/dota2-minify`; exact rc7 baseline `d4b4520c945a9e1f8f5facc52a76ac5903babe90`.
-- Branch model: exactly `v21.4-hardening` -> `beta` -> `main`; beta/main untouched by current foliage work.
-- Prior `_05`-only correction kept invisible-tree dependency assets out of blacklist.
-- Full stock-tree preservation test then removed all 17 `props_tree` blacklist entries; user reported unwanted foliage remained.
-- Current targeted variant restores only three leaf resources to blacklist: `_08.vmat_c`, `leaves_blank.vmat_c`, `_08.vmdl_c`.
-- Stock tree/static/destruction models and `_05` assets remain preserved.
-- Dark Terrain -> `Remove Foilage` dependency unchanged; Remove Foilage remains blacklist-only.
-- Validation head `ae18e5aa027c1a40ffb45c50939366e4df2f88f7`.
-- CI `34381400564` run 158: compileall/Ruff PASS; pytest **279/279 PASS**; Windows portable PASS.
-- Artifact `10116036501`; portable `53,640,387` bytes; SHA-256 `0a9cb76adc7905f2b7aa20454df2350ecd4a9759809520efd1bb2f98f1e4458e`.
-- Next: user tests Remove Foilage alone; success criterion = unwanted foliage gone + stock trees visible without custom tree mod.
+- Branch model: exactly `v21.4-hardening` -> `beta` -> `main`; beta/main untouched.
+- User requested both a direct Dark Terrain fix and a full-stock-tree compatibility VPK.
+- Dark Terrain direct fix completed at `340cbb69bd2b62c922aa8de116ed3df7f74c1435`: dependency on Remove Foilage removed.
+- Remove Foilage remains independent with targeted leaf blacklist behavior.
+- CI `34386411321` run 160: compileall/Ruff PASS; pytest **279/279 PASS**; Windows portable PASS.
+- User supplied current Dota `pak01_dir.vpk`; extractor gathered 827 tree-related resources from 141 archive chunks.
+- Built `Minify-Vanilla-Default-Trees-Override.vpk`: 827 stock resources, original paths, byte-identical content.
+- VPK size `377,140,356`; SHA-256 `ff1a9bd6b366a4aa7508030208dea387ac220a7675a7590ce84f07a57c65d8fe`.
+- Current stock finding: oak leaf `_05`/`_08` materials exist; `models/props_tree/tree_oak_leaves_05.vmdl_c` and `_08.vmdl_c` do not.
+- +1 saturation not applied; first diagnostic tests pure override/load-order behavior.
+- Next: user smoke Dark Terrain alone, Remove Foilage alone, then Remove Foilage + vanilla-tree VPK.

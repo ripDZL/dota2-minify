@@ -1,13 +1,15 @@
 # TODO
 - [x] Pin exact rc7 baseline and keep exactly `v21.4-hardening`, `beta`, `main`.
 - [x] Preserve hardened UI/backend/features and `960x680` contract.
-- [x] Record failed gameplay result: preserving all `props_tree` resources leaves unwanted foliage visible.
-- [x] Build targeted leaf variant: only `_08` leaf material/model plus blank leaf material blacklisted under tree namespaces.
-- [x] Keep `_05` oak leaf assets and stock tree/static/destruction models out of blacklist.
-- [x] Keep Dark Terrain -> `Remove Foilage` dependency and blacklist-only packaging.
-- [x] CI `34381400564`: **279/279 PASS**; Windows build PASS; artifact `10116036501`.
+- [x] Build targeted Remove Foilage leaf variant; keep `_05` oak leaf material preserved.
+- [x] Decouple Dark Terrain from `Remove Foilage`; dependency is now empty.
+- [x] CI `34386411321`: **279/279 PASS**; Windows portable PASS.
+- [x] Extract 827 current-stock tree resources from user's Dota VPK set.
+- [x] Build byte-identical stock-tree override VPK for load-order diagnosis.
+- [ ] Dota smoke Dark Terrain alone: terrain works; stock trees visible.
 - [ ] Dota smoke Remove Foilage alone: unwanted foliage removed; stock trees visible.
-- [ ] Dota smoke Dark Terrain: dependency works; stock trees visible; terrain changes intact.
-- [ ] If targeted leaf variant still fails, identify exact foliage model/material from gameplay evidence before broadening blacklist.
+- [ ] Dota smoke Remove Foilage + stock-tree override VPK: determine whether override restores any remaining invisible tree.
+- [ ] If override succeeds, decide whether to retain it as optional compatibility mod.
+- [ ] If a +1 saturation cosmetic variant is still wanted, use a proper Source 2 compile pipeline; do not binary-patch compiled resources.
 - [ ] General Windows/Dota smoke and residual hostile-input/path-race review.
-- [ ] Do not update `beta` until user approves current foliage behavior.
+- [ ] Do not update `beta` or `main` until explicitly approved.

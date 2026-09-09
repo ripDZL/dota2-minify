@@ -1,11 +1,14 @@
 # Progress
 - [x] Exact rc7 baseline and three-branch model retained.
 - [x] UI/security/nested-mod/profile/D2PFX/backup hardening unchanged.
-- [x] Full stock-tree namespace preservation test completed; user reported unwanted foliage remained.
-- [x] Targeted leaf variant now blacklists only `tree_oak_leaves_08.vmat_c`, `tree_oak_leaves_blank.vmat_c`, and `tree_oak_leaves_08.vmdl_c` under tree namespaces.
-- [x] `_05` leaf assets and all stock tree/static/destruction models remain preserved.
-- [x] Dark Terrain dependency and Remove Foilage blacklist-only packaging retained.
-- [x] Validation head `ae18e5aa027c1a40ffb45c50939366e4df2f88f7`; CI `34381400564`: **279/279 PASS**; Windows portable PASS.
-- [x] Artifact `10116036501`; portable SHA-256 `0a9cb76adc7905f2b7aa20454df2350ecd4a9759809520efd1bb2f98f1e4458e`.
-- [ ] Human Dota smoke current targeted leaf variant.
-- [ ] Promote only after user confirms foliage removal + tree visibility.
+- [x] Targeted Remove Foilage policy retained after failed full-tree-preservation test.
+- [x] Dark Terrain direct fix: `dependencies: []`; Remove Foilage is independent.
+- [x] Product commit `340cbb69bd2b62c922aa8de116ed3df7f74c1435`.
+- [x] CI `34386411321` run 160: compileall/Ruff PASS; pytest **279/279 PASS**; Windows portable PASS.
+- [x] User current `pak01` tree extraction completed: 827 resources across 141 data chunks.
+- [x] Vanilla stock-tree override VPK built with all 827 extracted resources at original paths.
+- [x] Override VPK SHA-256 `ff1a9bd6b366a4aa7508030208dea387ac220a7675a7590ce84f07a57c65d8fe`; size `377,140,356` bytes.
+- [x] Current stock check: `_05`/`_08` leaf materials exist; corresponding `tree_oak_leaves_05.vmdl_c`/`_08.vmdl_c` paths do not.
+- [ ] Human Dota smoke direct Dark Terrain build.
+- [ ] Human Dota smoke Remove Foilage and stock-tree override combinations.
+- [ ] Promote only after user confirms gameplay behavior.
