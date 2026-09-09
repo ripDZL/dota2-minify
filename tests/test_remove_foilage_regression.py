@@ -5,6 +5,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 REMOVE_FOILAGE = ROOT / "Minify" / "mods" / "Remove Foilage"
 DARK_TERRAIN = ROOT / "Minify" / "mods" / "Dark Terrain"
+# Keep only the targeted leaf resources; stock tree/static/destruction models stay untouched.
 EXPECTED_TREE_FOLIAGE = {
     "materials/models/props_tree/tree_oak_leaves_08.vmat_c",
     "materials/models/props_tree/tree_oak_leaves_blank.vmat_c",
