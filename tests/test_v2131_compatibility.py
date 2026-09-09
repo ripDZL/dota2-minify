@@ -174,15 +174,26 @@ class DarkTerrainCompatibilityTests(unittest.TestCase):
 
 
 class SafeFoliageAndMenuTests(unittest.TestCase):
-    def test_remove_foilage_is_blacklist_only_and_preserves_stock_tree_assets(self):
+    def test_remove_foilage_is_blacklist_only_and_targets_tree_leaves_only(self):
         self.assertFalse((FOILAGE / "manifest.json").exists())
         self.assertFalse((FOILAGE / "maps" / "dota.vpk").exists())
         entries = (FOILAGE / "blacklist.txt").read_text(encoding="utf-8-sig").splitlines()
-        tree_prefixes = (
-            "materials/models/props_tree/",
-            "models/props_tree/",
+        tree_entries = {
+            entry
+            for entry in entries
+            if entry.startswith("materials/models/props_tree/")
+            or entry.startswith("models/props_tree/")
+        }
+        self.assertEqual(
+            tree_entries,
+            {
+                "materials/models/props_tree/tree_oak_leaves_08.vmat_c",
+                "materials/models/props_tree/tree_oak_leaves_blank.vmat_c",
+                "models/props_tree/tree_oak_leaves_08.vmdl_c",
+            },
         )
-        self.assertFalse(any(entry.startswith(tree_prefixes) for entry in entries))
+        self.assertNotIn("materials/models/props_tree/tree_oak_leaves_05.vmat_c", entries)
+        self.assertNotIn("models/props_tree/tree_oak_leaves_05.vmdl_c", entries)
         self.assertIn("materials/models/props_nature/fern001.vmat_c", entries)
 
     def test_main_menu_background_keeps_both_collapse_rules(self):
