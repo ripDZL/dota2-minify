@@ -13,5 +13,8 @@
 - CI `34392881410` run 164: compileall/Ruff PASS; pytest **279/279 PASS**; Windows portable PASS.
 - Artifact `10120380045`; artifact digest `sha256:dd69b28437b852d21b35c65796ab61428f65fd1173c28d4f58e0bc4469134d8d`.
 - Portable: `53,641,222` bytes; SHA-256 `ec1915f57dd5bc727df05d71ad2117931e92a5ff89d922b8856981a4d92a04a0`.
-- Next human smoke: `Remove Foilage` alone, custom tree mods OFF; success = unwanted foliage removed and stock collision/tree visible.
+- Next task: repair `Remove Foilage` independently; first human smoke is Remove Foilage alone with custom tree mods OFF.
+- Success = unwanted foliage removed and stock collision/tree visible.
+- If still invisible, preserve only `ivy_branch001.vmat_c` + `ivy_leaf001.vmat_c` next; do not broadly preserve `props_nature`.
+- Session handoff prepared `2026-09-09 16:11 EDT`.
 - Do not promote `beta` or `main` without explicit user approval.

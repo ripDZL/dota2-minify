@@ -8,5 +8,6 @@
 - [x] Ground foliage blacklist retained.
 - [x] CI `34392881410` run 164: compileall/Ruff PASS; pytest **279/279 PASS**; Windows portable PASS.
 - [x] Artifact `10120380045`; portable SHA-256 `ec1915f57dd5bc727df05d71ad2117931e92a5ff89d922b8856981a4d92a04a0`.
+- [x] Handoff docs refreshed `2026-09-09 16:11 EDT`.
 - [ ] Human Dota smoke Remove Foilage alone with custom trees OFF.
 - [ ] Promote only after user confirms gameplay behavior.

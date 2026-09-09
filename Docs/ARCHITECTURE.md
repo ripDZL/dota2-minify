@@ -10,5 +10,6 @@
 - Current-stock evidence: `tree_oak_00_blank.vmdl_c` depends on `tree_oak_leaves_blank.vmat_c`; blanking that material can produce a non-rendering stock tree while collision remains.
 - Byte-identical vanilla-tree VPK cannot override Minify's higher-priority blank output; user confirmed that diagnostic failed.
 - Remaining direct stock-tree/blacklist overlaps are `ivy_branch001.vmat_c` and `ivy_leaf001.vmat_c`; preserve only if current candidate still fails.
+- Current route: repair Remove Foilage independently; do not re-couple Dark Terrain.
 - Validation product: `049c549730846b7b100f5d5e22a6c2d3aaabad46`; CI `34392881410`; **279/279 PASS**; Windows portable PASS.
 - Security boundary: local mod Python scripts trusted; archive/VPK/profile/backup/download/D2PFX data untrusted.

@@ -6,6 +6,7 @@
 - [x] Trace current stock tree references against Remove Foilage blacklist.
 - [x] Preserve `tree_oak_leaves_blank.vmat_c`; remove stale `_08.vmdl_c` blacklist entry; keep only `_08.vmat_c` blacklisted under `props_tree`.
 - [x] CI `34392881410`: **279/279 PASS**; Windows portable PASS; artifact `10120380045`.
+- [x] Refresh session docs and handoff prompt for new chat.
 - [ ] Dota smoke Remove Foilage alone, custom tree mods OFF: unwanted foliage removed; stock trees visible.
 - [ ] If invisible tree remains, test preserving only `ivy_branch001.vmat_c` and `ivy_leaf001.vmat_c` next.
 - [ ] General Windows/Dota smoke and residual hostile-input/path-race review.
