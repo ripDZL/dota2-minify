@@ -31,9 +31,7 @@ def _load_rules(rerl_file: str, folder: str) -> dict[str, dict[str, str]]:
             if not isinstance(source, str) or not isinstance(target, str) or not source or not target:
                 raise ValueError(f"rerl.json rule {target_pattern!r} for {folder} contains an invalid redirect.")
             if len(source.encode("utf-8")) != len(target.encode("utf-8")):
-                raise ValueError(
-                    f"rerl.json redirect must preserve UTF-8 byte length: {source!r} -> {target!r}."
-                )
+                raise ValueError(f"rerl.json redirect must preserve UTF-8 byte length: {source!r} -> {target!r}.")
             clean_redirects[source] = target
 
         validated[target_pattern.strip()] = clean_redirects

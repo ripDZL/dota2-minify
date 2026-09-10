@@ -165,9 +165,7 @@ def patch_resource_rerl(
         source_bytes = source.encode("utf-8")
         target_bytes = target.encode("utf-8")
         if len(source_bytes) != len(target_bytes):
-            raise ValueError(
-                f"RERL redirect must preserve UTF-8 byte length: {source!r} -> {target!r}."
-            )
+            raise ValueError(f"RERL redirect must preserve UTF-8 byte length: {source!r} -> {target!r}.")
         normalized[source] = target_bytes
 
     entries = read_rerl(data)
