@@ -1,15 +1,16 @@
 # Session Summary
 - Repo `ripDZL/dota2-minify`; exact rc7 baseline `d4b4520c945a9e1f8f5facc52a76ac5903babe90`.
 - Branch model exactly `v21.4-hardening` -> `beta` -> `main`; beta/main untouched.
-- Dark Terrain fix `340cbb69bd2b62c922aa8de116ed3df7f74c1435`; keep decoupled.
-- Last human-safe Remove Foilage product `049c549...` keeps stock tree visible but bright-green foliage remains.
-- Current-Dota audit shows blacklist is mostly current and `_00`, `_05`, `_08`, `blank` oak-leaf materials all exist.
-- Upstream compare `be3ed738...501f628` contains relevant commit `85020ee5`: blank `_05`, redirect oak/dire tree RERL `_05 -> _00`; later `501f628` is unrelated Windows launch handling.
-- Implemented hardened narrow port at `b718c702...`; current formatted code `3dbf6cb6d9dbc691bc8bab00b3739c889dd2a326`.
-- RERL redirects are same-byte-length in-place only; IDs/layout unchanged; strict header/block/RERL bounds validation.
-- Remove Foilage adds exact upstream rerl rules and `_05.vmat_c` blank payload override; preserves `tree_oak_leaves_blank.vmat_c`; `_08.vmat_c` remains blacklisted.
-- CI `34528212083` run #166: compileall/Ruff PASS; pytest **286/286 PASS**; Windows portable PASS.
-- Artifact `10172455393`; outer SHA-256 `20121b35a7d8caad24062ee4e6e454f0b6419aa839de78a22c7c31419c73778d`.
-- Portable `Minify-v21.4-hardening-3dbf6cb6d9dbc691bc8bab00b3739c889dd2a326-windows.zip`; SHA-256 `f0b73e9204186b2b3554527f46922156fdaf260926e7227a995aaff5c3a00458`.
-- Next gate: human Dota smoke Remove Foilage alone, custom tree mods OFF; verify foliage gone, stock trees visible, collision correct.
+- Dark Terrain remains independent.
+- Last human-safe Remove Foilage `049c549...`: stock tree visible, foliage remains.
+- Upstream `_05 -> _00` RERL concept ported/hardened at `3dbf6cb6...`; CI #166 **286/286 PASS**, Windows portable PASS.
+- Human smoke #166: tree visibility fails.
+- Tree RERL audit: 16 stock tree models use `_05`; generated pak66 confirms rewrites.
+- One-off RERL-ID-corrected candidate tested: foliage gone, certain trees invisible.
+- Correction: redirected RERL IDs must not be assumed to equal the target-name hash; changing the key can break model-internal references. Do not commit ID-update behavior.
+- Strong result: blanking original `_05.vmat_c` removes the unwanted foliage.
+- Built next smoke candidate: keep original `_05` blank; redirect affected tree `_05` key to private unused `_09`; alias material preserves exact stock `_05` textures/properties.
+- Private-alias portable SHA-256 `7e8feede3c2f648155a03a619760a996ea99c17a445f31335e4182191f8b5457`.
+- Mod-only SHA-256 `3d7d9b169e0fbbd808236e65e8d57affc85055d187301327ecd89cd2eb68e86b`.
+- Next gate: human smoke all stock trees visible + foliage gone + collision correct.
 - No beta/main promotion without explicit approval.

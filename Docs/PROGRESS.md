@@ -1,17 +1,15 @@
 # Progress
 - [x] Exact rc7 baseline and three-branch model retained; beta/main untouched.
-- [x] Dark Terrain independent at `340cbb69bd2b62c922aa8de116ed3df7f74c1435`.
-- [x] Stable prior Remove Foilage `049c549...`: stock blank-oak visible; unwanted foliage still present.
-- [x] Current-Dota foliage audit completed; legacy blacklist is largely current.
-- [x] Upstream `85020ee5` identified as direct Remove Foilage RERL fix: blank `_05`; redirect tree `_05 -> _00`.
-- [x] Hardened narrow implementation committed at `b718c702...`; formatting current code `3dbf6cb6...`.
-- [x] `_05.vmat_c` blank override added; `blank.vmat_c` preserved; `_08.vmat_c` remains blacklisted.
-- [x] CI `34528212083` run #166: compileall/Ruff PASS; pytest **286/286 PASS**; Windows portable PASS.
-- [x] Human smoke of run #166 failed: stock tree still invisible.
-- [x] Tree RERL output audit captured stock pak01 and generated `dota_dutch/pak66_dir.vpk` resources.
-- [x] Audit: 16 stock tree models reference `_05`; generated pak66 changes their RERL names to `_00` but retains `_05` resource ID `0x2107d82e708576e1`.
-- [x] Stock evidence: `_05` ID is `0x2107d82e708576e1`; `_00` ID is `0x803176895b1350a2`; every inspected stock RERL ID matches its resource-name hash.
-- [x] Built one-off ID-corrected candidate from exact audit resources; candidate SHA-256 `75d5845c7a1561c0c162a16712229de482526afb3ad232f499218349030cfcbe`.
-- [ ] Human Dota smoke of ID-corrected candidate.
-- [ ] Commit RERL ID-update semantics only if gameplay smoke succeeds.
+- [x] Dark Terrain remains independent.
+- [x] Stable prior Remove Foilage `049c549...`: stock tree visible; foliage remains.
+- [x] Current-Dota foliage audit completed; legacy blacklist largely current.
+- [x] Upstream RERL concept ported/hardened; CI #166 **286/286 PASS**; Windows portable PASS.
+- [x] Human smoke #166 failed tree visibility.
+- [x] Tree RERL audit: 16 tree models redirect `_05`; generated pak66 captured.
+- [x] ID-corrected candidate tested: foliage removed, certain trees invisible.
+- [x] Revised diagnosis: changing redirected RERL IDs is not valid evidence-based behavior; do not commit it.
+- [x] `_05.vmat_c` blanking is confirmed to remove the target foliage.
+- [x] Built private `_05` alias candidate using unused `_09` path and exact stock `_05` material semantics.
+- [ ] Human Dota smoke private-alias candidate.
+- [ ] Commit production alias implementation only after smoke success.
 - [ ] Promote only after explicit user approval.

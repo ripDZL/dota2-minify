@@ -1,17 +1,16 @@
 # AI Context
 - Baseline: `Egezenn/dota2-minify` tag `Minify-v1.14rc7`, commit `d4b4520c945a9e1f8f5facc52a76ac5903babe90`; do not rebase onto upstream `main`.
 - Fork: `ripDZL/dota2-minify`; branch flow exactly `v21.4-hardening` -> `beta` -> `main`; beta/main untouched.
-- Dark Terrain fix `340cbb69bd2b62c922aa8de116ed3df7f74c1435`; `dependencies: []`; keep independent.
+- Dark Terrain fix `340cbb69bd2b62c922aa8de116ed3df7f74c1435`; keep independent.
 - Last human-safe Remove Foilage product: `049c549730846b7b100f5d5e22a6c2d3aaabad46`; stock tree visible, bright-green foliage remains.
-- Audit: current `pak01_dir.vpk` indexes 384,571 resources; 595/596 literal blacklist lines exist; `**materials/nature/card_grass.*` is a search directive, not a missing file.
-- Current Dota contains `_00`, `_05`, `_08`, and `blank` oak-leaf materials; `_08` is blacklisted, `blank` is preserved.
-- Upstream commit `85020ee5d83ffa17a62c704b5ec618c2e12d8a85` adds Remove Foilage RERL redirects `_05 -> _00` for `tree_oak*` and `dire_tree00*`, and blanks `_05`.
-- Narrow hardened port: `b718c702b2be9c91a96d30ebd793b162c05b81a9`; formatting follow-up/current code `3dbf6cb6d9dbc691bc8bab00b3739c889dd2a326`.
-- RERL implementation only permits same-UTF-8-byte-length redirects; rewrites names in place; preserves resource IDs, file size, block sizes, offsets, and layout; validates Source 2 header/RERL bounds.
-- Remove Foilage `_05.vmat_c` is blanked with the existing Minify `blank.vmat_c` payload via `mods/Remove Foilage/files/`; `tree_oak_leaves_blank.vmat_c` remains preserved.
-- RERL rules: `materials/models/props_tree/tree_oak_leaves_05.vmat` -> `materials/models/props_tree/tree_oak_leaves_00.vmat` for `models/props_tree/tree_oak*.vmdl_c` and `models/props_tree/dire_tree00*.vmdl_c`.
-- CI run `34528212083` / #166: compileall PASS; Ruff format/check PASS; pytest **286/286 PASS**; Windows portable PASS.
-- Human smoke of run #166 FAILS tree-visibility criterion: user reports a stock tree is still invisible.
-- Exact supplied `tree_oak_00_blank.vmdl_c` RERL references only `tree_oak_leaves_blank.vmat`; `_05 -> _00` does not touch that model.
-- Next diagnostic: compare stock `pak01` tree RERL/resources with generated Minify `pak66`/`pak65` output to identify the exact invisible tree/override. Tool: `Minify-Tree-RERL-Audit.zip`.
-- Do not broaden tree/material blacklists or change beta/main before that evidence.
+- Current-Dota audit: 384,571 resources; legacy Remove Foilage blacklist largely current.
+- Upstream `85020ee5...` idea: blank `_05.vmat_c`; redirect oak/dire tree `_05 -> _00` in RERL.
+- Hardened port code: `3dbf6cb6d9dbc691bc8bab00b3739c889dd2a326`; CI #166 **286/286 PASS**, Windows portable PASS.
+- Human smoke #166: tree visibility still fails.
+- Tree RERL audit: 16 stock tree models use `_05`; generated pak66 rewrites those names to `_00`; `tree_oak_00_blank.vmdl_c` is not overridden.
+- One-off ID-corrected candidate changed `_05` RERL ID to `_00` ID. Human smoke: foliage gone, but certain trees remain invisible.
+- Corrected conclusion: stock RERL IDs matching name hashes does NOT prove redirected entries must change IDs; the ID is also the model's internal reference key. Do not commit ID-update semantics.
+- Foliage result confirms blanking original `_05.vmat_c` is effective.
+- Next candidate: preserve each tree's original `_05` material through private unused alias `_09`: keep original `_05` globally blank; map only old `_05` RERL key to `tree_oak_leaves_09.vmat`; alias material is exact stock `_05` bytes with same-length self-name `_05 -> _09`; `_05` texture dependencies unchanged.
+- Private-alias portable SHA-256 `7e8feede3c2f648155a03a619760a996ea99c17a445f31335e4182191f8b5457`; mod-only SHA-256 `3d7d9b169e0fbbd808236e65e8d57affc85055d187301327ecd89cd2eb68e86b`.
+- Do not change production code for alias behavior until human smoke passes. Do not touch beta/main without explicit approval.

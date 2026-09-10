@@ -1,14 +1,12 @@
 # Architecture
 - Baseline: exact upstream rc7 `d4b4520c945a9e1f8f5facc52a76ac5903babe90`; no upstream-main rebase.
 - Branches: exactly `v21.4-hardening` -> `beta` -> `main`; beta/main only by explicit approval.
-- UI/security/nested-mod/profile/D2PFX/backup hardening unchanged.
-- Dark Terrain independent: `manifest.json` `dependencies: []`.
-- Remove Foilage remains separately selectable; no Dark Terrain dependency.
-- Prior stable tree policy preserved `tree_oak_leaves_blank.vmat_c`; human smoke kept stock tree visible but foliage remained.
-- Current candidate follows upstream `85020ee5` concept: blank `_05.vmat_c`; redirect legitimate oak/dire tree RERL references from `_05.vmat` to `_00.vmat`.
-- RERL processor is intentionally narrower than upstream: Source 2 header version 12 and all block/RERL bounds validated; redirects must preserve UTF-8 byte length; only RERL name bytes change; resource ID and binary layout remain unchanged.
-- Redirect targets: `models/props_tree/tree_oak*.vmdl_c`, `models/props_tree/dire_tree00*.vmdl_c`.
-- `_05.vmat_c` uses the existing trusted Minify `blank.vmat_c` payload through `mods/Remove Foilage/files/`; `_08.vmat_c` remains blacklisted; `tree_oak_leaves_blank.vmat_c` remains preserved.
-- `blacklist.process()` invokes sibling `rerl.json` after normal blank generation so redirected tree models can override blanking dependencies in the same output VPK.
-- Current candidate code: `3dbf6cb6d9dbc691bc8bab00b3739c889dd2a326`; CI #166 **286/286 PASS** and Windows portable PASS.
-- Security boundary: local bundled mod rules trusted; filesystem destinations still pass through `security.confined_destination`.
+- Dark Terrain independent; Remove Foilage separately selectable.
+- Confirmed foliage control: blanking `materials/models/props_tree/tree_oak_leaves_05.vmat_c` removes the target foliage.
+- Stock tree preservation cannot use simple `_05 -> _00` for all affected models; human smoke still loses certain trees.
+- Do not update redirected RERL IDs to target-name hashes: model internals may reference the original RERL key.
+- Next architecture under test: private material alias. Original `_05.vmat_c` remains blank globally; affected tree models keep the original `_05` RERL key but map it to unused same-length `tree_oak_leaves_09.vmat`; `_09.vmat_c` is derived from exact stock `_05` material with only same-length self-name identity changed, retaining stock `_05` texture dependencies.
+- `tree_oak_leaves_blank.vmat_c` remains preserved; `_08.vmat_c` remains blacklisted.
+- Production implementation must dynamically derive alias data from current stock Dota, not freeze version-sensitive Dota binaries, and must retain strict Source 2 bounds/same-length validation.
+- Current committed RERL code remains `3dbf6cb6...`; private-alias behavior is smoke-only until validated.
+- Security boundary unchanged: local bundled rules trusted; filesystem destinations confined.

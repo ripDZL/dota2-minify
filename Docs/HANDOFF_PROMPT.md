@@ -1,20 +1,17 @@
 # Handoff Prompt
-- Continue `ripDZL/dota2-minify`; exact upstream baseline `Minify-v1.14rc7` / `d4b4520c945a9e1f8f5facc52a76ac5903babe90`; never rebase onto upstream `main`.
-- Branch flow exactly `v21.4-hardening` -> `beta` -> `main`; work only on `v21.4-hardening` unless explicitly approved.
-- Dark Terrain fix `340cbb69bd2b62c922aa8de116ed3df7f74c1435`; `dependencies: []`; keep independent.
-- Last human-safe Remove Foilage product `049c549730846b7b100f5d5e22a6c2d3aaabad46`: stock tree visible, bright-green foliage remains.
-- User uploaded current-Dota foliage audit; `pak01_dir.vpk` indexes 384,571 resources; blacklist largely current.
-- Upstream `85020ee5d83ffa17a62c704b5ec618c2e12d8a85` directly addresses Remove Foilage with RERL redirects `_05 -> _00` for `tree_oak*`/`dire_tree00*` plus `_05.vmat_c` blanking.
-- Narrow hardened port code: `b718c702b2be9c91a96d30ebd793b162c05b81a9`; formatting current code `3dbf6cb6d9dbc691bc8bab00b3739c889dd2a326`.
-- Our RERL writer does not use upstream block-splicing: same UTF-8 byte-length redirects only; in-place RERL name bytes; IDs/file size/block layout unchanged; strict bounds/header validation.
-- Remove Foilage `rerl.json`: `_05.vmat -> _00.vmat` for `models/props_tree/tree_oak*.vmdl_c` and `models/props_tree/dire_tree00*.vmdl_c`.
-- `_05.vmat_c` blanked using existing `Minify/bin/blank-files/blank.vmat_c` payload via mod `files/`; `tree_oak_leaves_blank.vmat_c` preserved; `_08.vmat_c` remains blacklisted.
-- CI `34528212083` run #166: compileall PASS; Ruff format/check PASS; pytest **286/286 PASS**; Windows portable PASS.
-- Artifact `10172455393`; outer SHA-256 `20121b35a7d8caad24062ee4e6e454f0b6419aa839de78a22c7c31419c73778d`.
-- Portable `Minify-v21.4-hardening-3dbf6cb6d9dbc691bc8bab00b3739c889dd2a326-windows.zip`; SHA-256 `f0b73e9204186b2b3554527f46922156fdaf260926e7227a995aaff5c3a00458`.
-- Immediate next gate: user tests Remove Foilage alone with all custom tree mods OFF. Success = bright-green foliage gone, stock trees visible, collision correct.
-- If foliage remains, use exact audit candidates; do not broaden oak/tree blacklists blindly.
-- If trees disappear, identify uncovered tree model family/RERL reference; keep blank leaf material preserved.
-- Do not promote beta/main without explicit approval.
+- Continue `ripDZL/dota2-minify`; baseline `Minify-v1.14rc7` / `d4b4520c945a9e1f8f5facc52a76ac5903babe90`; never rebase onto upstream `main`.
+- Branch flow exactly `v21.4-hardening` -> `beta` -> `main`; only work on hardening unless explicitly approved.
+- Dark Terrain remains independent.
+- Last human-safe Remove Foilage `049c549...`: trees visible, foliage remains.
+- Hardened upstream RERL concept code `3dbf6cb6...`; CI #166 **286/286 PASS**; Windows portable PASS; human smoke still loses tree visibility.
+- Audit: 16 stock oak/dire models use `_05`; `tree_oak_00_blank.vmdl_c` is not one of the generated overrides.
+- ID-corrected one-off candidate was tested: foliage gone but certain trees invisible. Do not implement target-name RERL ID updates.
+- Confirmed target: blanking original `tree_oak_leaves_05.vmat_c` removes unwanted foliage.
+- Current smoke candidate uses private unused `_09`: original `_05` stays blank; tree models keep old `_05` RERL key and point it to `_09`; `_09.vmat_c` preserves exact stock `_05` material/texture behavior.
+- Portable candidate SHA-256 `7e8feede3c2f648155a03a619760a996ea99c17a445f31335e4182191f8b5457`.
+- Mod-only candidate SHA-256 `3d7d9b169e0fbbd808236e65e8d57affc85055d187301327ecd89cd2eb68e86b`.
+- Immediate gate: human smoke private alias; success = all stock trees visible, target foliage gone, collision correct.
+- If successful, implement dynamic current-stock `_05` extraction + same-length aliasing; do not commit Dota stock binaries.
+- `beta`/`main` untouched; no promotion without explicit approval.
 - At session start read `Docs/AI_CONTEXT.md`, `Docs/TODO.md`, `Docs/PROGRESS.md`, `Docs/ARCHITECTURE.md`, `Docs/SESSION_SUMMARY.md`.
 - User-visible updates include America/Detroit timestamp.

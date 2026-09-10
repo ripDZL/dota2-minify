@@ -2,18 +2,15 @@
 - [x] Pin exact rc7 baseline; keep exactly `v21.4-hardening`, `beta`, `main`.
 - [x] Keep Dark Terrain independent from Remove Foilage.
 - [x] Confirm `049c549...` preserves stock tree but leaves bright-green foliage.
-- [x] Rule out oak-leaf worldnode blacklist guesses.
 - [x] Audit current Dota VPK index against Remove Foilage blacklist.
-- [x] Review upstream `be3ed738...501f628`; isolate relevant RERL commit `85020ee5`.
-- [x] Port narrow `_05 -> _00` tree RERL redirect with hardened same-length in-place writer.
-- [x] Blank `_05.vmat_c` using existing Minify blank payload; preserve `blank.vmat_c`; keep `_08.vmat_c` blacklisted.
-- [x] CI run #166: compileall/Ruff PASS; pytest **286/286 PASS**; Windows portable PASS.
-- [x] Human smoke run #166: FAIL — stock tree still invisible.
-- [x] Run/analyze `Minify-Tree-RERL-Audit-Report.zip` from run #166 output.
-- [x] Confirm generated pak66 rewrites 16 `_05` tree references to `_00` names but leaves `_05` RERL resource IDs unchanged.
-- [x] Confirm stock RERL IDs equal MurmurHash64B of resource names; run #166 creates 16 ID/name mismatches.
-- [x] Build one-off ID-corrected smoke candidate from exact current-stock/generated resources; do not commit code behavior yet.
-- [ ] Human smoke ID-corrected candidate: foliage removed, stock trees visible, collision correct.
-- [ ] If successful, update RERL writer to update resource ID with redirected name and add regression tests; run CI/portable.
+- [x] Port upstream `_05 -> _00` RERL concept with hardened parser/writer; CI #166 **286/286 PASS**.
+- [x] Human smoke #166: FAIL — tree visibility still broken.
+- [x] Audit generated pak66; identify 16 `_05` tree-model redirects.
+- [x] Test ID-corrected candidate: foliage gone, certain trees still invisible.
+- [x] Reject RERL ID-update semantics; redirected RERL key must remain available to model internals.
+- [x] Confirm blanking original `_05.vmat_c` removes target foliage.
+- [x] Build private-stock-material alias candidate: original `_05` blank; tree `_05` key redirects to unused `_09`; `_09` contains exact stock `_05` material behavior.
+- [ ] Human smoke private `_05` alias candidate: all stock trees visible, foliage gone, collision correct.
+- [ ] If successful, implement dynamic stock `_05` extraction/aliasing and focused regression tests; run CI/portable.
 - [ ] General Windows/Dota smoke and residual hostile-input/path-race review.
 - [ ] Do not update `beta` or `main` until explicitly approved.
