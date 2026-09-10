@@ -2,24 +2,20 @@
 - Continue work on `ripDZL/dota2-minify`.
 - Exact upstream baseline: `Egezenn/dota2-minify`, tag `Minify-v1.14rc7`, commit `d4b4520c945a9e1f8f5facc52a76ac5903babe90`; do not rebase onto current upstream `main`.
 - Branch flow must remain exactly `v21.4-hardening` -> `beta` -> `main`; work only on `v21.4-hardening` unless explicitly approved.
-- Current product commit: `049c549730846b7b100f5d5e22a6c2d3aaabad46` (`fix(mod): preserve current stock tree leaf dependencies`).
-- Current docs milestone before this handoff: `6f7e6d62820efdd677fb42533d4e6e091b435567`.
-- Dark Terrain direct fix: `340cbb69bd2b62c922aa8de116ed3df7f74c1435`; `Minify/mods/Dark Terrain/manifest.json` has `dependencies: []`; user reports terrain fix seems fine.
-- Keep Dark Terrain decoupled; repair `Remove Foilage` independently.
-- User confirmed `Remove Foilage + Minify-Vanilla-Default-Trees-Override.vpk` did NOT repair the invisible tree; do not pursue the byte-identical tree-VPK override as the primary fix.
-- Current Remove Foilage tree blacklist contains only `materials/models/props_tree/tree_oak_leaves_08.vmat_c` under `props_tree`.
-- Preserve `_05` oak leaf assets, `tree_oak_leaves_blank.vmat_c`, all stock tree/static/destruction models, and the stale/nonexistent `_08.vmdl_c` path.
-- Evidence from current stock Dota: `models/props_tree/tree_oak_00_blank.vmdl_c` directly references `materials/models/props_tree/tree_oak_leaves_blank.vmat_c`; blanking that material is the current primary invisible-tree hypothesis.
-- Current repair removed `tree_oak_leaves_blank.vmat_c` and stale `_08.vmdl_c` from the blacklist while retaining ground-foliage removal.
-- Other blacklisted resources directly referenced by extracted stock trees: `materials/models/props_nature/ivy_branch001.vmat_c` and `materials/models/props_nature/ivy_leaf001.vmat_c`.
-- Do NOT broadly preserve `props_nature`; if the current candidate still leaves an invisible tree, next test should preserve only those two ivy materials.
-- CI for current repair: run `34392881410` / run 164; compileall PASS; Ruff PASS; pytest **279/279 PASS**; Windows portable PASS.
-- Artifact: `10120380045`; portable SHA-256 `ec1915f57dd5bc727df05d71ad2117931e92a5ff89d922b8856981a4d92a04a0`.
-- Immediate next gate: user tests `Remove Foilage` alone with all custom tree mods OFF.
-- Success criteria: unwanted foliage disappears, stock tree visuals remain visible, and tree collision remains correct.
-- If test passes: record human smoke in docs and keep Dark Terrain independent.
-- If test fails with invisible tree: make the narrow ivy-material preservation candidate, update regression tests, run CI/Windows build, provide portable ZIP, then await another human smoke.
-- If foliage remains instead: do not restore broad tree blacklists; identify the exact remaining foliage asset before expanding the blacklist.
-- Keep exactly three branches. `beta` is `442d36dcc902f6436c6404f2947091663c254cc5`; `main` is `a26bc88a0d412e357965f29488b83a7f9093e11f`; neither is authorized for promotion yet.
+- Stable product commit remains `049c549730846b7b100f5d5e22a6c2d3aaabad46` (`fix(mod): preserve current stock tree leaf dependencies`).
+- Dark Terrain direct fix `340cbb69bd2b62c922aa8de116ed3df7f74c1435`; `dependencies: []`; keep Dark Terrain decoupled.
+- Stable Remove Foilage keeps only `materials/models/props_tree/tree_oak_leaves_08.vmat_c` blacklisted under `props_tree`; preserves `tree_oak_leaves_blank.vmat_c` so `tree_oak_00_blank.vmdl_c` renders.
+- Human smoke: stock tree is visible but unwanted bright-green foliage remains.
+- Oak-leaf worldnode blacklist candidates (`blank`, `_08`, `_05`) had no visible effect.
+- Material-remap diagnostic restored the original blank-leaf blacklist and preserved the stock tree through an alias; foliage still remained.
+- Coordinator stall during that test was unrelated service downtime; do not use it as evidence that the remap broke Dota.
+- Correct conclusion: `tree_oak_leaves_blank.vmat_c` is a required stock-tree dependency but does not identify the surviving foliage.
+- Do not continue tree-material/worldnode guessing and do not broaden blacklists without exact current-asset evidence.
+- `Minify-Foliage-Audit.zip` was generated. It reads only current `pak01_dir.vpk` index, compares every Remove Foilage blacklist entry, lists stale paths, and enumerates likely vegetation/worldnode resources not covered.
+- Immediate next gate: user runs audit from `game/dota` and uploads `Minify-Foliage-Audit-Report.zip`.
+- After report: identify exact current foliage resource(s), build a narrow blacklist candidate, update regression tests, run CI/Windows portable, then human smoke.
+- Stable CI `34392881410` run 164: compileall PASS; Ruff PASS; pytest **279/279 PASS**; Windows portable PASS.
+- Stable artifact `10120380045`; portable SHA-256 `ec1915f57dd5bc727df05d71ad2117931e92a5ff89d922b8856981a4d92a04a0`.
+- Keep exactly three branches. `beta` is `442d36dcc902f6436c6404f2947091663c254cc5`; `main` is `a26bc88a0d412e357965f29488b83a7f9093e11f`; neither is authorized for promotion.
 - At session start read `Docs/AI_CONTEXT.md`, `Docs/TODO.md`, `Docs/PROGRESS.md`, `Docs/ARCHITECTURE.md`, and `Docs/SESSION_SUMMARY.md` before changing code.
 - User-visible updates should include America/Detroit timestamp.
