@@ -1,21 +1,20 @@
 # Handoff Prompt
-- Continue work on `ripDZL/dota2-minify`.
-- Exact upstream baseline: `Egezenn/dota2-minify`, tag `Minify-v1.14rc7`, commit `d4b4520c945a9e1f8f5facc52a76ac5903babe90`; do not rebase onto current upstream `main`.
-- Branch flow must remain exactly `v21.4-hardening` -> `beta` -> `main`; work only on `v21.4-hardening` unless explicitly approved.
-- Stable product commit remains `049c549730846b7b100f5d5e22a6c2d3aaabad46` (`fix(mod): preserve current stock tree leaf dependencies`).
-- Dark Terrain direct fix `340cbb69bd2b62c922aa8de116ed3df7f74c1435`; `dependencies: []`; keep Dark Terrain decoupled.
-- Stable Remove Foilage keeps only `materials/models/props_tree/tree_oak_leaves_08.vmat_c` blacklisted under `props_tree`; preserves `tree_oak_leaves_blank.vmat_c` so `tree_oak_00_blank.vmdl_c` renders.
-- Human smoke: stock tree is visible but unwanted bright-green foliage remains.
-- Oak-leaf worldnode blacklist candidates (`blank`, `_08`, `_05`) had no visible effect.
-- Material-remap diagnostic restored the original blank-leaf blacklist and preserved the stock tree through an alias; foliage still remained.
-- Coordinator stall during that test was unrelated service downtime; do not use it as evidence that the remap broke Dota.
-- Correct conclusion: `tree_oak_leaves_blank.vmat_c` is a required stock-tree dependency but does not identify the surviving foliage.
-- Do not continue tree-material/worldnode guessing and do not broaden blacklists without exact current-asset evidence.
-- `Minify-Foliage-Audit.zip` was generated. It reads only current `pak01_dir.vpk` index, compares every Remove Foilage blacklist entry, lists stale paths, and enumerates likely vegetation/worldnode resources not covered.
-- Immediate next gate: user runs audit from `game/dota` and uploads `Minify-Foliage-Audit-Report.zip`.
-- After report: identify exact current foliage resource(s), build a narrow blacklist candidate, update regression tests, run CI/Windows portable, then human smoke.
-- Stable CI `34392881410` run 164: compileall PASS; Ruff PASS; pytest **279/279 PASS**; Windows portable PASS.
-- Stable artifact `10120380045`; portable SHA-256 `ec1915f57dd5bc727df05d71ad2117931e92a5ff89d922b8856981a4d92a04a0`.
-- Keep exactly three branches. `beta` is `442d36dcc902f6436c6404f2947091663c254cc5`; `main` is `a26bc88a0d412e357965f29488b83a7f9093e11f`; neither is authorized for promotion.
-- At session start read `Docs/AI_CONTEXT.md`, `Docs/TODO.md`, `Docs/PROGRESS.md`, `Docs/ARCHITECTURE.md`, and `Docs/SESSION_SUMMARY.md` before changing code.
-- User-visible updates should include America/Detroit timestamp.
+- Continue `ripDZL/dota2-minify`; exact upstream baseline `Minify-v1.14rc7` / `d4b4520c945a9e1f8f5facc52a76ac5903babe90`; never rebase onto upstream `main`.
+- Branch flow exactly `v21.4-hardening` -> `beta` -> `main`; work only on `v21.4-hardening` unless explicitly approved.
+- Dark Terrain fix `340cbb69bd2b62c922aa8de116ed3df7f74c1435`; `dependencies: []`; keep independent.
+- Last human-safe Remove Foilage product `049c549730846b7b100f5d5e22a6c2d3aaabad46`: stock tree visible, bright-green foliage remains.
+- User uploaded current-Dota foliage audit; `pak01_dir.vpk` indexes 384,571 resources; blacklist largely current.
+- Upstream `85020ee5d83ffa17a62c704b5ec618c2e12d8a85` directly addresses Remove Foilage with RERL redirects `_05 -> _00` for `tree_oak*`/`dire_tree00*` plus `_05.vmat_c` blanking.
+- Narrow hardened port code: `b718c702b2be9c91a96d30ebd793b162c05b81a9`; formatting current code `3dbf6cb6d9dbc691bc8bab00b3739c889dd2a326`.
+- Our RERL writer does not use upstream block-splicing: same UTF-8 byte-length redirects only; in-place RERL name bytes; IDs/file size/block layout unchanged; strict bounds/header validation.
+- Remove Foilage `rerl.json`: `_05.vmat -> _00.vmat` for `models/props_tree/tree_oak*.vmdl_c` and `models/props_tree/dire_tree00*.vmdl_c`.
+- `_05.vmat_c` blanked using existing `Minify/bin/blank-files/blank.vmat_c` payload via mod `files/`; `tree_oak_leaves_blank.vmat_c` preserved; `_08.vmat_c` remains blacklisted.
+- CI `34528212083` run #166: compileall PASS; Ruff format/check PASS; pytest **286/286 PASS**; Windows portable PASS.
+- Artifact `10172455393`; outer SHA-256 `20121b35a7d8caad24062ee4e6e454f0b6419aa839de78a22c7c31419c73778d`.
+- Portable `Minify-v21.4-hardening-3dbf6cb6d9dbc691bc8bab00b3739c889dd2a326-windows.zip`; SHA-256 `f0b73e9204186b2b3554527f46922156fdaf260926e7227a995aaff5c3a00458`.
+- Immediate next gate: user tests Remove Foilage alone with all custom tree mods OFF. Success = bright-green foliage gone, stock trees visible, collision correct.
+- If foliage remains, use exact audit candidates; do not broaden oak/tree blacklists blindly.
+- If trees disappear, identify uncovered tree model family/RERL reference; keep blank leaf material preserved.
+- Do not promote beta/main without explicit approval.
+- At session start read `Docs/AI_CONTEXT.md`, `Docs/TODO.md`, `Docs/PROGRESS.md`, `Docs/ARCHITECTURE.md`, `Docs/SESSION_SUMMARY.md`.
+- User-visible updates include America/Detroit timestamp.

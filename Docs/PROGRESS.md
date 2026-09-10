@@ -1,18 +1,14 @@
 # Progress
-- [x] Exact rc7 baseline and three-branch model retained.
-- [x] UI/security/nested-mod/profile/D2PFX/backup hardening unchanged.
-- [x] Dark Terrain independent at `340cbb69bd2b62c922aa8de116ed3df7f74c1435`; user reports terrain fix seems fine.
-- [x] Vanilla stock-tree override VPK tested; Remove Foilage + override still failed.
-- [x] Current-stock tree-reference scan isolated `tree_oak_leaves_blank.vmat_c` as a required material for `tree_oak_00_blank.vmdl_c`.
-- [x] Stable Remove Foilage product remains `049c549730846b7b100f5d5e22a6c2d3aaabad46`; stock tree visible, unwanted foliage still present.
-- [x] Oak-leaf worldnode aggregate blacklist tests had no visible effect.
-- [x] Material-remap diagnostic restored blank-leaf blacklist while preserving tree through alias; foliage still remained.
-- [x] Coordinator stall during that test was unrelated service downtime; compiled-resource corruption is not established.
-- [x] Corrected diagnosis: blank-leaf material explains the invisible-tree regression but not the surviving foliage.
-- [x] Built `Minify-Foliage-Audit.zip` to compare the full blacklist with the user's exact current VPK index and enumerate uncovered vegetation paths.
-- [x] Stable CI remains `34392881410` run 164: compileall/Ruff PASS; pytest **279/279 PASS**; Windows portable PASS.
-- [x] Stable artifact `10120380045`; portable SHA-256 `ec1915f57dd5bc727df05d71ad2117931e92a5ff89d922b8856981a4d92a04a0`.
-- [ ] Await current-Dota foliage audit report.
-- [ ] Identify exact surviving foliage resource, then build narrow candidate.
-- [ ] Human Dota smoke after evidence-based candidate.
-- [ ] Promote only after user confirms gameplay behavior.
+- [x] Exact rc7 baseline and three-branch model retained; beta/main untouched.
+- [x] Dark Terrain independent at `340cbb69bd2b62c922aa8de116ed3df7f74c1435`.
+- [x] Stable prior Remove Foilage `049c549...`: stock blank-oak visible; unwanted foliage still present.
+- [x] Current-Dota foliage audit completed; legacy blacklist is largely current.
+- [x] Upstream `85020ee5` identified as direct Remove Foilage RERL fix: blank `_05`; redirect tree `_05 -> _00`.
+- [x] Hardened narrow implementation committed at `b718c702...`; formatting current code `3dbf6cb6...`.
+- [x] RERL rewrites are same-byte-length, in-place, ID/layout preserving, bounds-checked.
+- [x] `_05.vmat_c` blank override added; `blank.vmat_c` preserved; `_08.vmat_c` remains blacklisted.
+- [x] CI `34528212083` run #166: compileall/Ruff PASS; pytest **286/286 PASS**; Windows portable PASS.
+- [x] Artifact `10172455393`; outer SHA-256 `20121b35a7d8caad24062ee4e6e454f0b6419aa839de78a22c7c31419c73778d`.
+- [x] Portable SHA-256 `f0b73e9204186b2b3554527f46922156fdaf260926e7227a995aaff5c3a00458`.
+- [ ] Human Dota smoke of current candidate.
+- [ ] Promote only after explicit user approval.

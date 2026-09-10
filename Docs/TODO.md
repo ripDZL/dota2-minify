@@ -1,18 +1,14 @@
 # TODO
-- [x] Pin exact rc7 baseline and keep exactly `v21.4-hardening`, `beta`, `main`.
-- [x] Preserve hardened UI/backend/features and `960x680` contract.
-- [x] Decouple Dark Terrain from `Remove Foilage`; user reports terrain fix seems fine.
-- [x] Test byte-identical vanilla-tree override; user reports it did not restore the invisible tree.
-- [x] Trace current stock tree references against Remove Foilage blacklist.
-- [x] Preserve `tree_oak_leaves_blank.vmat_c`; remove stale `_08.vmdl_c`; keep only `_08.vmat_c` blacklisted under `props_tree` in stable product `049c549...`.
-- [x] Confirm stable repair keeps stock tree visible but unwanted bright-green foliage remains.
-- [x] Rule out oak-leaf `blank`/`_08`/`_05` worldnode blacklist experiments; no visible effect.
-- [x] Test material-remap diagnostic; foliage still remains. Coordinator outage was unrelated.
-- [x] Correct prior overclaim: blank-leaf material explains invisible stock tree, not the surviving foliage.
-- [x] Build `Minify-Foliage-Audit.zip` to compare current `pak01_dir.vpk` index against the full Remove Foilage blacklist.
-- [ ] Run/upload `Minify-Foliage-Audit-Report.zip` from current Dota install.
-- [ ] Identify exact current uncovered foliage resource(s) before expanding blacklist.
-- [ ] Build narrow blacklist candidate only after audit evidence.
-- [ ] Human Dota smoke: Remove Foilage alone; foliage removed, stock trees visible, collision correct.
+- [x] Pin exact rc7 baseline; keep exactly `v21.4-hardening`, `beta`, `main`.
+- [x] Keep Dark Terrain independent from Remove Foilage.
+- [x] Confirm `049c549...` preserves stock tree but leaves bright-green foliage.
+- [x] Rule out oak-leaf worldnode blacklist guesses.
+- [x] Audit current Dota VPK index against Remove Foilage blacklist.
+- [x] Review upstream `be3ed738...501f628`; isolate relevant RERL commit `85020ee5`.
+- [x] Port narrow `_05 -> _00` tree RERL redirect with hardened same-length in-place writer.
+- [x] Blank `_05.vmat_c` using existing Minify blank payload; preserve `blank.vmat_c`; keep `_08.vmat_c` blacklisted.
+- [x] CI run #166: compileall/Ruff PASS; pytest **286/286 PASS**; Windows portable PASS.
+- [ ] Human Dota smoke: Remove Foilage alone, custom tree mods OFF; foliage gone, stock trees visible, collision correct.
+- [ ] If foliage remains, inspect audit candidates rather than broadening oak/tree blacklists.
 - [ ] General Windows/Dota smoke and residual hostile-input/path-race review.
 - [ ] Do not update `beta` or `main` until explicitly approved.

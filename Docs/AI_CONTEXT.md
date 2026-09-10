@@ -1,21 +1,17 @@
 # AI Context
-- Baseline: `Egezenn/dota2-minify` tag `Minify-v1.14rc7`, commit `d4b4520c945a9e1f8f5facc52a76ac5903babe90`.
-- Fork: `ripDZL/dota2-minify`; branch flow exactly `v21.4-hardening` -> `beta` -> `main`.
-- `beta`: `442d36dcc902f6436c6404f2947091663c254cc5`; `main`: `a26bc88a0d412e357965f29488b83a7f9093e11f`; untouched by current work.
-- Dark Terrain direct fix: `340cbb69bd2b62c922aa8de116ed3df7f74c1435`; manifest `dependencies: []`; user reports terrain fix seems fine.
-- Stable Remove Foilage product remains `049c549730846b7b100f5d5e22a6c2d3aaabad46`.
-- Stable tree policy: only `materials/models/props_tree/tree_oak_leaves_08.vmat_c` blacklisted under `props_tree`; preserve `tree_oak_leaves_blank.vmat_c` so `tree_oak_00_blank.vmdl_c` renders.
-- Human smoke: stable repair keeps stock tree visible but unwanted bright-green foliage remains.
-- Worldnode aggregate blacklist experiments for oak-leaf `blank`/`_08`/`_05` had no visible gameplay effect; do not continue guessing worldnode paths.
-- `tree_oak_leaves_blank.vmat_c` explains the invisible `tree_oak_00_blank.vmdl_c` regression, but it does NOT explain the surviving bright-green foliage.
-- Material-remap diagnostic restored the original blank-leaf blacklist and supplied a remapped stock tree; user reports Remove Foilage still did not remove the foliage.
-- Coordinator stall reported during that test was unrelated service downtime; do not treat it as evidence that the remapped compiled resources broke Dota.
-- Direct compiled-resource remap produced no foliage benefit and is not the next route.
-- Byte-identical vanilla-tree override VPK also did not repair the original invisible-tree behavior.
-- User supplied current-stock resource bundle containing `tree_oak_00_blank.vmdl_c`, `tree_oak_leaves_blank.vmat_c`, and four texture dependencies.
-- Next diagnostic: compare the complete Remove Foilage blacklist against the user's exact current `pak01_dir.vpk` index and enumerate uncovered vegetation/worldnode resources before changing the blacklist again.
-- `Minify-Foliage-Audit.zip` was generated for this purpose; it reads only the VPK directory index and outputs a small report ZIP.
-- Ground-foliage blacklist remains extensive, including `materials/models/props_nature/fern001.vmat_c`; current surviving foliage may use renamed/new or map-baked resources.
-- Stable CI: `34392881410` run 164; compileall/Ruff PASS; pytest **279/279 PASS**; Windows portable PASS.
-- Stable artifact `10120380045`; portable SHA-256 `ec1915f57dd5bc727df05d71ad2117931e92a5ff89d922b8856981a4d92a04a0`.
-- Keep Dark Terrain decoupled. Do not promote `beta` or `main` without explicit user approval.
+- Baseline: `Egezenn/dota2-minify` tag `Minify-v1.14rc7`, commit `d4b4520c945a9e1f8f5facc52a76ac5903babe90`; do not rebase onto upstream `main`.
+- Fork: `ripDZL/dota2-minify`; branch flow exactly `v21.4-hardening` -> `beta` -> `main`; beta/main untouched.
+- Dark Terrain fix `340cbb69bd2b62c922aa8de116ed3df7f74c1435`; `dependencies: []`; keep independent.
+- Last human-safe Remove Foilage product: `049c549730846b7b100f5d5e22a6c2d3aaabad46`; stock tree visible, bright-green foliage remains.
+- Audit: current `pak01_dir.vpk` indexes 384,571 resources; 595/596 literal blacklist lines exist; `**materials/nature/card_grass.*` is a search directive, not a missing file.
+- Current Dota contains `_00`, `_05`, `_08`, and `blank` oak-leaf materials; `_08` is blacklisted, `blank` is preserved.
+- Upstream commit `85020ee5d83ffa17a62c704b5ec618c2e12d8a85` adds Remove Foilage RERL redirects `_05 -> _00` for `tree_oak*` and `dire_tree00*`, and blanks `_05`.
+- Narrow hardened port: `b718c702b2be9c91a96d30ebd793b162c05b81a9`; formatting follow-up/current code `3dbf6cb6d9dbc691bc8bab00b3739c889dd2a326`.
+- RERL implementation only permits same-UTF-8-byte-length redirects; rewrites names in place; preserves resource IDs, file size, block sizes, offsets, and layout; validates Source 2 header/RERL bounds.
+- Remove Foilage `_05.vmat_c` is blanked with the existing Minify `blank.vmat_c` payload via `mods/Remove Foilage/files/`; `tree_oak_leaves_blank.vmat_c` remains preserved.
+- RERL rules: `materials/models/props_tree/tree_oak_leaves_05.vmat` -> `materials/models/props_tree/tree_oak_leaves_00.vmat` for `models/props_tree/tree_oak*.vmdl_c` and `models/props_tree/dire_tree00*.vmdl_c`.
+- CI run `34528212083` / #166: compileall PASS; Ruff format/check PASS; pytest **286/286 PASS**; Windows portable PASS.
+- Artifact `10172455393`; outer SHA-256 `20121b35a7d8caad24062ee4e6e454f0b6419aa839de78a22c7c31419c73778d`.
+- Portable ZIP SHA-256 `f0b73e9204186b2b3554527f46922156fdaf260926e7227a995aaff5c3a00458`.
+- Immediate gate: human Dota smoke with Remove Foilage alone and custom tree mods OFF; success = target foliage gone, stock trees visible, collision correct.
+- No beta/main promotion without explicit approval.

@@ -1,18 +1,14 @@
 # Architecture
-- Baseline: exact upstream rc7 `d4b4520c945a9e1f8f5facc52a76ac5903babe90`; no current-main rebase.
+- Baseline: exact upstream rc7 `d4b4520c945a9e1f8f5facc52a76ac5903babe90`; no upstream-main rebase.
 - Branches: exactly `v21.4-hardening` -> `beta` -> `main`; beta/main only by explicit approval.
-- UI: Dear PyGui Black-Plum Reactor; minimum `960x680`; compact Home; equal Patch/Rescan.
-- Mod discovery/security/profile/D2PFX/backup hardening unchanged.
-- Dark Terrain is independent: `manifest.json` has `dependencies: []`.
-- Remove Foilage is separately selectable and blacklist-only in the stable product; no `manifest.json`, no `maps/dota.vpk`.
-- Stable Remove Foilage tree policy: under `materials/models/props_tree/` / `models/props_tree/`, blacklist only `materials/models/props_tree/tree_oak_leaves_08.vmat_c`.
-- Preserve `tree_oak_leaves_05` assets, `tree_oak_leaves_blank.vmat_c`, stock tree/static/destruction models, and stale/nonexistent `_08.vmdl_c` path.
-- Current-stock evidence: `tree_oak_00_blank.vmdl_c` directly references `tree_oak_leaves_blank.vmat_c`; blanking that material can cause the invisible-tree regression.
-- That blank-leaf dependency does not identify the current bright-green foliage: foliage still renders in the material-remap diagnostic where the original blank-leaf path is blacklisted and the stock tree uses an alias.
-- Oak-leaf `blank`/`_08`/`_05` worldnode blacklist experiments also had no visible effect.
-- Coordinator downtime during the remap test was external and is not evidence of resource corruption.
-- Do not broaden tree/material blacklists from inference. First compare the full legacy blacklist against the user's current `pak01_dir.vpk` index and identify current vegetation paths not covered by the mod.
-- `Minify-Foliage-Audit.zip` performs index-only coverage analysis and emits a small report; it does not modify Dota or read numbered VPK payload chunks.
-- Byte-identical vanilla-tree VPK did not repair the original invisible-tree behavior.
-- Stable validation product: `049c549730846b7b100f5d5e22a6c2d3aaabad46`; CI `34392881410`; **279/279 PASS**; Windows portable PASS.
-- Security boundary: local mod Python scripts trusted; archive/VPK/profile/backup/download/D2PFX data untrusted.
+- UI/security/nested-mod/profile/D2PFX/backup hardening unchanged.
+- Dark Terrain independent: `manifest.json` `dependencies: []`.
+- Remove Foilage remains separately selectable; no Dark Terrain dependency.
+- Prior stable tree policy preserved `tree_oak_leaves_blank.vmat_c`; human smoke kept stock tree visible but foliage remained.
+- Current candidate follows upstream `85020ee5` concept: blank `_05.vmat_c`; redirect legitimate oak/dire tree RERL references from `_05.vmat` to `_00.vmat`.
+- RERL processor is intentionally narrower than upstream: Source 2 header version 12 and all block/RERL bounds validated; redirects must preserve UTF-8 byte length; only RERL name bytes change; resource ID and binary layout remain unchanged.
+- Redirect targets: `models/props_tree/tree_oak*.vmdl_c`, `models/props_tree/dire_tree00*.vmdl_c`.
+- `_05.vmat_c` uses the existing trusted Minify `blank.vmat_c` payload through `mods/Remove Foilage/files/`; `_08.vmat_c` remains blacklisted; `tree_oak_leaves_blank.vmat_c` remains preserved.
+- `blacklist.process()` invokes sibling `rerl.json` after normal blank generation so redirected tree models can override blanking dependencies in the same output VPK.
+- Current candidate code: `3dbf6cb6d9dbc691bc8bab00b3739c889dd2a326`; CI #166 **286/286 PASS** and Windows portable PASS.
+- Security boundary: local bundled mod rules trusted; filesystem destinations still pass through `security.confined_destination`.
