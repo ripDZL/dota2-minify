@@ -7,12 +7,12 @@
 - Remove Foilage is separately selectable and blacklist-only in the stable product; no `manifest.json`, no `maps/dota.vpk`.
 - Stable Remove Foilage tree policy: under `materials/models/props_tree/` / `models/props_tree/`, blacklist only `materials/models/props_tree/tree_oak_leaves_08.vmat_c`.
 - Preserve `tree_oak_leaves_05` assets, `tree_oak_leaves_blank.vmat_c`, stock tree/static/destruction models, and stale/nonexistent `_08.vmdl_c` path.
-- Current-stock evidence: `tree_oak_00_blank.vmdl_c` directly references `tree_oak_leaves_blank.vmat_c`.
-- Shared-material conflict: blanking `tree_oak_leaves_blank.vmat_c` removes intended foliage but also makes the stock blank-oak visual disappear; preserving it restores both.
-- Worldnode aggregate blacklist experiments do not solve this conflict; current map-internal aggregate paths did not change the observed foliage.
-- Byte-identical vanilla-tree VPK cannot override Minify's higher-priority blank output; user confirmed that diagnostic failed.
-- Direct byte editing of compiled `.vmdl_c/.vmat_c` is prohibited for this repair; a remap candidate caused Dota to stall at `Looking for coordinator` despite RERL/resource-ID repair.
-- Safe remap architecture must use source resources: current-stock extract -> Source2Viewer decompile -> edit `.vmdl/.vmat` -> Dota `resourcecompiler.exe` -> package -> validation.
-- Reuse Minify's existing Source2Viewer CLI integration and Dota `game/bin/win64/resourcecompiler.exe` path.
+- Current-stock evidence: `tree_oak_00_blank.vmdl_c` directly references `tree_oak_leaves_blank.vmat_c`; blanking that material can cause the invisible-tree regression.
+- That blank-leaf dependency does not identify the current bright-green foliage: foliage still renders in the material-remap diagnostic where the original blank-leaf path is blacklisted and the stock tree uses an alias.
+- Oak-leaf `blank`/`_08`/`_05` worldnode blacklist experiments also had no visible effect.
+- Coordinator downtime during the remap test was external and is not evidence of resource corruption.
+- Do not broaden tree/material blacklists from inference. First compare the full legacy blacklist against the user's current `pak01_dir.vpk` index and identify current vegetation paths not covered by the mod.
+- `Minify-Foliage-Audit.zip` performs index-only coverage analysis and emits a small report; it does not modify Dota or read numbered VPK payload chunks.
+- Byte-identical vanilla-tree VPK did not repair the original invisible-tree behavior.
 - Stable validation product: `049c549730846b7b100f5d5e22a6c2d3aaabad46`; CI `34392881410`; **279/279 PASS**; Windows portable PASS.
 - Security boundary: local mod Python scripts trusted; archive/VPK/profile/backup/download/D2PFX data untrusted.
