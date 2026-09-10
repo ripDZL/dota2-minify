@@ -11,7 +11,7 @@
 - Remove Foilage `_05.vmat_c` is blanked with the existing Minify `blank.vmat_c` payload via `mods/Remove Foilage/files/`; `tree_oak_leaves_blank.vmat_c` remains preserved.
 - RERL rules: `materials/models/props_tree/tree_oak_leaves_05.vmat` -> `materials/models/props_tree/tree_oak_leaves_00.vmat` for `models/props_tree/tree_oak*.vmdl_c` and `models/props_tree/dire_tree00*.vmdl_c`.
 - CI run `34528212083` / #166: compileall PASS; Ruff format/check PASS; pytest **286/286 PASS**; Windows portable PASS.
-- Artifact `10172455393`; outer SHA-256 `20121b35a7d8caad24062ee4e6e454f0b6419aa839de78a22c7c31419c73778d`.
-- Portable ZIP SHA-256 `f0b73e9204186b2b3554527f46922156fdaf260926e7227a995aaff5c3a00458`.
-- Immediate gate: human Dota smoke with Remove Foilage alone and custom tree mods OFF; success = target foliage gone, stock trees visible, collision correct.
-- No beta/main promotion without explicit approval.
+- Human smoke of run #166 FAILS tree-visibility criterion: user reports a stock tree is still invisible.
+- Exact supplied `tree_oak_00_blank.vmdl_c` RERL references only `tree_oak_leaves_blank.vmat`; `_05 -> _00` does not touch that model.
+- Next diagnostic: compare stock `pak01` tree RERL/resources with generated Minify `pak66`/`pak65` output to identify the exact invisible tree/override. Tool: `Minify-Tree-RERL-Audit.zip`.
+- Do not broaden tree/material blacklists or change beta/main before that evidence.
