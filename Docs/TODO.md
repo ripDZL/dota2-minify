@@ -6,11 +6,13 @@
 - [x] Trace current stock tree references against Remove Foilage blacklist.
 - [x] Preserve `tree_oak_leaves_blank.vmat_c`; remove stale `_08.vmdl_c`; keep only `_08.vmat_c` blacklisted under `props_tree` in stable product `049c549...`.
 - [x] Confirm stable repair keeps stock tree visible but unwanted bright-green foliage remains.
-- [x] Rule out `blank`/`_08`/`_05` map-worldnode aggregate blacklist experiments; no visible effect.
-- [x] Confirm shared-material conflict around `tree_oak_leaves_blank.vmat_c`.
-- [x] Reject direct compiled `.vmdl_c/.vmat_c` byte remap; user reports Dota stalls at `Looking for coordinator`.
-- [ ] Build safe automation: current-stock extract -> Source2Viewer decompile -> source-path remap -> Dota `resourcecompiler.exe` -> package.
-- [ ] Validate decompiled source output and compiled candidate before another Dota smoke.
-- [ ] Human Dota smoke: Remove Foilage alone; foliage removed, stock trees visible, collision correct, coordinator/game startup normal.
+- [x] Rule out oak-leaf `blank`/`_08`/`_05` worldnode blacklist experiments; no visible effect.
+- [x] Test material-remap diagnostic; foliage still remains. Coordinator outage was unrelated.
+- [x] Correct prior overclaim: blank-leaf material explains invisible stock tree, not the surviving foliage.
+- [x] Build `Minify-Foliage-Audit.zip` to compare current `pak01_dir.vpk` index against the full Remove Foilage blacklist.
+- [ ] Run/upload `Minify-Foliage-Audit-Report.zip` from current Dota install.
+- [ ] Identify exact current uncovered foliage resource(s) before expanding blacklist.
+- [ ] Build narrow blacklist candidate only after audit evidence.
+- [ ] Human Dota smoke: Remove Foilage alone; foliage removed, stock trees visible, collision correct.
 - [ ] General Windows/Dota smoke and residual hostile-input/path-race review.
 - [ ] Do not update `beta` or `main` until explicitly approved.
