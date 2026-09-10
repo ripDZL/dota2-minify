@@ -5,10 +5,13 @@
 - [x] Current-Dota foliage audit completed; legacy blacklist is largely current.
 - [x] Upstream `85020ee5` identified as direct Remove Foilage RERL fix: blank `_05`; redirect tree `_05 -> _00`.
 - [x] Hardened narrow implementation committed at `b718c702...`; formatting current code `3dbf6cb6...`.
-- [x] RERL rewrites are same-byte-length, in-place, ID/layout preserving, bounds-checked.
 - [x] `_05.vmat_c` blank override added; `blank.vmat_c` preserved; `_08.vmat_c` remains blacklisted.
 - [x] CI `34528212083` run #166: compileall/Ruff PASS; pytest **286/286 PASS**; Windows portable PASS.
-- [x] Artifact `10172455393`; outer SHA-256 `20121b35a7d8caad24062ee4e6e454f0b6419aa839de78a22c7c31419c73778d`.
-- [x] Portable SHA-256 `f0b73e9204186b2b3554527f46922156fdaf260926e7227a995aaff5c3a00458`.
-- [ ] Human Dota smoke of current candidate.
+- [x] Human smoke of run #166 failed: stock tree still invisible.
+- [x] Tree RERL output audit captured stock pak01 and generated `dota_dutch/pak66_dir.vpk` resources.
+- [x] Audit: 16 stock tree models reference `_05`; generated pak66 changes their RERL names to `_00` but retains `_05` resource ID `0x2107d82e708576e1`.
+- [x] Stock evidence: `_05` ID is `0x2107d82e708576e1`; `_00` ID is `0x803176895b1350a2`; every inspected stock RERL ID matches its resource-name hash.
+- [x] Built one-off ID-corrected candidate from exact audit resources; candidate SHA-256 `75d5845c7a1561c0c162a16712229de482526afb3ad232f499218349030cfcbe`.
+- [ ] Human Dota smoke of ID-corrected candidate.
+- [ ] Commit RERL ID-update semantics only if gameplay smoke succeeds.
 - [ ] Promote only after explicit user approval.
