@@ -8,7 +8,10 @@
 - [x] Port narrow `_05 -> _00` tree RERL redirect with hardened same-length in-place writer.
 - [x] Blank `_05.vmat_c` using existing Minify blank payload; preserve `blank.vmat_c`; keep `_08.vmat_c` blacklisted.
 - [x] CI run #166: compileall/Ruff PASS; pytest **286/286 PASS**; Windows portable PASS.
-- [ ] Human Dota smoke: Remove Foilage alone, custom tree mods OFF; foliage gone, stock trees visible, collision correct.
-- [ ] If foliage remains, inspect audit candidates rather than broadening oak/tree blacklists.
+- [x] Human smoke run #166: FAIL — stock tree still invisible.
+- [ ] Run/upload `Minify-Tree-RERL-Audit-Report.zip` after patching with run #166 candidate.
+- [ ] Compare stock pak01 vs generated pak66/pak65 tree RERL entries and exact overridden resources.
+- [ ] Build next candidate only from that exact tree dependency evidence.
+- [ ] Human Dota smoke: Remove Foilage alone; foliage removed, stock trees visible, collision correct.
 - [ ] General Windows/Dota smoke and residual hostile-input/path-race review.
 - [ ] Do not update `beta` or `main` until explicitly approved.
