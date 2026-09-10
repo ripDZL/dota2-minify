@@ -5,16 +5,17 @@
 - Dark Terrain direct fix: `340cbb69bd2b62c922aa8de116ed3df7f74c1435`; manifest `dependencies: []`; user reports terrain fix seems fine.
 - Stable Remove Foilage product remains `049c549730846b7b100f5d5e22a6c2d3aaabad46`.
 - Stable tree policy: only `materials/models/props_tree/tree_oak_leaves_08.vmat_c` blacklisted under `props_tree`; preserve `tree_oak_leaves_blank.vmat_c` so `tree_oak_00_blank.vmdl_c` renders.
-- Human smoke: stable repair keeps stock tree visible but unwanted bright-green foliage still remains.
-- Worldnode aggregate blacklist experiments (`blank`, `_08`, `_05`) had no visible gameplay effect; do not pursue map-worldnode blacklist guesses.
-- Shared-material conflict confirmed: blacklisting `tree_oak_leaves_blank.vmat_c` removes target foliage but also makes the stock blank oak tree invisible; preserving it restores both tree and foliage.
-- Byte-identical vanilla-tree override VPK did not beat Minify's blank output and did not repair the invisible tree.
+- Human smoke: stable repair keeps stock tree visible but unwanted bright-green foliage remains.
+- Worldnode aggregate blacklist experiments for oak-leaf `blank`/`_08`/`_05` had no visible gameplay effect; do not continue guessing worldnode paths.
+- `tree_oak_leaves_blank.vmat_c` explains the invisible `tree_oak_00_blank.vmdl_c` regression, but it does NOT explain the surviving bright-green foliage.
+- Material-remap diagnostic restored the original blank-leaf blacklist and supplied a remapped stock tree; user reports Remove Foilage still did not remove the foliage.
+- Coordinator stall reported during that test was unrelated service downtime; do not treat it as evidence that the remapped compiled resources broke Dota.
+- Direct compiled-resource remap produced no foliage benefit and is not the next route.
+- Byte-identical vanilla-tree override VPK also did not repair the original invisible-tree behavior.
 - User supplied current-stock resource bundle containing `tree_oak_00_blank.vmdl_c`, `tree_oak_leaves_blank.vmat_c`, and four texture dependencies.
-- Experimental direct binary `.vmdl_c/.vmat_c` material-remap candidate is INVALID: user reports Dota breaks/stalls at `Looking for coordinator`.
-- Never patch Source 2 compiled model/material bytes directly for this fix, even if RERL strings/resource IDs appear internally consistent.
-- Next route: supported pipeline only — extract current stock -> Source2Viewer decompile -> edit source `.vmdl/.vmat` -> Dota `resourcecompiler.exe` -> package -> validate -> human smoke.
-- Minify already uses Source2Viewer CLI and Dota `game/bin/win64/resourcecompiler.exe`; reuse those paths/toolchain.
-- Ground foliage blacklist remains intact; `materials/models/props_nature/fern001.vmat_c` remains blacklisted.
-- CI for stable product: `34392881410` run 164; compileall/Ruff PASS; pytest **279/279 PASS**; Windows portable PASS.
+- Next diagnostic: compare the complete Remove Foilage blacklist against the user's exact current `pak01_dir.vpk` index and enumerate uncovered vegetation/worldnode resources before changing the blacklist again.
+- `Minify-Foliage-Audit.zip` was generated for this purpose; it reads only the VPK directory index and outputs a small report ZIP.
+- Ground-foliage blacklist remains extensive, including `materials/models/props_nature/fern001.vmat_c`; current surviving foliage may use renamed/new or map-baked resources.
+- Stable CI: `34392881410` run 164; compileall/Ruff PASS; pytest **279/279 PASS**; Windows portable PASS.
 - Stable artifact `10120380045`; portable SHA-256 `ec1915f57dd5bc727df05d71ad2117931e92a5ff89d922b8856981a4d92a04a0`.
 - Keep Dark Terrain decoupled. Do not promote `beta` or `main` without explicit user approval.
