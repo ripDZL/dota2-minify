@@ -3,6 +3,7 @@ import shutil
 import subprocess
 from concurrent.futures import ThreadPoolExecutor
 
+import vpk
 from core import base, constants, fs, log, utils
 
 
@@ -66,6 +67,15 @@ def process(blacklist_txt, folder, blank_file_extensions):
 
     with ThreadPoolExecutor() as executor:
         executor.map(copy_blank_file, blacklist_data)
+
+    rerl_file = os.path.join(os.path.dirname(blacklist_txt), "rerl.json")
+    if os.path.isfile(rerl_file):
+        try:
+            from patch import rerl_processor
+
+            rerl_processor.process(rerl_file, folder, vpk.open(constants.dota_game_pak_path))
+        except Exception as exc:
+            log.write_warning(f"Failed to process rerl.json for {folder}: {exc}")
 
 
 def process_dir(index, line, folder):
