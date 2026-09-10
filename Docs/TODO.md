@@ -9,9 +9,11 @@
 - [x] Blank `_05.vmat_c` using existing Minify blank payload; preserve `blank.vmat_c`; keep `_08.vmat_c` blacklisted.
 - [x] CI run #166: compileall/Ruff PASS; pytest **286/286 PASS**; Windows portable PASS.
 - [x] Human smoke run #166: FAIL — stock tree still invisible.
-- [ ] Run/upload `Minify-Tree-RERL-Audit-Report.zip` after patching with run #166 candidate.
-- [ ] Compare stock pak01 vs generated pak66/pak65 tree RERL entries and exact overridden resources.
-- [ ] Build next candidate only from that exact tree dependency evidence.
-- [ ] Human Dota smoke: Remove Foilage alone; foliage removed, stock trees visible, collision correct.
+- [x] Run/analyze `Minify-Tree-RERL-Audit-Report.zip` from run #166 output.
+- [x] Confirm generated pak66 rewrites 16 `_05` tree references to `_00` names but leaves `_05` RERL resource IDs unchanged.
+- [x] Confirm stock RERL IDs equal MurmurHash64B of resource names; run #166 creates 16 ID/name mismatches.
+- [x] Build one-off ID-corrected smoke candidate from exact current-stock/generated resources; do not commit code behavior yet.
+- [ ] Human smoke ID-corrected candidate: foliage removed, stock trees visible, collision correct.
+- [ ] If successful, update RERL writer to update resource ID with redirected name and add regression tests; run CI/portable.
 - [ ] General Windows/Dota smoke and residual hostile-input/path-race review.
 - [ ] Do not update `beta` or `main` until explicitly approved.
