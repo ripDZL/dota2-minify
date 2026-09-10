@@ -4,13 +4,13 @@
 - Dark Terrain direct fix `340cbb69bd2b62c922aa8de116ed3df7f74c1435`; user says terrain fix seems fine.
 - Stable Remove Foilage product remains `049c549730846b7b100f5d5e22a6c2d3aaabad46`.
 - Stable repair preserves `tree_oak_leaves_blank.vmat_c`; stock blank-oak tree renders, but unwanted bright-green foliage remains.
-- Map-worldnode aggregate blacklist tests for `blank`, `_08`, and `_05` had no visible effect.
-- Shared-material conflict confirmed: blacklisting `tree_oak_leaves_blank.vmat_c` removes target foliage but makes `tree_oak_00_blank.vmdl_c` invisible.
-- User supplied exact current-stock resource bundle: model, blank-leaf material, and four texture dependencies.
-- Direct compiled model/material byte-remap diagnostic is rejected: user reports Dota breaks/stalls at `Looking for coordinator`.
-- Do not reuse binary compiled-resource mutation, even with RERL/resource-ID repair.
-- Next implementation route: Source2Viewer decompile -> edit source `.vmdl/.vmat` -> Dota `resourcecompiler.exe` -> package and validate.
-- Minify already uses Source2Viewer CLI and Dota `game/bin/win64/resourcecompiler.exe`; reuse supported toolchain.
+- Oak-leaf worldnode aggregate blacklist tests for `blank`, `_08`, and `_05` had no visible effect.
+- Material-remap diagnostic blacklisted the original blank-leaf material and preserved the stock tree through an alias; unwanted foliage still remained.
+- Coordinator stall observed during that test was unrelated service downtime; ignore it as a diagnostic signal.
+- Corrected conclusion: `tree_oak_leaves_blank.vmat_c` explains the invisible stock-tree dependency but does not identify the surviving foliage.
+- User supplied exact current-stock tree resource bundle; no additional tree-byte experiment is justified now.
+- Built `Minify-Foliage-Audit.zip`: index-only scanner comparing the full Remove Foilage blacklist against current `pak01_dir.vpk`, listing stale paths and uncovered vegetation/worldnode candidates.
+- Next: user runs audit and uploads `Minify-Foliage-Audit-Report.zip`; identify exact current foliage asset before any blacklist expansion.
 - Stable CI `34392881410` run 164: **279/279 PASS**; Windows portable PASS.
 - Stable artifact `10120380045`; portable SHA-256 `ec1915f57dd5bc727df05d71ad2117931e92a5ff89d922b8856981a4d92a04a0`.
 - Keep Dark Terrain independent; no beta/main promotion without explicit approval.
