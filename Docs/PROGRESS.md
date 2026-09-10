@@ -2,15 +2,17 @@
 - [x] Exact rc7 baseline and three-branch model retained.
 - [x] UI/security/nested-mod/profile/D2PFX/backup hardening unchanged.
 - [x] Dark Terrain independent at `340cbb69bd2b62c922aa8de116ed3df7f74c1435`; user reports terrain fix seems fine.
-- [x] Vanilla stock-tree override VPK tested; user reports Remove Foilage + override still failed.
-- [x] Current-stock tree-reference scan isolated `tree_oak_leaves_blank.vmat_c` as the material used by `tree_oak_00_blank.vmdl_c`.
+- [x] Vanilla stock-tree override VPK tested; Remove Foilage + override still failed.
+- [x] Current-stock tree-reference scan isolated `tree_oak_leaves_blank.vmat_c` as a required material for `tree_oak_00_blank.vmdl_c`.
 - [x] Stable Remove Foilage product remains `049c549730846b7b100f5d5e22a6c2d3aaabad46`; stock tree visible, unwanted foliage still present.
-- [x] Map-worldnode aggregate blacklist tests had no visible effect.
-- [x] Shared-material conflict confirmed: blanking `tree_oak_leaves_blank.vmat_c` removes foliage but breaks the stock blank-oak visual.
-- [x] Current-stock resource collector produced exact model/material + texture dependencies.
-- [x] Direct compiled-resource remap experiment rejected: user reports Dota stalls at `Looking for coordinator`.
+- [x] Oak-leaf worldnode aggregate blacklist tests had no visible effect.
+- [x] Material-remap diagnostic restored blank-leaf blacklist while preserving tree through alias; foliage still remained.
+- [x] Coordinator stall during that test was unrelated service downtime; compiled-resource corruption is not established.
+- [x] Corrected diagnosis: blank-leaf material explains the invisible-tree regression but not the surviving foliage.
+- [x] Built `Minify-Foliage-Audit.zip` to compare the full blacklist with the user's exact current VPK index and enumerate uncovered vegetation paths.
 - [x] Stable CI remains `34392881410` run 164: compileall/Ruff PASS; pytest **279/279 PASS**; Windows portable PASS.
 - [x] Stable artifact `10120380045`; portable SHA-256 `ec1915f57dd5bc727df05d71ad2117931e92a5ff89d922b8856981a4d92a04a0`.
-- [ ] Implement supported decompile/edit/recompile automation and validate before next gameplay candidate.
-- [ ] Human Dota smoke after safe compiler-built candidate.
+- [ ] Await current-Dota foliage audit report.
+- [ ] Identify exact surviving foliage resource, then build narrow candidate.
+- [ ] Human Dota smoke after evidence-based candidate.
 - [ ] Promote only after user confirms gameplay behavior.
