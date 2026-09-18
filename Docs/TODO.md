@@ -10,7 +10,7 @@
 - [ ] If alias succeeds, implement dynamic current-stock aliasing; never commit Dota stock binaries.
 - [x] Audit upstream `Minify-v2rc4` / `e444454684c2d7f809e7eef20a1b72d4422c50d7`.
 - [x] Confirm v2rc4 is a major architecture rewrite; raw merge/rebase is unsuitable.
-- [ ] **Current UI gate:** at DearPyGui minimum 960x680, make every visible element/text fit without clipping/overflow; wrap/reflow and collapse optional content before hiding essential controls. Verify dashboard, footer, Mod Library, Settings, D2PFX.
+- [x] 960x680 DearPyGui fit gate: responsive Home/activity/footer, scroll-safe Mod Library/Settings, compact one-column D2PFX, client-clamped shared modals; CI #168 **289/289 PASS**, Windows portable PASS.
 - [ ] Build explicit v2 compatibility matrix before replacing product architecture.
 - [ ] Port `core/security.py` protections into v2 downloads/extraction/update/D2PFX/cursor paths.
 - [ ] Port recursive/nested discovery, Collections, custom VPK categories into v2 `mods_shared` + ModService/UI.

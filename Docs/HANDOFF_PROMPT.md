@@ -1,6 +1,6 @@
 # Handoff Prompt
 - Repo `ripDZL/dota2-minify`; branches exactly `v21.4-hardening` -> `beta` -> `main`; no persistent extra branches.
-- Re-fetch branch heads before edits. This handoff was prepared from hardening parent `bb98da159176129d455f65a542be0029b649c65a`; beta `442d36dcc902f6436c6404f2947091663c254cc5`; main `a26bc88a0d412e357965f29488b83a7f9093e11f`.
+- Re-fetch branch heads before edits. Validated UI product tip is `5d097d3f7246f47e4f89008781d0e45d6137c13f`; beta `442d36dcc902f6436c6404f2947091663c254cc5`; main `a26bc88a0d412e357965f29488b83a7f9093e11f`.
 - At session start read `Docs/AI_CONTEXT.md`, `Docs/TODO.md`, `Docs/PROGRESS.md`, `Docs/ARCHITECTURE.md`, `Docs/SESSION_SUMMARY.md`, and this file before changing code.
 - Current integrated upstream baseline remains rc7 `d4b4520c945a9e1f8f5facc52a76ac5903babe90`.
 - Latest upstream release audited: `Minify-v2rc4` / `e444454684c2d7f809e7eef20a1b72d4422c50d7`; do not raw merge/rebase. Treat v2 as a new architecture target and port fork behavior semantically.
@@ -10,8 +10,8 @@
 - If private alias succeeds, production implementation must derive current-stock data dynamically with strict bounds/same-length aliasing; never commit Dota stock binaries.
 - Preserve from fork during any v2 work: recursive/nested mods, Collections/custom categories, profiles/favorites, backup/rollback, collision index/report, Dark Terrain collision-aware yielding, Main Menu two-rule fix, hardened network/archive/D2PFX/cursor/backup handling, manual prelaunch/no-auto-injection.
 - Port fork security into v2 downloads/archive/update/D2PFX/cursor paths before producing a v2 user build.
-- **Immediate UI gate from latest user screenshot:** every visible element and all text must fit at the enforced minimum window size. Current DearPyGui minimum is **960x680**. Fix responsive geometry, text wrapping, flexible widths/heights, and breakpoint-driven collapse of optional telemetry. Do **not** merely raise the minimum size, and do not hide essential navigation/actions.
-- Verify that minimum-fit invariant on dashboard/header/activity/footer, Mod Library, Settings, D2PFX, dialogs, and browser/plugin surfaces. Recreate the same invariant in responsive Svelte/CSS if/when v2 migration starts.
-- Next technical order: (1) current 960x680 fit pass + regressions, (2) human foliage alias smoke, (3) explicit v2 compatibility matrix, (4) staged semantic v2 ports/security mapping, (5) full Windows/Dota smoke.
+- 960x680 UI gate is complete at `5d097d3f7246f47e4f89008781d0e45d6137c13f`; CI #168 / `35392039137`: **289/289 PASS**, Windows portable PASS. Keep the same invariant in any future DearPyGui edits and responsive Svelte/CSS port.
+- Immediate next task: human smoke the private `_09` foliage alias. If it succeeds, design dynamic current-stock aliasing without committing Dota stock binaries.
+- Next technical order: (1) human foliage alias smoke, (2) explicit v2 compatibility matrix, (3) staged semantic v2 ports/security mapping, (4) full Windows/Dota smoke.
 - Do not promote beta -> main without validation and explicit user approval.
 - User-visible project updates include America/Detroit date + timestamp.

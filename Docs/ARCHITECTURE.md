@@ -8,6 +8,7 @@
 - Current DearPyGui minimum viewport is 960x680. At that size every visible label/control must remain legible and inside its container.
 - Minimum-size strategy: use measured responsive widths/heights, text wrap, flexible tables/groups, and breakpoint-driven collapse of **optional** telemetry. Essential navigation/actions must not disappear or clip. Do not treat a larger minimum as the primary fix.
 - The fit invariant applies to dashboard/header/activity/footer plus Mod Library, Settings, D2PFX browser, dialogs, and plugin/browser surfaces.
+- Implemented compact behavior: Home final compact pass runs after generic resize geometry; optional activity/social telemetry collapses; D2PFX switches to a 148px sidebar + one-column cards and hides optional catalogue telemetry; shared modals clamp to client bounds with scrollable copy.
 - Upstream v2rc4 target architecture: PyWebView host + Svelte frontend + Python services + plugin SDK + CSS themes.
 - v2rc4 tag `e444454684c2d7f809e7eef20a1b72d4422c50d7`; histories diverged, so migrate semantically rather than merge.
 - Preferred mapping: Black-Plum -> CSS theme; nested Collections/profiles/favorites -> ModService + Svelte; backup/collision -> PatchService + backend modules; D2PFX hardening -> plugin data/API/build hook.

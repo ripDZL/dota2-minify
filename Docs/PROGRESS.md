@@ -1,5 +1,5 @@
 # Progress
-- [x] Three-branch model retained; hardening tip at start of docs refresh `7f646b02cdf5a0a2cb08f330a44a3e11321f74b0`.
+- [x] Three-branch model retained; validated UI product tip `5d097d3f7246f47e4f89008781d0e45d6137c13f`.
 - [x] Beta previously promoted; current beta `442d36dcc902f6436c6404f2947091663c254cc5`; main remains `a26bc88a0d412e357965f29488b83a7f9093e11f`.
 - [x] Dark Terrain independent.
 - [x] RERL hardening code `3dbf6cb6d9dbc691bc8bab00b3739c889dd2a326`; CI `34528212083`: **286/286 PASS**; Windows build PASS.
@@ -10,7 +10,8 @@
 - [x] v2 advantages identified: PyWebView/Svelte, CSS themes, services, plugin SDK, D2PFX plugin, migrations, remap processor.
 - [x] v2 incompatibilities identified: no nested Collections/profiles/restore points/collision index; weaker network/archive/D2PFX/cursor hardening; auto-prelaunch option.
 - [x] Upstream latest Remove Foliage uses blacklist + `remap.json`, not a full-map VPK layer.
-- [ ] Latest UI smoke exposed a remaining release gate: all visible elements/text must fit at the current 960x680 DearPyGui minimum. Do not solve by only increasing minimum size.
+- [x] 960x680 UI gate implemented and validated; CI #168 / `35392039137`: **289/289 PASS**, Windows portable PASS.
+- [x] Responsive pass covers Home/activity/footer, Mod Library/Settings sizing, compact D2PFX, and shared modal clamping/scrolling.
 - [ ] No v2 product-code migration started yet.
-- [ ] Next: current minimum-window fit pass + compatibility matrix + staged v2rc4 port plan on hardening; no raw merge/rebase.
+- [ ] Next: human foliage alias smoke, then compatibility matrix + staged v2rc4 port plan on hardening; no raw merge/rebase.
 - [ ] Human foliage alias smoke + general Windows/Dota smoke remain.

@@ -1,7 +1,8 @@
 # AI Context
 - Current upstream-integrated baseline: `Egezenn/dota2-minify` `Minify-v1.14rc7` / `d4b4520c945a9e1f8f5facc52a76ac5903babe90`.
 - Repo `ripDZL/dota2-minify`; branches exactly `v21.4-hardening` -> `beta` -> `main`.
-- Hardening tip at start of this docs refresh: `7f646b02cdf5a0a2cb08f330a44a3e11321f74b0`; beta `442d36dcc902f6436c6404f2947091663c254cc5`; main `a26bc88a0d412e357965f29488b83a7f9093e11f`.
+- Validated 960x680 UI product tip: `5d097d3f7246f47e4f89008781d0e45d6137c13f`; beta `442d36dcc902f6436c6404f2947091663c254cc5`; main `a26bc88a0d412e357965f29488b83a7f9093e11f`.
+- UI CI #168 / `35392039137`: **289/289 PASS**, Ruff/compile PASS, Windows portable PASS; artifact SHA-256 `43c0fcbea15a42afe6ae0100ed83d1ff01be070bfb14c27c855b4da60b6780a7`.
 - Current committed foliage/RERL product code: `3dbf6cb6d9dbc691bc8bab00b3739c889dd2a326`; CI `34528212083` / #166: **286/286 PASS**, Windows portable PASS.
 - Dark Terrain remains independent.
 - Human smoke of simple upstream-style `_05 -> _00` RERL redirect still loses some tree visibility; do not use target-name RERL ID updates.
@@ -14,5 +15,5 @@
 - Fork-only behavior to preserve: recursive/nested mods + Collections/custom categories, profiles/favorites, collision index/report, transactional restore points/rollback, Dark Terrain collision-aware yielding, Main Menu two-rule fix, hardened network/archive/D2PFX/cursor/backup handling, manual prelaunch/no-auto-injection.
 - Upstream v2 gaps found: top-level-only mod scan; no profiles/favorites/restore points/collision report; weaker download/archive/D2PFX/cursor confinement/limits; optional automatic Steam prelaunch injection remains.
 - Upstream Main Menu Background currently has only the dashboard-background collapse rule; retain fork `#FrontpageContents` rule.
-- UI requirement from latest human smoke: **every visible element and all text must fit at the enforced minimum window size**. Current DearPyGui target remains 960x680; fix by responsive wrap/reflow/collapse of optional content, not by simply raising the minimum. Apply the same invariant to Mod Library, Settings, and D2PFX.
+- 960x680 DearPyGui fit pass complete: final resize owns compact Home geometry; activity/footer optional telemetry collapses at the breakpoint; D2PFX uses compact sidebar + one-column grid; shared modals clamp/scroll; Mod Library/Settings remain scroll-safe.
 - Preferred integration: treat v2rc4 as a new architecture target and port fork behavior explicitly; keep current hardening history as rollback provenance.
