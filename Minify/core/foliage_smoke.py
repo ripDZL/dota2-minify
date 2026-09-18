@@ -83,9 +83,7 @@ def read_stock_material(dota_pak_path: Path) -> bytes:
     if not data:
         raise ValueError(f"{STOCK_RESOURCE} is empty in the Dota VPK.")
     if len(data) > MAX_STOCK_RESOURCE_BYTES:
-        raise ValueError(
-            f"{STOCK_RESOURCE} is unexpectedly large ({len(data)} bytes); refusing smoke generation."
-        )
+        raise ValueError(f"{STOCK_RESOURCE} is unexpectedly large ({len(data)} bytes); refusing smoke generation.")
     validate_compiled_resource(data, "stock tree_oak_leaves_05.vmat_c")
     return data
 

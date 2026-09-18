@@ -457,9 +457,7 @@ def _generate_foliage_alias_smoke():
     try:
         metadata = foliage_smoke.build_from_vpk(constants.dota_game_pak_path)
         checkboxes.refresh()
-        output.add_text(
-            f"Generated local foliage alias smoke mod ({str(metadata['stock_sha256'])[:16]}...)."
-        )
+        output.add_text(f"Generated local foliage alias smoke mod ({str(metadata['stock_sha256'])[:16]}...).")
         modal_shared.show(
             "Foliage smoke mod ready",
             [
