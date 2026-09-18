@@ -1,8 +1,7 @@
 # AI Context
 - Current upstream-integrated baseline: `Egezenn/dota2-minify` `Minify-v1.14rc7` / `d4b4520c945a9e1f8f5facc52a76ac5903babe90`.
 - Repo `ripDZL/dota2-minify`; branches exactly `v21.4-hardening` -> `beta` -> `main`.
-- Current hardening head before this Docs audit: `d39e02ceb096e6255af2d4d94f10eaacb8a3aa62`.
-- `beta` currently `442d36dcc902f6436c6404f2947091663c254cc5`; prior Beta 1 prerelease exists. `main` remains `a26bc88a0d412e357965f29488b83a7f9093e11f`.
+- Hardening tip at start of this docs refresh: `7f646b02cdf5a0a2cb08f330a44a3e11321f74b0`; beta `442d36dcc902f6436c6404f2947091663c254cc5`; main `a26bc88a0d412e357965f29488b83a7f9093e11f`.
 - Current committed foliage/RERL product code: `3dbf6cb6d9dbc691bc8bab00b3739c889dd2a326`; CI `34528212083` / #166: **286/286 PASS**, Windows portable PASS.
 - Dark Terrain remains independent.
 - Human smoke of simple upstream-style `_05 -> _00` RERL redirect still loses some tree visibility; do not use target-name RERL ID updates.
@@ -12,8 +11,8 @@
 - Upstream audit 2026-09-18: latest release `Minify-v2rc4` / `e444454684c2d7f809e7eef20a1b72d4422c50d7`; upstream main `bd86c7cb619896e7200b7269c1b23245d3037120` is a docs-index commit after the release.
 - rc7 and v2rc4 diverged from merge base `c25db2cc0310e443eadacde9d9c3f6c84334ccd9`; v2rc4 is 50 commits ahead and rc7 3 commits ahead. Never raw-merge/rebase.
 - v2 architecture: PyWebView + Svelte frontend, CSS themes, Python service layer, plugin SDK, D2PFX plugin, migrations, remap processor.
-- Strong v2 candidates: web UI/theme system, service/plugin architecture, migrations, current Steam/language fixes, latest Remove Foliage remap/tree approach.
 - Fork-only behavior to preserve: recursive/nested mods + Collections/custom categories, profiles/favorites, collision index/report, transactional restore points/rollback, Dark Terrain collision-aware yielding, Main Menu two-rule fix, hardened network/archive/D2PFX/cursor/backup handling, manual prelaunch/no-auto-injection.
 - Upstream v2 gaps found: top-level-only mod scan; no profiles/favorites/restore points/collision report; weaker download/archive/D2PFX/cursor confinement/limits; optional automatic Steam prelaunch injection remains.
 - Upstream Main Menu Background currently has only the dashboard-background collapse rule; retain fork `#FrontpageContents` rule.
+- UI requirement from latest human smoke: **every visible element and all text must fit at the enforced minimum window size**. Current DearPyGui target remains 960x680; fix by responsive wrap/reflow/collapse of optional content, not by simply raising the minimum. Apply the same invariant to Mod Library, Settings, and D2PFX.
 - Preferred integration: treat v2rc4 as a new architecture target and port fork behavior explicitly; keep current hardening history as rollback provenance.
