@@ -7,9 +7,9 @@ import webbrowser
 
 import dearpygui.dearpygui as dpg
 import helper
-from core import base, config, constants, fs, log, output, steam
+from core import base, config, constants, foliage_smoke, fs, log, output, steam
 
-from ui import checkboxes, theme
+from ui import checkboxes, modal_shared, theme
 
 # Developer tools are embedded in Control Panel now. Keep the legacy state
 # variables because resize code and third-party integrations may still import them.
@@ -452,6 +452,36 @@ def _ensure_restore_dialog_fit():
         )
 
 
+def _generate_foliage_alias_smoke():
+    """Create the private _09 smoke mod from the user's current Dota stock material."""
+    try:
+        metadata = foliage_smoke.build_from_vpk(constants.dota_game_pak_path)
+        checkboxes.refresh()
+        output.add_text(
+            f"Generated local foliage alias smoke mod ({str(metadata['stock_sha256'])[:16]}...)."
+        )
+        modal_shared.show(
+            "Foliage smoke mod ready",
+            [
+                "Generated 'Remove Foilage - Private Alias Smoke' from your current Dota files.",
+                "Keep production 'Remove Foilage' unchecked. Select only the smoke mod, patch, then verify stock trees, target foliage removal, and collision.",
+                "The generated smoke mod contains a local Dota stock asset. Do not redistribute or commit it.",
+            ],
+            [{"label": "OK"}],
+            width=600,
+            height=330,
+        )
+    except Exception as exc:
+        log.write_warning(f"Failed to generate foliage alias smoke mod: {exc}")
+        modal_shared.show(
+            "Foliage smoke generation failed",
+            [str(exc)],
+            [{"label": "OK"}],
+            width=560,
+            height=280,
+        )
+
+
 def _wipe_language_paths():
     import patch
 
@@ -521,6 +551,7 @@ def render_panel(parent):
         )
         _tool_button(mod_tools, "Untick all mods", lambda: tick_batch(False))
         _tool_button(mod_tools, "Tick all mods", lambda: tick_batch(True))
+        _tool_button(mod_tools, "Generate _09 foliage smoke mod", _generate_foliage_alias_smoke)
 
         maintenance = _section_header("developer_tools_content", "Maintenance", default_open=False)
         dpg.add_text("These actions can change local Steam/Dota state.", parent=maintenance, wrap=700)

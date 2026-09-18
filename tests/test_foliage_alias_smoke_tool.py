@@ -5,13 +5,12 @@ from pathlib import Path
 
 import pytest
 
+from core import foliage_smoke as SMOKE
+
 
 ROOT = Path(__file__).resolve().parents[1]
 SCRIPT = ROOT / "scripts" / "foliage_alias_smoke.py"
-SPEC = importlib.util.spec_from_file_location("foliage_alias_smoke", SCRIPT)
-assert SPEC and SPEC.loader
-SMOKE = importlib.util.module_from_spec(SPEC)
-SPEC.loader.exec_module(SMOKE)
+DEVTOOLS = (ROOT / "Minify" / "ui" / "dev_tools.py").read_text(encoding="utf-8")
 
 
 def _resource(version):
@@ -31,7 +30,7 @@ def _source_mod(tmp_path):
 
 def test_build_smoke_mod_preserves_blank_and_adds_private_stock_alias(tmp_path):
     source = _source_mod(tmp_path)
-    output = tmp_path / "Remove Foilage - Private Alias Smoke"
+    output = tmp_path / SMOKE.SMOKE_MOD_NAME
     stock = _resource(2)
 
     metadata = SMOKE.build_smoke_mod(source, stock, output)
@@ -66,9 +65,17 @@ def test_build_smoke_mod_refuses_to_overwrite_unmarked_directory(tmp_path):
     assert (output / "keep.txt").read_text(encoding="utf-8") == "do not delete"
 
 
-def test_write_smoke_zip_requires_generated_marker(tmp_path):
-    output = tmp_path / "not-smoke"
-    output.mkdir()
+def test_cli_loads_without_generating_stock_content():
+    spec = importlib.util.spec_from_file_location("foliage_alias_smoke_cli", SCRIPT)
+    assert spec and spec.loader
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+    assert callable(module.discover_dota_pak)
+    assert callable(module.main)
 
-    with pytest.raises(RuntimeError, match="Not a generated foliage smoke directory"):
-        SMOKE.write_smoke_zip(output, tmp_path / "bad.zip")
+
+def test_portable_developer_tools_exposes_opt_in_smoke_generator():
+    assert "def _generate_foliage_alias_smoke():" in DEVTOOLS
+    assert 'foliage_smoke.build_from_vpk(constants.dota_game_pak_path)' in DEVTOOLS
+    assert '"Generate _09 foliage smoke mod"' in DEVTOOLS
+    assert "checkboxes.refresh()" in DEVTOOLS
