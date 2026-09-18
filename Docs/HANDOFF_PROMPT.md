@@ -1,18 +1,17 @@
 # Handoff Prompt
 - Repo `ripDZL/dota2-minify`; branches exactly `v21.4-hardening` -> `beta` -> `main`; no persistent extra branches.
-- Re-fetch branch heads before edits. Current hardening before audit Docs commit: `d39e02ceb096e6255af2d4d94f10eaacb8a3aa62`; beta `442d36dcc902f6436c6404f2947091663c254cc5`; main `a26bc88a0d412e357965f29488b83a7f9093e11f`.
+- Re-fetch branch heads before edits. This handoff was prepared from hardening parent `bb98da159176129d455f65a542be0029b649c65a`; beta `442d36dcc902f6436c6404f2947091663c254cc5`; main `a26bc88a0d412e357965f29488b83a7f9093e11f`.
+- At session start read `Docs/AI_CONTEXT.md`, `Docs/TODO.md`, `Docs/PROGRESS.md`, `Docs/ARCHITECTURE.md`, `Docs/SESSION_SUMMARY.md`, and this file before changing code.
 - Current integrated upstream baseline remains rc7 `d4b4520c945a9e1f8f5facc52a76ac5903babe90`.
-- Latest upstream release audited: `Minify-v2rc4` / `e444454684c2d7f809e7eef20a1b72d4422c50d7`; do not raw merge/rebase.
-- v2 target architecture: PyWebView/Svelte + CSS themes + service layer + plugin SDK + D2PFX plugin.
-- Preserve from fork: nested mods/Collections/custom categories, profiles/favorites, backup/rollback, collision report, Dark Terrain compatibility, Main Menu two-rule fix, security layer, manual prelaunch/no-auto-injection.
-- Port fork hardening into v2 downloads/archive/update/D2PFX/cursor paths before producing a v2 user build.
-- Current foliage/RERL product code: `3dbf6cb6d9dbc691bc8bab00b3739c889dd2a326`; CI #166 **286/286 PASS**, Windows PASS.
-- Human smoke: simple `_05 -> _00` and target-ID correction still lose some trees. Do not commit target-name RERL ID updates.
-- Confirmed foliage control: blank original `tree_oak_leaves_05.vmat_c`.
-- Current smoke candidate: original `_05` blank; tree model old `_05` RERL key points to private unused `_09`; alias preserves stock `_05` material/texture behavior.
-- Private alias is smoke-only. If successful, implement dynamic current-stock extraction + same-length aliasing; never commit Dota stock binaries.
-- Upstream v2 latest Remove Foliage also changed strategy to `remap.json`; compare/validate against alias findings before adoption.
-- Pending UI requirement: every element/text must fit minimum window size; solve in responsive Svelte/CSS if v2 migration proceeds.
-- Next technical work: compatibility matrix, then staged semantic ports onto hardening; no product-tree replacement until security/features are mapped.
+- Latest upstream release audited: `Minify-v2rc4` / `e444454684c2d7f809e7eef20a1b72d4422c50d7`; do not raw merge/rebase. Treat v2 as a new architecture target and port fork behavior semantically.
+- Current committed foliage/RERL product code: `3dbf6cb6d9dbc691bc8bab00b3739c889dd2a326`; CI `34528212083` / #166: **286/286 PASS**, Windows portable PASS.
+- Foliage findings: simple `_05 -> _00` redirect and target-name RERL-ID correction both lose some trees. Do not commit target-name RERL ID updates. Blanking original `tree_oak_leaves_05.vmat_c` does remove target foliage.
+- Current foliage smoke candidate is private unused `_09`: original `_05` stays blank; affected tree models keep the old `_05` RERL key but point it to `_09`; alias preserves stock `_05` material/texture behavior. Candidate is smoke-only.
+- If private alias succeeds, production implementation must derive current-stock data dynamically with strict bounds/same-length aliasing; never commit Dota stock binaries.
+- Preserve from fork during any v2 work: recursive/nested mods, Collections/custom categories, profiles/favorites, backup/rollback, collision index/report, Dark Terrain collision-aware yielding, Main Menu two-rule fix, hardened network/archive/D2PFX/cursor/backup handling, manual prelaunch/no-auto-injection.
+- Port fork security into v2 downloads/archive/update/D2PFX/cursor paths before producing a v2 user build.
+- **Immediate UI gate from latest user screenshot:** every visible element and all text must fit at the enforced minimum window size. Current DearPyGui minimum is **960x680**. Fix responsive geometry, text wrapping, flexible widths/heights, and breakpoint-driven collapse of optional telemetry. Do **not** merely raise the minimum size, and do not hide essential navigation/actions.
+- Verify that minimum-fit invariant on dashboard/header/activity/footer, Mod Library, Settings, D2PFX, dialogs, and browser/plugin surfaces. Recreate the same invariant in responsive Svelte/CSS if/when v2 migration starts.
+- Next technical order: (1) current 960x680 fit pass + regressions, (2) human foliage alias smoke, (3) explicit v2 compatibility matrix, (4) staged semantic v2 ports/security mapping, (5) full Windows/Dota smoke.
 - Do not promote beta -> main without validation and explicit user approval.
-- User-visible updates include America/Detroit timestamp.
+- User-visible project updates include America/Detroit date + timestamp.
