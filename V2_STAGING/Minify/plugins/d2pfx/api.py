@@ -131,19 +131,19 @@ def get_mods(params: Dict[str, Any] = None) -> List[Dict[str, Any]]:
 def _resolve_mod_folder(name: str, cat_id: str, label: str = None) -> str:
     from patch import manifest_utils
 
-    if os.path.exists(base.mods_dir):
-        for folder in os.listdir(base.mods_dir):
-            mod_path = os.path.join(base.mods_dir, folder)
-            if not os.path.isdir(mod_path):
-                continue
-            cfg = manifest_utils.get_mod(mod_path)
-            if (
-                cfg.get("browser") == "d2pfx"
-                and cfg.get("name") == name
-                and cfg.get("category") == cat_id
-                and cfg.get("label") == label
-            ):
-                return folder
+    mods_shared.scan_mods()
+    for mod_id in mods_shared.mods_alphabetical:
+        mod_path = mods_shared.get_mod_path(mod_id)
+        if not os.path.isdir(mod_path):
+            continue
+        cfg = manifest_utils.get_mod(mod_path)
+        if (
+            cfg.get("browser") == "d2pfx"
+            and cfg.get("name") == name
+            and cfg.get("category") == cat_id
+            and cfg.get("label") == label
+        ):
+            return mod_id
 
     mod_dir_name = f"D2PFX {cat_id.upper()} - {name}"
     if label:
@@ -155,11 +155,10 @@ def _resolve_mod_folder(name: str, cat_id: str, label: str = None) -> str:
 def get_installed_mods(params: Dict[str, Any] = None) -> List[Dict[str, Any]]:
     from patch import manifest_utils
 
+    mods_shared.scan_mods()
     installed = []
-    if not os.path.exists(base.mods_dir):
-        return []
-    for folder in os.listdir(base.mods_dir):
-        mod_path = os.path.join(base.mods_dir, folder)
+    for mod_id in mods_shared.mods_alphabetical:
+        mod_path = mods_shared.get_mod_path(mod_id)
         if not os.path.isdir(mod_path):
             continue
         cfg = manifest_utils.get_mod(mod_path)
@@ -169,8 +168,8 @@ def get_installed_mods(params: Dict[str, Any] = None) -> List[Dict[str, Any]]:
                     "name": cfg.get("name"),
                     "category": cfg.get("category"),
                     "label": cfg.get("label"),
-                    "folder": folder,
-                    "enabled": mods_shared.get_state(folder),
+                    "folder": mod_id,
+                    "enabled": mods_shared.get_state(mod_id),
                 }
             )
     return installed
@@ -361,45 +360,53 @@ def uninstall_mod(params: Dict[str, Any] = None) -> Dict[str, Any]:
 
     from patch import manifest_utils
 
+    mods_shared.scan_mods()
     target_dir = None
-    target_folder = None
-    if os.path.exists(base.mods_dir):
-        for folder in os.listdir(base.mods_dir):
-            mod_path = os.path.join(base.mods_dir, folder)
-            if not os.path.isdir(mod_path):
-                continue
-            cfg = manifest_utils.get_mod(mod_path)
-            if (
-                cfg.get("browser") == "d2pfx"
-                and cfg.get("name") == mod_name
-                and cfg.get("category") == cat_id
-                and cfg.get("label") == label
-            ):
-                target_dir = mod_path
-                target_folder = folder
-                break
+    target_id = None
+    for mod_id in mods_shared.mods_alphabetical:
+        mod_path = mods_shared.get_mod_path(mod_id)
+        if not os.path.isdir(mod_path):
+            continue
+        cfg = manifest_utils.get_mod(mod_path)
+        if (
+            cfg.get("browser") == "d2pfx"
+            and cfg.get("name") == mod_name
+            and cfg.get("category") == cat_id
+            and cfg.get("label") == label
+        ):
+            target_dir = mod_path
+            target_id = mod_id
+            break
 
     if not target_dir:
-        mod_dir_name = f"D2PFX {cat_id.upper()} - {mod_name}"
-        if label:
-            mod_dir_name = f"{mod_dir_name} {label}"
-        target_folder = utils.sanitize_win_path(mod_dir_name)
-        possible_dir = os.path.join(base.mods_dir, target_folder)
-        if os.path.exists(possible_dir):
+        fallback_id = _resolve_mod_folder(str(mod_name or ""), str(cat_id or ""), label)
+        possible_dir = mods_shared.get_mod_path(fallback_id)
+        if os.path.isdir(possible_dir):
             target_dir = possible_dir
+            target_id = fallback_id
 
-    if target_dir and os.path.exists(target_dir):
-        fs.remove_path(target_dir)
-        if target_folder:
+    if not target_dir:
+        return {"success": False, "error": "Mod directory not found."}
+
+    try:
+        relative = os.path.relpath(os.path.abspath(target_dir), os.path.abspath(base.mods_dir)).replace(os.sep, "/")
+        security.safe_relative_path(relative)
+        _, confined = security.confined_destination(base.mods_dir, relative)
+        if os.path.normcase(os.path.abspath(confined)) != os.path.normcase(os.path.abspath(target_dir)):
+            raise ValueError("D2PFX uninstall target escaped the mods directory.")
+        fs.remove_path(confined)
+
+        if target_id:
             states = config.read_json_file(base.mods_config_dir)
-            if target_folder in states:
-                del states[target_folder]
+            if isinstance(states, dict) and target_id in states:
+                del states[target_id]
                 config.write_json_file(base.mods_config_dir, dict(sorted(states.items())))
+
         mods_shared.scan_mods()
         output.add_text(f"D2PFX mod '{mod_name}' removed.", msg_type="info")
         return {"success": True}
-    else:
-        return {"success": False, "error": "Mod directory not found."}
+    except Exception as exc:
+        return {"success": False, "error": str(exc)}
 
 
 @router.route

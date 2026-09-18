@@ -137,6 +137,7 @@ def test_v2_stage2_service_and_patch_callers_use_logical_mod_paths():
     config_service = (STAGE / "ui" / "services" / "config_service.py").read_text(encoding="utf-8")
     conditions = (STAGE / "conditions.py").read_text(encoding="utf-8")
     d2pfx = (STAGE / "plugins" / "d2pfx" / "build_hook.py").read_text(encoding="utf-8")
+    d2pfx_api = (STAGE / "plugins" / "d2pfx" / "api.py").read_text(encoding="utf-8")
 
     assert "mod_path = mods_shared.get_mod_path(mod)" in service
     assert "mod_path = mods_shared.get_mod_path(mod_name)" in service
@@ -159,3 +160,6 @@ def test_v2_stage2_service_and_patch_callers_use_logical_mod_paths():
     assert "mod_path = mods_shared.get_mod_path(mod_name)" in config_service
     assert "mod_path = mods_shared.get_mod_path(folder)" in conditions
     assert "mod_path = mods_shared.get_mod_path(mod_name)" in d2pfx
+    assert "for mod_id in mods_shared.mods_alphabetical:" in d2pfx_api
+    assert "mod_path = mods_shared.get_mod_path(mod_id)" in d2pfx_api
+    assert "security.confined_destination(base.mods_dir, relative)" in d2pfx_api
