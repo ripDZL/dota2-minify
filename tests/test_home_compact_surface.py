@@ -19,7 +19,7 @@ def test_home_keeps_only_status_action_separator_visible():
 
 def test_home_compacts_shell_after_resize_pass():
     for token in (
-        "HOME_COMPACT_MIN_SHELL_HEIGHT = 250",
+        "HOME_COMPACT_MIN_SHELL_HEIGHT = 292",
         "HOME_COMPACT_INNER_INSET = 34",
         "HOME_COMPACT_VERTICAL_GAP = 22",
         "HOME_STATUS_HEIGHT = 68",

@@ -267,7 +267,7 @@ def test_minimum_width_fit_contract_covers_primary_library_and_d2pfx():
     assert "content_width = max(320, shared.window_width - CONTENT_INSET)" in WINDOW
     assert "settings_width = content_width" in WINDOW
     assert 'with dpg.child_window(width=168, tag="d2pfx_sidebar"):' in D2PFX
-    assert "init_width_or_weight=320" in D2PFX
+    assert "init_width_or_weight=240" in D2PFX
     assert 'tag="d2pfx_cat_desc", wrap=360' in D2PFX
     assert "new_cols = 1 if compact else max(2, min(4, int(main_width / 220)))" in D2PFX
     assert "wrap=max(220, _list_width() - 64)" in CHECKBOXES
