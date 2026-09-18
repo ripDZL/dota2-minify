@@ -46,4 +46,4 @@ def test_final_home_structure_exists_at_construction():
     ):
         assert f'tag="{tag}"' in MAIN
     assert 'with dpg.group(tag="header_brand_group", horizontal=False):' in MAIN
-    assert 'dpg.add_text(f"RELEASE: {base.VERSION}", tag="app_product_name")' in MAIN
+    assert 'dpg.add_text(f"RELEASE: {base.DISPLAY_VERSION}", tag="app_product_name")' in MAIN
