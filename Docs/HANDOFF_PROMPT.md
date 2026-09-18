@@ -1,17 +1,18 @@
 # Handoff Prompt
-- Continue `ripDZL/dota2-minify`; baseline `Minify-v1.14rc7` / `d4b4520c945a9e1f8f5facc52a76ac5903babe90`; never rebase onto upstream `main`.
-- Branch flow exactly `v21.4-hardening` -> `beta` -> `main`; only work on hardening unless explicitly approved.
-- Dark Terrain remains independent.
-- Last human-safe Remove Foilage `049c549...`: trees visible, foliage remains.
-- Hardened upstream RERL concept code `3dbf6cb6...`; CI #166 **286/286 PASS**; Windows portable PASS; human smoke still loses tree visibility.
-- Audit: 16 stock oak/dire models use `_05`; `tree_oak_00_blank.vmdl_c` is not one of the generated overrides.
-- ID-corrected one-off candidate was tested: foliage gone but certain trees invisible. Do not implement target-name RERL ID updates.
-- Confirmed target: blanking original `tree_oak_leaves_05.vmat_c` removes unwanted foliage.
-- Current smoke candidate uses private unused `_09`: original `_05` stays blank; tree models keep old `_05` RERL key and point it to `_09`; `_09.vmat_c` preserves exact stock `_05` material/texture behavior.
-- Portable candidate SHA-256 `7e8feede3c2f648155a03a619760a996ea99c17a445f31335e4182191f8b5457`.
-- Mod-only candidate SHA-256 `3d7d9b169e0fbbd808236e65e8d57affc85055d187301327ecd89cd2eb68e86b`.
-- Immediate gate: human smoke private alias; success = all stock trees visible, target foliage gone, collision correct.
-- If successful, implement dynamic current-stock `_05` extraction + same-length aliasing; do not commit Dota stock binaries.
-- `beta`/`main` untouched; no promotion without explicit approval.
-- At session start read `Docs/AI_CONTEXT.md`, `Docs/TODO.md`, `Docs/PROGRESS.md`, `Docs/ARCHITECTURE.md`, `Docs/SESSION_SUMMARY.md`.
+- Repo `ripDZL/dota2-minify`; branches exactly `v21.4-hardening` -> `beta` -> `main`; no persistent extra branches.
+- Re-fetch branch heads before edits. Current hardening before audit Docs commit: `d39e02ceb096e6255af2d4d94f10eaacb8a3aa62`; beta `442d36dcc902f6436c6404f2947091663c254cc5`; main `a26bc88a0d412e357965f29488b83a7f9093e11f`.
+- Current integrated upstream baseline remains rc7 `d4b4520c945a9e1f8f5facc52a76ac5903babe90`.
+- Latest upstream release audited: `Minify-v2rc4` / `e444454684c2d7f809e7eef20a1b72d4422c50d7`; do not raw merge/rebase.
+- v2 target architecture: PyWebView/Svelte + CSS themes + service layer + plugin SDK + D2PFX plugin.
+- Preserve from fork: nested mods/Collections/custom categories, profiles/favorites, backup/rollback, collision report, Dark Terrain compatibility, Main Menu two-rule fix, security layer, manual prelaunch/no-auto-injection.
+- Port fork hardening into v2 downloads/archive/update/D2PFX/cursor paths before producing a v2 user build.
+- Current foliage/RERL product code: `3dbf6cb6d9dbc691bc8bab00b3739c889dd2a326`; CI #166 **286/286 PASS**, Windows PASS.
+- Human smoke: simple `_05 -> _00` and target-ID correction still lose some trees. Do not commit target-name RERL ID updates.
+- Confirmed foliage control: blank original `tree_oak_leaves_05.vmat_c`.
+- Current smoke candidate: original `_05` blank; tree model old `_05` RERL key points to private unused `_09`; alias preserves stock `_05` material/texture behavior.
+- Private alias is smoke-only. If successful, implement dynamic current-stock extraction + same-length aliasing; never commit Dota stock binaries.
+- Upstream v2 latest Remove Foliage also changed strategy to `remap.json`; compare/validate against alias findings before adoption.
+- Pending UI requirement: every element/text must fit minimum window size; solve in responsive Svelte/CSS if v2 migration proceeds.
+- Next technical work: compatibility matrix, then staged semantic ports onto hardening; no product-tree replacement until security/features are mapped.
+- Do not promote beta -> main without validation and explicit user approval.
 - User-visible updates include America/Detroit timestamp.

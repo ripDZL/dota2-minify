@@ -1,16 +1,24 @@
 # TODO
-- [x] Pin exact rc7 baseline; keep exactly `v21.4-hardening`, `beta`, `main`.
+- [x] Keep exactly `v21.4-hardening`, `beta`, `main`.
 - [x] Keep Dark Terrain independent from Remove Foilage.
-- [x] Confirm `049c549...` preserves stock tree but leaves bright-green foliage.
-- [x] Audit current Dota VPK index against Remove Foilage blacklist.
-- [x] Port upstream `_05 -> _00` RERL concept with hardened parser/writer; CI #166 **286/286 PASS**.
-- [x] Human smoke #166: FAIL — tree visibility still broken.
-- [x] Audit generated pak66; identify 16 `_05` tree-model redirects.
-- [x] Test ID-corrected candidate: foliage gone, certain trees still invisible.
-- [x] Reject RERL ID-update semantics; redirected RERL key must remain available to model internals.
+- [x] Port/harden RERL concept; CI #166 **286/286 PASS**; Windows portable PASS.
+- [x] Confirm simple `_05 -> _00` smoke still breaks some trees.
+- [x] Reject target-name RERL ID updates.
 - [x] Confirm blanking original `_05.vmat_c` removes target foliage.
-- [x] Build private-stock-material alias candidate: original `_05` blank; tree `_05` key redirects to unused `_09`; `_09` contains exact stock `_05` material behavior.
-- [ ] Human smoke private `_05` alias candidate: all stock trees visible, foliage gone, collision correct.
-- [ ] If successful, implement dynamic stock `_05` extraction/aliasing and focused regression tests; run CI/portable.
-- [ ] General Windows/Dota smoke and residual hostile-input/path-race review.
-- [ ] Do not update `beta` or `main` until explicitly approved.
+- [x] Build private `_09` stock-material alias smoke candidate.
+- [ ] Human smoke private alias: all stock trees visible, target foliage gone, collision correct.
+- [ ] If alias succeeds, implement dynamic current-stock aliasing; never commit Dota stock binaries.
+- [x] Audit upstream `Minify-v2rc4` / `e444454684c2d7f809e7eef20a1b72d4422c50d7`.
+- [x] Confirm v2rc4 is a major architecture rewrite; raw merge/rebase is unsuitable.
+- [ ] Build explicit v2 compatibility matrix before replacing product architecture.
+- [ ] Port `core/security.py` protections into v2 downloads/extraction/update/D2PFX/cursor paths.
+- [ ] Port recursive/nested discovery, Collections, custom VPK categories into v2 `mods_shared` + ModService/UI.
+- [ ] Port profiles/favorites/mod-library metadata/collision report into v2 services/UI.
+- [ ] Port transactional restore points/rollback + compatibility validation into v2 PatchService/pipeline.
+- [ ] Port Dark Terrain collision-aware yielding; do not replace it with blanket category conflict.
+- [ ] Preserve Main Menu second `#FrontpageContents` collapse rule.
+- [ ] Evaluate upstream v2 Remove Foliage `remap.json` against private-alias findings in isolated Dota smoke.
+- [ ] Preserve manual `prelaunch`; disable automatic Steam launch-option injection.
+- [ ] Rebuild Black-Plum as CSS theme and prove every page/plugin fits enforced minimum size.
+- [ ] Residual hostile-input/path-race review and Dota smoke.
+- [ ] Beta -> main only after validation and explicit approval.

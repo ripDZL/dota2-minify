@@ -1,15 +1,16 @@
 # Progress
-- [x] Exact rc7 baseline and three-branch model retained; beta/main untouched.
-- [x] Dark Terrain remains independent.
-- [x] Stable prior Remove Foilage `049c549...`: stock tree visible; foliage remains.
-- [x] Current-Dota foliage audit completed; legacy blacklist largely current.
-- [x] Upstream RERL concept ported/hardened; CI #166 **286/286 PASS**; Windows portable PASS.
-- [x] Human smoke #166 failed tree visibility.
-- [x] Tree RERL audit: 16 tree models redirect `_05`; generated pak66 captured.
-- [x] ID-corrected candidate tested: foliage removed, certain trees invisible.
-- [x] Revised diagnosis: changing redirected RERL IDs is not valid evidence-based behavior; do not commit it.
-- [x] `_05.vmat_c` blanking is confirmed to remove the target foliage.
-- [x] Built private `_05` alias candidate using unused `_09` path and exact stock `_05` material semantics.
-- [ ] Human Dota smoke private-alias candidate.
-- [ ] Commit production alias implementation only after smoke success.
-- [ ] Promote only after explicit user approval.
+- [x] Three-branch model retained; current hardening `d39e02ceb096e6255af2d4d94f10eaacb8a3aa62`.
+- [x] Beta previously promoted; current beta `442d36dcc902f6436c6404f2947091663c254cc5`; main remains frozen.
+- [x] Dark Terrain independent.
+- [x] RERL hardening code `3dbf6cb6d9dbc691bc8bab00b3739c889dd2a326`; CI `34528212083`: **286/286 PASS**; Windows build PASS.
+- [x] Simple upstream-style tree redirect smoke failed; some trees invisible.
+- [x] ID-update semantics rejected; blank `_05.vmat_c` confirmed to remove target foliage.
+- [x] Private `_09` stock-material alias candidate built; human smoke pending.
+- [x] Upstream reviewed through `Minify-v2rc4` / `e444454684c2d7f809e7eef20a1b72d4422c50d7`.
+- [x] v2 advantages identified: PyWebView/Svelte, CSS themes, services, plugin SDK, D2PFX plugin, migrations, remap processor.
+- [x] v2 incompatibilities identified: no nested Collections/profiles/restore points/collision index; weaker network/archive/D2PFX/cursor hardening; auto-prelaunch option.
+- [x] Upstream latest Remove Foliage uses blacklist + `remap.json`, not a full-map VPK layer.
+- [ ] No v2 product-code migration started yet.
+- [ ] Next: compatibility matrix + staged v2rc4 port plan on hardening; no raw merge/rebase.
+- [ ] Minimum-window fit requirement remains and should be solved in responsive Svelte/CSS if v2 migration proceeds.
+- [ ] Human foliage alias smoke + general Windows/Dota smoke remain.

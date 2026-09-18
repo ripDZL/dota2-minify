@@ -1,12 +1,16 @@
 # Architecture
-- Baseline: exact upstream rc7 `d4b4520c945a9e1f8f5facc52a76ac5903babe90`; no upstream-main rebase.
-- Branches: exactly `v21.4-hardening` -> `beta` -> `main`; beta/main only by explicit approval.
-- Dark Terrain independent; Remove Foilage separately selectable.
-- Confirmed foliage control: blanking `materials/models/props_tree/tree_oak_leaves_05.vmat_c` removes the target foliage.
-- Stock tree preservation cannot use simple `_05 -> _00` for all affected models; human smoke still loses certain trees.
-- Do not update redirected RERL IDs to target-name hashes: model internals may reference the original RERL key.
-- Next architecture under test: private material alias. Original `_05.vmat_c` remains blank globally; affected tree models keep the original `_05` RERL key but map it to unused same-length `tree_oak_leaves_09.vmat`; `_09.vmat_c` is derived from exact stock `_05` material with only same-length self-name identity changed, retaining stock `_05` texture dependencies.
-- `tree_oak_leaves_blank.vmat_c` remains preserved; `_08.vmat_c` remains blacklisted.
-- Production implementation must dynamically derive alias data from current stock Dota, not freeze version-sensitive Dota binaries, and must retain strict Source 2 bounds/same-length validation.
-- Current committed RERL code remains `3dbf6cb6...`; private-alias behavior is smoke-only until validated.
-- Security boundary unchanged: local bundled rules trusted; filesystem destinations confined.
+- Current product lineage: rc7-derived hardening; exact upstream baseline `d4b4520c945a9e1f8f5facc52a76ac5903babe90`.
+- Branch flow exactly hardening -> beta -> main; no persistent integration/reference branches.
+- Current committed foliage engine uses hardened same-length RERL rewriting; private `_09` alias remains smoke-only.
+- Never freeze/version-pin Dota stock binary bytes in repo; any successful alias implementation must derive from current stock Dota with strict bounds.
+- Security boundary: local bundled/mod Python trusted; archive/VPK/profile/backup/download/D2PFX data untrusted; destinations confined.
+- Current fork hardening primitives: `core/security.py`, `core/backup_manager.py`, `core/mod_compat.py`, `core/mod_library.py`.
+- Upstream v2rc4 target architecture: PyWebView host + Svelte frontend + Python services + plugin SDK + CSS themes.
+- v2rc4 tag `e444454684c2d7f809e7eef20a1b72d4422c50d7`; histories diverged, so migrate semantically rather than merge.
+- Preferred mapping: Black-Plum -> CSS theme; nested Collections/profiles/favorites -> ModService + Svelte; backup/collision -> PatchService + backend modules; D2PFX hardening -> plugin data/API/build hook.
+- Port fork security into v2 before accepting any v2 test build: bounded/atomic downloads, safe archives, URL/redirect/SSRF validation, bounded decompression, staged installs, symlink-safe cursor operations.
+- Preserve collision-aware resource ownership. Upstream blanket category conflicts are not equivalent to fork Dark Terrain behavior.
+- Preserve no-auto-prelaunch policy even though upstream v2 exposes `patch_on_launch`.
+- Upstream v2 Remove Foliage remap is eligible for isolated validation; never reintroduce a full-map Remove Foliage layer.
+- Main Menu Background must retain both collapse rules.
+- UI requirement: every visible element/text must fit the enforced minimum; solve via responsive CSS/container rules before lowering minimum below current safe target.

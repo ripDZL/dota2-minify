@@ -1,16 +1,16 @@
 # Session Summary
-- Repo `ripDZL/dota2-minify`; exact rc7 baseline `d4b4520c945a9e1f8f5facc52a76ac5903babe90`.
-- Branch model exactly `v21.4-hardening` -> `beta` -> `main`; beta/main untouched.
-- Dark Terrain remains independent.
-- Last human-safe Remove Foilage `049c549...`: stock tree visible, foliage remains.
-- Upstream `_05 -> _00` RERL concept ported/hardened at `3dbf6cb6...`; CI #166 **286/286 PASS**, Windows portable PASS.
-- Human smoke #166: tree visibility fails.
-- Tree RERL audit: 16 stock tree models use `_05`; generated pak66 confirms rewrites.
-- One-off RERL-ID-corrected candidate tested: foliage gone, certain trees invisible.
-- Correction: redirected RERL IDs must not be assumed to equal the target-name hash; changing the key can break model-internal references. Do not commit ID-update behavior.
-- Strong result: blanking original `_05.vmat_c` removes the unwanted foliage.
-- Built next smoke candidate: keep original `_05` blank; redirect affected tree `_05` key to private unused `_09`; alias material preserves exact stock `_05` textures/properties.
-- Private-alias portable SHA-256 `7e8feede3c2f648155a03a619760a996ea99c17a445f31335e4182191f8b5457`.
-- Mod-only SHA-256 `3d7d9b169e0fbbd808236e65e8d57affc85055d187301327ecd89cd2eb68e86b`.
-- Next gate: human smoke all stock trees visible + foliage gone + collision correct.
-- No beta/main promotion without explicit approval.
+- User requested upstream update review and combining fork fixes with upstream.
+- Current hardening head: `d39e02ceb096e6255af2d4d94f10eaacb8a3aa62`; current committed RERL code `3dbf6cb6d9dbc691bc8bab00b3739c889dd2a326`.
+- CI #166 / `34528212083`: **286/286 PASS**, Windows portable PASS.
+- Current beta: `442d36dcc902f6436c6404f2947091663c254cc5`; main remains `a26bc88a0d412e357965f29488b83a7f9093e11f`.
+- Foliage: simple `_05 -> _00` RERL smoke breaks some tree visibility; target-name RERL ID update also failed.
+- Blanking original `_05.vmat_c` removes target foliage; private unused `_09` alias candidate built to preserve stock tree material. Human smoke pending.
+- Latest upstream release: `Minify-v2rc4`, commit `e444454684c2d7f809e7eef20a1b72d4422c50d7`, published 2026-09-18.
+- Upstream main `bd86c7cb619896e7200b7269c1b23245d3037120` only adds generated docs after v2rc4.
+- rc7/v2rc4 histories diverged; raw merge/rebase rejected.
+- v2 replaces DearPyGui with PyWebView/Svelte and adds CSS themes, services, plugin SDK, D2PFX plugin, migrations, remap processor.
+- Fork-only features/security absent upstream: nested mods/Collections/custom categories, profiles/favorites, restore points/rollback, collision report, Dark Terrain collision-aware handling, hardened downloads/archives/D2PFX/cursors.
+- Upstream Main Menu Background lacks fork `#FrontpageContents` rule; upstream optional auto-prelaunch conflicts with fork policy.
+- Upstream latest Remove Foliage fix uses `remap.json` + blacklist and removes Dark Terrain dependency; candidate for isolated testing.
+- Recommended integration: staged v2rc4 architecture migration with explicit ports, preserving current hardening lineage as rollback.
+- Pending: private foliage alias smoke; v2 compatibility matrix; responsive minimum-window fit; full Dota smoke.

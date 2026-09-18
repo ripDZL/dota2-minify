@@ -1,16 +1,19 @@
 # AI Context
-- Baseline: `Egezenn/dota2-minify` tag `Minify-v1.14rc7`, commit `d4b4520c945a9e1f8f5facc52a76ac5903babe90`; do not rebase onto upstream `main`.
-- Fork: `ripDZL/dota2-minify`; branch flow exactly `v21.4-hardening` -> `beta` -> `main`; beta/main untouched.
-- Dark Terrain fix `340cbb69bd2b62c922aa8de116ed3df7f74c1435`; keep independent.
-- Last human-safe Remove Foilage product: `049c549730846b7b100f5d5e22a6c2d3aaabad46`; stock tree visible, bright-green foliage remains.
-- Current-Dota audit: 384,571 resources; legacy Remove Foilage blacklist largely current.
-- Upstream `85020ee5...` idea: blank `_05.vmat_c`; redirect oak/dire tree `_05 -> _00` in RERL.
-- Hardened port code: `3dbf6cb6d9dbc691bc8bab00b3739c889dd2a326`; CI #166 **286/286 PASS**, Windows portable PASS.
-- Human smoke #166: tree visibility still fails.
-- Tree RERL audit: 16 stock tree models use `_05`; generated pak66 rewrites those names to `_00`; `tree_oak_00_blank.vmdl_c` is not overridden.
-- One-off ID-corrected candidate changed `_05` RERL ID to `_00` ID. Human smoke: foliage gone, but certain trees remain invisible.
-- Corrected conclusion: stock RERL IDs matching name hashes does NOT prove redirected entries must change IDs; the ID is also the model's internal reference key. Do not commit ID-update semantics.
-- Foliage result confirms blanking original `_05.vmat_c` is effective.
-- Next candidate: preserve each tree's original `_05` material through private unused alias `_09`: keep original `_05` globally blank; map only old `_05` RERL key to `tree_oak_leaves_09.vmat`; alias material is exact stock `_05` bytes with same-length self-name `_05 -> _09`; `_05` texture dependencies unchanged.
+- Current upstream-integrated baseline: `Egezenn/dota2-minify` `Minify-v1.14rc7` / `d4b4520c945a9e1f8f5facc52a76ac5903babe90`.
+- Repo `ripDZL/dota2-minify`; branches exactly `v21.4-hardening` -> `beta` -> `main`.
+- Current hardening head before this Docs audit: `d39e02ceb096e6255af2d4d94f10eaacb8a3aa62`.
+- `beta` currently `442d36dcc902f6436c6404f2947091663c254cc5`; prior Beta 1 prerelease exists. `main` remains `a26bc88a0d412e357965f29488b83a7f9093e11f`.
+- Current committed foliage/RERL product code: `3dbf6cb6d9dbc691bc8bab00b3739c889dd2a326`; CI `34528212083` / #166: **286/286 PASS**, Windows portable PASS.
+- Dark Terrain remains independent.
+- Human smoke of simple upstream-style `_05 -> _00` RERL redirect still loses some tree visibility; do not use target-name RERL ID updates.
+- Confirmed: blanking stock `tree_oak_leaves_05.vmat_c` removes target foliage.
+- Current smoke-only candidate: preserve stock tree material through unused private `_09` alias; production behavior not committed until human smoke passes.
 - Private-alias portable SHA-256 `7e8feede3c2f648155a03a619760a996ea99c17a445f31335e4182191f8b5457`; mod-only SHA-256 `3d7d9b169e0fbbd808236e65e8d57affc85055d187301327ecd89cd2eb68e86b`.
-- Do not change production code for alias behavior until human smoke passes. Do not touch beta/main without explicit approval.
+- Upstream audit 2026-09-18: latest release `Minify-v2rc4` / `e444454684c2d7f809e7eef20a1b72d4422c50d7`; upstream main `bd86c7cb619896e7200b7269c1b23245d3037120` is a docs-index commit after the release.
+- rc7 and v2rc4 diverged from merge base `c25db2cc0310e443eadacde9d9c3f6c84334ccd9`; v2rc4 is 50 commits ahead and rc7 3 commits ahead. Never raw-merge/rebase.
+- v2 architecture: PyWebView + Svelte frontend, CSS themes, Python service layer, plugin SDK, D2PFX plugin, migrations, remap processor.
+- Strong v2 candidates: web UI/theme system, service/plugin architecture, migrations, current Steam/language fixes, latest Remove Foliage remap/tree approach.
+- Fork-only behavior to preserve: recursive/nested mods + Collections/custom categories, profiles/favorites, collision index/report, transactional restore points/rollback, Dark Terrain collision-aware yielding, Main Menu two-rule fix, hardened network/archive/D2PFX/cursor/backup handling, manual prelaunch/no-auto-injection.
+- Upstream v2 gaps found: top-level-only mod scan; no profiles/favorites/restore points/collision report; weaker download/archive/D2PFX/cursor confinement/limits; optional automatic Steam prelaunch injection remains.
+- Upstream Main Menu Background currently has only the dashboard-background collapse rule; retain fork `#FrontpageContents` rule.
+- Preferred integration: treat v2rc4 as a new architecture target and port fork behavior explicitly; keep current hardening history as rollback provenance.
