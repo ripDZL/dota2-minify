@@ -2,7 +2,7 @@ import base64
 import os
 from typing import Any, Dict, List
 
-from core import base, config, mods_shared, output, utils
+from core import base, config, mod_library, mods_shared, output, profiles, utils
 
 
 class ModService:
@@ -31,11 +31,12 @@ class ModService:
 
         return {
             "group": group,
-            "category": category,
-            "source": source,
+            "category": mod_library.category(mod_name) or category,
+            "source": mod_library.source(mod_name) or source,
             "type": mod_type,
             "nested": bool(shared.get("nested") or group),
             "path": os.path.abspath(mod_path),
+            "favorite": mod_library.is_favorite(mod_name),
         }
 
     @staticmethod
@@ -78,7 +79,7 @@ class ModService:
                 mod_path = mods_shared.get_mod_path(mod)
                 always = False
                 untickable = False
-                display_name = mods_shared.get_mod_label(mod)
+                display_name = mod_library.display_name(mod)
                 if os.path.isdir(mod_path):
                     cfg = manifest_utils.get_mod(mod_path)
                     always = bool(cfg.get("always", False))
@@ -103,6 +104,88 @@ class ModService:
         except Exception as e:
             output.add_text(f"get_mods error: {e}", msg_type="error")
             return []
+
+    def set_favorite(self, mod_name: str, value: bool) -> Dict[str, Any]:
+        try:
+            mods_shared.scan_mods()
+            if mod_name not in mods_shared.mod_paths:
+                return {"success": False, "error": "Mod not found."}
+            favorite = mod_library.set_favorite(mod_name, bool(value))
+            return {"success": True, "favorite": favorite}
+        except Exception as exc:
+            output.add_text(f"set_favorite error: {exc}", msg_type="error")
+            return {"success": False, "error": str(exc)}
+
+    def get_profiles(self) -> List[Dict[str, Any]]:
+        return profiles.list_profiles()
+
+    def save_profile(self, name: str) -> Dict[str, Any]:
+        try:
+            mods_shared.scan_mods()
+            states = {
+                mod: bool(mods_shared.get_state(mod))
+                for mod in mods_shared.visually_available_mods
+            }
+            saved = profiles.save_profile(name, states)
+            return {"success": True, "name": str(name).strip(), "state_count": len(saved)}
+        except Exception as exc:
+            return {"success": False, "error": str(exc)}
+
+    def apply_profile(self, name: str) -> Dict[str, Any]:
+        try:
+            import conditions
+            from patch import manifest_utils
+
+            mods_shared.scan_mods()
+            states = profiles.get_profile(name)
+            if states is None:
+                return {"success": False, "error": "Profile not found."}
+
+            available = list(mods_shared.visually_available_mods)
+            snapshot = profiles.complete_snapshot(states, available)
+            applied = 0
+            locked = 0
+            missing = len(set(states) - set(available))
+
+            for mod in available:
+                mod_path = mods_shared.get_mod_path(mod)
+                cfg = manifest_utils.get_mod(mod_path) if os.path.isdir(mod_path) else {}
+                always = bool(cfg.get("always", False)) if isinstance(cfg, dict) else False
+                workshop_locked = (
+                    os.path.isdir(mod_path)
+                    and not conditions.workshop_installed
+                    and conditions.is_workshop_required_mod(mod_path, cfg)
+                )
+                if always or workshop_locked:
+                    locked += 1
+                    continue
+                mods_shared.set_state(mod, snapshot[mod])
+                applied += 1
+
+            return {
+                "success": True,
+                "name": str(name).strip(),
+                "applied": applied,
+                "locked": locked,
+                "missing": missing,
+            }
+        except Exception as exc:
+            return {"success": False, "error": str(exc)}
+
+    def duplicate_profile(self, name: str) -> Dict[str, Any]:
+        try:
+            new_name = profiles.duplicate_profile(name)
+            if not new_name:
+                return {"success": False, "error": "Profile not found."}
+            return {"success": True, "name": new_name}
+        except Exception as exc:
+            return {"success": False, "error": str(exc)}
+
+    def delete_profile(self, name: str) -> Dict[str, Any]:
+        try:
+            return {"success": profiles.delete_profile(name)}
+        except Exception as exc:
+            return {"success": False, "error": str(exc)}
 
     @staticmethod
     def _build_directory_tree(dir_path: str) -> Dict[str, Any]:

@@ -23,6 +23,12 @@ declare global {
             always?: boolean;
             untickable?: boolean;
             preview?: string | null;
+            group?: string;
+            category?: string;
+            source?: string;
+            type?: "standard" | "collection" | "d2pfx" | "vpk";
+            nested?: boolean;
+            favorite?: boolean;
           }>
         >;
         get_mod_details: (
@@ -47,6 +53,12 @@ declare global {
         set_locale: (lang: string) => Promise<boolean>;
         set_game_language: (lang: string) => Promise<boolean>;
         set_mods: (data: Record<string, boolean>) => Promise<boolean>;
+        set_mod_favorite?: (mod_name: string, value: boolean) => Promise<{ success: boolean; favorite?: boolean; error?: string }>;
+        get_profiles?: () => Promise<Array<{ name: string; state_count: number }>>;
+        save_profile?: (name: string) => Promise<{ success: boolean; name?: string; state_count?: number; error?: string }>;
+        apply_profile?: (name: string) => Promise<{ success: boolean; applied?: number; locked?: number; missing?: number; error?: string }>;
+        duplicate_profile?: (name: string) => Promise<{ success: boolean; name?: string; error?: string }>;
+        delete_profile?: (name: string) => Promise<{ success: boolean; error?: string }>;
         start_patch: () => Promise<{ status: string }>;
         start_uninstall: (remove_everything?: boolean) => Promise<{ status: string }>;
         open_url?: (url: string) => Promise<void> | void;

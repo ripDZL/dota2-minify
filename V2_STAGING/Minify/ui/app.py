@@ -107,6 +107,24 @@ class Api:
     def set_mods(self, data: Dict[str, bool]) -> bool:
         return self.mod_service.set_mods(data)
 
+    def set_mod_favorite(self, mod_name: str, value: bool) -> Dict[str, Any]:
+        return self.mod_service.set_favorite(mod_name, value)
+
+    def get_profiles(self) -> List[Dict[str, Any]]:
+        return self.mod_service.get_profiles()
+
+    def save_profile(self, name: str) -> Dict[str, Any]:
+        return self.mod_service.save_profile(name)
+
+    def apply_profile(self, name: str) -> Dict[str, Any]:
+        return self.mod_service.apply_profile(name)
+
+    def duplicate_profile(self, name: str) -> Dict[str, Any]:
+        return self.mod_service.duplicate_profile(name)
+
+    def delete_profile(self, name: str) -> Dict[str, Any]:
+        return self.mod_service.delete_profile(name)
+
     def get_available_languages(self) -> List[str]:
         return self.config_service.get_available_languages()
 
