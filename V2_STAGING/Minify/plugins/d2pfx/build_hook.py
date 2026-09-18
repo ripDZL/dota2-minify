@@ -149,7 +149,7 @@ def scan_d2pfx_mods(mod_list):
         if not mods_shared.get_state(mod_name):
             continue
 
-        mod_path = os.path.join(base.mods_dir, mod_name)
+        mod_path = mods_shared.get_mod_path(mod_name)
         if not os.path.isdir(mod_path):
             continue
 
