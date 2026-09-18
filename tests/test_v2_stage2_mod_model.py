@@ -124,7 +124,7 @@ def test_v2_stage2_mod_model_keeps_custom_vpk_categories_and_no_blanket_terrain_
         'VPK_COLLECTION_DIR = "_VPK Mods"',
         'NESTED_VPK_PREFIX = "nested-vpk::"',
         "relative_parent = os.path.dirname(relative_path)",
-        "_groups[mod_id] = str(metadata.get("category") or relative_parent).strip()",
+        '_groups[mod_id] = str(metadata.get("category") or relative_parent).strip()',
         'categories.discard("terrains")',
         "get_conflicting_categories()",
     ):
