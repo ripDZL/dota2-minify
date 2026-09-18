@@ -15,7 +15,10 @@
 - UI regression fix: startup modal queue uses explicit `modal_active` state so Tutorial/Language Setup cannot overlap in one popup. User-facing title/release is `v21.4-hardening`; keep internal `VERSION = "1.14rc7"` for manifest compatibility.
 - CI #173 / `35403299757`: **295/295 PASS**, Ruff/compile PASS, Windows portable PASS. Current portable SHA-256: `6b9788d3ac1e60dba636d5a5b0b17b5dea4d52285a1660e2111ebbc9fc1ff8b1`.
 - v2 matrix/security mapping are complete in `Docs/V2_COMPATIBILITY_MATRIX.md` and `Docs/V2_PORT_PLAN.md`.
+- v2 Stage 1 source staging is complete under `V2_STAGING/` at `5589355f7b2b4af00a7facb4b1de5458f1b93749`: core security/fs, app update + Workshop Tools, D2PFX data/API/cursors, remap confinement, Svelte updater digest handoff.
+- CI #176 / `35405707258`: **309/309 PASS**, Ruff/compile PASS, Windows portable PASS; artifact digest `sha256:d8e5e9da96eacc949f46af14944246ce4b124c33b7918e40833852ec9f857771`.
+- `V2_STAGING` is not a user build and must not replace the rc7-derived product until the rest of the exact v2rc4 tree is integrated around it.
 - Immediate next task: human smoke the private `_09` foliage alias. If it succeeds, implement dynamic current-stock aliasing without committing Dota stock binaries.
-- Next technical order: (1) human foliage alias smoke, (2) production alias only if PASS, (3) staged v2 security substrate/product ports, (4) full Windows/Dota smoke.
+- Next technical order: (1) human foliage alias smoke remains manual/independent, (2) production alias only if PASS, (3) integrate staged Stage 1 into full v2rc4 + Stage 2 recursive mod model/services, (4) full Windows/Dota smoke.
 - Do not promote beta -> main without validation and explicit user approval.
 - User-visible project updates include America/Detroit date + timestamp.

@@ -15,7 +15,9 @@
 - [x] Fix startup Tutorial/Language Setup modal overlap and show `v21.4-hardening` as the user-facing version; CI #173 **295/295 PASS**, Windows portable PASS.
 - [x] Build explicit v2 compatibility matrix before replacing product architecture (`Docs/V2_COMPATIBILITY_MATRIX.md`).
 - [x] Map staged v2 security/product ports to exact upstream caller files (`Docs/V2_PORT_PLAN.md`).
+- [x] Stage v2 Stage 1 security substrate and high-risk callers under `V2_STAGING/`; CI #176 **309/309 PASS**, Windows portable PASS.
 - [ ] Port `core/security.py` protections into v2 downloads/extraction/update/D2PFX/cursor paths.
+- [ ] Integrate the staged Stage 1 files into the complete v2rc4 architecture before producing any v2 user build.
 - [ ] Port recursive/nested discovery, Collections, custom VPK categories into v2 `mods_shared` + ModService/UI.
 - [ ] Port profiles/favorites/mod-library metadata/collision report into v2 services/UI.
 - [ ] Port transactional restore points/rollback + compatibility validation into v2 PatchService/pipeline.

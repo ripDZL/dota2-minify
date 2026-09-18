@@ -13,5 +13,8 @@
 - 960x680 UI fit pass complete: responsive Home/activity/footer, scroll-safe Mod Library/Settings, compact one-column D2PFX, client-clamped shared modals.
 - CI #168 / `35392039137`: **289/289 PASS**, compile/Ruff PASS, Windows portable PASS; artifact digest `43c0fcbea15a42afe6ae0100ed83d1ff01be070bfb14c27c855b4da60b6780a7`.
 - v2 compatibility matrix and exact staged port map are complete (`Docs/V2_COMPATIBILITY_MATRIX.md`, `Docs/V2_PORT_PLAN.md`).
-- Pending: private foliage alias human smoke; then staged v2 security/product ports; residual security/Dota smoke.
+- v2 Stage 1 security source port is staged under `V2_STAGING/` at `5589355f7b2b4af00a7facb4b1de5458f1b93749`; it does not replace/package the current product.
+- Staged coverage: core security/fs, updater digest verification, transactional Workshop Tools, D2PFX network/install/cursor hardening, remap confinement, updater digest propagation.
+- CI #176 / `35405707258`: **309/309 PASS**, Ruff/compile PASS, Windows portable PASS; artifact digest `sha256:d8e5e9da96eacc949f46af14944246ce4b124c33b7918e40833852ec9f857771`.
+- Pending: private foliage alias human smoke; integrate Stage 1 into the complete v2rc4 tree; then Stage 2 mod model/services and residual security/Dota smoke.
 - Do not promote beta -> main without validation and explicit approval.

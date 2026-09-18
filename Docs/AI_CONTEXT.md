@@ -23,3 +23,7 @@
 - 960x680 DearPyGui fit pass complete: final resize owns compact Home geometry; activity/footer optional telemetry collapses at the breakpoint; D2PFX uses compact sidebar + one-column grid; shared modals clamp/scroll; Mod Library/Settings remain scroll-safe.
 - Explicit v2 compatibility matrix: `Docs/V2_COMPATIBILITY_MATRIX.md`; exact staged security/product caller map: `Docs/V2_PORT_PLAN.md`.
 - Preferred integration: treat v2rc4 as a new architecture target and port fork behavior explicitly; keep current hardening history as rollback provenance.
+- v2 Stage 1 source staging tip: `5589355f7b2b4af00a7facb4b1de5458f1b93749` under `V2_STAGING/`; production product tip remains `8f29962bb056a9f95ab224f135bf795ecbda2b93`.
+- Staged Stage 1: shared path/archive/decompression/hash/public-HTTPS primitives; bounded atomic v2 downloads/extraction; digest-verified app updates; digest-verified transactional Workshop Tools install/rollback; hardened D2PFX catalogue/install/cursor flows; confined remap processing; updater digest propagation.
+- CI #176 / `35405707258`: **309/309 PASS**, Ruff/compile PASS, Windows portable PASS. Artifact digest `sha256:d8e5e9da96eacc949f46af14944246ce4b124c33b7918e40833852ec9f857771`.
+- `V2_STAGING` is intentionally non-production and is not packaged as the v2 app yet; next migration stage is the v2 mod model/services around the security substrate.

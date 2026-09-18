@@ -15,6 +15,8 @@
 - v2rc4 tag `e444454684c2d7f809e7eef20a1b72d4422c50d7`; histories diverged, so migrate semantically rather than merge.
 - Preferred mapping: Black-Plum -> CSS theme; nested Collections/profiles/favorites -> ModService + Svelte; backup/collision -> PatchService + backend modules; D2PFX hardening -> plugin data/API/build hook.
 - Port fork security into v2 before accepting any v2 test build: bounded/atomic downloads, safe archives, URL/redirect/SSRF validation, bounded decompression, staged installs, symlink-safe cursor operations. Exact caller map and acceptance gates live in `Docs/V2_PORT_PLAN.md`.
+- Stage 1 implementation is isolated under `V2_STAGING/` until the complete v2rc4 architecture surrounds it. This prevents an incomplete PyWebView/Svelte tree from replacing the validated rc7-derived product.
+- Staged app updates require GitHub asset SHA-256 propagation from Svelte to Python; Workshop Tools require a GitHub asset digest and use staged directory publication with rollback. D2PFX installs use confined staging + atomic publication; cursor copies accept only bounded regular files; remap output/build paths are confined.
 - Preserve collision-aware resource ownership. Upstream blanket category conflicts are not equivalent to fork Dark Terrain behavior.
 - Preserve no-auto-prelaunch policy even though upstream v2 exposes `patch_on_launch`.
 - Upstream v2 Remove Foliage remap is eligible for isolated validation; never reintroduce a full-map Remove Foliage layer.

@@ -15,6 +15,9 @@
 - [x] Upstream latest Remove Foliage uses blacklist + `remap.json`, not a full-map VPK layer.
 - [x] 960x680 UI gate implemented and validated; CI #168 / `35392039137`: **289/289 PASS**, Windows portable PASS.
 - [x] Responsive pass covers Home/activity/footer, Mod Library/Settings sizing, compact D2PFX, and shared modal clamping/scrolling.
-- [x] Explicit v2 compatibility matrix and staged security/product caller map completed; no v2 product-code migration started yet.
-- [ ] Next: human foliage alias smoke; if PASS, implement dynamic aliasing. Then begin v2 security substrate semantic port on hardening; no raw merge/rebase.
+- [x] Explicit v2 compatibility matrix and staged security/product caller map completed.
+- [x] v2 Stage 1 security source port staged under `V2_STAGING/`: core security/fs, updater + Workshop Tools, D2PFX data/API/cursors, remap confinement, Svelte digest handoff.
+- [x] CI #176 / `35405707258`: **309/309 PASS**, Ruff/compile PASS, Windows portable PASS; artifact digest `sha256:d8e5e9da96eacc949f46af14944246ce4b124c33b7918e40833852ec9f857771`.
+- [x] Production rc7-derived app remains unchanged by `V2_STAGING`; validated product tip remains `8f29962bb056a9f95ab224f135bf795ecbda2b93`.
+- [ ] Next: human foliage alias smoke remains an independent manual gate. For v2, integrate the staged Stage 1 substrate into the full v2rc4 tree, then begin Stage 2 recursive mod model/services; no raw merge/rebase.
 - [ ] Human foliage alias smoke + general Windows/Dota smoke remain.
