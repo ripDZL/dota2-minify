@@ -1,7 +1,5 @@
 from importlib.util import module_from_spec, spec_from_file_location
 from pathlib import Path
-import io
-import os
 import stat
 import zipfile
 import zlib
@@ -31,7 +29,7 @@ def test_v2_stage1_files_track_exact_target():
 
 def test_v2_security_rejects_path_escape_shapes():
     security = _load_security()
-    for value in ("../escape", "/absolute", "C:/drive", r"..\escape", "\\server\share"):
+    for value in ("../escape", "/absolute", "C:/drive", r"..\escape", r"\\server\share"):
         with pytest.raises(ValueError):
             security.safe_relative_path(value)
 

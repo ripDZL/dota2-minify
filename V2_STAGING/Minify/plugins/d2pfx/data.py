@@ -6,14 +6,14 @@ import tempfile
 import time
 import urllib.parse
 
-import requests
 from core import base, config, fs, security
 
 # D2PFX Browser Constants
 BASE_URL = "https://raw.githubusercontent.com/h6rd/Dota2PornFxWeb/data/"
 ASSETS_URL = "https://raw.githubusercontent.com/h6rd/Dota2PornFxWeb/main/assets/files/"
 CACHE_DIR = os.path.join(base.cache_dir, "plugins", "d2pfx")
-PREVIEWS_CACHE_DIR = os.path.join(CACHE_DIR, "previews")\nPREVIEWS_URL = "https://raw.githubusercontent.com/h6rd/Dota2PornFxWeb/main/assets/previews/"
+PREVIEWS_CACHE_DIR = os.path.join(CACHE_DIR, "previews")
+PREVIEWS_URL = "https://raw.githubusercontent.com/h6rd/Dota2PornFxWeb/main/assets/previews/"
 BLACKLIST = [
     "guides",
     "item-sounds",
