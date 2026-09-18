@@ -9,6 +9,7 @@ D2PFX = (ROOT / "Minify" / "browsers" / "d2pfx" / "ui.py").read_text(encoding="u
 WINDOW = (ROOT / "Minify" / "ui" / "window.py").read_text(encoding="utf-8")
 TERMINAL = (ROOT / "Minify" / "ui" / "terminal.py").read_text(encoding="utf-8")
 DEVTOOLS = (ROOT / "Minify" / "ui" / "dev_tools.py").read_text(encoding="utf-8")
+MODAL_SHARED = (ROOT / "Minify" / "ui" / "modal_shared.py").read_text(encoding="utf-8")
 
 
 def test_stale_workspace_badge_removed():
@@ -268,7 +269,7 @@ def test_minimum_width_fit_contract_covers_primary_library_and_d2pfx():
     assert 'with dpg.child_window(width=168, tag="d2pfx_sidebar"):' in D2PFX
     assert "init_width_or_weight=320" in D2PFX
     assert 'tag="d2pfx_cat_desc", wrap=360' in D2PFX
-    assert "new_cols = max(2, min(4, int(content_width / 240)))" in D2PFX
+    assert "new_cols = 1 if compact else max(2, min(4, int(main_width / 220)))" in D2PFX
     assert "wrap=max(220, _list_width() - 64)" in CHECKBOXES
 
 
@@ -283,8 +284,8 @@ def test_minimum_height_contract_keeps_navigation_and_library_controls_accessibl
 
 
 def test_minimum_height_contract_bounds_d2pfx_and_auxiliary_scroll_regions():
-    assert "d2pfx_content_height = max(MIN_D2PFX_CONTENT_HEIGHT, shared.window_height - 64)" in WINDOW
-    assert "d2pfx_mods_height = max(180, d2pfx_content_height - D2PFX_HEADER_BUDGET)" in WINDOW
+    assert "d2pfx_content_height = max(MIN_D2PFX_CONTENT_HEIGHT, shared.window_height - 48)" in WINDOW
+    assert "d2pfx_mods_height = max(180, d2pfx_content_height - d2pfx_header_budget)" in WINDOW
     assert 'dpg.configure_item("d2pfx_mods_view", height=d2pfx_mods_height, no_scrollbar=False)' in WINDOW
     assert 'dpg.configure_item("conflict_list", height=max(220, min(410, shared.window_height - 320)))' in WINDOW
     assert 'dpg.configure_item("d2pfx_import_preview", height=max(150, min(230, shared.window_height - 350)))' in WINDOW
@@ -294,3 +295,38 @@ def test_registered_browser_windows_resize_before_browser_layout_hooks():
     resize_tag_index = WINDOW.index('for window_tag in getattr(browser_config, "RESIZE_TAGS", [])')
     hook_index = WINDOW.index('if hasattr(browser_config, "on_resize"):', resize_tag_index)
     assert resize_tag_index < hook_index
+
+
+def test_minimum_viewport_collapses_only_optional_home_and_footer_telemetry():
+    assert "ACTIVITY_COMPACT_BREAKPOINT = 980" in WINDOW
+    assert 'dpg.configure_item("activity_select_button", show=not compact_activity)' in WINDOW
+    assert 'for tag in ("button_discord", "button_telegram"):' in WINDOW
+    assert 'dpg.configure_item(tag, show=not compact_width)' in WINDOW
+    assert "HOME_COMPACT_MIN_SHELL_HEIGHT = 292" in DEVTOOLS
+    assert WINDOW.index("_configure_home_surface(content_width)", WINDOW.index("def on_resize")) > WINDOW.index(
+        'dpg.configure_item("dashboard_status_message"', WINDOW.index("def on_resize")
+    )
+
+
+def test_d2pfx_minimum_breakpoint_uses_single_column_and_collapses_optional_telemetry():
+    assert "compact = shared.window_width <= 1000 or shared.window_height <= 700" in D2PFX
+    assert "sidebar_width = 148 if compact else 168" in D2PFX
+    assert 'init_width_or_weight=240' in D2PFX
+    assert "new_cols = 1 if compact else max(2, min(4, int(main_width / 220)))" in D2PFX
+    for tag in (
+        "d2pfx_browser_eyebrow",
+        "d2pfx_browser_subtitle",
+        "d2pfx_refresh_list_button",
+        "d2pfx_reload_images_button",
+    ):
+        assert f'"{tag}"' in D2PFX
+    assert "dpg.configure_item(tag, show=not compact)" in D2PFX
+    assert 'height=max(180, browser_height - header_budget)' in D2PFX
+
+
+def test_shared_modals_clamp_to_client_area_and_scroll_long_copy():
+    assert "def _fit_dimensions(width, height):" in MODAL_SHARED
+    assert "client_width - 32" in MODAL_SHARED
+    assert "client_height - 32" in MODAL_SHARED
+    assert MODAL_SHARED.count("width, height = _fit_dimensions(width, height)") >= 3
+    assert "no_scrollbar=False" in MODAL_SHARED

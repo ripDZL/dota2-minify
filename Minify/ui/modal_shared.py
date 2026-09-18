@@ -12,6 +12,15 @@ modal_queue = []
 active_modal_callback = None
 
 
+def _fit_dimensions(width, height):
+    """Clamp modal geometry to the current decorated-window client area."""
+    client_width = int(shared.window_width or dpg.get_viewport_width() or shared.MODAL_WIDTH)
+    client_height = int(shared.window_height or dpg.get_viewport_height() or shared.MODAL_HEIGHT)
+    max_width = max(280, client_width - 32)
+    max_height = max(220, client_height - 32)
+    return min(int(width), max_width), min(int(height), max_height)
+
+
 def show(title, messages, buttons, width=shared.MODAL_WIDTH, height=shared.MODAL_HEIGHT, dropdowns=None):
     """
     Shows a unified modal popup or queues it if one is already active.
@@ -28,6 +37,7 @@ def show(title, messages, buttons, width=shared.MODAL_WIDTH, height=shared.MODAL
 
 def show_progress(messages, width=shared.MODAL_WIDTH, height=shared.MODAL_HEIGHT):
     """Shows the modal with a progress bar and status text."""
+    width, height = _fit_dimensions(width, height)
     if dpg.does_item_exist("modal_text_wrapper"):
         dpg.delete_item("modal_text_wrapper", children_only=True)
 
@@ -63,6 +73,7 @@ def show_next_from_queue():
     buttons = modal_data["buttons"]
     width = modal_data.get("width", shared.MODAL_WIDTH)
     height = modal_data.get("height", shared.MODAL_HEIGHT)
+    width, height = _fit_dimensions(width, height)
     dropdowns = modal_data.get("dropdowns")
 
     if dpg.does_item_exist("modal_progress_wrapper"):
@@ -80,6 +91,7 @@ def show_next_from_queue():
         width=width - shared.MODAL_TEXT_WIDTH_PADDING,
         height=height - shared.MODAL_TEXT_HEIGHT_PADDING,
         border=False,
+        no_scrollbar=False,
     ):
         for msg in messages:
             dpg.add_text(msg, wrap=width - shared.MODAL_TEXT_WRAP_PADDING)
@@ -147,6 +159,7 @@ def configure(width=None, height=None):
         width = dpg.get_item_width("modal_popup") or shared.MODAL_WIDTH
     if height is None:
         height = dpg.get_item_height("modal_popup") or shared.MODAL_HEIGHT
+    width, height = _fit_dimensions(width, height)
 
     dpg.configure_item(
         "modal_popup",

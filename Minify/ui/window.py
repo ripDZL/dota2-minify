@@ -19,7 +19,9 @@ _home_sequence_detached = False
 CONTENT_INSET = 16
 MIN_D2PFX_CONTENT_HEIGHT = 260
 D2PFX_HEADER_BUDGET = 188
+D2PFX_COMPACT_HEADER_BUDGET = 132
 HEADER_BRAND_WIDTH = 340
+ACTIVITY_COMPACT_BREAKPOINT = 980
 ACTIVITY_COPY_WIDTH = 108
 ACTIVITY_SELECT_WIDTH = 132
 ACTIVITY_BUTTON_HEIGHT = 30
@@ -207,11 +209,17 @@ def _configure_home_surface(content_width):
                 dpg.bind_item_theme("activity_select_button", "main_secondary_button_theme")
 
         right_edge = max(320, content_width - ACTIVITY_RIGHT_INSET)
-        select_x = max(260, right_edge - ACTIVITY_SELECT_WIDTH)
-        copy_x = max(140, select_x - ACTIVITY_BUTTON_GAP - ACTIVITY_COPY_WIDTH)
+        compact_activity = content_width <= ACTIVITY_COMPACT_BREAKPOINT
         button_y = max(0, (36 - ACTIVITY_BUTTON_HEIGHT) // 2)
-        dpg.set_item_pos("activity_copy_button", (copy_x, button_y))
-        dpg.set_item_pos("activity_select_button", (select_x, button_y))
+        dpg.configure_item("activity_select_button", show=not compact_activity)
+        if compact_activity:
+            copy_x = max(140, right_edge - ACTIVITY_COPY_WIDTH)
+            dpg.set_item_pos("activity_copy_button", (copy_x, button_y))
+        else:
+            select_x = max(260, right_edge - ACTIVITY_SELECT_WIDTH)
+            copy_x = max(140, select_x - ACTIVITY_BUTTON_GAP - ACTIVITY_COPY_WIDTH)
+            dpg.set_item_pos("activity_copy_button", (copy_x, button_y))
+            dpg.set_item_pos("activity_select_button", (select_x, button_y))
 
 
 def _configure_minimum_window_surfaces(content_width, compact_width):
@@ -244,19 +252,24 @@ def _configure_minimum_window_surfaces(content_width, compact_width):
     # D2PFX has a scrollable card surface, but its sidebar and card viewport
     # previously relied on implicit height. Give both a client-area budget so
     # the browser cannot extend below the decorated 960x680 window.
-    d2pfx_sidebar_width = 156 if compact_width else 168
-    d2pfx_content_height = max(MIN_D2PFX_CONTENT_HEIGHT, shared.window_height - 64)
-    d2pfx_mods_height = max(180, d2pfx_content_height - D2PFX_HEADER_BUDGET)
+    d2pfx_content_height = max(MIN_D2PFX_CONTENT_HEIGHT, shared.window_height - 48)
+    d2pfx_header_budget = D2PFX_COMPACT_HEADER_BUDGET if compact_width else D2PFX_HEADER_BUDGET
+    d2pfx_mods_height = max(180, d2pfx_content_height - d2pfx_header_budget)
     if dpg.does_item_exist("d2pfx_sidebar"):
         dpg.configure_item(
             "d2pfx_sidebar",
-            width=d2pfx_sidebar_width,
             height=d2pfx_content_height,
             no_scrollbar=False,
             no_scroll_with_mouse=False,
         )
     if dpg.does_item_exist("d2pfx_mods_view"):
         dpg.configure_item("d2pfx_mods_view", height=d2pfx_mods_height, no_scrollbar=False)
+
+    # Keep language/output controls available at minimum size; collapse only
+    # duplicate social shortcuts from the footer.
+    for tag in ("button_discord", "button_telegram"):
+        if dpg.does_item_exist(tag):
+            dpg.configure_item(tag, show=not compact_width)
 
     # Auxiliary dialogs already clamp their outer dimensions. Clamp their
     # largest inner scroll region as well so title/description/action rows stay
@@ -333,7 +346,6 @@ def on_resize():
 
     if dpg.does_item_exist("app_shell_header"):
         dpg.configure_item("app_shell_header", width=content_width, height=76)
-    _configure_home_surface(content_width)
     if dpg.does_item_exist("app_nav_rail"):
         dpg.configure_item(
             "app_nav_rail",
@@ -374,12 +386,16 @@ def on_resize():
         dpg.configure_item("dashboard_focus_hint", wrap=max(240, main_width - 28))
     if dpg.does_item_exist("dashboard_status_message"):
         dpg.configure_item("dashboard_status_message", wrap=max(190, main_width - 120))
+
+    # Run the compact Home pass after the generic shell geometry so its final
+    # dimensions cannot be overwritten during the same resize callback.
+    _configure_home_surface(content_width)
     if dpg.does_item_exist("activity_header"):
         dpg.configure_item("activity_header", width=content_width, height=36)
 
     settings_width = content_width
     if dpg.does_item_exist("settings_scroll"):
-        dpg.configure_item("settings_scroll", width=settings_width, height=max(220, shared.window_height - 78))
+        dpg.configure_item("settings_scroll", width=settings_width, height=max(220, shared.window_height - 104))
     if dpg.does_item_exist("settings_actions_bar"):
         dpg.configure_item("settings_actions_bar", width=settings_width, height=56)
     if dpg.does_item_exist("settings_intro"):

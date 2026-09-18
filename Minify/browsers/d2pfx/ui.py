@@ -131,9 +131,13 @@ class BrowserUI:
 
                     # Main Content
                     with dpg.group():
-                        with dpg.table(header_row=False, width=-1):
-                            dpg.add_table_column()
-                            dpg.add_table_column(width_fixed=True, init_width_or_weight=320)
+                        with dpg.table(header_row=False, width=-1, tag="d2pfx_header_table"):
+                            dpg.add_table_column(tag="d2pfx_category_column")
+                            dpg.add_table_column(
+                                tag="d2pfx_meta_column",
+                                width_fixed=True,
+                                init_width_or_weight=240,
+                            )
                             with dpg.table_row():
                                 with dpg.group():
                                     dpg.add_text("Select a category", tag="d2pfx_cat_title", color=(255, 255, 0))
@@ -179,6 +183,7 @@ class BrowserUI:
                                         )
                                     meta_btn = dpg.add_button(
                                         label="Refresh list",
+                                        tag="d2pfx_refresh_list_button",
                                         width=-1,
                                         height=28,
                                         callback=lambda s, a: self.prune_metadata_cache(),
@@ -187,6 +192,7 @@ class BrowserUI:
                                         dpg.add_text("Reload the D2PFX categories and mod list from fresh metadata.")
                                     imgs_btn = dpg.add_button(
                                         label="Reload images",
+                                        tag="d2pfx_reload_images_button",
                                         width=-1,
                                         height=28,
                                         callback=lambda s, a: self.prune_image_cache(),
@@ -418,14 +424,48 @@ class BrowserUI:
         if not dpg.does_item_exist("d2pfx_browser_window") or not dpg.is_item_shown("d2pfx_browser_window"):
             return
 
-        content_width = max(420, shared.window_width - 210)
-        new_cols = max(2, min(4, int(content_width / 240)))
-        category_wrap = max(220, shared.window_width - 168 - 320 - 80)
+        compact = shared.window_width <= 1000 or shared.window_height <= 700
+        sidebar_width = 148 if compact else 168
+        browser_height = max(260, shared.window_height - 48)
+        main_width = max(360, shared.window_width - sidebar_width - 36)
+        meta_width = 240
+        category_wrap = max(180, main_width - meta_width - 36)
+        new_cols = 1 if compact else max(2, min(4, int(main_width / 220)))
 
+        if dpg.does_item_exist("d2pfx_sidebar"):
+            dpg.configure_item(
+                "d2pfx_sidebar",
+                width=sidebar_width,
+                height=browser_height,
+                no_scrollbar=False,
+                no_scroll_with_mouse=False,
+            )
+        if dpg.does_item_exist("d2pfx_header_table"):
+            dpg.configure_item("d2pfx_header_table", width=main_width)
         if dpg.does_item_exist("d2pfx_cat_desc"):
             dpg.configure_item("d2pfx_cat_desc", wrap=category_wrap)
         if dpg.does_item_exist("d2pfx_browser_subtitle"):
-            dpg.configure_item("d2pfx_browser_subtitle", wrap=300)
+            dpg.configure_item("d2pfx_browser_subtitle", wrap=max(160, meta_width - 20))
+
+        # At the minimum viewport, retain search/import controls and collapse
+        # duplicate catalogue telemetry/actions that are available elsewhere.
+        for tag in (
+            "d2pfx_browser_eyebrow",
+            "d2pfx_browser_subtitle",
+            "d2pfx_refresh_list_button",
+            "d2pfx_reload_images_button",
+        ):
+            if dpg.does_item_exist(tag):
+                dpg.configure_item(tag, show=not compact)
+
+        header_budget = 132 if compact else 188
+        if dpg.does_item_exist("d2pfx_mods_view"):
+            dpg.configure_item(
+                "d2pfx_mods_view",
+                width=main_width,
+                height=max(180, browser_height - header_budget),
+                no_scrollbar=False,
+            )
 
         if self.current_cols != new_cols:
             self.current_cols = new_cols
