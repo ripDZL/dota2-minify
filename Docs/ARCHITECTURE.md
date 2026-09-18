@@ -1,7 +1,7 @@
 # Architecture
 - Current product lineage: rc7-derived hardening; exact upstream baseline `d4b4520c945a9e1f8f5facc52a76ac5903babe90`.
 - Branch flow exactly hardening -> beta -> main; no persistent integration/reference branches.
-- Current committed foliage engine uses hardened same-length RERL rewriting; private `_09` alias remains smoke-only.
+- Current committed foliage engine uses hardened same-length RERL rewriting; private `_09` alias remains smoke-only. `core/foliage_smoke.py` generates the ignored local smoke mod from the installed Dota VPK; no Valve stock binary is committed.
 - Never freeze/version-pin Dota stock binary bytes in repo; any successful alias implementation must derive from current stock Dota with strict bounds.
 - Security boundary: local bundled/mod Python trusted; archive/VPK/profile/backup/download/D2PFX data untrusted; destinations confined.
 - Current fork hardening primitives: `core/security.py`, `core/backup_manager.py`, `core/mod_compat.py`, `core/mod_library.py`.
@@ -12,7 +12,7 @@
 - Upstream v2rc4 target architecture: PyWebView host + Svelte frontend + Python services + plugin SDK + CSS themes.
 - v2rc4 tag `e444454684c2d7f809e7eef20a1b72d4422c50d7`; histories diverged, so migrate semantically rather than merge.
 - Preferred mapping: Black-Plum -> CSS theme; nested Collections/profiles/favorites -> ModService + Svelte; backup/collision -> PatchService + backend modules; D2PFX hardening -> plugin data/API/build hook.
-- Port fork security into v2 before accepting any v2 test build: bounded/atomic downloads, safe archives, URL/redirect/SSRF validation, bounded decompression, staged installs, symlink-safe cursor operations.
+- Port fork security into v2 before accepting any v2 test build: bounded/atomic downloads, safe archives, URL/redirect/SSRF validation, bounded decompression, staged installs, symlink-safe cursor operations. Exact caller map and acceptance gates live in `Docs/V2_PORT_PLAN.md`.
 - Preserve collision-aware resource ownership. Upstream blanket category conflicts are not equivalent to fork Dark Terrain behavior.
 - Preserve no-auto-prelaunch policy even though upstream v2 exposes `patch_on_launch`.
 - Upstream v2 Remove Foliage remap is eligible for isolated validation; never reintroduce a full-map Remove Foliage layer.

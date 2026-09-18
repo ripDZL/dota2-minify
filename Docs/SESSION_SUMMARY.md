@@ -1,13 +1,15 @@
 # Session Summary
 - Repo `ripDZL/dota2-minify`; current branch model exactly `v21.4-hardening` -> `beta` -> `main`.
-- Validated UI product tip `5d097d3f7246f47e4f89008781d0e45d6137c13f`; beta `442d36dcc902f6436c6404f2947091663c254cc5`; main `a26bc88a0d412e357965f29488b83a7f9093e11f`.
+- Validated smoke-tool product tip `f885e761faab103c1727f738335c3d28bb0045e6`; beta `442d36dcc902f6436c6404f2947091663c254cc5`; main `a26bc88a0d412e357965f29488b83a7f9093e11f`.
 - Current committed RERL product code `3dbf6cb6d9dbc691bc8bab00b3739c889dd2a326`; CI #166 / `34528212083`: **286/286 PASS**, Windows portable PASS.
 - Foliage: simple `_05 -> _00` RERL smoke breaks some tree visibility; target-name RERL ID update also failed.
-- Blanking original `_05.vmat_c` removes target foliage; private unused `_09` alias candidate built to preserve stock tree material. Human smoke pending.
+- Blanking original `_05.vmat_c` removes target foliage. Local `_09` smoke generation is integrated in Developer Tools; it derives stock `_05` from the installed Dota VPK and writes it as ignored `_09`. Human smoke pending.
+- CI #171 / `35394422779`: **294/294 PASS**, Windows portable PASS; portable SHA-256 `c1291295d849f14a403bb045e75e8095ec8228b2a39b6176b9a792106a55cae0`.
 - Latest upstream release audited: `Minify-v2rc4`, commit `e444454684c2d7f809e7eef20a1b72d4422c50d7`; raw merge/rebase rejected because histories/architecture diverged.
 - v2 replaces DearPyGui with PyWebView/Svelte and adds CSS themes, services, plugin SDK, D2PFX plugin, migrations, remap processor.
 - Fork-only behavior/security to preserve: nested mods/Collections/custom categories, profiles/favorites, restore points/rollback, collision report, Dark Terrain collision-aware handling, hardened downloads/archives/D2PFX/cursors, Main Menu second rule, manual prelaunch/no-auto-injection.
 - 960x680 UI fit pass complete: responsive Home/activity/footer, scroll-safe Mod Library/Settings, compact one-column D2PFX, client-clamped shared modals.
 - CI #168 / `35392039137`: **289/289 PASS**, compile/Ruff PASS, Windows portable PASS; artifact digest `43c0fcbea15a42afe6ae0100ed83d1ff01be070bfb14c27c855b4da60b6780a7`.
-- Pending: private foliage alias smoke; v2 compatibility matrix; staged semantic v2 ports; residual security/Dota smoke.
+- v2 compatibility matrix and exact staged port map are complete (`Docs/V2_COMPATIBILITY_MATRIX.md`, `Docs/V2_PORT_PLAN.md`).
+- Pending: private foliage alias human smoke; then staged v2 security/product ports; residual security/Dota smoke.
 - Do not promote beta -> main without validation and explicit approval.

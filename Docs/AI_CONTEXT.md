@@ -1,9 +1,11 @@
 # AI Context
 - Current upstream-integrated baseline: `Egezenn/dota2-minify` `Minify-v1.14rc7` / `d4b4520c945a9e1f8f5facc52a76ac5903babe90`.
 - Repo `ripDZL/dota2-minify`; branches exactly `v21.4-hardening` -> `beta` -> `main`.
-- Validated 960x680 UI product tip: `5d097d3f7246f47e4f89008781d0e45d6137c13f`; beta `442d36dcc902f6436c6404f2947091663c254cc5`; main `a26bc88a0d412e357965f29488b83a7f9093e11f`.
-- UI CI #168 / `35392039137`: **289/289 PASS**, Ruff/compile PASS, Windows portable PASS; artifact SHA-256 `43c0fcbea15a42afe6ae0100ed83d1ff01be070bfb14c27c855b4da60b6780a7`.
-- Current committed foliage/RERL product code: `3dbf6cb6d9dbc691bc8bab00b3739c889dd2a326`; CI `34528212083` / #166: **286/286 PASS**, Windows portable PASS.
+- Validated smoke-tool product tip: `f885e761faab103c1727f738335c3d28bb0045e6`; beta `442d36dcc902f6436c6404f2947091663c254cc5`; main `a26bc88a0d412e357965f29488b83a7f9093e11f`.
+- UI CI #168 / `35392039137`: **289/289 PASS**, Ruff/compile PASS, Windows portable PASS.
+- Current committed foliage/RERL production behavior remains `3dbf6cb6d9dbc691bc8bab00b3739c889dd2a326`; no `_09` alias is enabled in production.
+- Local `_09` human-smoke tooling is integrated at `f885e761faab103c1727f738335c3d28bb0045e6`; CI #171 / `35394422779`: **294/294 PASS**, Ruff/compile PASS, Windows portable PASS.
+- Smoke-enabled portable SHA-256: `c1291295d849f14a403bb045e75e8095ec8228b2a39b6176b9a792106a55cae0`.
 - Dark Terrain remains independent.
 - Human smoke of simple upstream-style `_05 -> _00` RERL redirect still loses some tree visibility; do not use target-name RERL ID updates.
 - Confirmed: blanking stock `tree_oak_leaves_05.vmat_c` removes target foliage.
@@ -16,4 +18,5 @@
 - Upstream v2 gaps found: top-level-only mod scan; no profiles/favorites/restore points/collision report; weaker download/archive/D2PFX/cursor confinement/limits; optional automatic Steam prelaunch injection remains.
 - Upstream Main Menu Background currently has only the dashboard-background collapse rule; retain fork `#FrontpageContents` rule.
 - 960x680 DearPyGui fit pass complete: final resize owns compact Home geometry; activity/footer optional telemetry collapses at the breakpoint; D2PFX uses compact sidebar + one-column grid; shared modals clamp/scroll; Mod Library/Settings remain scroll-safe.
+- Explicit v2 compatibility matrix: `Docs/V2_COMPATIBILITY_MATRIX.md`; exact staged security/product caller map: `Docs/V2_PORT_PLAN.md`.
 - Preferred integration: treat v2rc4 as a new architecture target and port fork behavior explicitly; keep current hardening history as rollback provenance.

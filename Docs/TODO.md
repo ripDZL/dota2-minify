@@ -6,12 +6,14 @@
 - [x] Reject target-name RERL ID updates.
 - [x] Confirm blanking original `_05.vmat_c` removes target foliage.
 - [x] Build private `_09` stock-material alias smoke candidate.
+- [x] Add reproducible local `_09` smoke generator + portable Developer Tools action; no stock binaries committed; CI #171 **294/294 PASS**, Windows portable PASS.
 - [ ] Human smoke private alias: all stock trees visible, target foliage gone, collision correct.
 - [ ] If alias succeeds, implement dynamic current-stock aliasing; never commit Dota stock binaries.
 - [x] Audit upstream `Minify-v2rc4` / `e444454684c2d7f809e7eef20a1b72d4422c50d7`.
 - [x] Confirm v2rc4 is a major architecture rewrite; raw merge/rebase is unsuitable.
 - [x] 960x680 DearPyGui fit gate: responsive Home/activity/footer, scroll-safe Mod Library/Settings, compact one-column D2PFX, client-clamped shared modals; CI #168 **289/289 PASS**, Windows portable PASS.
-- [ ] Build explicit v2 compatibility matrix before replacing product architecture.
+- [x] Build explicit v2 compatibility matrix before replacing product architecture (`Docs/V2_COMPATIBILITY_MATRIX.md`).
+- [x] Map staged v2 security/product ports to exact upstream caller files (`Docs/V2_PORT_PLAN.md`).
 - [ ] Port `core/security.py` protections into v2 downloads/extraction/update/D2PFX/cursor paths.
 - [ ] Port recursive/nested discovery, Collections, custom VPK categories into v2 `mods_shared` + ModService/UI.
 - [ ] Port profiles/favorites/mod-library metadata/collision report into v2 services/UI.

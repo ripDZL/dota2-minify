@@ -1,17 +1,19 @@
 # Handoff Prompt
 - Repo `ripDZL/dota2-minify`; branches exactly `v21.4-hardening` -> `beta` -> `main`; no persistent extra branches.
-- Re-fetch branch heads before edits. Validated UI product tip is `5d097d3f7246f47e4f89008781d0e45d6137c13f`; beta `442d36dcc902f6436c6404f2947091663c254cc5`; main `a26bc88a0d412e357965f29488b83a7f9093e11f`.
+- Re-fetch branch heads before edits. Validated smoke-tool product tip is `f885e761faab103c1727f738335c3d28bb0045e6`; beta `442d36dcc902f6436c6404f2947091663c254cc5`; main `a26bc88a0d412e357965f29488b83a7f9093e11f`.
 - At session start read `Docs/AI_CONTEXT.md`, `Docs/TODO.md`, `Docs/PROGRESS.md`, `Docs/ARCHITECTURE.md`, `Docs/SESSION_SUMMARY.md`, and this file before changing code.
 - Current integrated upstream baseline remains rc7 `d4b4520c945a9e1f8f5facc52a76ac5903babe90`.
 - Latest upstream release audited: `Minify-v2rc4` / `e444454684c2d7f809e7eef20a1b72d4422c50d7`; do not raw merge/rebase. Treat v2 as a new architecture target and port fork behavior semantically.
 - Current committed foliage/RERL product code: `3dbf6cb6d9dbc691bc8bab00b3739c889dd2a326`; CI `34528212083` / #166: **286/286 PASS**, Windows portable PASS.
 - Foliage findings: simple `_05 -> _00` redirect and target-name RERL-ID correction both lose some trees. Do not commit target-name RERL ID updates. Blanking original `tree_oak_leaves_05.vmat_c` does remove target foliage.
-- Current foliage smoke candidate is private unused `_09`: original `_05` stays blank; affected tree models keep the old `_05` RERL key but point it to `_09`; alias preserves stock `_05` material/texture behavior. Candidate is smoke-only.
+- Current foliage smoke candidate is private unused `_09`: original `_05` stays blank; affected tree models keep the old `_05` RERL key but point it to `_09`; alias preserves stock `_05` material/texture behavior. Generate it locally via Developer Tools -> Mod tools -> `Generate _09 foliage smoke mod`; generated stock bytes stay local and must not be committed/redistributed.
 - If private alias succeeds, production implementation must derive current-stock data dynamically with strict bounds/same-length aliasing; never commit Dota stock binaries.
 - Preserve from fork during any v2 work: recursive/nested mods, Collections/custom categories, profiles/favorites, backup/rollback, collision index/report, Dark Terrain collision-aware yielding, Main Menu two-rule fix, hardened network/archive/D2PFX/cursor/backup handling, manual prelaunch/no-auto-injection.
 - Port fork security into v2 downloads/archive/update/D2PFX/cursor paths before producing a v2 user build.
 - 960x680 UI gate is complete at `5d097d3f7246f47e4f89008781d0e45d6137c13f`; CI #168 / `35392039137`: **289/289 PASS**, Windows portable PASS. Keep the same invariant in any future DearPyGui edits and responsive Svelte/CSS port.
-- Immediate next task: human smoke the private `_09` foliage alias. If it succeeds, design dynamic current-stock aliasing without committing Dota stock binaries.
-- Next technical order: (1) human foliage alias smoke, (2) explicit v2 compatibility matrix, (3) staged semantic v2 ports/security mapping, (4) full Windows/Dota smoke.
+- CI #171 / `35394422779`: **294/294 PASS**, Windows portable PASS for the integrated smoke generator.
+- v2 matrix/security mapping are complete in `Docs/V2_COMPATIBILITY_MATRIX.md` and `Docs/V2_PORT_PLAN.md`.
+- Immediate next task: human smoke the private `_09` foliage alias. If it succeeds, implement dynamic current-stock aliasing without committing Dota stock binaries.
+- Next technical order: (1) human foliage alias smoke, (2) production alias only if PASS, (3) staged v2 security substrate/product ports, (4) full Windows/Dota smoke.
 - Do not promote beta -> main without validation and explicit user approval.
 - User-visible project updates include America/Detroit date + timestamp.

@@ -5,13 +5,14 @@
 - [x] RERL hardening code `3dbf6cb6d9dbc691bc8bab00b3739c889dd2a326`; CI `34528212083`: **286/286 PASS**; Windows build PASS.
 - [x] Simple upstream-style tree redirect smoke failed; some trees invisible.
 - [x] ID-update semantics rejected; blank `_05.vmat_c` confirmed to remove target foliage.
-- [x] Private `_09` stock-material alias candidate built; human smoke pending.
+- [x] Private `_09` smoke generator integrated into Developer Tools; derives current stock `_05` locally as ignored `_09` alias; human smoke pending.
+- [x] CI #171 / `35394422779`: **294/294 PASS**, Windows portable PASS.
 - [x] Upstream reviewed through `Minify-v2rc4` / `e444454684c2d7f809e7eef20a1b72d4422c50d7`.
 - [x] v2 advantages identified: PyWebView/Svelte, CSS themes, services, plugin SDK, D2PFX plugin, migrations, remap processor.
 - [x] v2 incompatibilities identified: no nested Collections/profiles/restore points/collision index; weaker network/archive/D2PFX/cursor hardening; auto-prelaunch option.
 - [x] Upstream latest Remove Foliage uses blacklist + `remap.json`, not a full-map VPK layer.
 - [x] 960x680 UI gate implemented and validated; CI #168 / `35392039137`: **289/289 PASS**, Windows portable PASS.
 - [x] Responsive pass covers Home/activity/footer, Mod Library/Settings sizing, compact D2PFX, and shared modal clamping/scrolling.
-- [ ] No v2 product-code migration started yet.
-- [ ] Next: human foliage alias smoke, then compatibility matrix + staged v2rc4 port plan on hardening; no raw merge/rebase.
+- [x] Explicit v2 compatibility matrix and staged security/product caller map completed; no v2 product-code migration started yet.
+- [ ] Next: human foliage alias smoke; if PASS, implement dynamic aliasing. Then begin v2 security substrate semantic port on hardening; no raw merge/rebase.
 - [ ] Human foliage alias smoke + general Windows/Dota smoke remain.
