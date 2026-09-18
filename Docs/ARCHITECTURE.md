@@ -5,6 +5,9 @@
 - Never freeze/version-pin Dota stock binary bytes in repo; any successful alias implementation must derive from current stock Dota with strict bounds.
 - Security boundary: local bundled/mod Python trusted; archive/VPK/profile/backup/download/D2PFX data untrusted; destinations confined.
 - Current fork hardening primitives: `core/security.py`, `core/backup_manager.py`, `core/mod_compat.py`, `core/mod_library.py`.
+- Current DearPyGui minimum viewport is 960x680. At that size every visible label/control must remain legible and inside its container.
+- Minimum-size strategy: use measured responsive widths/heights, text wrap, flexible tables/groups, and breakpoint-driven collapse of **optional** telemetry. Essential navigation/actions must not disappear or clip. Do not treat a larger minimum as the primary fix.
+- The fit invariant applies to dashboard/header/activity/footer plus Mod Library, Settings, D2PFX browser, dialogs, and plugin/browser surfaces.
 - Upstream v2rc4 target architecture: PyWebView host + Svelte frontend + Python services + plugin SDK + CSS themes.
 - v2rc4 tag `e444454684c2d7f809e7eef20a1b72d4422c50d7`; histories diverged, so migrate semantically rather than merge.
 - Preferred mapping: Black-Plum -> CSS theme; nested Collections/profiles/favorites -> ModService + Svelte; backup/collision -> PatchService + backend modules; D2PFX hardening -> plugin data/API/build hook.
@@ -13,4 +16,4 @@
 - Preserve no-auto-prelaunch policy even though upstream v2 exposes `patch_on_launch`.
 - Upstream v2 Remove Foliage remap is eligible for isolated validation; never reintroduce a full-map Remove Foliage layer.
 - Main Menu Background must retain both collapse rules.
-- UI requirement: every visible element/text must fit the enforced minimum; solve via responsive CSS/container rules before lowering minimum below current safe target.
+- Rebuild the minimum-fit invariant in responsive Svelte/CSS/container rules during v2 migration.
