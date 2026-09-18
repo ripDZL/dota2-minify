@@ -10,6 +10,7 @@ WINDOW = (ROOT / "Minify" / "ui" / "window.py").read_text(encoding="utf-8")
 TERMINAL = (ROOT / "Minify" / "ui" / "terminal.py").read_text(encoding="utf-8")
 DEVTOOLS = (ROOT / "Minify" / "ui" / "dev_tools.py").read_text(encoding="utf-8")
 MODAL_SHARED = (ROOT / "Minify" / "ui" / "modal_shared.py").read_text(encoding="utf-8")
+GUI = (ROOT / "Minify" / "ui" / "gui.py").read_text(encoding="utf-8")
 
 
 def test_stale_workspace_badge_removed():
@@ -243,7 +244,7 @@ def test_developer_tools_live_in_control_panel_tab_not_floating_windows():
 
 def test_header_is_reduced_to_centered_minify_release_lines():
     assert 'dpg.configure_item("header_brand_group", horizontal=False)' in WINDOW
-    assert 'dpg.set_value("app_product_name", f"RELEASE: {base.VERSION}")' in WINDOW
+    assert 'dpg.set_value("app_product_name", f"RELEASE: {base.DISPLAY_VERSION}")' in WINDOW
     assert 'dpg.configure_item("app_version", show=False)' in WINDOW
     assert "HEADER_BRAND_WIDTH = 340" in WINDOW
     assert 'dpg.configure_item("app_title", indent=max(0, (HEADER_BRAND_WIDTH - title_width) // 2))' in WINDOW
@@ -322,6 +323,15 @@ def test_d2pfx_minimum_breakpoint_uses_single_column_and_collapses_optional_tele
         assert f'"{tag}"' in D2PFX
     assert "dpg.configure_item(tag, show=not compact)" in D2PFX
     assert 'height=max(180, browser_height - header_budget)' in D2PFX
+
+
+def test_modal_queue_prevents_same_frame_startup_overlap():
+    assert "modal_active = False" in MODAL_SHARED
+    assert "if not modal_active:" in MODAL_SHARED
+    assert "if modal_active or not modal_queue:" in MODAL_SHARED
+    assert "modal_active = True" in MODAL_SHARED
+    assert "def dismiss_active():" in MODAL_SHARED
+    assert "modal_shared.dismiss_active()" in GUI
 
 
 def test_shared_modals_clamp_to_client_area_and_scroll_long_copy():

@@ -111,8 +111,7 @@ def close_active_window():
     )
 
     if is_modal_active:
-        dpg.configure_item("modal_popup", show=False)
-        threading.Timer(0.1, modal_shared.show_next_from_queue).start()
+        modal_shared.dismiss_active()
     elif active_window not in persistent_windows:
         dpg.configure_item(active_window, show=False)
 

@@ -5,7 +5,8 @@ from patch import manifest_utils
 def test_hardening_build_identity():
     assert base.VERSION == "1.14rc7"
     assert base.FORK_BUILD == "v21.4-hardening"
-    assert base.TITLE == "Minify 1.14rc7 — v21.4-hardening"
+    assert base.DISPLAY_VERSION == "v21.4-hardening"
+    assert base.TITLE == "Minify v21.4-hardening"
 
 
 def test_hardening_version_remains_manifest_compatible():

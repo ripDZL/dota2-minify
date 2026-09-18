@@ -91,7 +91,7 @@ def create_ui():
                 with dpg.group(tag="header_brand_group", horizontal=False):
                     dpg.add_text("MINIFY", tag="app_title")
                     dpg.bind_item_font("app_title", "large_font")
-                    dpg.add_text(f"RELEASE: {base.VERSION}", tag="app_product_name")
+                    dpg.add_text(f"RELEASE: {base.DISPLAY_VERSION}", tag="app_product_name")
                 dpg.add_spacer(width=1)
 
         dpg.add_child_window(

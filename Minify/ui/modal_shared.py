@@ -10,6 +10,7 @@ from ui import shared
 
 modal_queue = []
 active_modal_callback = None
+modal_active = False
 
 
 def _fit_dimensions(width, height):
@@ -31,12 +32,15 @@ def show(title, messages, buttons, width=shared.MODAL_WIDTH, height=shared.MODAL
     modal_queue.append(
         {"messages": messages, "buttons": buttons, "width": width, "height": height, "dropdowns": dropdowns}
     )
-    if not dpg.is_item_shown("modal_popup") or not dpg.is_item_shown("modal_button_wrapper"):
+    if not modal_active:
         show_next_from_queue()
 
 
 def show_progress(messages, width=shared.MODAL_WIDTH, height=shared.MODAL_HEIGHT):
     """Shows the modal with a progress bar and status text."""
+    global modal_active, active_modal_callback
+    modal_active = True
+    active_modal_callback = None
     width, height = _fit_dimensions(width, height)
     if dpg.does_item_exist("modal_text_wrapper"):
         dpg.delete_item("modal_text_wrapper", children_only=True)
@@ -64,9 +68,22 @@ def set_progress(value, status_text=None):
         dpg.set_value("modal_progress_status", status_text)
 
 
+def dismiss_active():
+    """Dismiss the current modal and advance a queued modal on the next tick."""
+    global active_modal_callback, modal_active
+    active_modal_callback = None
+    modal_active = False
+    if dpg.does_item_exist("modal_popup"):
+        dpg.configure_item("modal_popup", show=False)
+    threading.Timer(0.1, show_next_from_queue).start()
+
+
 def show_next_from_queue():
-    if not modal_queue:
+    global modal_active, active_modal_callback
+    if modal_active or not modal_queue:
         return
+
+    modal_active = True
 
     modal_data = modal_queue.pop(0)
     messages = modal_data["messages"]
@@ -110,15 +127,15 @@ def show_next_from_queue():
                     )
                 dpg.add_spacer(height=4)
 
-    global active_modal_callback
     for i, btn in enumerate(buttons):
         _inner_cb = btn.get("callback")
 
         def create_wrapped_callback(inner_cb):
             def wrapped_callback(sender=None, app_data=None, user_data=None):
-                global active_modal_callback
+                global active_modal_callback, modal_active
                 try:
                     active_modal_callback = None
+                    modal_active = False
                     dpg.configure_item("modal_popup", show=False)
                     if inner_cb:
                         inner_cb(sender, app_data, user_data)

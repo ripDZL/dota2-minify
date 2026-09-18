@@ -170,7 +170,7 @@ def _configure_home_surface(content_width):
     if dpg.does_item_exist("header_brand_group"):
         dpg.configure_item("header_brand_group", horizontal=False)
     if dpg.does_item_exist("app_product_name"):
-        dpg.set_value("app_product_name", f"RELEASE: {base.VERSION}")
+        dpg.set_value("app_product_name", f"RELEASE: {base.DISPLAY_VERSION}")
         dpg.configure_item("app_product_name", show=True)
     if dpg.does_item_exist("app_version"):
         dpg.configure_item("app_version", show=False)

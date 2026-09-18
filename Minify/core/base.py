@@ -5,11 +5,12 @@ import os
 import platform
 import sys
 
-# Runtime compatibility stays tied to the exact upstream rc7 baseline while the
-# window title identifies this fork's hardening test line.
+# VERSION remains tied to the exact upstream rc7 baseline for manifest
+# compatibility. DISPLAY_VERSION is the user-facing hardening build identity.
 VERSION = "1.14rc7"
 FORK_BUILD = "v21.4-hardening"
-TITLE = f"Minify {VERSION} — {FORK_BUILD}"
+DISPLAY_VERSION = FORK_BUILD
+TITLE = f"Minify {DISPLAY_VERSION}"
 
 OS = platform.system()
 MACHINE = platform.machine().lower()
