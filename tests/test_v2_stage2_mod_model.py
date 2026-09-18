@@ -115,7 +115,7 @@ def test_v2_stage2_collection_symlinks_are_not_followed():
             return
 
         env = _load_mod_functions(*_DISCOVERY, root=root)
-        assert env["_discover_directory_mod_entries"]() == []
+        assert env["_discover_directory_mod_entries"]() == [("Pack", str(collection))]
 
 
 def test_v2_stage2_mod_model_keeps_custom_vpk_categories_and_no_blanket_terrain_conflict():
