@@ -10,6 +10,7 @@
 - [ ] If alias succeeds, implement dynamic current-stock aliasing; never commit Dota stock binaries.
 - [x] Audit upstream `Minify-v2rc4` / `e444454684c2d7f809e7eef20a1b72d4422c50d7`.
 - [x] Confirm v2rc4 is a major architecture rewrite; raw merge/rebase is unsuitable.
+- [ ] **Current UI gate:** at DearPyGui minimum 960x680, make every visible element/text fit without clipping/overflow; wrap/reflow and collapse optional content before hiding essential controls. Verify dashboard, footer, Mod Library, Settings, D2PFX.
 - [ ] Build explicit v2 compatibility matrix before replacing product architecture.
 - [ ] Port `core/security.py` protections into v2 downloads/extraction/update/D2PFX/cursor paths.
 - [ ] Port recursive/nested discovery, Collections, custom VPK categories into v2 `mods_shared` + ModService/UI.
@@ -19,6 +20,6 @@
 - [ ] Preserve Main Menu second `#FrontpageContents` collapse rule.
 - [ ] Evaluate upstream v2 Remove Foliage `remap.json` against private-alias findings in isolated Dota smoke.
 - [ ] Preserve manual `prelaunch`; disable automatic Steam launch-option injection.
-- [ ] Rebuild Black-Plum as CSS theme and prove every page/plugin fits enforced minimum size.
+- [ ] Rebuild Black-Plum as CSS theme and retain the same minimum-window fit invariant in v2.
 - [ ] Residual hostile-input/path-race review and Dota smoke.
 - [ ] Beta -> main only after validation and explicit approval.
