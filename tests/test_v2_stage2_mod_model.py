@@ -140,7 +140,13 @@ def test_v2_stage2_service_and_patch_callers_use_logical_mod_paths():
 
     assert "mod_path = mods_shared.get_mod_path(mod)" in service
     assert "mod_path = mods_shared.get_mod_path(mod_name)" in service
-    for field in ('"group": group', '"category": category', '"source": source', '"type": mod_type'):
+    for field in (
+        '"group": group',
+        '"category": mod_library.category(mod_name) or category',
+        '"source": mod_library.source(mod_name) or source',
+        '"type": mod_type',
+        '"favorite": mod_library.is_favorite(mod_name)',
+    ):
         assert field in service
 
     assert "dependency_id = mods_shared.resolve_mod_reference" in patch
