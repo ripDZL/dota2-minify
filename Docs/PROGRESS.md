@@ -7,6 +7,8 @@
 - [x] ID-update semantics rejected; blank `_05.vmat_c` confirmed to remove target foliage.
 - [x] Private `_09` smoke generator integrated into Developer Tools; derives current stock `_05` locally as ignored `_09` alias; human smoke pending.
 - [x] CI #171 / `35394422779`: **294/294 PASS**, Windows portable PASS.
+- [x] Startup modal race fixed with explicit queue active state; Tutorial and Language Setup no longer construct into the same popup frame.
+- [x] User-facing version/title now shows `v21.4-hardening`; upstream compatibility remains `VERSION = "1.14rc7"`. CI #173 / `35403299757`: **295/295 PASS**, Windows portable PASS; portable SHA-256 `6b9788d3ac1e60dba636d5a5b0b17b5dea4d52285a1660e2111ebbc9fc1ff8b1`.
 - [x] Upstream reviewed through `Minify-v2rc4` / `e444454684c2d7f809e7eef20a1b72d4422c50d7`.
 - [x] v2 advantages identified: PyWebView/Svelte, CSS themes, services, plugin SDK, D2PFX plugin, migrations, remap processor.
 - [x] v2 incompatibilities identified: no nested Collections/profiles/restore points/collision index; weaker network/archive/D2PFX/cursor hardening; auto-prelaunch option.

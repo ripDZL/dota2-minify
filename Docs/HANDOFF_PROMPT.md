@@ -1,6 +1,6 @@
 # Handoff Prompt
 - Repo `ripDZL/dota2-minify`; branches exactly `v21.4-hardening` -> `beta` -> `main`; no persistent extra branches.
-- Re-fetch branch heads before edits. Validated smoke-tool product tip is `f885e761faab103c1727f738335c3d28bb0045e6`; beta `442d36dcc902f6436c6404f2947091663c254cc5`; main `a26bc88a0d412e357965f29488b83a7f9093e11f`.
+- Re-fetch branch heads before edits. Validated product tip is `8f29962bb056a9f95ab224f135bf795ecbda2b93`; beta `442d36dcc902f6436c6404f2947091663c254cc5`; main `a26bc88a0d412e357965f29488b83a7f9093e11f`.
 - At session start read `Docs/AI_CONTEXT.md`, `Docs/TODO.md`, `Docs/PROGRESS.md`, `Docs/ARCHITECTURE.md`, `Docs/SESSION_SUMMARY.md`, and this file before changing code.
 - Current integrated upstream baseline remains rc7 `d4b4520c945a9e1f8f5facc52a76ac5903babe90`.
 - Latest upstream release audited: `Minify-v2rc4` / `e444454684c2d7f809e7eef20a1b72d4422c50d7`; do not raw merge/rebase. Treat v2 as a new architecture target and port fork behavior semantically.
@@ -12,6 +12,8 @@
 - Port fork security into v2 downloads/archive/update/D2PFX/cursor paths before producing a v2 user build.
 - 960x680 UI gate is complete at `5d097d3f7246f47e4f89008781d0e45d6137c13f`; CI #168 / `35392039137`: **289/289 PASS**, Windows portable PASS. Keep the same invariant in any future DearPyGui edits and responsive Svelte/CSS port.
 - CI #171 / `35394422779`: **294/294 PASS**, Windows portable PASS for the integrated smoke generator.
+- UI regression fix: startup modal queue uses explicit `modal_active` state so Tutorial/Language Setup cannot overlap in one popup. User-facing title/release is `v21.4-hardening`; keep internal `VERSION = "1.14rc7"` for manifest compatibility.
+- CI #173 / `35403299757`: **295/295 PASS**, Ruff/compile PASS, Windows portable PASS. Current portable SHA-256: `6b9788d3ac1e60dba636d5a5b0b17b5dea4d52285a1660e2111ebbc9fc1ff8b1`.
 - v2 matrix/security mapping are complete in `Docs/V2_COMPATIBILITY_MATRIX.md` and `Docs/V2_PORT_PLAN.md`.
 - Immediate next task: human smoke the private `_09` foliage alias. If it succeeds, implement dynamic current-stock aliasing without committing Dota stock binaries.
 - Next technical order: (1) human foliage alias smoke, (2) production alias only if PASS, (3) staged v2 security substrate/product ports, (4) full Windows/Dota smoke.

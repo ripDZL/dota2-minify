@@ -6,6 +6,8 @@
 - Security boundary: local bundled/mod Python trusted; archive/VPK/profile/backup/download/D2PFX data untrusted; destinations confined.
 - Current fork hardening primitives: `core/security.py`, `core/backup_manager.py`, `core/mod_compat.py`, `core/mod_library.py`.
 - Current DearPyGui minimum viewport is 960x680. At that size every visible label/control must remain legible and inside its container.
+- UI identity is split intentionally: `base.VERSION = "1.14rc7"` is upstream/manifest compatibility; `base.DISPLAY_VERSION = base.FORK_BUILD = "v21.4-hardening"` is user-facing. Keep viewport/title text ASCII-safe on Windows.
+- Unified startup modals use explicit `modal_active` queue state rather than rendered-visibility probes; multiple same-frame startup notices must serialize, never share one popup tree.
 - Minimum-size strategy: use measured responsive widths/heights, text wrap, flexible tables/groups, and breakpoint-driven collapse of **optional** telemetry. Essential navigation/actions must not disappear or clip. Do not treat a larger minimum as the primary fix.
 - The fit invariant applies to dashboard/header/activity/footer plus Mod Library, Settings, D2PFX browser, dialogs, and plugin/browser surfaces.
 - Implemented compact behavior: Home final compact pass runs after generic resize geometry; optional activity/social telemetry collapses; D2PFX switches to a 148px sidebar + one-column cards and hides optional catalogue telemetry; shared modals clamp to client bounds with scrollable copy.

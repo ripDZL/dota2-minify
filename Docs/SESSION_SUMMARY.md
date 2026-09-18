@@ -1,10 +1,12 @@
 # Session Summary
 - Repo `ripDZL/dota2-minify`; current branch model exactly `v21.4-hardening` -> `beta` -> `main`.
-- Validated smoke-tool product tip `f885e761faab103c1727f738335c3d28bb0045e6`; beta `442d36dcc902f6436c6404f2947091663c254cc5`; main `a26bc88a0d412e357965f29488b83a7f9093e11f`.
+- Validated product tip `8f29962bb056a9f95ab224f135bf795ecbda2b93`; beta `442d36dcc902f6436c6404f2947091663c254cc5`; main `a26bc88a0d412e357965f29488b83a7f9093e11f`.
 - Current committed RERL product code `3dbf6cb6d9dbc691bc8bab00b3739c889dd2a326`; CI #166 / `34528212083`: **286/286 PASS**, Windows portable PASS.
 - Foliage: simple `_05 -> _00` RERL smoke breaks some tree visibility; target-name RERL ID update also failed.
 - Blanking original `_05.vmat_c` removes target foliage. Local `_09` smoke generation is integrated in Developer Tools; it derives stock `_05` from the installed Dota VPK and writes it as ignored `_09`. Human smoke pending.
 - CI #171 / `35394422779`: **294/294 PASS**, Windows portable PASS; portable SHA-256 `c1291295d849f14a403bb045e75e8095ec8228b2a39b6176b9a792106a55cae0`.
+- Screenshot regression fixed: startup Tutorial and Language Setup modals now serialize through explicit active-state queueing; user-facing title/release shows `v21.4-hardening` while internal rc7 compatibility version remains unchanged.
+- CI #173 / `35403299757`: **295/295 PASS**, Ruff/compile PASS, Windows portable PASS; portable SHA-256 `6b9788d3ac1e60dba636d5a5b0b17b5dea4d52285a1660e2111ebbc9fc1ff8b1`.
 - Latest upstream release audited: `Minify-v2rc4`, commit `e444454684c2d7f809e7eef20a1b72d4422c50d7`; raw merge/rebase rejected because histories/architecture diverged.
 - v2 replaces DearPyGui with PyWebView/Svelte and adds CSS themes, services, plugin SDK, D2PFX plugin, migrations, remap processor.
 - Fork-only behavior/security to preserve: nested mods/Collections/custom categories, profiles/favorites, restore points/rollback, collision report, Dark Terrain collision-aware handling, hardened downloads/archives/D2PFX/cursors, Main Menu second rule, manual prelaunch/no-auto-injection.

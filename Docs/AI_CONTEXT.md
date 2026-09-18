@@ -1,10 +1,13 @@
 # AI Context
 - Current upstream-integrated baseline: `Egezenn/dota2-minify` `Minify-v1.14rc7` / `d4b4520c945a9e1f8f5facc52a76ac5903babe90`.
 - Repo `ripDZL/dota2-minify`; branches exactly `v21.4-hardening` -> `beta` -> `main`.
-- Validated smoke-tool product tip: `f885e761faab103c1727f738335c3d28bb0045e6`; beta `442d36dcc902f6436c6404f2947091663c254cc5`; main `a26bc88a0d412e357965f29488b83a7f9093e11f`.
+- Validated product tip: `8f29962bb056a9f95ab224f135bf795ecbda2b93`; beta `442d36dcc902f6436c6404f2947091663c254cc5`; main `a26bc88a0d412e357965f29488b83a7f9093e11f`.
 - UI CI #168 / `35392039137`: **289/289 PASS**, Ruff/compile PASS, Windows portable PASS.
 - Current committed foliage/RERL production behavior remains `3dbf6cb6d9dbc691bc8bab00b3739c889dd2a326`; no `_09` alias is enabled in production.
 - Local `_09` human-smoke tooling is integrated at `f885e761faab103c1727f738335c3d28bb0045e6`; CI #171 / `35394422779`: **294/294 PASS**, Ruff/compile PASS, Windows portable PASS.
+- UI/modal identity fix validated at `8f29962bb056a9f95ab224f135bf795ecbda2b93`; CI #173 / `35403299757`: **295/295 PASS**, Ruff/compile PASS, Windows portable PASS.
+- Startup modals now use explicit active-state queueing, preventing Tutorial/Language Setup same-frame overlap. User-facing release/title is `v21.4-hardening`; internal `VERSION = "1.14rc7"` remains for manifest compatibility; ASCII title removes Windows mojibake.
+- Current portable SHA-256: `6b9788d3ac1e60dba636d5a5b0b17b5dea4d52285a1660e2111ebbc9fc1ff8b1`.
 - Smoke-enabled portable SHA-256: `c1291295d849f14a403bb045e75e8095ec8228b2a39b6176b9a792106a55cae0`.
 - Dark Terrain remains independent.
 - Human smoke of simple upstream-style `_05 -> _00` RERL redirect still loses some tree visibility; do not use target-name RERL ID updates.

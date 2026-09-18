@@ -12,6 +12,7 @@
 - [x] Audit upstream `Minify-v2rc4` / `e444454684c2d7f809e7eef20a1b72d4422c50d7`.
 - [x] Confirm v2rc4 is a major architecture rewrite; raw merge/rebase is unsuitable.
 - [x] 960x680 DearPyGui fit gate: responsive Home/activity/footer, scroll-safe Mod Library/Settings, compact one-column D2PFX, client-clamped shared modals; CI #168 **289/289 PASS**, Windows portable PASS.
+- [x] Fix startup Tutorial/Language Setup modal overlap and show `v21.4-hardening` as the user-facing version; CI #173 **295/295 PASS**, Windows portable PASS.
 - [x] Build explicit v2 compatibility matrix before replacing product architecture (`Docs/V2_COMPATIBILITY_MATRIX.md`).
 - [x] Map staged v2 security/product ports to exact upstream caller files (`Docs/V2_PORT_PLAN.md`).
 - [ ] Port `core/security.py` protections into v2 downloads/extraction/update/D2PFX/cursor paths.
