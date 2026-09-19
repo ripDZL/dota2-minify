@@ -117,7 +117,8 @@ export async function checkForUpdates(
           return null;
         }
 
-        let downloadUrl = "";\n        let downloadSha256 = "";
+        let downloadUrl = "";
+        let downloadSha256 = "";
         if (Array.isArray(rel.assets)) {
           const exeAsset = rel.assets.find(
             (a: any) => typeof a.name === "string" && a.name.toLowerCase().endsWith(".exe"),
@@ -141,7 +142,8 @@ export async function checkForUpdates(
           title: rel.name || `Release v${remoteVer}`,
           body: rel.body || "",
           releaseUrl: rel.html_url || `https://github.com/Egezenn/dota2-minify/releases/tag/${tag}`,
-          downloadUrl: downloadUrl || rel.html_url,\n          downloadSha256: downloadSha256 || undefined,
+          downloadUrl: downloadUrl || rel.html_url,
+          downloadSha256: downloadSha256 || undefined,
           isPrerelease: isPre,
           publishedAt: rel.published_at,
         };
