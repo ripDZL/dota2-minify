@@ -4,7 +4,7 @@
 - Branches must remain exactly: `v21.4-hardening`, `beta`, `main`.
 - Work only on `v21.4-hardening` unless the user explicitly approves promotion.
 - Re-fetch all 3 branch heads before edits.
-- Latest code head before handoff docs: `c12197d660fdee3ddc4057ff30b5f8f2afe923cd`.
+- Latest validated code head before handoff docs: `472bfe794d4e0deecfc1e5deb352943737e181e6`.
 - Known untouched promotion heads at handoff:
   - `beta`: `442d36dcc902f6436c6404f2947091663c254cc5`
   - `main`: `a26bc88a0d412e357965f29488b83a7f9093e11f`
@@ -67,24 +67,18 @@
   - `e999af8443a498a65f529df104b0cf12f0645cdf` Home Control Panel.
   - `ebbca811b41ad334a1e1ac01824939c7d77914ff` restore safety with custom output paths.
 
-## Current CI / build blocker
-- User manually stopped the older stuck jobs.
-- Workflow now uses:
-  - concurrency cancel-in-progress.
-  - `windows-2022`.
-  - root Windows build timeout: 30 minutes.
-  - v2 Windows job timeout: 60 minutes.
-  - v2 executable build-step timeout: 45 minutes.
-- Commit `2a2385e5efad0919f7c7e250ce70591a051a748d` changed staged v2 PyInstaller launch from nested `uv run pyinstaller` to `sys.executable -m PyInstaller`.
-- Commit `c12197d660fdee3ddc4057ff30b5f8f2afe923cd` extended Windows build timeouts.
-- CI #213 / run `35456691291` at handoff:
-  - root `validate`: SUCCESS.
+## Current CI / Windows build
+- CI #213 / run `35456691291` localized the v2 Windows stall to PyInstaller immediately after `Looking for dynamic libraries`.
+- PyInstaller had completed Analysis and then blocked inside its Windows package-import DLL-path heuristic; the actual PE/DLL dependency scan had not started.
+- Commit `472bfe794d4e0deecfc1e5deb352943737e181e6` adds a GitHub-Windows-only guard that skips that import heuristic while retaining normal binary dependency analysis.
+- Guard regression tests exercise the wrapper semantics; local/non-GitHub builds retain normal PyInstaller behavior.
+- CI #214 / run `35459474245`: **SUCCESS**.
+  - root `validate`: SUCCESS, **364 tests passed**.
   - `validate-v2-staging`: SUCCESS.
   - root `build-windows-portable`: SUCCESS.
-  - `build-v2-windows-portable`: still stuck/in progress in **Build v2 executable and runtime package**.
-- Validation currently reports **361 tests passed**; staged v2 compile/Ruff/Svelte/plugin build pass.
-- The blocker is specifically the Windows v2 PyInstaller/runtime packaging step, not validation or the Svelte build.
-- Do not wait indefinitely. Diagnose the PyInstaller stall itself. Prefer adding observable subprocess output/progress and isolating the exact PyInstaller stage rather than increasing timeouts again.
+  - `build-v2-windows-portable`: SUCCESS.
+- Successful v2 log confirms 114 package imports were skipped only for the heuristic, then DLL analysis continued immediately and the package completed.
+- Current v2 inner portable ZIP SHA-256: `86018d93c44fc2a93e270dfdb91dd9e3d6790149e20f0081f86eb2b796405803`.
 
 ## Test ZIP rule
 - User explicitly wants a v2 Windows ZIP **only when the parity work is done enough to test and the current build succeeds**.
@@ -108,9 +102,8 @@
 - Never claim foliage PASS without an actual Dota smoke test from the user.
 
 ## Next actions
-- First: diagnose/fix the v2 Windows PyInstaller stall.
-- Add runtime/packaging regression coverage where feasible; avoid grep-only tests when runtime semantics can be exercised.
-- Re-run CI until the **current** v2 Windows portable artifact is produced.
-- Then provide the user the ZIP for smoke testing.
-- After user smoke feedback, fix only on `v21.4-hardening`.
+- Current parity-complete v2 Windows test ZIP is built from `472bfe794d4e0deecfc1e5deb352943737e181e6`; CI #214 / `35459474245`.
+- Next gate: user Windows/Dota smoke of this ZIP.
+- Private foliage alias human smoke remains independent and must not be claimed PASS without actual Dota testing.
+- Fix smoke findings only on `v21.4-hardening`.
 - Keep `beta` and `main` untouched unless the user explicitly approves promotion.

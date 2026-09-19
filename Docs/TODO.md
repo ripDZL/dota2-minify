@@ -19,14 +19,17 @@
 - [x] Port `core/security.py` protections into v2 downloads/extraction/update/D2PFX/cursor paths.
 - [x] Integrate staged Stage 1 into the complete exact v2rc4 architecture under `V2_STAGING/`; CI #191 validated both v2 frontend and Windows portable.
 - [x] Port recursive/nested discovery, Collections, custom VPK categories into v2 `mods_shared` + ModService/UI.
-- [ ] Port collision report into v2 services/UI. Profiles/favorites/mod-library metadata are staged and validated.
-- [ ] Port transactional restore points/rollback + compatibility validation into v2 PatchService/pipeline.
-- [ ] Port Dark Terrain collision-aware yielding; do not replace it with blanket category conflict.
+- [x] Port collision report into v2 services/UI; profiles/favorites/mod-library metadata are staged and validated.
+- [x] Port transactional restore points/rollback + compatibility validation into v2 PatchService/pipeline.
+- [x] Port Dark Terrain collision-aware yielding; do not replace it with blanket category conflict.
 - [x] Preserve Main Menu second `#FrontpageContents` collapse rule.
 - [ ] Evaluate upstream v2 Remove Foliage `remap.json` against private-alias findings in isolated Dota smoke.
 - [x] Preserve manual `prelaunch`; disable automatic Steam launch-option injection.
-- [ ] Rebuild Black-Plum as CSS theme and retain the same minimum-window fit invariant in v2.
+- [x] Rebuild Black-Plum as CSS theme and retain the same minimum-window fit invariant in v2.
 - [ ] Residual hostile-input/path-race review and Dota smoke.
 - [ ] Beta -> main only after validation and explicit approval.
 
 - [x] Fix v2 runtime startup `base.TITLE` regression caused by literal escaped newlines in staged base identity; CI #192 PASS and replacement v2 portable built.
+- [x] Diagnose/fix the v2 Windows PyInstaller dynamic-library stall; CI #214 PASS on `472bfe794d4e0deecfc1e5deb352943737e181e6`.
+- [x] Produce the current parity-complete v2 Windows portable; SHA-256 `86018d93c44fc2a93e270dfdb91dd9e3d6790149e20f0081f86eb2b796405803`.
+- [ ] User Windows/Dota smoke of the current parity-complete v2 ZIP.

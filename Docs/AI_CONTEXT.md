@@ -37,3 +37,7 @@
 - v2 launch regression fixed at `0cf84afbcc67a2097753ef8648a84bc2f6533512`: staged `core/base.py` had literal `\\n` escapes after a comment, so `VERSION/FORK_BUILD/DISPLAY_VERSION/TITLE` were commented out at runtime despite source/compile checks. Identity test now imports the staged module and asserts runtime attributes.
 - CI #192 / `35443577402`: **327/327 PASS**, root + v2 Ruff/compile PASS, Svelte/plugin builds PASS, rc7 + v2 Windows portable PASS.
 - Fixed v2 portable SHA-256: `77ac3af45ecd9e8eb1baff6bef4e1b6c8402b4374c1c766dda83c96af972ba00`.
+- v2 Windows PyInstaller stall diagnosed: the hosted-Windows package-import DLL-path heuristic blocked after `Looking for dynamic libraries`, before PE dependency scanning.
+- Fix `472bfe794d4e0deecfc1e5deb352943737e181e6`: GitHub-Windows-only PyInstaller guard skips that heuristic while preserving binary dependency analysis; local/non-GitHub builds are unchanged.
+- CI #214 / `35459474245`: **364/364 PASS**, v2 compile/Ruff/Svelte/plugin PASS, root Windows portable PASS, v2 Windows portable PASS.
+- Current parity-complete v2 portable SHA-256: `86018d93c44fc2a93e270dfdb91dd9e3d6790149e20f0081f86eb2b796405803`.

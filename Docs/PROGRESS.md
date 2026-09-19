@@ -30,3 +30,8 @@
 
 - [x] v2 runtime startup fix `0cf84afbcc67a2097753ef8648a84bc2f6533512`: real newlines restored in staged `core/base.py`; runtime import regression test added.
 - [x] CI #192 / `35443577402`: **327/327 PASS**; both validation jobs and both Windows portable jobs PASS. Fixed v2 portable SHA-256 `77ac3af45ecd9e8eb1baff6bef4e1b6c8402b4374c1c766dda83c96af972ba00`.
+- [x] v2 Windows PyInstaller stall isolated to the package-import DLL-path heuristic after `Looking for dynamic libraries`; real PE dependency analysis had not begun.
+- [x] CI-only guard fix `472bfe794d4e0deecfc1e5deb352943737e181e6` preserves normal binary dependency scanning and leaves local/non-GitHub builds unchanged.
+- [x] CI #214 / `35459474245`: **364/364 PASS**; both validation jobs, root Windows portable, and v2 Windows portable PASS.
+- [x] Current parity-complete v2 portable SHA-256: `86018d93c44fc2a93e270dfdb91dd9e3d6790149e20f0081f86eb2b796405803`.
+- [ ] Next: user Windows/Dota smoke; private foliage alias smoke remains a separate human gate.

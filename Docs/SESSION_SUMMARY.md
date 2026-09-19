@@ -28,3 +28,8 @@
 - User runtime smoke found `AttributeError: module 'core.base' has no attribute 'TITLE'` in the first v2 test ZIP. Root cause: escaped `\\n` text was embedded on the identity comment line, commenting out the constants at runtime.
 - Fixed at `0cf84afbcc67a2097753ef8648a84bc2f6533512`; identity test now imports staged `core/base.py` and checks real runtime values.
 - CI #192 / `35443577402`: **327/327 PASS**, v2 frontend/plugin and both Windows portable builds PASS. Replacement v2 portable SHA-256 `77ac3af45ecd9e8eb1baff6bef4e1b6c8402b4374c1c766dda83c96af972ba00`.
+- v2 Windows build stall diagnosed from CI #213: PyInstaller blocked in its Windows package-import DLL-path heuristic immediately after `Looking for dynamic libraries`.
+- Fixed at `472bfe794d4e0deecfc1e5deb352943737e181e6` with a GitHub-Windows-only guard; actual binary dependency analysis remains enabled and local/non-GitHub builds are unchanged.
+- CI #214 / `35459474245`: **364/364 PASS**; both validation jobs and both Windows portable jobs PASS.
+- Current parity-complete v2 portable SHA-256: `86018d93c44fc2a93e270dfdb91dd9e3d6790149e20f0081f86eb2b796405803`.
+- Next gate: user Windows/Dota smoke. Beta/main remain untouched.

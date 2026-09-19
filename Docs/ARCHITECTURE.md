@@ -27,3 +27,4 @@
 - v2 display identity mirrors the fork split: internal `VERSION = "2rc4"`; user-facing `DISPLAY_VERSION = FORK_BUILD = "v21.4-hardening"`.
 - v2 automatic Steam prelaunch injection is disabled by compatibility shim and removed from settings/pipeline; explicit CLI `prelaunch` remains.
 - v2 Mod Library services use stable logical IDs for nested/Collection/D2PFX mods; profiles are complete snapshots and favorites use stable keys.
+- Windows CI packaging uses `V2_STAGING/scripts/pyinstaller_guard.py`: on GitHub Windows runners only, skip PyInstaller's package-import DLL-path heuristic that can hang unattended; retain normal PE/DLL dependency analysis. Local/non-GitHub packaging keeps default PyInstaller behavior.
