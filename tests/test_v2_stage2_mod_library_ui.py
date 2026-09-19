@@ -87,3 +87,23 @@ def test_v2_mod_library_list_uses_legacy_collection_sections_and_bulk_controls()
 
     assert 'if (key === "d2pfx") return "D2PFX Mods";' in grid
     assert 'if (key === "vpk") return "VPK Mods";' in grid
+
+
+def test_v2_mod_library_list_has_rc7_all_none_controls_per_section():
+    grid = (WEB / "lib" / "components" / "ModGrid.svelte").read_text(encoding="utf-8")
+
+    for token in (
+        "function allModsInListGroup(key: string)",
+        "function totalInListGroup(key: string): number",
+        "async function setListGroupSelectable(groupKey: string, value: boolean)",
+        'listGroupKey(mod) === groupKey && !mod.always && !mod.untickable',
+        'class="list-group-actions"',
+        "Select in this section",
+        'on:click={() => setListGroupSelectable(groupKey, true)}>All</button>',
+        'on:click={() => setListGroupSelectable(groupKey, false)}>None</button>',
+        "{selectedInListGroup(groupKey)}/{totalInListGroup(groupKey)} selected",
+    ):
+        assert token in grid
+
+    helper = grid[grid.index("async function setListGroupSelectable"):grid.index("function expandAllGroups")]
+    assert "filteredMods" not in helper

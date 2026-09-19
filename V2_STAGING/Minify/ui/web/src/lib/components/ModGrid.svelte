@@ -107,8 +107,16 @@
     return filteredMods.filter((mod) => listGroupKey(mod) === key);
   }
 
+  function allModsInListGroup(key: string) {
+    return mods.filter((mod) => listGroupKey(mod) === key);
+  }
+
   function selectedInListGroup(key: string): number {
-    return modsInListGroup(key).filter((mod) => mod.enabled).length;
+    return allModsInListGroup(key).filter((mod) => mod.enabled).length;
+  }
+
+  function totalInListGroup(key: string): number {
+    return allModsInListGroup(key).length;
   }
 
   function toggleListGroup(key: string) {
@@ -205,6 +213,15 @@
   async function invertSelectable() {
     const updated = mods.map((mod) =>
       mod.always || mod.untickable ? mod : { ...mod, enabled: !mod.enabled },
+    );
+    await persistModStates(updated);
+  }
+
+  async function setListGroupSelectable(groupKey: string, value: boolean) {
+    const updated = mods.map((mod) =>
+      listGroupKey(mod) === groupKey && !mod.always && !mod.untickable
+        ? { ...mod, enabled: value }
+        : mod,
     );
     await persistModStates(updated);
   }
@@ -493,10 +510,15 @@
           >
             <span class="group-disclosure">{collapsedGroups[groupKey] ? "▶" : "▼"}</span>
             <span class="group-name">{listGroupLabel(groupKey)}</span>
-            <span class="group-count">{selectedInListGroup(groupKey)}/{groupMods.length} selected</span>
+            <span class="group-count">{selectedInListGroup(groupKey)}/{totalInListGroup(groupKey)} selected</span>
           </button>
 
           {#if !collapsedGroups[groupKey]}
+            <div class="list-group-actions" aria-label={`Selection controls for ${listGroupLabel(groupKey)}`}>
+              <span>Select in this section</span>
+              <button type="button" on:click={() => setListGroupSelectable(groupKey, true)}>All</button>
+              <button type="button" on:click={() => setListGroupSelectable(groupKey, false)}>None</button>
+            </div>
             <div class="list-group-rows">
               {#each groupMods as mod (mod.name)}
                 <ModListRow
@@ -791,6 +813,27 @@
     white-space: nowrap;
   }
 
+  .list-group-actions {
+    min-height: 30px;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    padding: 3px 7px;
+    border-bottom: 1px solid var(--border-color, #000);
+    background: var(--bg-secondary, #f4f4f4);
+  }
+
+  .list-group-actions span {
+    color: var(--text-muted, #777);
+    font-size: 10px;
+  }
+
+  .list-group-actions button {
+    min-height: 22px;
+    padding: 0 7px;
+    font-size: 10px;
+  }
+
   .list-group-rows {
     display: flex;
     flex-direction: column;
@@ -836,6 +879,15 @@
     }
 
     .selection-tools button {
+      padding: 0 6px;
+    }
+
+    .list-group-actions {
+      min-height: 28px;
+      padding: 3px 5px;
+    }
+
+    .list-group-actions button {
       padding: 0 6px;
     }
 
