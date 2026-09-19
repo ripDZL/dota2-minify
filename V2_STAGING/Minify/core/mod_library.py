@@ -11,7 +11,9 @@ import hashlib
 import json
 import os
 import re
+import stat
 import tempfile
+import time
 import zlib
 from collections import defaultdict
 
@@ -21,6 +23,10 @@ LIBRARY_DB_FILE = "mod-library.json"
 CONTENT_INDEX_FILE = "mod-content-index.json"
 COLLISION_REPORT_FILE = "compatibility-report.json"
 SCHEMA_VERSION = 3
+
+_content_index_runtime: dict | None = None
+_content_index_write_disabled = False
+_content_index_warning_emitted = False
 
 CRITICAL_EXTENSIONS = {
     ".vmdl_c",
@@ -246,8 +252,12 @@ def _content_index_path() -> str:
 
 
 def _load_content_index() -> dict:
+    global _content_index_runtime
+    if _content_index_runtime is not None:
+        return _content_index_runtime
+
     try:
-        with open(_content_index_path(), encoding="utf-8-sig") as file:
+        with open(os.path.abspath(_content_index_path()), encoding="utf-8-sig") as file:
             data = json.load(file)
     except Exception:
         data = {}
@@ -256,23 +266,68 @@ def _load_content_index() -> dict:
     records = data.get("records")
     if not isinstance(records, dict):
         records = {}
-    return {"schema_version": SCHEMA_VERSION, "records": records}
+    _content_index_runtime = {"schema_version": SCHEMA_VERSION, "records": records}
+    return _content_index_runtime
 
 
-def _save_content_index(data: dict) -> None:
-    os.makedirs(base.config_dir, exist_ok=True)
+def _save_content_index(data: dict) -> bool:
+    """Best-effort persistence for the derived collision index cache.
+
+    Windows may briefly lock or mark the previous cache read-only. The index is
+    reconstructable, so persistence failures must never block patch preflight.
+    """
+    global _content_index_runtime, _content_index_write_disabled, _content_index_warning_emitted
+
     data["schema_version"] = SCHEMA_VERSION
-    fd, temporary = tempfile.mkstemp(prefix=".minify-content-index-", suffix=".json", dir=base.config_dir)
+    _content_index_runtime = data
+    if _content_index_write_disabled:
+        return False
+
+    destination = os.path.abspath(_content_index_path())
+    directory = os.path.dirname(destination) or "."
+    temporary = None
     try:
+        os.makedirs(directory, exist_ok=True)
+        if os.path.lexists(destination) and os.path.islink(destination):
+            raise PermissionError(f"Refusing to replace symlinked content-index cache: {destination}")
+
+        fd, temporary = tempfile.mkstemp(prefix=".minify-content-index-", suffix=".json", dir=directory)
         with os.fdopen(fd, "w", encoding="utf-8", newline="\n") as file:
             json.dump(data, file, indent=2, ensure_ascii=False, sort_keys=True)
-        os.replace(temporary, _content_index_path())
-    except Exception:
-        try:
-            os.remove(temporary)
-        except FileNotFoundError:
-            pass
-        raise
+
+        for attempt in range(4):
+            try:
+                os.replace(temporary, destination)
+                temporary = None
+                return True
+            except PermissionError:
+                if os.path.isfile(destination) and not os.path.islink(destination):
+                    try:
+                        current_mode = os.stat(destination, follow_symlinks=False).st_mode
+                        os.chmod(destination, current_mode | stat.S_IWUSR)
+                    except OSError:
+                        pass
+                if attempt < 3:
+                    time.sleep(0.05 * (2**attempt))
+                    continue
+                raise
+    except OSError as error:
+        _content_index_write_disabled = True
+        if not _content_index_warning_emitted:
+            _content_index_warning_emitted = True
+            print(
+                "Warning: content-index cache could not be updated; "
+                f"patch preflight will continue with the in-memory index: {error}"
+            )
+        return False
+    finally:
+        if temporary is not None:
+            try:
+                os.remove(temporary)
+            except FileNotFoundError:
+                pass
+            except OSError:
+                pass
 
 
 def _record_key_for_path(path: str) -> str:

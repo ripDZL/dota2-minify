@@ -1,4 +1,10 @@
+import ast
+import os
+import stat
+import tempfile
+import time
 from pathlib import Path
+from types import SimpleNamespace
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -119,3 +125,69 @@ def test_v2_stage3_svelte_has_review_and_restore_surfaces():
         assert token in review
     for token in ("Restore points", "Restore selected", "Selected mods:"):
         assert token in restore
+
+
+def test_v2_content_index_cache_permission_failure_does_not_block_preflight(tmp_path, monkeypatch):
+    library_path = STAGE / "core" / "mod_library.py"
+    source = library_path.read_text(encoding="utf-8")
+    tree = ast.parse(source, filename=str(library_path))
+
+    wanted_assignments = {
+        "CONTENT_INDEX_FILE",
+        "SCHEMA_VERSION",
+        "_content_index_runtime",
+        "_content_index_write_disabled",
+        "_content_index_warning_emitted",
+    }
+    nodes = []
+    for node in tree.body:
+        if isinstance(node, (ast.Assign, ast.AnnAssign)):
+            targets = []
+            if isinstance(node, ast.Assign):
+                targets = node.targets
+            elif node.target is not None:
+                targets = [node.target]
+            if any(isinstance(target, ast.Name) and target.id in wanted_assignments for target in targets):
+                nodes.append(node)
+        elif isinstance(node, ast.FunctionDef) and node.name in {"_content_index_path", "_save_content_index"}:
+            nodes.append(node)
+
+    env = {
+        "os": os,
+        "stat": stat,
+        "tempfile": tempfile,
+        "time": time,
+        "json": __import__("json"),
+        "base": SimpleNamespace(config_dir=str(tmp_path)),
+    }
+    exec(compile(ast.Module(body=nodes, type_ignores=[]), str(library_path), "exec"), env)
+
+    destination = tmp_path / "mod-content-index.json"
+    destination.write_text('{"records": {}}', encoding="utf-8")
+
+    real_replace = os.replace
+
+    def deny_cache_replace(src, dst):
+        if os.path.abspath(dst) == os.path.abspath(destination):
+            raise PermissionError(5, "Access is denied", str(dst))
+        return real_replace(src, dst)
+
+    monkeypatch.setattr(os, "replace", deny_cache_replace)
+
+    payload = {"records": {"example": {"entries": ["materials/test.vmat_c"]}}}
+    assert env["_save_content_index"](payload) is False
+    assert env["_content_index_runtime"] is payload
+    assert env["_content_index_write_disabled"] is True
+    assert list(tmp_path.glob(".minify-content-index-*.json")) == []
+
+
+def test_v2_content_index_cache_uses_absolute_destination_and_windows_retry():
+    source = (STAGE / "core" / "mod_library.py").read_text(encoding="utf-8")
+    for token in (
+        "destination = os.path.abspath(_content_index_path())",
+        "for attempt in range(4):",
+        "current_mode | stat.S_IWUSR",
+        "patch preflight will continue with the in-memory index",
+        "_content_index_write_disabled = True",
+    ):
+        assert token in source
