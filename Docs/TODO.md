@@ -29,10 +29,11 @@
 - [x] Residual hostile-input/path-race review; CI #218 **369/369 PASS**, both Windows portable builds PASS.
 - [x] Fix v2 D2PFX screenshot regression: working JPG previews/fallback, Updated-date parity, max-4 desktop grid, action feedback/search race/install-state fixes; CI #220 **374/374 PASS**, both Windows portable builds PASS.
 - [x] Restore toggleable legacy-style Mod Library list view with collapsible type groups, optional compact previews, and persistent List/Cards choice; CI #221 **375/375 PASS**, both Windows portable builds PASS.
+- [x] Restore legacy section naming + bulk controls and fix D2PFX classification: actual collection labels such as Hero Mods, Select all/Clear/Invert/Expand all/Collapse all, current string-schema D2PFX manifests; CI #222 **377/377 PASS**, both Windows portable builds PASS.
 - [ ] Smoke new Mod Library List/Cards view + corrected D2PFX Browser, then full Windows/Dota smoke.
 - [ ] Beta -> main only after validation and explicit approval.
 
 - [x] Fix v2 runtime startup `base.TITLE` regression caused by literal escaped newlines in staged base identity; CI #192 PASS and replacement v2 portable built.
 - [x] Diagnose/fix the v2 Windows PyInstaller dynamic-library stall; CI #214 PASS on `472bfe794d4e0deecfc1e5deb352943737e181e6`.
-- [x] Produce the current List-view + D2PFX-corrected parity-complete v2 Windows portable from `1354b8549f0e546faed062794ba7669d0f0a5ba0`; SHA-256 `87a59e0959cd6f7a96971055b619c254aff1d1876ddbe68eae0dc27d811b261e`.
+- [x] Produce the current legacy-section + D2PFX-corrected parity-complete v2 Windows portable from `1c17df75253aa9b5c3924497e78587ad51ff9e81`; SHA-256 `3312efd9cbdfc84ffb87805504205fafc1af376d7e5b2b72007fdf835a7a90de`.
 - [ ] User Mod Library/D2PFX re-smoke + Windows/Dota smoke of the current parity-complete v2 ZIP.

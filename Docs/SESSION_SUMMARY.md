@@ -52,3 +52,10 @@
 - CI #221 / `35467625867`: **375/375 PASS**, Ruff clean, v2 Svelte/plugin validation PASS, root + v2 Windows portable PASS.
 - Current v2 portable SHA-256: `87a59e0959cd6f7a96971055b619c254aff1d1876ddbe68eae0dc27d811b261e`; artifact digest `sha256:54acf4d448a0db4744fc10c3bde20f83c419bca538085c30f8c101bd0dbadb4e`.
 - Next: Mod Library/D2PFX smoke, then full Windows/Dota smoke. Beta/main untouched.
+
+- User smoke of #221 found D2PFX mods incorrectly under Standard and Single Hero nested mods under one generic Collections section; requested legacy selection buttons back.
+- Root causes: ModService discarded string-form `browser: "d2pfx"`; initial v2 list grouped every nested mod under literal `collection` rather than the actual parent-group label.
+- Fixed at `1c17df75253aa9b5c3924497e78587ad51ff9e81`: D2PFX schema normalization, real collection section labels such as Hero Mods, and Select all/Clear/Invert/Expand all/Collapse all. Bulk state changes preserve always/untickable mods.
+- CI #222 / `35468658278`: **377/377 PASS**, Ruff clean, v2 Svelte/plugin validation PASS, root + v2 Windows portable PASS.
+- Current v2 portable SHA-256: `3312efd9cbdfc84ffb87805504205fafc1af376d7e5b2b72007fdf835a7a90de`; artifact digest `sha256:7acb394329eaf3ae6ccdde6c7e14ff2f9370de37225078428e0cbf2452dd87b8`.
+- Next: section/bulk-control/D2PFX smoke, then full Windows/Dota smoke. Beta/main untouched.

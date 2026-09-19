@@ -51,3 +51,8 @@
 - [x] CI #221 / `35467625867`: **375/375 PASS**, Ruff clean, v2 validation/Svelte/plugin builds PASS, root + v2 Windows portable PASS.
 - [x] Current v2 portable SHA-256: `87a59e0959cd6f7a96971055b619c254aff1d1876ddbe68eae0dc27d811b261e`.
 - [ ] Next: user smoke of Mod Library List/Cards + D2PFX, then continue full Windows/Dota smoke; foliage alias remains separate.
+
+- [x] Legacy-list smoke follow-up fixed at `1c17df75253aa9b5c3924497e78587ad51ff9e81`: collection sections preserve actual parent labels (for example Hero Mods), current `browser: "d2pfx"` manifests classify as D2PFX, and Select all/Clear/Invert/Expand all/Collapse all are restored.
+- [x] CI #222 / `35468658278`: **377/377 PASS**, Ruff clean, v2 validation/Svelte/plugin builds PASS, root + v2 Windows portable PASS.
+- [x] Current v2 portable SHA-256: `3312efd9cbdfc84ffb87805504205fafc1af376d7e5b2b72007fdf835a7a90de`.
+- [ ] Next: user smoke of section placement/bulk controls + D2PFX, then continue full Windows/Dota smoke; private foliage alias remains separate.
