@@ -36,7 +36,6 @@ def _iter_mod_directories():
             stack.append((path, depth + 1))
 
 
-
 class Migrations:
     def __init__(self):
         self._migrate_locale_config()
