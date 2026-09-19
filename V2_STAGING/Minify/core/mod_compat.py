@@ -191,9 +191,7 @@ def classify_collision(path: str, owners, fingerprints=None) -> dict:
         }
 
     hashes = {
-        str(info.get("sha256"))
-        for info in fingerprints.values()
-        if isinstance(info, dict) and info.get("sha256")
+        str(info.get("sha256")) for info in fingerprints.values() if isinstance(info, dict) and info.get("sha256")
     }
     if len(hashes) == 1 and len(fingerprints) >= 2:
         return {

@@ -96,9 +96,7 @@ def patcher():
         selected_for_backup = _selected_mods(mod_list)
         for compatibility_rule in mod_compat.active_rules(selected_for_backup):
             output.add_text(
-                "Compatibility active: {} — {}".format(
-                    compatibility_rule["title"], compatibility_rule["summary"]
-                ),
+                "Compatibility active: {} — {}".format(compatibility_rule["title"], compatibility_rule["summary"]),
                 msg_type="warning",
             )
 
@@ -109,16 +107,13 @@ def patcher():
             if conflicts:
                 counts = mod_library.conflict_counts(conflicts)
                 output.add_text(
-                    f"Preflight: {counts['pairs']} indexed conflict pair(s) "
-                    f"({counts.get('critical', 0)} critical).",
+                    f"Preflight: {counts['pairs']} indexed conflict pair(s) ({counts.get('critical', 0)} critical).",
                     msg_type="warning",
                 )
         except Exception:
             log.write_warning("VPK conflict preflight could not be completed.")
 
-        restore_point = backup_manager.create_restore_point(
-            helper.output_path, selected_for_backup, reason="pre-patch"
-        )
+        restore_point = backup_manager.create_restore_point(helper.output_path, selected_for_backup, reason="pre-patch")
         output.add_text("Restore point created.", msg_type="success")
 
         blank_file_extensions = helper.get_blank_file_extensions()  # list of extensions in bin/blank-files
@@ -502,4 +497,3 @@ def patcher():
             playsound3.playsound(os.path.join(base.sounds_dir, "fail.wav"), block=False)
         except playsound3.PlaysoundException:
             log.write_warning()
-

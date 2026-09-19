@@ -231,6 +231,7 @@ def metadata(mod: str) -> dict:
         "nested": bool(mods_shared.get_mod_metadata(mod).get("nested") or group),
     }
 
+
 def _utc_now_iso() -> str:
     return _dt.datetime.now(_dt.timezone.utc).isoformat(timespec="seconds")
 
@@ -395,7 +396,12 @@ def index_contents(mod: str, force: bool = False) -> list[str]:
     if not os.path.exists(path):
         return []
 
-    if not force and os.path.isfile(path) and record.get("indexer_version") == 2 and isinstance(record.get("entries"), list):
+    if (
+        not force
+        and os.path.isfile(path)
+        and record.get("indexer_version") == 2
+        and isinstance(record.get("entries"), list)
+    ):
         try:
             size, mtime_ns = _stat_signature(path)
         except OSError:
@@ -404,7 +410,9 @@ def index_contents(mod: str, force: bool = False) -> list[str]:
             return list(record["entries"])
 
     try:
-        entries = _vpk_entries(mod) if os.path.isfile(path) and path.casefold().endswith(".vpk") else _standard_entries(mod)
+        entries = (
+            _vpk_entries(mod) if os.path.isfile(path) and path.casefold().endswith(".vpk") else _standard_entries(mod)
+        )
         record.pop("index_error", None)
     except Exception as error:
         record["index_error"] = str(error)
@@ -560,7 +568,9 @@ def build_collision_report(mods, conflicts=None) -> dict:
         {
             **action,
             "mod_name": display_name(action.get("mod")),
-            "winner": str(active_dark_rule.get("winner", "other shader / base game")) if active_dark_rule else "undetermined",
+            "winner": str(active_dark_rule.get("winner", "other shader / base game"))
+            if active_dark_rule
+            else "undetermined",
         }
         for action in mod_compat.planned_resource_actions(selected)
     ]
@@ -589,4 +599,3 @@ def write_collision_report(mods, conflicts=None) -> str:
             pass
         raise
     return path
-
