@@ -1,6 +1,6 @@
 import type { UpdateInfo } from "./types";
 
-export const GITHUB_RELEASES_URL = "https://api.github.com/repos/Egezenn/dota2-minify/releases";
+export const GITHUB_RELEASES_URL = "https://api.github.com/repos/ripDZL/dota2-minify/releases";
 
 export async function getAppVersion(): Promise<string | null> {
   try {
@@ -141,7 +141,7 @@ export async function checkForUpdates(
           currentVersion: current,
           title: rel.name || `Release v${remoteVer}`,
           body: rel.body || "",
-          releaseUrl: rel.html_url || `https://github.com/Egezenn/dota2-minify/releases/tag/${tag}`,
+          releaseUrl: rel.html_url || `https://github.com/ripDZL/dota2-minify/releases/tag/${tag}`,
           downloadUrl: downloadUrl || rel.html_url,
           downloadSha256: downloadSha256 || undefined,
           isPrerelease: isPre,

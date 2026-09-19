@@ -218,7 +218,7 @@ class Api:
         return self.config_service.is_debug_env()
 
     def get_version(self) -> str:
-        return base.VERSION
+        return base.DISPLAY_VERSION
 
     @staticmethod
     def is_portable() -> bool:
