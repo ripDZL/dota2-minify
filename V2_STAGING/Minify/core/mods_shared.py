@@ -18,9 +18,9 @@ D2PFX_METADATA_MAX_FILE_BYTES = 8 * 1024 * 1024
 VPK_IDENTITY_DB_FILE = "vpk-identities.json"
 VPK_HASH_CACHE_FILE = "vpk-hash-cache.json"
 
-# v2 category-conflict behavior is retained for categories where whole-mod
-# exclusion is correct. Terrain is intentionally omitted: this fork preserves
-# resource-level Dark Terrain yielding instead of blanket terrain exclusion.
+# Upstream v2 category-conflict metadata is retained for compatibility and UI
+# introspection only. Fork/rc7 parity does not convert a shared category into a
+# hard patch conflict; only explicit per-mod manifest conflicts may block patching.
 CATEGORY_CONFLICTS = [
     "announcers",
     "backgrounds",
@@ -943,8 +943,6 @@ def scan_mods():
     _labels = {}
     _groups = {}
     _metadata = {}
-    category_mods = {}
-    active_conflicting_cats = get_conflicting_categories()
 
     identity_db = _load_identity_db()
 
@@ -980,8 +978,6 @@ def scan_mods():
             _dependencies.append({mod: [dependencies] if isinstance(dependencies, str) else list(dependencies)})
         if conflicts is not None:
             _conflicts.append({mod: [conflicts] if isinstance(conflicts, str) else list(conflicts)})
-        if category and str(category).casefold() in active_conflicting_cats:
-            category_mods.setdefault(str(category).casefold(), []).append(mod)
 
         if blacklist_exist and not cfg:
             _with_order.append({mod: 2})
@@ -1036,23 +1032,6 @@ def scan_mods():
                 _labels[mod_id] = _vpk_label(mod_path, metadata)
                 _groups[mod_id] = str(metadata.get("category") or relative_parent).strip()
                 _metadata[mod_id] = metadata
-
-    for mods_in_category in category_mods.values():
-        if len(mods_in_category) < 2:
-            continue
-        for mod in mods_in_category:
-            siblings = [other for other in mods_in_category if other != mod]
-            existing = next((entry for entry in _conflicts if mod in entry), None)
-            if existing is None:
-                _conflicts.append({mod: siblings})
-            else:
-                values = existing[mod]
-                if isinstance(values, str):
-                    values = [values]
-                    existing[mod] = values
-                for sibling in siblings:
-                    if sibling not in values:
-                        values.append(sibling)
 
     def mod_order_key(item):
         mod_id = list(item.keys())[0]

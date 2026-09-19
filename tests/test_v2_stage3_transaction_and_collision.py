@@ -191,3 +191,14 @@ def test_v2_content_index_cache_uses_absolute_destination_and_windows_retry():
         "_content_index_write_disabled = True",
     ):
         assert token in source
+
+
+def test_v2_collision_review_does_not_replace_rc7_explicit_conflict_semantics():
+    patch_source = (STAGE / "patch" / "__init__.py").read_text(encoding="utf-8")
+    mods_source = (STAGE / "core" / "mods_shared.py").read_text(encoding="utf-8")
+
+    assert 'conflicts = cfg.get("conflicts", None)' in mods_source
+    assert '_conflicts.append({mod: [conflicts] if isinstance(conflicts, str) else list(conflicts)})' in mods_source
+    assert "category_mods" not in mods_source[mods_source.index("def scan_mods():") :]
+    assert 'output.add_text("&conflicts_detected", msg_type="error")' in patch_source
+    assert "if conflicts_found:" in patch_source

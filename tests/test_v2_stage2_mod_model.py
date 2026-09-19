@@ -130,7 +130,7 @@ def test_v2_stage2_mod_metadata_reads_are_bounded_and_identity_checked():
     assert 'with open(path, encoding="utf-8-sig", errors="replace")' not in source
 
 
-def test_v2_stage2_mod_model_keeps_custom_vpk_categories_and_no_blanket_terrain_conflict():
+def test_v2_stage2_mod_model_keeps_custom_vpk_categories_without_blanket_hard_conflicts():
     source = MODS_SHARED.read_text(encoding="utf-8")
     for token in (
         'VPK_COLLECTION_DIR = "_VPK Mods"',
@@ -139,8 +139,14 @@ def test_v2_stage2_mod_model_keeps_custom_vpk_categories_and_no_blanket_terrain_
         '_groups[mod_id] = str(metadata.get("category") or relative_parent).strip()',
         'categories.discard("terrains")',
         "get_conflicting_categories()",
+        '_conflicts.append({mod: [conflicts] if isinstance(conflicts, str) else list(conflicts)})',
     ):
         assert token in source
+
+    scan_body = source[source.index("def scan_mods():") :]
+    assert "category_mods" not in scan_body
+    assert "active_conflicting_cats" not in scan_body
+    assert "mods_in_category" not in scan_body
 
 
 def test_v2_stage2_service_and_patch_callers_use_logical_mod_paths():
