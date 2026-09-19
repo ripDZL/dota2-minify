@@ -26,6 +26,10 @@
 
 <header class="header">
   <nav class="nav-tabs">
+    <button class="tab-btn {activeTab === 'home' ? 'active' : ''}" on:click={() => onTabChange("home")}>
+      Home
+    </button>
+
     <button class="tab-btn {activeTab === 'mods' ? 'active' : ''}" on:click={() => onTabChange("mods")}>
       {$t("tab_mods")}
     </button>

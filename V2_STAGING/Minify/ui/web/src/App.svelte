@@ -4,6 +4,7 @@
   import { localeStore } from "./lib/stores/locale";
   import { loadApiData, refreshMods, applyTheme, injectThemeIntoFrame } from "./lib/api";
   import Header from "./lib/components/Header.svelte";
+  import Home from "./lib/components/Home.svelte";
   import ModGrid from "./lib/components/ModGrid.svelte";
   import Terminal from "./lib/components/Terminal.svelte";
   import Settings from "./lib/components/Settings.svelte";
@@ -19,7 +20,7 @@
   import { fetchPendingAnnouncements, markAnnouncementSeen } from "./lib/announcements";
   import { checkForUpdates, ignoreUpdate, getAppVersion } from "./lib/updater";
 
-  let activeTab: string = "mods";
+  let activeTab: string = "home";
   let pluginTabs: Array<{ id: string; name: string; entry_point?: string }> = [];
   let pluginContents: Record<string, string> = {};
 
@@ -406,6 +407,10 @@
     });
   }
 
+  async function handleRescanMods() {
+    await refreshMods();
+  }
+
   async function handleSaveMods(data: Record<string, boolean>) {
     try {
       await window.pywebview?.api?.set_mods(data);
@@ -566,6 +571,15 @@
   />
 
   <main class="content-area">
+    <div class="tab-pane" class:hidden={activeTab !== "home"}>
+      <Home
+        {isPatching}
+        onPatch={handlePatch}
+        onRestore={openRestoreManager}
+        onRescan={handleRescanMods}
+      />
+    </div>
+
     <div class="tab-pane" class:hidden={activeTab !== "mods"}>
       <ModGrid onSaveMods={handleSaveMods} />
     </div>
