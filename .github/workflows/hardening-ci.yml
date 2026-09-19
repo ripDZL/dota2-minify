@@ -54,7 +54,7 @@ jobs:
   build-windows-portable:
     needs: validate
     runs-on: windows-2022
-    timeout-minutes: 20
+    timeout-minutes: 30
     steps:
       - uses: actions/checkout@v4
 
@@ -139,7 +139,7 @@ jobs:
   build-v2-windows-portable:
     needs: validate-v2-staging
     runs-on: windows-2022
-    timeout-minutes: 20
+    timeout-minutes: 60
     steps:
       - uses: actions/checkout@v4
 
@@ -170,6 +170,7 @@ jobs:
           npm run build
 
       - name: Build v2 executable and runtime package
+        timeout-minutes: 45
         shell: pwsh
         run: |
           Set-Location V2_STAGING
