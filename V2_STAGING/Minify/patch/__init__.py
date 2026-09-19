@@ -4,6 +4,7 @@ import os
 import shutil
 import subprocess
 import time
+import traceback
 import webbrowser
 from concurrent.futures import ThreadPoolExecutor
 
@@ -16,11 +17,47 @@ import vpk
 
 import conditions
 import helper
-from core import base, config, constants, fs, log, mods_shared, output, registry, steam, utils
+from core import (
+    backup_manager,
+    base,
+    config,
+    constants,
+    fs,
+    log,
+    mod_compat,
+    mod_library,
+    mods_shared,
+    output,
+    registry,
+    steam,
+    utils,
+)
 
 from patch import blacklist, manifest_utils, remap_processor, replacer, styling, unins, vpk_utils, xml_utils
 
 dota_version_changed = False
+
+
+def _rollback_failed_patch(restore_point: str | None, error: BaseException) -> str:
+    if not restore_point:
+        return ""
+    try:
+        backup_manager.restore_restore_point(restore_point, restore_selection=False)
+        backup_manager.mark_rolled_back(restore_point, str(error))
+        return "Previous Minify output was restored automatically."
+    except Exception:
+        log.write_warning("Automatic rollback also failed; check logs.")
+        return "Automatic rollback also failed; check logs."
+
+
+def _selected_mods(mod_list) -> list[str]:
+    selected = []
+    for mod in mod_list:
+        mod_path = mods_shared.get_mod_path(mod)
+        cfg = manifest_utils.get_mod(mod_path) if os.path.isdir(mod_path) else {}
+        if mods_shared.get_state(mod) or bool(cfg.get("always", False)):
+            selected.append(mod)
+    return selected
 
 
 def patcher():
@@ -35,22 +72,54 @@ def patcher():
             output.add_text("&failure_terminal", msg_type="error")
             return
 
+    restore_point = None
+    patch_completed = False
+
     try:
         mod_list = constants.mods_with_order
 
         mods_shared.enforce_locale_mod_states()
 
-        for item in os.listdir(base.logs_dir):
-            fs.remove_path(os.path.join(base.logs_dir, item))
-
         fs.create_dirs(
             base.cache_dir,
+            base.logs_dir,
             base.build_dir,
             base.replace_dir,
             base.merge_dir,
             constants.minify_dota_compile_input_path,
             constants.minify_dota_tools_required_path,
         )
+
+        for item in os.listdir(base.logs_dir):
+            fs.remove_path(os.path.join(base.logs_dir, item))
+
+        selected_for_backup = _selected_mods(mod_list)
+        for compatibility_rule in mod_compat.active_rules(selected_for_backup):
+            output.add_text(
+                "Compatibility active: {} — {}".format(
+                    compatibility_rule["title"], compatibility_rule["summary"]
+                ),
+                msg_type="warning",
+            )
+
+        try:
+            conflicts = mod_library.analyze_conflicts(selected_for_backup)
+            report_path = mod_library.write_collision_report(selected_for_backup, conflicts)
+            output.add_text(f"Compatibility report: {report_path}")
+            if conflicts:
+                counts = mod_library.conflict_counts(conflicts)
+                output.add_text(
+                    f"Preflight: {counts['pairs']} indexed conflict pair(s) "
+                    f"({counts.get('critical', 0)} critical).",
+                    msg_type="warning",
+                )
+        except Exception:
+            log.write_warning("VPK conflict preflight could not be completed.")
+
+        restore_point = backup_manager.create_restore_point(
+            helper.output_path, selected_for_backup, reason="pre-patch"
+        )
+        output.add_text("Restore point created.", msg_type="success")
 
         blank_file_extensions = helper.get_blank_file_extensions()  # list of extensions in bin/blank-files
 
@@ -140,7 +209,12 @@ def patcher():
                 mod_path = mods_shared.get_mod_path(mod_name)
                 try:
                     mod_vpk = vpk.open(mod_path)
-                    vpk_utils.dump(mod_vpk, constants.minify_dota_compile_output_path, check_exists=True)
+                    vpk_utils.dump(
+                        mod_vpk,
+                        constants.minify_dota_compile_output_path,
+                        check_exists=True,
+                        exclude_paths=mod_compat.exclusions_for_mod(mod_name, selected_for_backup),
+                    )
                     output.add_text("&merged_mod", mod_name, indent=True)
                 except Exception:
                     log.write_warning("&failed_merge_mod", mod_name)
@@ -180,11 +254,17 @@ def patcher():
                                 dirs_exist_ok=True,
                             )
                     if os.path.exists(files_dir):
-                        shutil.copytree(
+                        excluded_compat_paths = mod_compat.copy_standard_files(
+                            folder,
                             files_dir,
                             constants.minify_dota_compile_output_path,
-                            dirs_exist_ok=True,
+                            selected_for_backup,
                         )
+                        for excluded_path in excluded_compat_paths:
+                            output.add_text(
+                                f"Compatibility: excluded {excluded_path} from {mods_shared.get_mod_label(folder)}.",
+                                msg_type="warning",
+                            )
 
                     if conditions.workshop_installed and xml_file and os.path.exists(xml_file):
                         with utils.open_utf8(xml_file) as file:
@@ -318,6 +398,13 @@ def patcher():
         native_mods = vpk.new(constants.minify_dota_compile_output_path)
         native_mods.save(os.path.join(helper.output_path, "pak66_dir.vpk"))
 
+        compatibility_validation = mod_compat.validate_generated_output(helper.output_path, selected_for_backup)
+        if compatibility_validation.get("active"):
+            output.add_text(
+                "Compatibility validation passed: Dark Terrain yields deferred post-process safely.",
+                msg_type="success",
+            )
+
         # ---------------------------------- STEP 7 ---------------------------------- #
         # -------------------------- Clean paths and inform -------------------------- #
         # ---------------------------------------------------------------------------- #
@@ -371,6 +458,9 @@ def patcher():
                         )
 
         helper.bulk_exec_script("after_patch", False)
+        patch_completed = True
+        if restore_point:
+            backup_manager.mark_success(restore_point)
 
         output.add_separator()
         output.add_text("&success_terminal", msg_type="success")
@@ -384,13 +474,32 @@ def patcher():
             webbrowser.open(f"steam://rungameid/{base.STEAM_DOTA_ID}")
 
     # chimes are from pixabay.com/sound-effects/chime-74910/
-    except (PermissionError, playsound3.PlaysoundException):
+    except playsound3.PlaysoundException:
         log.write_warning()
 
-    except Exception:
+    except PermissionError as error:
+        error_details = traceback.format_exc()
         log.write_crashlog()
-
+        rollback_message = _rollback_failed_patch(restore_point if not patch_completed else None, error)
         output.add_separator()
         output.add_text("&failure_terminal", msg_type="error")
+        if rollback_message:
+            output.add_text(rollback_message, msg_type="warning")
+        output.add_text(error_details, msg_type="error")
         output.add_text("&check_logs_terminal", msg_type="warning")
-        playsound3.playsound(os.path.join(base.sounds_dir, "fail.wav"), block=False)
+
+    except Exception as error:
+        error_details = traceback.format_exc()
+        log.write_crashlog()
+        rollback_message = _rollback_failed_patch(restore_point if not patch_completed else None, error)
+        output.add_separator()
+        output.add_text("&failure_terminal", msg_type="error")
+        if rollback_message:
+            output.add_text(rollback_message, msg_type="warning")
+        output.add_text(error_details, msg_type="error")
+        output.add_text("&check_logs_terminal", msg_type="warning")
+        try:
+            playsound3.playsound(os.path.join(base.sounds_dir, "fail.wav"), block=False)
+        except playsound3.PlaysoundException:
+            log.write_warning()
+

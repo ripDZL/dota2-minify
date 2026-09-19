@@ -14,6 +14,8 @@
   import UpdateModal from "./lib/components/UpdateModal.svelte";
   import WorkshopToolsDetectedModal from "./lib/components/WorkshopToolsDetectedModal.svelte";
   import WorkshopDownloadModal from "./lib/components/WorkshopDownloadModal.svelte";
+  import PatchReviewModal from "./lib/components/PatchReviewModal.svelte";
+  import RestoreModal from "./lib/components/RestoreModal.svelte";
   import { fetchPendingAnnouncements, markAnnouncementSeen } from "./lib/announcements";
   import { checkForUpdates, ignoreUpdate, getAppVersion } from "./lib/updater";
 
@@ -32,6 +34,18 @@
   let showUpdateModal = false;
   let showWorkshopModal = false;
   let showWorkshopDownloadModal = false;
+  let showPatchReviewModal = false;
+  let patchPreview: any = null;
+  let showRestoreModal = false;
+  let restorePoints: Array<{
+    id: string;
+    created: string;
+    completed: string;
+    status: string;
+    reason: string;
+    selected_mod_count: number;
+  }> = [];
+  let restoreBusy = false;
 
   let initialized = false;
   let isDebugEnv = false;
@@ -202,6 +216,84 @@
     return now.toTimeString().split(" ")[0];
   }
 
+  async function openPatchReview() {
+    try {
+      const result = await window.pywebview?.api?.get_patch_preview?.();
+      if (!result) {
+        throw new Error("Patch preview API is unavailable.");
+      }
+      patchPreview = result;
+      showPatchReviewModal = true;
+    } catch (err) {
+      logs = [
+        ...logs,
+        {
+          text: `Patch preflight failed: ${err}`,
+          type: "error",
+          timestamp: getCurrentTime(),
+        },
+      ];
+      activeTab = "terminal";
+    }
+  }
+
+  async function confirmPatch() {
+    showPatchReviewModal = false;
+    await triggerPatch();
+  }
+
+  async function openRestoreManager() {
+    if (isPatching) return;
+    try {
+      restorePoints = (await window.pywebview?.api?.get_restore_points?.()) || [];
+      showRestoreModal = true;
+    } catch (err) {
+      logs = [
+        ...logs,
+        {
+          text: `Failed to load restore points: ${err}`,
+          type: "error",
+          timestamp: getCurrentTime(),
+        },
+      ];
+      activeTab = "terminal";
+    }
+  }
+
+  async function restoreSelectedPoint(id: string) {
+    if (!id || restoreBusy || isPatching) return;
+    restoreBusy = true;
+    try {
+      const result = await window.pywebview?.api?.restore_point?.(id);
+      if (!result?.success) {
+        throw new Error(result?.error || "Restore failed.");
+      }
+      showRestoreModal = false;
+      await refreshMods();
+      logs = [
+        ...logs,
+        {
+          text: `Restore point ${id} restored successfully.`,
+          type: "success",
+          timestamp: getCurrentTime(),
+        },
+      ];
+      activeTab = "terminal";
+    } catch (err) {
+      logs = [
+        ...logs,
+        {
+          text: `Restore failed: ${err}`,
+          type: "error",
+          timestamp: getCurrentTime(),
+        },
+      ];
+      activeTab = "terminal";
+    } finally {
+      restoreBusy = false;
+    }
+  }
+
   async function triggerPatch() {
     isPatching = true;
     activeTab = "terminal";
@@ -232,7 +324,7 @@
       console.error("Error checking workshop tools:", err);
     }
 
-    await triggerPatch();
+    await openPatchReview();
   }
 
   async function handleWorkshopExtract() {
@@ -251,12 +343,12 @@
         },
       ];
     }
-    await triggerPatch();
+    await openPatchReview();
   }
 
   async function handleWorkshopSkip() {
     showWorkshopModal = false;
-    await triggerPatch();
+    await openPatchReview();
   }
 
   function handleWorkshopCancel() {
@@ -423,6 +515,7 @@
       broadcastToPlugins({ type: "TAB_ACTIVE", tab });
     }}
     onPatch={handlePatch}
+    onRestoreClick={openRestoreManager}
     onUninstallClick={() => (showUninstallModal = true)}
   />
 
@@ -430,6 +523,21 @@
     isOpen={showUninstallModal}
     onConfirm={handleUninstallConfirm}
     onCancel={() => (showUninstallModal = false)}
+  />
+
+  <PatchReviewModal
+    isOpen={showPatchReviewModal}
+    preview={patchPreview}
+    onConfirm={confirmPatch}
+    onCancel={() => (showPatchReviewModal = false)}
+  />
+
+  <RestoreModal
+    isOpen={showRestoreModal}
+    points={restorePoints}
+    busy={restoreBusy}
+    onRestore={restoreSelectedPoint}
+    onCancel={() => !restoreBusy && (showRestoreModal = false)}
   />
 
   <AnnouncementModal

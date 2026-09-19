@@ -81,6 +81,15 @@ class Api:
     def start_patch(self) -> Dict[str, Any]:
         return self.patch_service.start_patch()
 
+    def get_patch_preview(self) -> Dict[str, Any]:
+        return self.patch_service.get_patch_preview()
+
+    def get_restore_points(self) -> List[Dict[str, Any]]:
+        return self.patch_service.get_restore_points()
+
+    def restore_point(self, snapshot_id: str) -> Dict[str, Any]:
+        return self.patch_service.restore_point(snapshot_id)
+
     def start_uninstall(self, remove_everything: bool = False) -> Dict[str, Any]:
         return self.patch_service.start_uninstall(remove_everything)
 

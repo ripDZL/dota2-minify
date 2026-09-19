@@ -4,7 +4,7 @@ import threading
 from concurrent.futures import ThreadPoolExecutor
 
 import vpk
-from core import base, config, constants, fs, log, output, utils
+from core import base, config, constants, fs, log, output, security, utils
 
 
 def extract(vpk_to_extract_from, paths, path_to_extract_to=base.build_dir):
@@ -29,14 +29,12 @@ def extract(vpk_to_extract_from, paths, path_to_extract_to=base.build_dir):
         executor.map(extract_file, paths)
 
 
-def dump(vpk_obj, output_dir, check_exists=True):
+def dump(vpk_obj, output_dir, check_exists=True, exclude_paths=None):
+    excluded = {security.safe_relative_path(str(path)).casefold() for path in (exclude_paths or [])}
     for filepath in vpk_obj:
-        # Sanitize filepath to prevent invalid characters or quotes
-        clean_path = filepath.strip().strip('"').strip("'").replace("\\", "/").lstrip("/")
-        if not clean_path:
+        clean_path, full_path = security.confined_destination(output_dir, filepath)
+        if clean_path.casefold() in excluded:
             continue
-
-        full_path = os.path.join(output_dir, clean_path)
         if check_exists and os.path.exists(full_path):
             continue
 

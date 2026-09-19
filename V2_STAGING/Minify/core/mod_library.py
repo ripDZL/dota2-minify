@@ -6,14 +6,31 @@ transaction stage; favorites and user metadata remain independent of the UI.
 
 from __future__ import annotations
 
+import datetime as _dt
+import hashlib
 import json
 import os
+import re
 import tempfile
+import zlib
+from collections import defaultdict
 
 from core import base, mods_shared
 
 LIBRARY_DB_FILE = "mod-library.json"
-SCHEMA_VERSION = 1
+CONTENT_INDEX_FILE = "mod-content-index.json"
+COLLISION_REPORT_FILE = "compatibility-report.json"
+SCHEMA_VERSION = 3
+
+CRITICAL_EXTENSIONS = {
+    ".vmdl_c",
+    ".vmat_c",
+    ".vtex_c",
+    ".vpcf_c",
+    ".vsnd_c",
+    ".vxml_c",
+    ".vcss_c",
+}
 
 
 def _db_path() -> str:
@@ -213,3 +230,363 @@ def metadata(mod: str) -> dict:
         "group": group,
         "nested": bool(mods_shared.get_mod_metadata(mod).get("nested") or group),
     }
+
+def _utc_now_iso() -> str:
+    return _dt.datetime.now(_dt.timezone.utc).isoformat(timespec="seconds")
+
+
+def _content_index_path() -> str:
+    return os.path.join(base.config_dir, CONTENT_INDEX_FILE)
+
+
+def _load_content_index() -> dict:
+    try:
+        with open(_content_index_path(), encoding="utf-8-sig") as file:
+            data = json.load(file)
+    except Exception:
+        data = {}
+    if not isinstance(data, dict):
+        data = {}
+    records = data.get("records")
+    if not isinstance(records, dict):
+        records = {}
+    return {"schema_version": SCHEMA_VERSION, "records": records}
+
+
+def _save_content_index(data: dict) -> None:
+    os.makedirs(base.config_dir, exist_ok=True)
+    data["schema_version"] = SCHEMA_VERSION
+    fd, temporary = tempfile.mkstemp(prefix=".minify-content-index-", suffix=".json", dir=base.config_dir)
+    try:
+        with os.fdopen(fd, "w", encoding="utf-8", newline="\n") as file:
+            json.dump(data, file, indent=2, ensure_ascii=False, sort_keys=True)
+        os.replace(temporary, _content_index_path())
+    except Exception:
+        try:
+            os.remove(temporary)
+        except FileNotFoundError:
+            pass
+        raise
+
+
+def _record_key_for_path(path: str) -> str:
+    return os.path.normcase(os.path.abspath(path))
+
+
+def _stat_signature(path: str) -> tuple[int, int]:
+    info = os.stat(path)
+    return int(info.st_size), int(getattr(info, "st_mtime_ns", int(info.st_mtime * 1_000_000_000)))
+
+
+def _record_for_mod(mod: str, create: bool = True) -> tuple[dict, dict, str]:
+    data = _load_content_index()
+    path = mods_shared.get_mod_path(mod)
+    key = _record_key_for_path(path)
+    record = data["records"].get(key)
+    if not isinstance(record, dict):
+        record = {}
+        if create:
+            data["records"][key] = record
+    return data, record, key
+
+
+def _iter_embedded_vpks(root: str):
+    for current_root, dirs, files in os.walk(root):
+        dirs[:] = [name for name in dirs if not os.path.islink(os.path.join(current_root, name))]
+        for name in files:
+            if name.casefold().endswith(".vpk"):
+                yield os.path.join(current_root, name)
+
+
+def _standard_entries(mod: str) -> list[str]:
+    import vpk
+
+    root = mods_shared.get_mod_path(mod)
+    results = set()
+    folder = os.path.join(root, "files")
+    if os.path.isdir(folder):
+        for current_root, dirs, files in os.walk(folder):
+            dirs[:] = [name for name in dirs if not os.path.islink(os.path.join(current_root, name))]
+            for name in files:
+                full = os.path.join(current_root, name)
+                if os.path.islink(full) or not os.path.isfile(full):
+                    continue
+                rel = os.path.relpath(full, folder).replace(os.sep, "/").casefold()
+                if rel:
+                    results.add(rel)
+
+    for vpk_path in _iter_embedded_vpks(root):
+        try:
+            archive = vpk.open(vpk_path)
+            results.update(str(entry).replace("\\", "/").casefold() for entry in archive)
+        except Exception:
+            continue
+    return sorted(results)
+
+
+def _vpk_entries(mod: str) -> list[str]:
+    import vpk
+
+    path = mods_shared.get_mod_path(mod)
+    archive = vpk.open(path)
+    return sorted({str(entry).replace("\\", "/").casefold() for entry in archive})
+
+
+def _hash_stream(stream) -> tuple[int, str, int]:
+    checksum = 0
+    digest = hashlib.sha256()
+    size = 0
+    while True:
+        chunk = stream.read(1024 * 1024)
+        if not chunk:
+            break
+        size += len(chunk)
+        checksum = zlib.crc32(chunk, checksum)
+        digest.update(chunk)
+    return checksum & 0xFFFFFFFF, digest.hexdigest(), size
+
+
+def _fingerprint_vpk_entry(vpk_path: str, virtual_path: str) -> dict | None:
+    import vpk
+
+    archive = vpk.open(vpk_path)
+    wanted = virtual_path.casefold()
+    actual = next((str(entry) for entry in archive if str(entry).replace("\\", "/").casefold() == wanted), None)
+    if actual is None:
+        return None
+    with archive.get_file(actual) as pak_file:
+        crc_hint = getattr(pak_file, "crc32", None)
+        size_hint = getattr(pak_file, "length", None)
+        crc, sha256, measured_size = _hash_stream(pak_file)
+    return {
+        "crc32": f"{int(crc_hint if crc_hint is not None else crc) & 0xFFFFFFFF:08x}",
+        "sha256": sha256,
+        "size": int(size_hint if size_hint is not None else measured_size),
+        "origin": os.path.basename(vpk_path),
+    }
+
+
+def fingerprint_entry(mod: str, virtual_path: str) -> dict:
+    normalized = str(virtual_path or "").replace("\\", "/").lstrip("/").casefold()
+    root = mods_shared.get_mod_path(mod)
+    try:
+        if os.path.isfile(root) and root.casefold().endswith(".vpk"):
+            return _fingerprint_vpk_entry(root, normalized) or {}
+
+        direct = os.path.join(root, "files", *normalized.split("/"))
+        if os.path.isfile(direct) and not os.path.islink(direct):
+            with open(direct, "rb") as stream:
+                crc, sha256, size = _hash_stream(stream)
+            return {"crc32": f"{crc:08x}", "sha256": sha256, "size": size, "origin": "files"}
+
+        if os.path.isdir(root):
+            for vpk_path in _iter_embedded_vpks(root):
+                result = _fingerprint_vpk_entry(vpk_path, normalized)
+                if result:
+                    return result
+    except Exception as error:
+        return {"error": str(error)}
+    return {}
+
+
+def index_contents(mod: str, force: bool = False) -> list[str]:
+    data, record, key = _record_for_mod(mod)
+    path = mods_shared.get_mod_path(mod)
+    if not os.path.exists(path):
+        return []
+
+    if not force and os.path.isfile(path) and record.get("indexer_version") == 2 and isinstance(record.get("entries"), list):
+        try:
+            size, mtime_ns = _stat_signature(path)
+        except OSError:
+            size = mtime_ns = None
+        if record.get("size") == size and record.get("mtime_ns") == mtime_ns:
+            return list(record["entries"])
+
+    try:
+        entries = _vpk_entries(mod) if os.path.isfile(path) and path.casefold().endswith(".vpk") else _standard_entries(mod)
+        record.pop("index_error", None)
+    except Exception as error:
+        record["index_error"] = str(error)
+        entries = []
+
+    if os.path.isfile(path):
+        try:
+            size, mtime_ns = _stat_signature(path)
+            record.update({"size": size, "mtime_ns": mtime_ns})
+        except OSError:
+            pass
+    record.update(
+        {
+            "path": os.path.abspath(path),
+            "mod_id": mod,
+            "entries": entries,
+            "entry_count": len(entries),
+            "indexer_version": 2,
+            "entries_indexed_at": _utc_now_iso(),
+        }
+    )
+    data["records"][key] = record
+    _save_content_index(data)
+    return entries
+
+
+def estimate_entry_count(mods) -> int:
+    total = 0
+    for mod in mods:
+        _, record, _ = _record_for_mod(mod)
+        count = record.get("entry_count")
+        total += count if isinstance(count, int) else len(index_contents(mod))
+    return total
+
+
+def _base_display_name(mod: str) -> str:
+    return re.sub(r"\s*\[\d+/\d+\]\s*$", "", display_name(mod)).strip().casefold()
+
+
+def _conflict_severity(a: str, b: str, paths: list[str]) -> str:
+    if _base_display_name(a) == _base_display_name(b):
+        return "expected"
+    if any(os.path.splitext(path)[1].casefold() in CRITICAL_EXTENSIONS for path in paths):
+        return "critical"
+    return "possible"
+
+
+def analyze_conflicts(mods, max_examples: int = 8) -> list[dict]:
+    from core import mod_compat
+
+    mods = [mod for mod in mods if os.path.exists(mods_shared.get_mod_path(mod))]
+    entry_owners = defaultdict(list)
+    for mod in mods:
+        for entry in index_contents(mod):
+            if os.path.basename(entry).startswith("minify_"):
+                continue
+            entry_owners[entry].append(mod)
+
+    pair_paths = defaultdict(list)
+    for entry, owners in entry_owners.items():
+        unique = list(dict.fromkeys(owners))
+        for i in range(len(unique)):
+            for j in range(i + 1, len(unique)):
+                pair = tuple(sorted((unique[i], unique[j]), key=str.casefold))
+                pair_paths[pair].append(entry)
+
+    conflicts = []
+    for (a, b), paths in pair_paths.items():
+        details = []
+        for virtual_path in paths:
+            fingerprints = {a: fingerprint_entry(a, virtual_path), b: fingerprint_entry(b, virtual_path)}
+            details.append(
+                {
+                    "path": virtual_path,
+                    "owners": fingerprints,
+                    **mod_compat.classify_collision(virtual_path, (a, b), fingerprints),
+                }
+            )
+        severity = _conflict_severity(a, b, paths)
+        if any(item.get("classification") == "true conflict" for item in details):
+            severity = "critical"
+        group_classification = next(
+            (
+                name
+                for name in ("true conflict", "unknown", "intentional override")
+                if any(item.get("classification") == name for item in details)
+            ),
+            "unknown",
+        )
+        conflicts.append(
+            {
+                "a": a,
+                "b": b,
+                "a_name": display_name(a),
+                "b_name": display_name(b),
+                "severity": severity,
+                "classification": group_classification,
+                "auto_fix": any(item.get("auto_fix") for item in details),
+                "count": len(paths),
+                "examples": paths[:max_examples],
+                "details": details,
+            }
+        )
+
+    severity_order = {"critical": 0, "possible": 1, "expected": 2}
+    conflicts.sort(
+        key=lambda item: (
+            severity_order.get(item["severity"], 9),
+            -item["count"],
+            item["a_name"].casefold(),
+            item["b_name"].casefold(),
+        )
+    )
+    return conflicts
+
+
+def conflict_counts(conflicts: list[dict]) -> dict:
+    result = {"critical": 0, "possible": 0, "expected": 0, "pairs": len(conflicts)}
+    for item in conflicts:
+        severity = item.get("severity", "possible")
+        result[severity] = result.get(severity, 0) + 1
+    return result
+
+
+def build_collision_report(mods, conflicts=None) -> dict:
+    from core import mod_compat
+
+    selected = list(dict.fromkeys(mods or []))
+    conflicts = analyze_conflicts(selected) if conflicts is None else conflicts
+    rows = []
+    for conflict in conflicts:
+        for detail in conflict.get("details", []):
+            owners = detail.get("owners", {})
+            a = conflict.get("a")
+            b = conflict.get("b")
+            winner = detail.get("winner", "undetermined")
+            rows.append(
+                {
+                    "virtual_path": detail.get("path"),
+                    "mod_a": {"id": a, "name": conflict.get("a_name"), **(owners.get(a) or {})},
+                    "mod_b": {"id": b, "name": conflict.get("b_name"), **(owners.get(b) or {})},
+                    "classification": detail.get("classification", "unknown"),
+                    "winner": display_name(winner) if winner in selected else str(winner),
+                    "load_priority": "forced compatibility owner" if detail.get("auto_fix") else "undetermined",
+                    "recommended_action": detail.get("recommended_action", "Review manually."),
+                    "auto_fix": bool(detail.get("auto_fix")),
+                    "rule_id": detail.get("rule_id"),
+                }
+            )
+
+    active_dark_rule = mod_compat.active_dark_terrain_rule(selected)
+    planned = [
+        {
+            **action,
+            "mod_name": display_name(action.get("mod")),
+            "winner": str(active_dark_rule.get("winner", "other shader / base game")) if active_dark_rule else "undetermined",
+        }
+        for action in mod_compat.planned_resource_actions(selected)
+    ]
+    return {
+        "generated_at": _utc_now_iso(),
+        "selected_mods": [{"id": mod, "name": display_name(mod)} for mod in selected],
+        "active_compatibility_rules": mod_compat.active_rules(selected),
+        "collisions": rows,
+        "planned_resource_actions": planned,
+    }
+
+
+def write_collision_report(mods, conflicts=None) -> str:
+    report = build_collision_report(mods, conflicts=conflicts)
+    os.makedirs(base.logs_dir, exist_ok=True)
+    path = os.path.join(base.logs_dir, COLLISION_REPORT_FILE)
+    fd, temporary = tempfile.mkstemp(prefix=".minify-compat-", suffix=".json", dir=base.logs_dir)
+    try:
+        with os.fdopen(fd, "w", encoding="utf-8", newline="\n") as file:
+            json.dump(report, file, indent=2, ensure_ascii=False, sort_keys=True)
+        os.replace(temporary, path)
+    except Exception:
+        try:
+            os.remove(temporary)
+        except FileNotFoundError:
+            pass
+        raise
+    return path
+

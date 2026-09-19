@@ -60,6 +60,47 @@ declare global {
         duplicate_profile?: (name: string) => Promise<{ success: boolean; name?: string; error?: string }>;
         delete_profile?: (name: string) => Promise<{ success: boolean; error?: string }>;
         start_patch: () => Promise<{ status: string }>;
+        get_patch_preview?: () => Promise<{
+          selected_mods: Array<{ id: string; name: string }>;
+          counts: { critical: number; possible: number; expected: number; pairs: number };
+          estimated_entries: number;
+          compatibility_rules: Array<{ id: string; title: string; summary: string }>;
+          planned_resource_actions: Array<{
+            path: string;
+            mod: string;
+            classification: string;
+            recommended_action: string;
+            rule_id?: string | null;
+          }>;
+          conflicts: Array<{
+            a: string;
+            b: string;
+            a_name: string;
+            b_name: string;
+            severity: string;
+            classification: string;
+            auto_fix: boolean;
+            count: number;
+            examples: string[];
+          }>;
+        }>;
+        get_restore_points?: () => Promise<
+          Array<{
+            id: string;
+            created: string;
+            completed: string;
+            status: string;
+            reason: string;
+            selected_mod_count: number;
+          }>
+        >;
+        restore_point?: (snapshot_id: string) => Promise<{
+          success: boolean;
+          restored?: string[];
+          selection_restored?: boolean;
+          output_path?: string;
+          error?: string;
+        }>;
         start_uninstall: (remove_everything?: boolean) => Promise<{ status: string }>;
         open_url?: (url: string) => Promise<void> | void;
         clear_logs: () => Promise<boolean>;

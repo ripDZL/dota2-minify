@@ -12,6 +12,7 @@
 
   export let onTabChange: (tab: string) => void;
   export let onPatch: () => void;
+  export let onRestoreClick: () => void;
   export let onUninstallClick: () => void;
 
   function openExternal(url: string) {
@@ -97,6 +98,9 @@
       </button>
     </div>
 
+    <button class="restore-btn" on:click={onRestoreClick} disabled={isPatching}>
+      Restore
+    </button>
     <button class="uninstall-btn" on:click={onUninstallClick} disabled={isPatching}>
       {$t("button_uninstall")}
     </button>
@@ -198,6 +202,7 @@
     display: block;
   }
 
+  .restore-btn,
   .uninstall-btn,
   .patch-btn {
     display: inline-flex;
@@ -216,12 +221,14 @@
     box-sizing: border-box;
   }
 
+  .restore-btn:hover,
   .uninstall-btn:hover,
   .patch-btn:hover {
     background: var(--btn-hover-bg, #f0f0f0);
     border-color: var(--btn-hover-border, var(--border-color, #000));
   }
 
+  .restore-btn:active,
   .uninstall-btn:active,
   .patch-btn:active {
     background: var(--btn-active-bg, #000);
