@@ -66,3 +66,8 @@
 - Windows runtime smoke found PATCH/preflight blocked by `PermissionError [WinError 5]` when `mod_library._save_content_index` replaced `config/mod-content-index.json`.
 - Fix `c8dd5d6167279ea98bfcddadbeea7e4910084831`: content-index persistence is explicitly best-effort because it is derived; absolute destination, four Windows permission/sharing retries, writable-bit repair, in-memory cache retention, and process-level disk-write disable after persistent failure. Patch preflight no longer propagates cache publication failure.
 - CI #223 / `35469297934`: **379/379 PASS**, Ruff clean, both validation jobs and both Windows portable builds PASS. Current v2 ZIP SHA-256 `4413087967b6170c70a9fa9c568002b0d8806b73498d20973c916337b5845516`.
+
+- PATCH smoke after the cache fix exposed a parity regression: upstream-v2 plugin/category `category_conflicts` were being expanded into synthetic hard conflicts, blocking D2PFX combinations rc7 permits.
+- Fix `99bf24ea8702a50b456d472189db5d7eb49fc967`: category/plugin overlaps remain visible in collision preflight/reporting but no longer populate hard `mod_conflicts_list`; explicit per-mod manifest `conflicts` still hard-stop like rc7. Dark Terrain resource yielding remains separate.
+- CI #224 / `35470208025`: **380/380 PASS**, Ruff clean, v2 Svelte/plugin validation PASS, root + v2 Windows portable PASS.
+- Current v2 ZIP SHA-256: `f6ee41ed9f11c11ea24b3fdbf01a2b33c88118a6fa270b235ba6105a8af60190`.

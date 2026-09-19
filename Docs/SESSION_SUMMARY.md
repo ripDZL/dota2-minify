@@ -65,3 +65,9 @@
 - CI #223 / `35469297934`: **379/379 PASS**, Ruff clean, v2 validation/Svelte/plugin builds PASS, root + v2 Windows portable PASS.
 - Current v2 portable SHA-256: `4413087967b6170c70a9fa9c568002b0d8806b73498d20973c916337b5845516`; artifact digest `sha256:f5ce5d38a127577d73b1ace29575cd17f65a6f1eab583dbae91d566837cc1c74`.
 - Next: user retry PATCH/preflight. Beta/main untouched.
+
+- PATCH smoke on #223 showed D2PFX CREEP-DENY variants blocked although rc7 permits the same selection.
+- Root cause: v2 plugin/category `category_conflicts` were converted into synthetic hard conflicts.
+- Fixed at `99bf24ea8702a50b456d472189db5d7eb49fc967`: category/plugin overlaps are report-only; explicit manifest conflicts remain blocking; Dark Terrain compatibility remains independent.
+- CI #224 / `35470208025`: **380/380 PASS**, Ruff clean, v2 Svelte/plugin validation PASS, both Windows portable builds PASS.
+- Current ZIP SHA-256 `f6ee41ed9f11c11ea24b3fdbf01a2b33c88118a6fa270b235ba6105a8af60190`; v2 artifact digest `sha256:9ee5af9352cc5a5831641f58f1bddf171d647cbe9d5cdc641f9f3ac7e4793328`.

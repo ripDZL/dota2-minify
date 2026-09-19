@@ -38,3 +38,6 @@
 - [x] Diagnose/fix the v2 Windows PyInstaller dynamic-library stall; CI #214 PASS on `472bfe794d4e0deecfc1e5deb352943737e181e6`.
 - [x] Produce the current patch-preflight + legacy-section + D2PFX-corrected v2 Windows portable from `c8dd5d6167279ea98bfcddadbeea7e4910084831`; SHA-256 `4413087967b6170c70a9fa9c568002b0d8806b73498d20973c916337b5845516`.
 - [ ] User PATCH/preflight retry + Mod Library/D2PFX re-smoke + Windows/Dota smoke of the current v2 ZIP.
+
+- [x] Restore rc7 conflict semantics in v2: category/plugin overlaps are advisory/report-only; explicit manifest conflicts remain hard blockers. CI #224 **380/380 PASS**, both Windows builds PASS.
+- [ ] Retry PATCH with the same D2PFX overlap set; then continue full Windows/Dota smoke.

@@ -4,7 +4,7 @@
 - Branches must remain exactly: `v21.4-hardening`, `beta`, `main`.
 - Work only on `v21.4-hardening` unless the user explicitly approves promotion.
 - Re-fetch all 3 branch heads before edits.
-- Latest validated code head before handoff docs: `c8dd5d6167279ea98bfcddadbeea7e4910084831`.
+- Latest validated code head before handoff docs: `99bf24ea8702a50b456d472189db5d7eb49fc967`.
 - Known untouched promotion heads at handoff:
   - `beta`: `442d36dcc902f6436c6404f2947091663c254cc5`
   - `main`: `a26bc88a0d412e357965f29488b83a7f9093e11f`
@@ -120,3 +120,12 @@
 - Private foliage alias human smoke remains independent and must not be claimed PASS without actual Dota testing.
 - Fix smoke findings only on `v21.4-hardening`.
 - Keep `beta` and `main` untouched unless the user explicitly approves promotion.
+
+- Conflict-semantics smoke fix: `99bf24ea8702a50b456d472189db5d7eb49fc967`.
+  - Same-category/plugin overlaps stay advisory in preflight/reporting.
+  - Only explicit per-mod manifest `conflicts` retain the rc7 hard stop.
+  - Dark Terrain resource-yield compatibility remains independent.
+- CI #224 / `35470208025`: **SUCCESS**, **380 tests passed**, Ruff clean, v2 validation/Svelte/plugin PASS, both Windows portable builds PASS.
+- Current v2 portable SHA-256: `f6ee41ed9f11c11ea24b3fdbf01a2b33c88118a6fa270b235ba6105a8af60190`.
+- Current GitHub v2 artifact digest: `sha256:9ee5af9352cc5a5831641f58f1bddf171d647cbe9d5cdc641f9f3ac7e4793328`.
+- Next immediate gate: retry PATCH with the same D2PFX overlap set; expected result is warning/report + continued patch unless an explicit manifest conflict exists.

@@ -44,3 +44,5 @@
 - Legacy list bulk controls operate on the complete mod set like the old UI; always-on and untickable mods are never mutated. Expand/Collapse affects current list sections only.
 
 - v2 collision content index is a derived cache, not patch state. `config/mod-content-index.json` persistence must be best-effort: use an absolute destination and atomic temp file, retry Windows permission/sharing failures, repair read-only destination attributes where possible, retain the live index in memory, and never abort patch preflight solely because cache publication failed.
+
+- v2 conflict contract: indexed resource overlaps and plugin/category conflict metadata are advisory preflight information, not patch blockers. Preserve rc7 hard-stop behavior only for explicit per-mod manifest `conflicts`. Apply compatibility rules such as Dark Terrain yielding independently.

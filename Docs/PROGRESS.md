@@ -62,3 +62,7 @@
 - [x] CI #223 / `35469297934`: **379/379 PASS**, Ruff clean, v2 validation/Svelte/plugin builds PASS, root + v2 Windows portable PASS.
 - [x] Current v2 portable SHA-256: `4413087967b6170c70a9fa9c568002b0d8806b73498d20973c916337b5845516`.
 - [ ] Next: user PATCH/preflight retry on Windows; then continue UI/D2PFX/full Dota smoke. Foliage alias remains separate.
+
+- [x] rc7 conflict-semantics parity: category/plugin overlaps no longer synthesize hard conflicts; explicit manifest conflicts still block.
+- [x] CI #224 / `35470208025`: **380/380 PASS**, Ruff clean, both validation jobs and both Windows portable builds PASS.
+- [x] Current v2 portable SHA-256: `f6ee41ed9f11c11ea24b3fdbf01a2b33c88118a6fa270b235ba6105a8af60190`.
