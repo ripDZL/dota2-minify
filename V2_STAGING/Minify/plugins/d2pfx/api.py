@@ -350,13 +350,22 @@ def install_mod(params: Dict[str, Any] = None) -> Dict[str, Any]:
                 if preview_file.casefold().startswith(("http://", "https://"))
                 else dm.get_preview_url(cat_id, preview_file)
             )
-            preview_dest = os.path.join(install_dir, "preview.webp")
-            dm.download_file(
-                preview_url,
-                preview_dest,
-                emit_progress=False,
-                max_bytes=32 * 1024 * 1024,
-            )
+            try:
+                preview_name = security.safe_download_filename(
+                    preview_url,
+                    allowed_extensions={".jpg", ".jpeg", ".png", ".webp", ".gif"},
+                )
+            except ValueError:
+                preview_name = ""
+            if preview_name:
+                preview_extension = os.path.splitext(preview_name)[1].casefold()
+                preview_dest = os.path.join(install_dir, f"preview{preview_extension}")
+                dm.download_file(
+                    preview_url,
+                    preview_dest,
+                    emit_progress=False,
+                    max_bytes=32 * 1024 * 1024,
+                )
 
         if isinstance(tags, dict):
             active_tags = [str(k) for k, v in tags.items() if v][:256]

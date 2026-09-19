@@ -64,3 +64,10 @@ def test_v2_d2pfx_install_state_is_set_only_after_successful_install():
     state_index = block.index("await setModState", call_index)
     assert state_index > call_index
     assert "modRequestId" in browser
+
+
+def test_v2_d2pfx_installed_preview_keeps_downloaded_image_type():
+    source = API.read_text(encoding="utf-8")
+    assert 'allowed_extensions={".jpg", ".jpeg", ".png", ".webp", ".gif"}' in source
+    assert 'preview_dest = os.path.join(install_dir, f"preview{preview_extension}")' in source
+    assert 'preview_dest = os.path.join(install_dir, "preview.webp")' not in source
