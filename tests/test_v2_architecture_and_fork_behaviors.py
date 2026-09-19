@@ -40,11 +40,22 @@ def test_v2_exact_architecture_tree_is_materialized():
 
 
 def test_v2_display_identity_keeps_internal_rc4_compatibility():
-    source = (MINIFY / "core" / "base.py").read_text(encoding="utf-8")
-    assert 'VERSION = "2rc4"' in source
-    assert 'FORK_BUILD = "v21.4-hardening"' in source
-    assert "DISPLAY_VERSION = FORK_BUILD" in source
-    assert 'TITLE = f"Minify {DISPLAY_VERSION}"' in source
+    import importlib.util
+
+    path = MINIFY / "core" / "base.py"
+    source = path.read_text(encoding="utf-8")
+    assert '\\nVERSION = "2rc4"' not in source
+    assert '\\nTITLE = f"Minify {DISPLAY_VERSION}"' not in source
+
+    spec = importlib.util.spec_from_file_location("v2_staged_base_identity", path)
+    assert spec and spec.loader
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+
+    assert module.VERSION == "2rc4"
+    assert module.FORK_BUILD == "v21.4-hardening"
+    assert module.DISPLAY_VERSION == "v21.4-hardening"
+    assert module.TITLE == "Minify v21.4-hardening"
 
 
 def test_v2_never_auto_injects_prelaunch_into_steam_options():
