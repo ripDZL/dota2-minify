@@ -9,6 +9,13 @@ declare global {
         get_current_locale: () => Promise<string>;
         get_current_game_language: () => Promise<string>;
         get_available_languages: () => Promise<string[]>;
+        generate_foliage_alias_smoke?: () => Promise<{
+          success: boolean;
+          output_dir?: string;
+          stock_sha256?: string;
+          stock_size?: number;
+          error?: string;
+        }>;
         get_available_game_languages: () => Promise<string[]>;
         get_logs: () => Promise<Array<{ text: string; type: string; timestamp?: string }>>;
         is_patching: () => Promise<boolean>;

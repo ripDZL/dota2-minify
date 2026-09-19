@@ -134,6 +134,26 @@ class Api:
     def delete_profile(self, name: str) -> Dict[str, Any]:
         return self.mod_service.delete_profile(name)
 
+    def generate_foliage_alias_smoke(self) -> Dict[str, Any]:
+        try:
+            from core import foliage_smoke, mods_shared
+
+            metadata = foliage_smoke.build_from_vpk(Path(constants.dota_game_pak_path))
+            mods_shared.scan_mods()
+            output.add_text(
+                f"Generated local foliage alias smoke mod at {metadata['output_dir']}.",
+                msg_type="success",
+            )
+            return {
+                "success": True,
+                "output_dir": str(metadata["output_dir"]),
+                "stock_sha256": str(metadata["stock_sha256"]),
+                "stock_size": int(metadata["stock_size"]),
+            }
+        except Exception as exc:
+            output.add_text(f"Foliage alias smoke generation failed: {exc}", msg_type="error")
+            return {"success": False, "error": str(exc)}
+
     def get_available_languages(self) -> List[str]:
         return self.config_service.get_available_languages()
 

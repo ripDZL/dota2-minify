@@ -26,6 +26,27 @@
 
   let newListItemInputs: Record<string, string> = {};
 
+  let foliageSmokeBusy = false;
+  let foliageSmokeStatus = "";
+
+  async function generateFoliageSmoke() {
+    if (foliageSmokeBusy) return;
+    foliageSmokeBusy = true;
+    foliageSmokeStatus = "Generating local _09 smoke mod…";
+    try {
+      const result = await window.pywebview?.api?.generate_foliage_alias_smoke?.();
+      if (result?.success) {
+        foliageSmokeStatus = `Generated. Keep Remove Foliage unchecked; test the Private Alias Smoke mod. SHA-256: ${result.stock_sha256 || "unknown"}`;
+      } else {
+        foliageSmokeStatus = `Failed: ${result?.error || "unknown error"}`;
+      }
+    } catch (err) {
+      foliageSmokeStatus = `Failed: ${err}`;
+    } finally {
+      foliageSmokeBusy = false;
+    }
+  }
+
   async function loadSettings() {
     try {
       if (window.pywebview?.api?.get_settings) {
@@ -179,6 +200,26 @@
   </div>
 
   <div class="settings-body">
+
+    <div class="settings-section developer-tools">
+      <div class="section-header">
+        <h4 class="section-title">Developer Tools</h4>
+      </div>
+      <div class="section-content">
+        <div class="setting-item-row">
+          <div class="developer-copy">
+            <span class="setting-label">Remove Foliage private alias smoke</span>
+            <span class="developer-note">Generates the local-only _09 test mod from your installed Dota files. No Valve stock asset is bundled or uploaded.</span>
+          </div>
+          <button class="btn-action" on:click={generateFoliageSmoke} disabled={foliageSmokeBusy}>
+            {foliageSmokeBusy ? "Generating…" : "Generate _09 foliage smoke mod"}
+          </button>
+        </div>
+        {#if foliageSmokeStatus}
+          <div class="developer-status">{foliageSmokeStatus}</div>
+        {/if}
+      </div>
+    </div>
     {#each sections as [sectionTitle, items]}
       <div class="settings-section">
         <div class="section-header">
@@ -486,6 +527,27 @@
 
   .setting-label {
     font-size: 13px;
+  }
+
+  .developer-copy {
+    display: flex;
+    flex: 1;
+    min-width: 0;
+    flex-direction: column;
+    gap: 3px;
+  }
+
+  .developer-note,
+  .developer-status {
+    color: var(--text-muted, #888);
+    font-size: 11px;
+    overflow-wrap: anywhere;
+  }
+
+  .developer-status {
+    padding: 6px 8px;
+    border-left: 3px solid var(--accent, #17bebe);
+    background: var(--bg-tertiary, #e8e8e8);
   }
 
   .setting-input {

@@ -33,7 +33,17 @@ from core import (
     utils,
 )
 
-from patch import blacklist, manifest_utils, remap_processor, replacer, styling, unins, vpk_utils, xml_utils
+from patch import (
+    blacklist,
+    manifest_utils,
+    remap_processor,
+    replacer,
+    rerl_processor,
+    styling,
+    unins,
+    vpk_utils,
+    xml_utils,
+)
 
 dota_version_changed = False
 
@@ -235,6 +245,7 @@ def patcher():
                         xml_file = os.path.join(mod_path, "xml.json")
                         files_uncompiled_dir = os.path.join(mod_path, "files_uncompiled")
                         remap_file = os.path.join(mod_path, "remap.json")
+                        rerl_file = os.path.join(mod_path, "rerl.json")
                     script_file = os.path.join(mod_path, "script.py")
                     replacer_file = os.path.join(mod_path, "replacer.json")
                     files_dir = os.path.join(mod_path, "files")
@@ -294,8 +305,11 @@ def patcher():
                     # --------------------------------- replacer.csv --------------------------------- #
                     replacer.process(replacer_file, folder, replacer_source_extracts, replacer_targets)
 
-                    # ---------------------------------- remap.json --------------------------------- #
-                    if conditions.workshop_installed and os.path.exists(remap_file):
+                    # Same-length RERL redirects preserve compiled resource IDs/layout.
+                    # Prefer them when supplied; remap.json remains the v2 fallback for other mods.
+                    if os.path.exists(rerl_file):
+                        rerl_processor.process(rerl_file, folder, dota_pak_contents)
+                    elif conditions.workshop_installed and os.path.exists(remap_file):
                         remap_processor.process(remap_file, folder, dota_pak_contents)
 
             except Exception:
