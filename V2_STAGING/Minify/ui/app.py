@@ -167,7 +167,6 @@ class Api:
         return {"success": True, "path": path, "count": len(payload.get("profiles", {}))}
 
     def import_profiles(self) -> Dict[str, Any]:
-        import json
         from core import profiles
 
         path = self.dialog_service.pick_file("Import Profiles", ("JSON files (*.json)",))
@@ -175,16 +174,10 @@ class Api:
             return {"success": False, "cancelled": True}
 
         path = os.path.abspath(str(path))
-        if os.path.islink(path) or not os.path.isfile(path):
-            return {"success": False, "error": "Selected profile import is not a regular file."}
-        if os.path.getsize(path) > profiles.PROFILE_MAX_FILE_BYTES:
-            return {"success": False, "error": "Selected profile import exceeds the safety limit."}
-
         try:
-            with open(path, encoding="utf-8-sig") as file:
-                data = json.load(file)
+            data = profiles.read_profile_file(path)
         except Exception as exc:
-            return {"success": False, "error": f"Profile import is not valid JSON: {exc}"}
+            return {"success": False, "error": f"Profile import could not be read safely: {exc}"}
 
         result = self.mod_service.import_profile_bundle(data)
         if result.get("success"):

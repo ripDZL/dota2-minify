@@ -6,7 +6,7 @@ import json
 import os
 import tempfile
 
-from core import base
+from core import base, security
 
 PROFILE_FILE_NAME = "mod-profiles.json"
 PROFILE_EXPORT_FORMAT = "minify-mod-profiles"
@@ -79,15 +79,18 @@ def _normalize_hints(hints, referenced: set[str]) -> dict:
     return normalized
 
 
+def read_profile_file(path: str):
+    raw = security.read_bounded_regular_file(path, max_bytes=PROFILE_MAX_FILE_BYTES)
+    try:
+        return json.loads(raw.decode("utf-8-sig"))
+    except (UnicodeDecodeError, json.JSONDecodeError) as exc:
+        raise ValueError("Profile file is not valid UTF-8 JSON.") from exc
+
+
 def load_profiles() -> dict[str, dict[str, bool]]:
     path = _path()
     try:
-        if os.path.islink(path) or not os.path.isfile(path):
-            return {}
-        if os.path.getsize(path) > PROFILE_MAX_FILE_BYTES:
-            return {}
-        with open(path, encoding="utf-8-sig") as file:
-            data = json.load(file)
+        data = read_profile_file(path)
         profiles = data.get("profiles", data) if isinstance(data, dict) else {}
         return _normalize_profiles_mapping(profiles)
     except Exception:

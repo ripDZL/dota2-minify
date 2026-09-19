@@ -31,11 +31,22 @@ def test_v2_profile_file_io_is_bounded_atomic_and_symlink_safe():
         "os.replace(temporary, path)",
         "def import_profiles(",
         'pick_file("Import Profiles", ("JSON files (*.json)",))',
-        "profiles.PROFILE_MAX_FILE_BYTES",
-        "os.path.islink(path) or not os.path.isfile(path)",
+        "profiles.read_profile_file(path)",
         "self.mod_service.import_profile_bundle(data)",
     ):
         assert token in app
+
+
+def test_v2_profile_reads_use_identity_checked_bounded_helper():
+    profiles = (STAGE / "core" / "profiles.py").read_text(encoding="utf-8")
+    security = (STAGE / "core" / "security.py").read_text(encoding="utf-8")
+
+    assert "def read_profile_file(path: str):" in profiles
+    assert "security.read_bounded_regular_file(path, max_bytes=PROFILE_MAX_FILE_BYTES)" in profiles
+    assert "def read_bounded_regular_file(path: str, *, max_bytes: int) -> bytes:" in security
+    assert "os.stat(path, follow_symlinks=False)" in security
+    assert "opened = os.fstat(fd)" in security
+    assert "(before.st_dev, before.st_ino) != (opened.st_dev, opened.st_ino)" in security
 
 
 def test_v2_profile_ui_exposes_update_import_export_controls():

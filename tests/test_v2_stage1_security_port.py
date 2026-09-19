@@ -34,6 +34,43 @@ def test_v2_security_rejects_path_escape_shapes():
             security.safe_relative_path(value)
 
 
+def test_v2_security_rejects_windows_alias_ads_and_device_shapes():
+    security = _load_security()
+    for value in (
+        "nested/file.txt:stream",
+        "nested/CON",
+        "nested/con.txt",
+        "nested/LPT1.log",
+        "nested/trailing.",
+        "nested/trailing ",
+        "nested/control\nname",
+    ):
+        with pytest.raises(ValueError):
+            security.safe_relative_path(value)
+
+    assert security.safe_relative_path("materials/*.vmat_c") == "materials/*.vmat_c"
+
+
+def test_v2_bounded_regular_read_detects_open_race(monkeypatch, tmp_path):
+    security = _load_security()
+    victim = tmp_path / "profiles.json"
+    victim.write_bytes(b'{"safe": true}')
+    original_open = security.os.open
+    swapped = False
+
+    def racing_open(path, flags):
+        nonlocal swapped
+        if not swapped and str(path) == str(victim):
+            swapped = True
+            victim.unlink()
+            victim.write_bytes(b'{"swapped": true}')
+        return original_open(path, flags)
+
+    monkeypatch.setattr(security.os, "open", racing_open)
+    with pytest.raises(ValueError, match="changed while it was being opened"):
+        security.read_bounded_regular_file(str(victim), max_bytes=1024)
+
+
 def test_v2_security_rejects_private_https_targets():
     security = _load_security()
     with pytest.raises(ValueError):

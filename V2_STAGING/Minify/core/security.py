@@ -17,6 +17,11 @@ ARCHIVE_MAX_TOTAL_BYTES = 4 * 1024 * 1024 * 1024
 ARCHIVE_MAX_COMPRESSION_RATIO = 250.0
 D2PFX_MAX_MANIFEST_BYTES = 8 * 1024 * 1024
 
+WINDOWS_RESERVED_STEMS = (
+    {"con", "prn", "aux", "nul"} | {f"com{i}" for i in range(1, 10)} | {f"lpt{i}" for i in range(1, 10)}
+)
+WINDOWS_FORBIDDEN_COMPONENT_CHARS = '<>:"|'
+
 # Digests are from the pinned upstream GitHub release assets. Keys are exact
 # archive basenames so a version/architecture change fails closed until reviewed.
 EXPECTED_DOWNLOAD_SHA256 = {
@@ -48,6 +53,48 @@ def sha256_file(path: str, chunk_size: int = 1024 * 1024) -> str:
     return digest.hexdigest()
 
 
+def read_bounded_regular_file(path: str, *, max_bytes: int) -> bytes:
+    """Read an untrusted local file without following a swapped symlink."""
+    if max_bytes < 1:
+        raise ValueError("max_bytes must be positive.")
+
+    fd = None
+    try:
+        before = os.stat(path, follow_symlinks=False)
+        if not stat.S_ISREG(before.st_mode):
+            raise ValueError("Selected path is not a regular file.")
+        if before.st_size > max_bytes:
+            raise ValueError(f"Selected file exceeds the {max_bytes}-byte safety limit.")
+
+        flags = os.O_RDONLY
+        if hasattr(os, "O_BINARY"):
+            flags |= os.O_BINARY
+        if hasattr(os, "O_NOFOLLOW"):
+            flags |= os.O_NOFOLLOW
+
+        fd = os.open(path, flags)
+        opened = os.fstat(fd)
+        if not stat.S_ISREG(opened.st_mode):
+            raise ValueError("Selected path did not open as a regular file.")
+        if opened.st_size > max_bytes:
+            raise ValueError(f"Selected file exceeds the {max_bytes}-byte safety limit.")
+        if (before.st_dev, before.st_ino) != (opened.st_dev, opened.st_ino):
+            raise ValueError("Selected file changed while it was being opened.")
+
+        with os.fdopen(fd, "rb") as file:
+            fd = None
+            data = file.read(max_bytes + 1)
+        if len(data) > max_bytes:
+            raise ValueError(f"Selected file exceeds the {max_bytes}-byte safety limit.")
+        return data
+    finally:
+        if fd is not None:
+            try:
+                os.close(fd)
+            except OSError:
+                pass
+
+
 def verify_expected_download(path: str, source_url: str = "") -> str:
     """Verify a freshly downloaded pinned dependency archive.
 
@@ -77,6 +124,23 @@ def safe_relative_path(value: str) -> str:
     raw = str(value or "")
     if "\x00" in raw:
         raise ValueError("Path contains a NUL byte.")
+
+    # Reject Windows alias/ADS/device-name shapes before normalization can
+    # silently turn them into a different filesystem object on extraction.
+    portable_raw = raw.replace("\\", "/")
+    for component in portable_raw.split("/"):
+        if component in ("", ".", ".."):
+            continue
+        if any(ord(char) < 32 for char in component):
+            raise ValueError(f"Path contains a control character: {value!r}")
+        if any(char in WINDOWS_FORBIDDEN_COMPONENT_CHARS for char in component):
+            raise ValueError(f"Path contains a Windows-unsafe component: {value!r}")
+        if component.endswith((" ", ".")):
+            raise ValueError(f"Path contains a Windows-aliased component: {value!r}")
+        stem = component.split(".", 1)[0].casefold()
+        if stem in WINDOWS_RESERVED_STEMS:
+            raise ValueError(f"Path contains a reserved Windows device name: {value!r}")
+
     raw = raw.strip().strip('"').strip("'").replace("\\", "/")
     if not raw:
         raise ValueError("Path is empty.")
@@ -350,11 +414,6 @@ import ipaddress
 import posixpath
 import socket
 import urllib.parse
-
-WINDOWS_RESERVED_STEMS = (
-    {"con", "prn", "aux", "nul"} | {f"com{i}" for i in range(1, 10)} | {f"lpt{i}" for i in range(1, 10)}
-)
-
 
 def _public_ip(address: str) -> bool:
     try:
