@@ -70,3 +70,8 @@
 - [x] Patch activity visibility: global live PATCH/PREFLIGHT status + immediate PatchService start log + Home recent-terminal panel; `c7b319e46d06991d2d2bb69a3e31631caa869509`.
 - [x] CI #225 / `35470787033`: **381/381 PASS**, Ruff clean, both validation jobs and both Windows portable builds PASS.
 - [x] Current v2 portable SHA-256: `d6b45e3f7e77c68ff8919fae6d51761524c3d8d2f16c26f1467d342c038066af`.
+
+- [x] Per-section Mod Library All/None parity restored at `ca24d6a7a16add68333dced211fc6a1248fe3d7c`.
+- [x] Full-section selection semantics verified by regression test; always/untickable states preserved.
+- [x] CI #226 / `35471631659`: **382/382 PASS**, Ruff clean, v2 validation/Svelte/plugin PASS, root + v2 Windows portable PASS.
+- [x] Current v2 portable SHA-256: `a6e3ba78514c992c32ae0b8b223aafc75c749c77054a6db75851af685b87cceb`.

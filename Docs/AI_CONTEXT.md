@@ -75,3 +75,7 @@
 - User requested visible patch progress and a terminal on Home. Implemented at `c7b319e46d06991d2d2bb69a3e31631caa869509`: global PATCH/PREFLIGHT live status, immediate patch-start log, Home recent-terminal panel (120 lines), full-terminal shortcut, and patch no longer auto-switches to Terminal.
 - CI #225 / `35470787033`: **381/381 PASS**, Ruff clean, v2 validation/Svelte/plugin builds PASS, root + v2 Windows portable PASS.
 - Current status/Home-terminal v2 ZIP SHA-256: `d6b45e3f7e77c68ff8919fae6d51761524c3d8d2f16c26f1467d342c038066af`.
+
+- Legacy Mod Library per-section bulk controls restored at `ca24d6a7a16add68333dced211fc6a1248fe3d7c`: every expanded section has All/None, operating on the complete section regardless of active filters; always/untickable mods are preserved.
+- CI #226 / `35471631659`: **382/382 PASS**, Ruff clean, v2 validation/Svelte/plugin PASS, both Windows portable builds PASS.
+- Current v2 portable SHA-256: `a6e3ba78514c992c32ae0b8b223aafc75c749c77054a6db75851af685b87cceb`.

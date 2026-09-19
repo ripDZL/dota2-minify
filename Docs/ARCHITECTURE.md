@@ -48,3 +48,5 @@
 - v2 conflict contract: indexed resource overlaps and plugin/category conflict metadata are advisory preflight information, not patch blockers. Preserve rc7 hard-stop behavior only for explicit per-mod manifest `conflicts`. Apply compatibility rules such as Dark Terrain yielding independently.
 
 - Patch progress contract: preflight and active patch state are globally visible from the shared App log/status stream. Home embeds a bounded recent terminal view (latest 120 entries) but the full Terminal tab remains available. Starting PATCH must emit visible status before worker-thread output and must not force a tab change.
+
+- Legacy list section controls: each expanded section owns All/None actions over the entire logical section membership, independent of search/category/state filters. Never mutate `always` or `untickable` mods through section bulk actions. Header selected/total counts reflect complete section membership.

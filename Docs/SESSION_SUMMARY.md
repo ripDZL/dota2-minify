@@ -76,3 +76,8 @@
 - Implemented `c7b319e46d06991d2d2bb69a3e31631caa869509`: immediate preflight/patch status bar, PatchService start log, Home live recent-terminal panel with full-terminal shortcut, and no automatic tab switch on patch start.
 - CI #225 / `35470787033`: **381/381 PASS**, Ruff clean, v2 validation/Svelte/plugin builds PASS, both Windows portable builds PASS.
 - Current v2 ZIP SHA-256 `d6b45e3f7e77c68ff8919fae6d51761524c3d8d2f16c26f1467d342c038066af`; v2 artifact digest `sha256:1b72b6265599eaed4e3bbd4686d3e164297a974f2bf9a86b525c8c63d2e06cda`.
+
+- User requested rc7-style All/None controls per Mod Library section.
+- Implemented `ca24d6a7a16add68333dced211fc6a1248fe3d7c`: expanded sections show `Select in this section — All / None`; actions cover hidden/filtered members too and preserve always/untickable mods; section counts use complete membership.
+- CI #226 / `35471631659`: **382/382 PASS**, Ruff clean, v2 validation/Svelte/plugin PASS, both Windows portable builds PASS.
+- Current v2 ZIP SHA-256 `a6e3ba78514c992c32ae0b8b223aafc75c749c77054a6db75851af685b87cceb`; artifact digest `sha256:4cfb684d75e229b2c0e32a94956eec651d1f8d0c4a4ab7ae2f297fa0b56018b2`.

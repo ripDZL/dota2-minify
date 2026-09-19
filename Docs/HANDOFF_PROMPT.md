@@ -4,7 +4,7 @@
 - Branches must remain exactly: `v21.4-hardening`, `beta`, `main`.
 - Work only on `v21.4-hardening` unless the user explicitly approves promotion.
 - Re-fetch all 3 branch heads before edits.
-- Latest validated code head before handoff docs: `c7b319e46d06991d2d2bb69a3e31631caa869509`.
+- Latest validated code head before handoff docs: `ca24d6a7a16add68333dced211fc6a1248fe3d7c`.
 - Known untouched promotion heads at handoff:
   - `beta`: `442d36dcc902f6436c6404f2947091663c254cc5`
   - `main`: `a26bc88a0d412e357965f29488b83a7f9093e11f`
@@ -139,3 +139,13 @@
 - Current v2 portable SHA-256: `d6b45e3f7e77c68ff8919fae6d51761524c3d8d2f16c26f1467d342c038066af`.
 - Current GitHub v2 artifact digest: `sha256:1b72b6265599eaed4e3bbd4686d3e164297a974f2bf9a86b525c8c63d2e06cda`.
 - Next immediate gate: Windows PATCH smoke for live status/Home terminal plus actual patch completion with the same D2PFX overlap set.
+
+- Per-section legacy bulk selection follow-up: `ca24d6a7a16add68333dced211fc6a1248fe3d7c`.
+  - Expanded Mod Library sections expose `Select in this section: All / None`.
+  - Section All/None applies to the complete section, not only filtered/visible rows.
+  - Always-on and untickable mods remain unchanged.
+  - Section selected/total counts now use the complete section membership.
+- CI #226 / `35471631659`: **SUCCESS**, **382/382 tests passed**, Ruff clean, v2 validation/Svelte/plugin PASS, both Windows portable builds PASS.
+- Current v2 portable SHA-256: `a6e3ba78514c992c32ae0b8b223aafc75c749c77054a6db75851af685b87cceb`.
+- Current GitHub v2 artifact digest: `sha256:4cfb684d75e229b2c0e32a94956eec651d1f8d0c4a4ab7ae2f297fa0b56018b2`.
+- Next immediate gate: user smoke of per-section All/None plus ongoing Windows PATCH/Dota smoke.

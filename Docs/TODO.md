@@ -46,3 +46,8 @@
 - [x] CI #225 / `35470787033`: **381/381 PASS**, Ruff clean, v2 validation/Svelte/plugin builds PASS, both Windows portable builds PASS.
 - [x] Current v2 portable SHA-256: `d6b45e3f7e77c68ff8919fae6d51761524c3d8d2f16c26f1467d342c038066af`.
 - [ ] Smoke live PATCH status/Home terminal while completing a real patch; continue Dota smoke.
+
+- [x] Restore rc7-style All/None controls inside each expanded Mod Library section.
+- [x] Section All/None acts on complete category/collection membership, not filtered rows; preserve always/untickable states.
+- [x] CI #226 / `35471631659`: **382/382 PASS**, both Windows portable builds PASS.
+- [ ] User smoke of per-section selection controls and continued PATCH/Dota behavior.
