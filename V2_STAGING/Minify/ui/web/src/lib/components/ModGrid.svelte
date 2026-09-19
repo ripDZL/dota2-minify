@@ -80,18 +80,39 @@
     }
   }
 
+  function d2pfxCategoryLabel(value: string): string {
+    const clean = String(value || "").trim();
+    if (!clean) return "Other";
+    return clean
+      .split(/[-_\s]+/)
+      .filter(Boolean)
+      .map((part) => {
+        const folded = part.toLowerCase();
+        if (["tp", "ui", "hud"].includes(folded)) return folded.toUpperCase();
+        return folded.charAt(0).toUpperCase() + folded.slice(1);
+      })
+      .join(" ");
+  }
+
   function listGroupKey(mod: any): string {
     const type = String(mod?.type || "standard").trim().toLowerCase();
     if (type === "collection") {
       const group = String(mod?.group || mod?.category || "Collections").trim() || "Collections";
       return `collection::${group}`;
     }
+    if (type === "d2pfx") {
+      const category = String(mod?.category || "other").trim().toLowerCase() || "other";
+      return `d2pfx::${category}`;
+    }
     return type || "standard";
   }
 
   function listGroupLabel(key: string): string {
     if (key === "standard") return "Standard Mods";
-    if (key === "d2pfx") return "D2PFX Mods";
+    if (key.startsWith("d2pfx::")) {
+      const category = key.slice("d2pfx::".length);
+      return `D2PFX · ${d2pfxCategoryLabel(category)}`;
+    }
     if (key === "vpk") return "VPK Mods";
     if (key.startsWith("collection::")) return key.slice("collection::".length) || "Collections";
     return key ? `${key.charAt(0).toUpperCase()}${key.slice(1)} Mods` : "Other Mods";
@@ -100,7 +121,7 @@
   function listGroupRank(key: string): number {
     if (key === "standard") return 0;
     if (key.startsWith("collection::")) return 1;
-    if (key === "d2pfx") return 2;
+    if (key.startsWith("d2pfx::")) return 2;
     if (key === "vpk") return 3;
     return 4;
   }

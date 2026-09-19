@@ -57,7 +57,7 @@ def test_v2_mod_library_restores_persistent_legacy_list_view_with_card_toggle():
     ):
         assert token in grid
 
-    for label in ("Standard Mods", "Collections", "D2PFX Mods", "VPK Mods"):
+    for label in ("Standard Mods", "Collections", "D2PFX · ", "VPK Mods"):
         assert label in grid
 
     assert "class:has-preview={Boolean(preview)}" in row
@@ -85,7 +85,8 @@ def test_v2_mod_library_list_uses_legacy_collection_sections_and_bulk_controls()
     ):
         assert token in grid
 
-    assert 'if (key === "d2pfx") return "D2PFX Mods";' in grid
+    assert 'if (key.startsWith("d2pfx::")) {' in grid
+    assert 'return `D2PFX · ${d2pfxCategoryLabel(category)}`;' in grid
     assert 'if (key === "vpk") return "VPK Mods";' in grid
 
 
@@ -124,3 +125,20 @@ def test_v2_hero_section_exposes_d2pfx_aware_default_selector():
         assert token in grid
 
     assert "apply_hero_defaults_without_d2pfx?:" in global_types
+
+
+def test_v2_d2pfx_installs_are_grouped_by_category_in_legacy_list_view():
+    grid = (WEB / "lib" / "components" / "ModGrid.svelte").read_text(encoding="utf-8")
+
+    for token in (
+        'if (type === "d2pfx") {',
+        'const category = String(mod?.category || "other").trim().toLowerCase() || "other";',
+        'return `d2pfx::${category}`;',
+        'function d2pfxCategoryLabel(value: string): string',
+        'key.startsWith("d2pfx::")',
+        'return `D2PFX · ${d2pfxCategoryLabel(category)}`;',
+        'if (key.startsWith("d2pfx::")) return 2;',
+    ):
+        assert token in grid
+
+    assert "D2PFX Mods" not in grid
