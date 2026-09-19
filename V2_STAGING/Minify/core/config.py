@@ -4,6 +4,8 @@ JSON(C) config files
 Interactions with main config and mod configs
 """
 
+import os
+import tempfile
 from typing import Any, Optional
 
 import jsonc
@@ -20,8 +22,23 @@ def read_json_file(path: str) -> dict:
 
 
 def write_json_file(path: str, data: dict) -> None:
-    with utils.open_utf8R(path, "w") as file:
-        jsonc.dump(data, file, indent=2)
+    absolute = os.path.abspath(path)
+    directory = os.path.dirname(absolute) or "."
+    os.makedirs(directory, exist_ok=True)
+    if os.path.lexists(absolute) and os.path.islink(absolute):
+        raise ValueError(f"Refusing to replace symlinked config file: {absolute}")
+
+    fd, temporary = tempfile.mkstemp(prefix=".minify-config-", suffix=".json", dir=directory)
+    try:
+        with os.fdopen(fd, "w", encoding="utf-8", newline="\n") as file:
+            jsonc.dump(data, file, indent=2)
+        os.replace(temporary, absolute)
+    except Exception:
+        try:
+            os.remove(temporary)
+        except FileNotFoundError:
+            pass
+        raise
 
 
 def update_json_file(path: str, key: str, value: Any) -> Any:

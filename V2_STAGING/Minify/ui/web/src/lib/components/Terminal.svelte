@@ -23,6 +23,30 @@
     if (!text) return "";
     return text.replace(/\x1b\[[0-9;]*m/g, "");
   }
+
+  function selectAllLogs() {
+    if (!terminalElement) return;
+    const selection = window.getSelection();
+    if (!selection) return;
+    const range = document.createRange();
+    range.selectNodeContents(terminalElement);
+    selection.removeAllRanges();
+    selection.addRange(range);
+  }
+
+  async function copyAllLogs() {
+    const text = logs
+      .filter((log) => log.type !== "separator")
+      .map((log) => cleanAnsi(log.text))
+      .join("\n");
+    if (!text) return;
+    try {
+      await navigator.clipboard.writeText(text);
+    } catch (_) {
+      selectAllLogs();
+      document.execCommand("copy");
+    }
+  }
 </script>
 
 <div class="terminal-container">
@@ -36,6 +60,8 @@
         <input type="checkbox" bind:checked={autoScroll} />
         {$t("label_autoscroll")}
       </label>
+      <button type="button" on:click={copyAllLogs}>Copy</button>
+      <button type="button" on:click={selectAllLogs}>Select all</button>
       <button on:click={onClear}> {$t("button_clear")} </button>
     </div>
   </div>

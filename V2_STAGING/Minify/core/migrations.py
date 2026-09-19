@@ -2,6 +2,40 @@ import os
 
 from core import base, config, fs, log, mods_shared, output
 
+MAX_MIGRATION_MOD_DIRS = 4096
+MAX_MIGRATION_DEPTH = 12
+
+
+def _iter_mod_directories():
+    root = os.path.abspath(base.mods_dir)
+    if not os.path.isdir(root) or os.path.islink(root):
+        return
+
+    stack = [(root, 0)]
+    visited = 0
+    while stack:
+        current, depth = stack.pop()
+        if depth >= MAX_MIGRATION_DEPTH:
+            continue
+        try:
+            entries = sorted(os.listdir(current), key=str.casefold)
+        except OSError:
+            continue
+
+        for name in entries:
+            if mods_shared.is_ignored_folder(name):
+                continue
+            path = os.path.join(current, name)
+            if os.path.islink(path) or not os.path.isdir(path):
+                continue
+            visited += 1
+            if visited > MAX_MIGRATION_MOD_DIRS:
+                log.write_warning("Nested mod migration scan reached its directory safety limit.")
+                return
+            yield path
+            stack.append((path, depth + 1))
+
+
 
 class Migrations:
     def __init__(self):
@@ -35,30 +69,24 @@ class Migrations:
             log.write_warning("Migrated legacy 'minify' locale to 'english' (dutch fallback)")
 
     def _rename_file_in_mods(self, src_name, dest_name):
-        if not os.path.exists(base.mods_dir):
-            return
-
-        for mod in os.listdir(base.mods_dir):
-            mod_path = os.path.join(base.mods_dir, mod)
-            if not os.path.isdir(mod_path) or mods_shared.is_ignored_folder(mod):
-                continue
-
+        for mod_path in _iter_mod_directories() or ():
+            mod_label = os.path.relpath(mod_path, base.mods_dir)
             src = os.path.join(mod_path, src_name)
             dest = os.path.join(mod_path, dest_name)
 
-            if os.path.exists(src):
+            if os.path.isfile(src) and not os.path.islink(src):
                 if not os.path.exists(dest):
                     try:
                         fs.move_path(src, dest)
-                        output.add_text(f"Migrated {src_name} to {dest_name} in {mod}")
+                        output.add_text(f"Migrated {src_name} to {dest_name} in {mod_label}")
                     except Exception as e:
-                        log.write_warning(f"Failed to migrate {src_name} to {dest_name} in {mod}: {e}")
+                        log.write_warning(f"Failed to migrate {src_name} to {dest_name} in {mod_label}: {e}")
                 else:
                     try:
                         fs.remove_path(src)
-                        output.add_text(f"Removed redundant {src_name} in {mod} since {dest_name} exists")
+                        output.add_text(f"Removed redundant {src_name} in {mod_label} since {dest_name} exists")
                     except Exception as e:
-                        log.write_warning(f"Failed to remove redundant {src_name} in {mod}: {e}")
+                        log.write_warning(f"Failed to remove redundant {src_name} in {mod_label}: {e}")
 
     def _migrate_rescomproot_and_bin(self):
         legacy_bin = "bin"
@@ -118,14 +146,8 @@ class Migrations:
         utils.write_states("legacy_paks_migrated", True)
 
     def _migrate_flatten_d2pfx_manifests(self):
-        if not os.path.exists(base.mods_dir):
-            return
-
-        for mod in os.listdir(base.mods_dir):
-            mod_path = os.path.join(base.mods_dir, mod)
-            if not os.path.isdir(mod_path) or mods_shared.is_ignored_folder(mod):
-                continue
-
+        for mod_path in _iter_mod_directories() or ():
+            mod = os.path.relpath(mod_path, base.mods_dir)
             manifest_path = os.path.join(mod_path, "manifest.json")
             if not os.path.isfile(manifest_path):
                 continue

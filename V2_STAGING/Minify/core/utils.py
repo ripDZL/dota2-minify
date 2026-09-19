@@ -4,6 +4,7 @@ import functools
 import json
 import os
 import re
+import tempfile
 import uuid
 from pathlib import Path
 from typing import IO, Any
@@ -31,8 +32,21 @@ def write_states(states_or_key: dict | str, value: Any = None) -> None:
         states[states_or_key] = value
 
     fs.create_dirs(base.cache_dir)
-    with open_utf8R(base.states_file_dir, "w") as f:
-        json.dump(states, f, indent=2)
+    target = os.path.abspath(base.states_file_dir)
+    if os.path.lexists(target) and os.path.islink(target):
+        raise ValueError(f"Refusing to replace symlinked state file: {target}")
+
+    fd, temporary = tempfile.mkstemp(prefix=".minify-states-", suffix=".json", dir=os.path.dirname(target) or ".")
+    try:
+        with os.fdopen(fd, "w", encoding="utf-8", newline="\n") as f:
+            json.dump(states, f, indent=2)
+        os.replace(temporary, target)
+    except Exception:
+        try:
+            os.remove(temporary)
+        except FileNotFoundError:
+            pass
+        raise
 
 
 def get_state(mod_name: str, key: str, default=None):

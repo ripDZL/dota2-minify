@@ -14,6 +14,8 @@
   let searchQuery = "";
   let typeFilter = "all";
   let categoryFilter = "all";
+  let stateFilter = "all";
+  let sortMode = "name-asc";
   let selectedModForDetails: string | null = null;
   let isRefreshing = false;
   let profiles: ProfileItem[] = [];
@@ -64,19 +66,51 @@
     return (mod.type || "standard") === typeFilter;
   }
 
-  $: filteredMods = mods.filter((mod) => {
-    const q = searchQuery.toLowerCase().trim();
-    const display = (mod.display_name || mod.name).toLowerCase();
-    const category = (mod.category || mod.group || "").trim();
-    const searchMatches =
-      !q ||
-      display.includes(q) ||
-      mod.name.toLowerCase().includes(q) ||
-      category.toLowerCase().includes(q) ||
-      (mod.source || "").toLowerCase().includes(q);
-    const categoryMatches = categoryFilter === "all" || category === categoryFilter;
-    return searchMatches && categoryMatches && typeMatches(mod);
-  });
+  function stateMatches(mod: (typeof mods)[number]) {
+    if (stateFilter === "selected") return Boolean(mod.enabled);
+    if (stateFilter === "unselected") return !mod.enabled;
+    return true;
+  }
+
+  function sortMods(items: typeof mods) {
+    const originalOrder = new Map(mods.map((mod, index) => [mod.name, index]));
+    return [...items].sort((a, b) => {
+      const aName = (a.display_name || a.name).toLowerCase();
+      const bName = (b.display_name || b.name).toLowerCase();
+      const aCategory = (a.category || a.group || "").toLowerCase();
+      const bCategory = (b.category || b.group || "").toLowerCase();
+      const aSource = (a.source || "").toLowerCase();
+      const bSource = (b.source || "").toLowerCase();
+
+      if (sortMode === "name-desc") return bName.localeCompare(aName);
+      if (sortMode === "category") return aCategory.localeCompare(bCategory) || aName.localeCompare(bName);
+      if (sortMode === "enabled-first")
+        return Number(Boolean(b.enabled)) - Number(Boolean(a.enabled)) || aName.localeCompare(bName);
+      if (sortMode === "disabled-first")
+        return Number(Boolean(a.enabled)) - Number(Boolean(b.enabled)) || aName.localeCompare(bName);
+      if (sortMode === "source") return aSource.localeCompare(bSource) || aName.localeCompare(bName);
+      if (sortMode === "file-priority")
+        return (originalOrder.get(a.name) ?? 999999) - (originalOrder.get(b.name) ?? 999999);
+      return aName.localeCompare(bName);
+    });
+  }
+
+  $: filteredMods = sortMods(
+    mods.filter((mod) => {
+      const q = searchQuery.toLowerCase().trim();
+      const display = (mod.display_name || mod.name).toLowerCase();
+      const category = (mod.category || mod.group || "").trim();
+      const searchMatches =
+        !q ||
+        display.includes(q) ||
+        mod.name.toLowerCase().includes(q) ||
+        category.toLowerCase().includes(q) ||
+        (mod.source || "").toLowerCase().includes(q);
+      const categoryMatches = categoryFilter === "all" || category === categoryFilter;
+      return searchMatches && categoryMatches && typeMatches(mod) && stateMatches(mod);
+    }),
+  );
+  $: selectedCount = mods.filter((mod) => mod.enabled).length;
 
   async function toggleMod(modName: string, enabled: boolean) {
     const updated = mods.map((m) => (m.name === modName ? { ...m, enabled } : m));
@@ -236,7 +270,7 @@
   <div class="grid-toolbar">
     <div class="toolbar-title">
       <h3>{$t("title_mods")}</h3>
-      <span class="result-count">{filteredMods.length}/{mods.length}</span>
+      <span class="result-count">{selectedCount} selected · {filteredMods.length}/{mods.length} shown</span>
     </div>
     <div class="toolbar-controls">
       <button class="refresh-btn" class:refreshing={isRefreshing} on:click={handleRefresh} title={$t("button_refresh")}>
@@ -269,6 +303,22 @@
       {#each categories as category}
         <option value={category}>{category}</option>
       {/each}
+    </select>
+
+    <select bind:value={stateFilter} aria-label="Mod state filter">
+      <option value="all">All states</option>
+      <option value="selected">Selected</option>
+      <option value="unselected">Unselected</option>
+    </select>
+
+    <select bind:value={sortMode} aria-label="Mod sort order">
+      <option value="name-asc">Name A–Z</option>
+      <option value="name-desc">Name Z–A</option>
+      <option value="category">Category</option>
+      <option value="enabled-first">Enabled first</option>
+      <option value="disabled-first">Disabled first</option>
+      <option value="source">Source</option>
+      <option value="file-priority">File priority</option>
     </select>
 
     <div class="profile-tools">

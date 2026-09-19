@@ -21,6 +21,24 @@
     "items": []
   },
   {
+    "key": "steam_root",
+    "text": "Steam Root (restart required)",
+    "default": "",
+    "type": "inputbox"
+  },
+  {
+    "key": "steam_library",
+    "text": "Steam Library (restart required)",
+    "default": "",
+    "type": "inputbox"
+  },
+  {
+    "key": "output_path",
+    "text": "Output Path",
+    "default": "",
+    "type": "inputbox"
+  },
+  {
     "key": "opt_into_rcs",
     "text": "&setting_opt_into_rcs",
     "default": false,
