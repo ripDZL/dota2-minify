@@ -124,23 +124,11 @@ class DataManager:
         return data
 
     def _read_cached_catalogue(self, filename, local_path):
-        info = os.stat(local_path, follow_symlinks=False)
-        if not stat.S_ISREG(info.st_mode):
-            raise ValueError("Cached D2PFX catalogue must be a regular file.")
-        if info.st_size > security.D2PFX_MAX_MANIFEST_BYTES:
-            raise ValueError("Cached D2PFX catalogue exceeds the safety limit.")
-
-        flags = os.O_RDONLY
-        if hasattr(os, "O_BINARY"):
-            flags |= os.O_BINARY
-        if hasattr(os, "O_NOFOLLOW"):
-            flags |= os.O_NOFOLLOW
-        fd = os.open(local_path, flags)
-        with os.fdopen(fd, "r", encoding="utf-8") as file:
-            opened = os.fstat(file.fileno())
-            if not stat.S_ISREG(opened.st_mode) or opened.st_size > security.D2PFX_MAX_MANIFEST_BYTES:
-                raise ValueError("Cached D2PFX catalogue changed during validation.")
-            return self._validate_catalogue_shape(filename, json.load(file))
+        raw = security.read_bounded_regular_file(
+            local_path,
+            max_bytes=security.D2PFX_MAX_MANIFEST_BYTES,
+        )
+        return self._validate_catalogue_shape(filename, json.loads(raw.decode("utf-8")))
 
     def fetch_gz_json(self, filename, force_refresh=False):
         try:

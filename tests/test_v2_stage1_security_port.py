@@ -54,7 +54,9 @@ def test_v2_security_rejects_windows_alias_ads_and_device_shapes():
 def test_v2_bounded_regular_read_detects_open_race(monkeypatch, tmp_path):
     security = _load_security()
     victim = tmp_path / "profiles.json"
+    replacement = tmp_path / "replacement.json"
     victim.write_bytes(b'{"safe": true}')
+    replacement.write_bytes(b'{"swapped": true}')
     original_open = security.os.open
     swapped = False
 
@@ -62,8 +64,7 @@ def test_v2_bounded_regular_read_detects_open_race(monkeypatch, tmp_path):
         nonlocal swapped
         if not swapped and str(path) == str(victim):
             swapped = True
-            victim.unlink()
-            victim.write_bytes(b'{"swapped": true}')
+            replacement.replace(victim)
         return original_open(path, flags)
 
     monkeypatch.setattr(security.os, "open", racing_open)

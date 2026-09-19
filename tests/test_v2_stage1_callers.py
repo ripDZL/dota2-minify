@@ -24,6 +24,7 @@ def test_v2_d2pfx_data_uses_shared_bounded_network_and_cache_guards():
         "os.replace(temporary, local_path)",
         "security.safe_relative_path",
         "security.confined_destination",
+        "security.read_bounded_regular_file",
     ):
         assert token in source
     assert "gzip.GzipFile" not in source

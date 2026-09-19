@@ -415,6 +415,7 @@ import posixpath
 import socket
 import urllib.parse
 
+
 def _public_ip(address: str) -> bool:
     try:
         return ipaddress.ip_address(address).is_global
