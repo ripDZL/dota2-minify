@@ -9,7 +9,7 @@ import shutil
 import stat
 import tempfile
 
-from core import base, constants, security
+from core import base, config, constants, security
 
 BACKUP_DIR_NAME = "backups"
 MAX_BACKUPS = 10
@@ -123,6 +123,11 @@ def _validated_output_path(value: str) -> str:
         allowed = {}
         for path in constants.minify_dota_possible_language_output_paths:
             resolved = os.path.realpath(os.path.abspath(path))
+            allowed[os.path.normcase(resolved)] = resolved
+
+        configured = config.get("output_path", "")
+        if isinstance(configured, str) and configured.strip():
+            resolved = os.path.realpath(os.path.abspath(os.path.expanduser(configured.strip())))
             allowed[os.path.normcase(resolved)] = resolved
     except Exception as exc:
         raise RuntimeError("Could not resolve Minify's allowed output locations.") from exc

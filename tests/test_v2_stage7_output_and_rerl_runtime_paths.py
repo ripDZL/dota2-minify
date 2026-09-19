@@ -28,3 +28,10 @@ def test_v2_rerl_redirects_do_not_require_workshop_tools():
 
     assert rerl_assignment < workshop_branch < rerl_process
     assert "rerl_processor.process(rerl_file, folder, dota_pak_contents)" in patch
+
+
+def test_v2_restore_points_accept_the_explicit_configured_output_path():
+    backup = (STAGE / "core" / "backup_manager.py").read_text(encoding="utf-8")
+    assert "from core import base, config, constants, security" in backup
+    assert 'configured = config.get("output_path", "")' in backup
+    assert "os.path.abspath(os.path.expanduser(configured.strip()))" in backup
