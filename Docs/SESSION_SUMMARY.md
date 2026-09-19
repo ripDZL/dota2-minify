@@ -33,3 +33,9 @@
 - CI #214 / `35459474245`: **364/364 PASS**; both validation jobs and both Windows portable jobs PASS.
 - Current parity-complete v2 portable SHA-256: `86018d93c44fc2a93e270dfdb91dd9e3d6790149e20f0081f86eb2b796405803`.
 - Next gate: user Windows/Dota smoke. Beta/main remain untouched.
+
+- Residual hostile-input/path-race review completed through `541d8b4f20e48a1f62dc4052f6347fd450a5ba55`.
+- Hardened Windows alias/ADS/device paths; identity-checked bounded profile, D2PFX cache, generic JSON/JSONC, remap, Mods.txt, D2PFX manifest, VPK sidecar, and cursor-source reads.
+- CI #218 / `35464400624`: **369/369 PASS**, Ruff clean, both validation jobs PASS, root + v2 Windows portable builds PASS.
+- Current v2 portable SHA-256: `2acb39b7099b125a8583e727774cd112873c234ca9c22c36344671c3a25f5007`.
+- Remaining gates: full Windows/Dota smoke and private _09 foliage alias human smoke. Beta/main remain untouched.

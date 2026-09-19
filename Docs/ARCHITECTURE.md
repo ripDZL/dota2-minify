@@ -28,3 +28,7 @@
 - v2 automatic Steam prelaunch injection is disabled by compatibility shim and removed from settings/pipeline; explicit CLI `prelaunch` remains.
 - v2 Mod Library services use stable logical IDs for nested/Collection/D2PFX mods; profiles are complete snapshots and favorites use stable keys.
 - Windows CI packaging uses `V2_STAGING/scripts/pyinstaller_guard.py`: on GitHub Windows runners only, skip PyInstaller's package-import DLL-path heuristic that can hang unattended; retain normal PE/DLL dependency analysis. Local/non-GitHub packaging keeps default PyInstaller behavior.
+
+- v2 untrusted local-file reads use bounded regular-file opens with pre-open `stat`, no-follow where available, post-open `fstat`, and device/inode identity comparison; applied to profiles, D2PFX cache, JSON/JSONC mod config, remap rules, and mod metadata.
+- v2 portable path validation rejects traversal plus Windows ADS/device-name/control/trailing-dot-space aliases before normalization; remap glob characters remain supported.
+- D2PFX cursor publication revalidates source identity after open; recursive nested-mod discovery does not follow symlink directories.

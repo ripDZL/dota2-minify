@@ -41,3 +41,8 @@
 - Fix `472bfe794d4e0deecfc1e5deb352943737e181e6`: GitHub-Windows-only PyInstaller guard skips that heuristic while preserving binary dependency analysis; local/non-GitHub builds are unchanged.
 - CI #214 / `35459474245`: **364/364 PASS**, v2 compile/Ruff/Svelte/plugin PASS, root Windows portable PASS, v2 Windows portable PASS.
 - Current parity-complete v2 portable SHA-256: `86018d93c44fc2a93e270dfdb91dd9e3d6790149e20f0081f86eb2b796405803`.
+
+- Residual v2 hostile-input/path-race review completed through `541d8b4f20e48a1f62dc4052f6347fd450a5ba55`: Windows alias/ADS/device/trailing-dot-space path rejection; bounded identity-checked local reads; profile import/load; D2PFX catalogue; cursor sources; generic JSON/JSONC; remap.json; Mods.txt/d2pfx manifest/VPK sidecar metadata.
+- Recursive nested-mod discovery already skips symlink directories; no scanner traversal change was needed.
+- CI #218 / `35464400624`: **369/369 PASS**, Ruff clean, v2 validation PASS, root Windows portable PASS, v2 Windows portable PASS.
+- Current parity-complete v2 portable SHA-256: `2acb39b7099b125a8583e727774cd112873c234ca9c22c36344671c3a25f5007`.

@@ -35,3 +35,8 @@
 - [x] CI #214 / `35459474245`: **364/364 PASS**; both validation jobs, root Windows portable, and v2 Windows portable PASS.
 - [x] Current parity-complete v2 portable SHA-256: `86018d93c44fc2a93e270dfdb91dd9e3d6790149e20f0081f86eb2b796405803`.
 - [ ] Next: user Windows/Dota smoke; private foliage alias smoke remains a separate human gate.
+
+- [x] Residual v2 hostile-input/path-race review closed: Windows path aliases/ADS/device names, bounded identity-checked profile/D2PFX/config/remap/mod-metadata reads, and cursor source identity.
+- [x] Final security stack validated at `541d8b4f20e48a1f62dc4052f6347fd450a5ba55`; CI #218 / `35464400624`: **369/369 PASS**, both validation jobs and both Windows portable builds PASS.
+- [x] Current parity-complete v2 portable SHA-256: `2acb39b7099b125a8583e727774cd112873c234ca9c22c36344671c3a25f5007`.
+- [ ] Next: full Windows/Dota smoke; private foliage alias smoke remains a separate human gate.

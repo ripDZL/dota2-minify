@@ -4,7 +4,7 @@
 - Branches must remain exactly: `v21.4-hardening`, `beta`, `main`.
 - Work only on `v21.4-hardening` unless the user explicitly approves promotion.
 - Re-fetch all 3 branch heads before edits.
-- Latest validated code head before handoff docs: `472bfe794d4e0deecfc1e5deb352943737e181e6`.
+- Latest validated code head before handoff docs: `541d8b4f20e48a1f62dc4052f6347fd450a5ba55`.
 - Known untouched promotion heads at handoff:
   - `beta`: `442d36dcc902f6436c6404f2947091663c254cc5`
   - `main`: `a26bc88a0d412e357965f29488b83a7f9093e11f`
@@ -51,6 +51,7 @@
   - Workshop-independent RERL processing.
   - v2 Developer Tools parity actions.
   - v2 Home / Control Panel surface.
+  - Residual hostile-input/path-race hardening: Windows alias/ADS/device-path rejection, identity-checked bounded local reads, profile/D2PFX/remap/config/mod-metadata/cursor race guards.
 - Key recent commits:
   - `a30675b24e14514a1ce7bd519ee173f452674553` restore/collision/Dark Terrain transaction.
   - `1f4362c1472c7dde715b66713dd62c10b0429307` Black-Plum + 960x680.
@@ -68,17 +69,20 @@
   - `ebbca811b41ad334a1e1ac01824939c7d77914ff` restore safety with custom output paths.
 
 ## Current CI / Windows build
-- CI #213 / run `35456691291` localized the v2 Windows stall to PyInstaller immediately after `Looking for dynamic libraries`.
-- PyInstaller had completed Analysis and then blocked inside its Windows package-import DLL-path heuristic; the actual PE/DLL dependency scan had not started.
-- Commit `472bfe794d4e0deecfc1e5deb352943737e181e6` adds a GitHub-Windows-only guard that skips that import heuristic while retaining normal binary dependency analysis.
-- Guard regression tests exercise the wrapper semantics; local/non-GitHub builds retain normal PyInstaller behavior.
-- CI #214 / run `35459474245`: **SUCCESS**.
-  - root `validate`: SUCCESS, **364 tests passed**.
+- PyInstaller hosted-Windows DLL import-probe stall remains fixed by `472bfe794d4e0deecfc1e5deb352943737e181e6`.
+- Residual security hardening stack:
+  - `3a37edb7f0f814e6276f5fff3d03ffbca1dd5b1d`: Windows path aliases/ADS/device names + bounded identity-checked profile reads.
+  - `eecd7ef43156506ff5797030d34e5a1e10b50f8b`: D2PFX catalogue identity-checked reads.
+  - `94a166544ce8455441abc9457f6e04a8e1ea4644`: cursor source identity check.
+  - `734f083d53b4cd15df37956b1bc6cd70a801440a`: bounded generic JSON/JSONC + remap reads.
+  - `541d8b4f20e48a1f62dc4052f6347fd450a5ba55`: bounded D2PFX/sidecar mod metadata reads.
+- CI #218 / run `35464400624`: **SUCCESS**.
+  - root `validate`: SUCCESS, **369 tests passed**, Ruff clean.
   - `validate-v2-staging`: SUCCESS.
   - root `build-windows-portable`: SUCCESS.
   - `build-v2-windows-portable`: SUCCESS.
-- Successful v2 log confirms 114 package imports were skipped only for the heuristic, then DLL analysis continued immediately and the package completed.
-- Current v2 inner portable ZIP SHA-256: `86018d93c44fc2a93e270dfdb91dd9e3d6790149e20f0081f86eb2b796405803`.
+- Current v2 inner portable ZIP SHA-256: `2acb39b7099b125a8583e727774cd112873c234ca9c22c36344671c3a25f5007`.
+- GitHub v2 artifact digest: `sha256:cb5b99a3e5bcc06dcbce49eedb7c08e7480c0f6fbf82f8d74d921ffd134fd627`.
 
 ## Test ZIP rule
 - User explicitly wants a v2 Windows ZIP **only when the parity work is done enough to test and the current build succeeds**.
@@ -102,8 +106,8 @@
 - Never claim foliage PASS without an actual Dota smoke test from the user.
 
 ## Next actions
-- Current parity-complete v2 Windows test ZIP is built from `472bfe794d4e0deecfc1e5deb352943737e181e6`; CI #214 / `35459474245`.
-- Next gate: user Windows/Dota smoke of this ZIP.
+- Current parity-complete v2 Windows test ZIP is built from `541d8b4f20e48a1f62dc4052f6347fd450a5ba55`; CI #218 / `35464400624`.
+- Residual hostile-input/path-race review is complete; next gate is user Windows/Dota smoke of this ZIP.
 - Private foliage alias human smoke remains independent and must not be claimed PASS without actual Dota testing.
 - Fix smoke findings only on `v21.4-hardening`.
 - Keep `beta` and `main` untouched unless the user explicitly approves promotion.
