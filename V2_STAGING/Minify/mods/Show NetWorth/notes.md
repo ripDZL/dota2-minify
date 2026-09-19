@@ -1,0 +1,3 @@
+<!-- lang:en -->
+
+Shows your current networth in the quick stats panel.

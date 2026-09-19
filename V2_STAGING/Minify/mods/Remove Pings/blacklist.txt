@@ -1,0 +1,2 @@
+**particles/ui_mouseactions/.*ping.*\.vpcf_c
+**sounds/ui/.*ping.*\.vsnd_c

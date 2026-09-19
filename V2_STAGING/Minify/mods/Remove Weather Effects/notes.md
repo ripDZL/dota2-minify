@@ -1,0 +1,5 @@
+<!-- lang:en -->
+
+Removes all weather effects from weather items and from `cl_weather` console command.
+
+https://liquipedia.net/dota2/Weather_Effects

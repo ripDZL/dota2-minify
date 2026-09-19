@@ -1,0 +1,93 @@
+[project]
+name = "dota2-minify"
+# 1.0 = initial tkinter fixes
+# 2.0 = seperation of source files from project root
+# 3.0 = initial module based architecture
+# 3.1 = cleanup
+# 3.2 = core & ui modules fully established
+# 3.3 = browsers module
+# 3.4 = patch module
+# 4.0 = webview & plugins
+version = "4.0"
+description = "Dota2 Mod Patcher & Toolkit for everyone to use mods easily"
+readme = "README.md"
+requires-python = ">=3.13"
+license = "GPL-3.0-or-later"
+dependencies = [
+    "defusedxml>=0.7.1",
+    "json-with-comments>=1.2.10",
+    "playsound3>=3.3.0",
+    "psutil>=7.1.3",
+    "pywebview>=6.2.1",
+    "requests[socks]>=2.32.5",
+    "typer>=0.27",
+    "vdf>=3.4",
+    "vpk>=1.4.0",
+]
+
+[project.optional-dependencies]
+linux = [
+    "pycairo>=1.26.0",
+    "pygobject>=3.50.0",
+    "pywebview[gtk]",
+]
+
+[tool]
+
+[tool.black]
+line-length = 120
+
+[tool.ruff]
+line-length = 120
+lint.select = ["E", "F", "I"]
+lint.ignore = [
+    "E402", # Module level import not at top of file
+    "E501", # Line too long
+    "E722", # Do not use bare `except`
+    "E741", # Ambiguous variable name
+    "F401", # Unused import
+    "F541", # f-string without placeholder
+    "I001", # Unsorted imports
+]
+
+[tool.pyrefly]
+preset = "off"
+search-path = ["Minify"]
+
+[tool.pylint.messages_control]
+disable = [
+    "invalid-name",
+    "missing-module-docstring",
+    "missing-class-docstring",
+    "missing-function-docstring",
+    "line-too-long",
+    "trailing-whitespace",
+    "wrong-import-position",
+    "import-outside-toplevel",
+    "import-error",
+    "possibly-used-before-assignment",
+    "too-many-function-args",
+    "too-many-branches",
+    "too-many-arguments",
+    "too-many-locals",
+    "too-many-statements",
+    "too-many-boolean-expressions",
+    "too-many-positional-arguments",
+    "too-many-nested-blocks",
+    "inconsistent-return-statements",
+    "consider-using-with",
+    "unnecessary-lambda",
+    "fixme",
+    "global-variable-not-assigned",
+    "global-statement",
+    "unused-argument",
+    "undefined-loop-variable",
+    "broad-exception-caught",
+    "broad-exception-raised",
+    "subprocess-run-check",
+    "unspecified-encoding",
+    "similarities",
+]
+
+[dependency-groups]
+dev = ["pyinstaller>=6.17.0", "pytest>=8.0.0", "ruff>=0.3.0"]

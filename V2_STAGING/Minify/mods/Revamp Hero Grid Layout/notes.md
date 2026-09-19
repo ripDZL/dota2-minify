@@ -1,0 +1,4 @@
+<!-- lang:en -->
+
+Makes hero cards bigger.
+Removes hero movies that appear on card hovers, badges and similiar heroes row.

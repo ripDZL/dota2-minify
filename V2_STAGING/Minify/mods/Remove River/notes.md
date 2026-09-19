@@ -1,0 +1,5 @@
+<!-- lang:en -->
+
+Removes all things related to rivers.
+
+Including painting river with vial items, walking sound effects, particle splash effects.

@@ -1,0 +1,43 @@
+import os
+import re
+
+import helper
+from core import constants, fs, output, registry, steam
+
+from patch import vpk_utils
+
+
+def uninstall():
+    output.clean()
+
+    pak_pattern = r"^pak\d{2}_dir\.vpk$"
+    for path in constants.minify_dota_possible_language_output_paths:
+        if os.path.isdir(path):
+            maps_vpk_path = os.path.join(path, "maps", "dota.vpk")
+            if os.path.exists(maps_vpk_path) and vpk_utils.is_minify_pak(maps_vpk_path):
+                fs.remove_path(os.path.join(path, "maps"))
+
+            for item in os.listdir(path):
+                pak_path = os.path.join(path, item)
+                if os.path.isfile(pak_path) and re.fullmatch(pak_pattern, item):
+                    if vpk_utils.is_minify_pak(pak_path):
+                        fs.remove_path(pak_path)
+
+    steam.remove_minify_lang()
+    steam.restore_boot_language()
+
+    for plugin in registry.get_plugins():
+        if hasattr(plugin, "on_uninstall"):
+            plugin.on_uninstall()
+
+    helper.bulk_exec_script("uninstall")
+    output.add_text("&mods_removed_terminal")
+
+
+def wipe():
+    output.clean()
+    uninstall()
+    for path in constants.minify_dota_possible_language_output_paths:
+        if os.path.isdir(path):
+            fs.remove_path(path)
+            output.add_text("&clean_lang_dirs", path)

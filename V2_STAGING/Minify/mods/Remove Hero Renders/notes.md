@@ -1,0 +1,5 @@
+<!-- lang:en -->
+
+Removes hero previews, renders from the UI.
+
+The console variable `map_enable_portrait_worlds 0` achieves the same goal, however you'll get stuck on MVP screens.

@@ -1,0 +1,3 @@
+<!-- lang:en -->
+
+Repositions & scales some aspects of the in-game HUD.

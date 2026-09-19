@@ -1,0 +1,526 @@
+"""
+Module to find steam root and library that Dota2 is in (always accounts the Windows' executable path to find if used through an emulation layer).
+Also fixes language argument for the user(s)
+"""
+
+import os
+import sys
+
+import vdf
+
+from core import base, config, log, output, utils
+
+
+def remove_lang_args(arg_string):
+    "Parse launch options, remove language argument and return a clean string"
+
+    if not arg_string:
+        return ""
+    tokens = arg_string.split()
+    cleaned = []
+    skip_next = False
+
+    for i, token in enumerate(tokens):
+        if skip_next:
+            skip_next = False
+            continue
+
+        if token == "-language":
+            if i + 1 < len(tokens) and not tokens[i + 1].startswith(("-", "+")):
+                skip_next = True
+            continue
+
+        cleaned.append(token)
+
+    return " ".join(cleaned)
+
+
+def remove_specific_lang_arg(arg_string, lang_to_remove):
+    "Parse launch options, remove a specific language argument and return a clean string"
+
+    if not arg_string:
+        return ""
+    tokens = arg_string.split()
+    cleaned = []
+    skip_next = False
+
+    for i, token in enumerate(tokens):
+        if skip_next:
+            skip_next = False
+            continue
+
+        if token == "-language":
+            if i + 1 < len(tokens) and not tokens[i + 1].startswith(("-", "+")):
+                if tokens[i + 1] == lang_to_remove:
+                    skip_next = True
+                    continue
+                else:
+                    cleaned.append(token)
+                    continue
+            else:
+                cleaned.append(token)
+                continue
+
+        cleaned.append(token)
+
+    return " ".join(cleaned)
+
+
+def add_prelaunch_to_launch_options(check_only=False):
+    "If frozen and patch_on_launch is enabled, prepend prelaunch command before %command% in launch options"
+
+    if not base.FROZEN:
+        return False
+
+    if not config.get("patch_on_launch"):
+        return False
+
+    steam_ids = []
+    accounts = get_steam_accounts()
+    if config.get("apply_for_all"):
+        for account in accounts:
+            steam_ids.append(account["id"])
+    else:
+        steam_ids.append(config.get("steam_id"))
+
+    changed = False
+    for steam_id in steam_ids:
+        vdf_path = os.path.join(config.get("steam_root"), "userdata", steam_id, "config", "localconfig.vdf")
+        if not os.path.exists(vdf_path):
+            continue
+
+        with utils.open_utf8R(vdf_path) as file:
+            data = vdf.load(file)
+
+        try:
+            launch_options = data["UserLocalConfigStore"]["Software"]["Valve"]["Steam"]["apps"][base.STEAM_DOTA_ID][
+                "LaunchOptions"
+            ]
+        except KeyError:
+            continue
+
+        tokens = launch_options.split()
+
+        if base.is_win:
+            prefix = f'"{sys.executable}" prelaunch'
+        else:
+            prefix = f'bash -c "{sys.executable} prelaunch" &&'
+
+        if launch_options.startswith(prefix):
+            continue
+
+        other_tokens = [t for t in tokens if t != "%command%"]
+        new_tokens = [prefix, "%command%"] + other_tokens
+        new_options = " ".join(new_tokens)
+
+        if new_options != launch_options:
+            if check_only:
+                return True
+            data["UserLocalConfigStore"]["Software"]["Valve"]["Steam"]["apps"][base.STEAM_DOTA_ID]["LaunchOptions"] = (
+                new_options
+            )
+            with utils.open_utf8R(vdf_path, "w") as file:
+                vdf.dump(data, file, pretty=True)
+            changed = True
+
+    return changed
+
+
+def fix_launch_options(check_only=False):
+    """
+    Fixes user(s) launch options with the language argument that has the current output path.
+    Does it for all accounts available if "apply_for_all" key is set.
+    """
+
+    steam_ids = []
+    successful_ids = []
+    accounts = get_steam_accounts()
+    if config.get("apply_for_all"):
+        for account in accounts:
+            steam_ids.append(account["id"])
+    else:
+        steam_ids.append(config.get("steam_id"))
+
+    for steam_id in steam_ids:
+        vdf_path = os.path.join(config.get("steam_root"), "userdata", steam_id, "config", "localconfig.vdf")
+        if not os.path.exists(vdf_path):
+            continue
+
+        with utils.open_utf8R(vdf_path) as file:
+            if not check_only:
+                output.add_text("&checking_launch_options")
+            data = vdf.load(file)
+
+        locale = config.get_locale()
+        try:
+            launch_options = data["UserLocalConfigStore"]["Software"]["Valve"]["Steam"]["apps"][base.STEAM_DOTA_ID][
+                "LaunchOptions"
+            ]
+        except KeyError:
+            continue
+        if f"-language {locale}" not in launch_options or launch_options.count("-language") >= 2:
+            if check_only:
+                return True
+            user_name = "?"
+            for user in accounts:
+                if user["id"] == steam_id:
+                    user_name = user["name"]
+                    break
+
+            output.add_text("&discrepancy_launch_options", user_name, locale, indent=True)
+
+            data["UserLocalConfigStore"]["Software"]["Valve"]["Steam"]["apps"][base.STEAM_DOTA_ID]["LaunchOptions"] = (
+                f"-language {locale} {remove_lang_args(launch_options)}"
+            )
+            with utils.open_utf8R(vdf_path, "w") as file:
+                vdf.dump(data, file, pretty=True)
+            successful_ids.append(steam_id)
+    return successful_ids
+
+
+def remove_minify_lang():
+    """
+    Removes `-language minify` argument specifically from launch options only if the locale matches the config.
+    """
+    steam_ids = []
+    successful_ids = []
+    accounts = get_steam_accounts()
+    if config.get("apply_for_all"):
+        for account in accounts:
+            steam_ids.append(account["id"])
+    else:
+        steam_ids.append(config.get("steam_id"))
+
+    for steam_id in steam_ids:
+        vdf_path = os.path.join(config.get("steam_root"), "userdata", steam_id, "config", "localconfig.vdf")
+        if not os.path.exists(vdf_path):
+            continue
+
+        with utils.open_utf8R(vdf_path) as file:
+            data = vdf.load(file)
+
+        locale = config.get("output_locale")
+        if locale != "english":
+            continue
+
+        try:
+            launch_options = data["UserLocalConfigStore"]["Software"]["Valve"]["Steam"]["apps"][base.STEAM_DOTA_ID][
+                "LaunchOptions"
+            ]
+        except KeyError:
+            continue
+
+        if "-language" in launch_options:
+            data["UserLocalConfigStore"]["Software"]["Valve"]["Steam"]["apps"][base.STEAM_DOTA_ID]["LaunchOptions"] = (
+                remove_specific_lang_arg(launch_options, config.get_locale())
+            )
+            with utils.open_utf8(vdf_path, "w") as file:
+                vdf.dump(data, file, pretty=True)
+            successful_ids.append(steam_id)
+
+    return successful_ids
+
+
+def restore_boot_language():
+    """
+    Restores the UILanguage in boot.vcfg to english if symbolic english (dutch) was used.
+    """
+    if config.get("output_locale") != "english":
+        return False
+
+    boot_vcfg_path = os.path.join(LIBRARY, "steamapps", "common", "dota 2 beta", "game", "dota", "cfg", "boot.vcfg")
+    if not os.path.exists(boot_vcfg_path):
+        return False
+
+    try:
+        with utils.open_utf8R(boot_vcfg_path) as file:
+            data = vdf.load(file)
+    except Exception:
+        log.write_warning("Error reading boot.vcfg")
+        return False
+
+    if data.get("boot", {}).get("UILanguage") != "dutch":
+        return False
+
+    data["boot"]["UILanguage"] = "english"
+    with utils.open_utf8(boot_vcfg_path, "w") as file:
+        vdf.dump(data, file, pretty=True)
+    return True
+
+
+def fix_boot_language(check_only=False):
+    """
+    Ensures UILanguage in boot.vcfg matches the resolved locale (e.g. dutch for english).
+    """
+
+    locale = config.get_locale()
+
+    boot_vcfg_path = os.path.join(LIBRARY, "steamapps", "common", "dota 2 beta", "game", "dota", "cfg", "boot.vcfg")
+    if not os.path.exists(boot_vcfg_path):
+        return False
+
+    try:
+        with utils.open_utf8R(boot_vcfg_path) as file:
+            data = vdf.load(file)
+    except Exception:
+        log.write_warning("Error reading boot.vcfg")
+        return False
+
+    if data.get("boot", {}).get("UILanguage") == locale:
+        return False
+
+    if check_only:
+        return True
+
+    data["boot"]["UILanguage"] = locale
+    with utils.open_utf8(boot_vcfg_path, "w") as file:
+        vdf.dump(data, file, pretty=True)
+    return True
+
+
+def find_library_from_vdf(steam_root):
+    "Find the Dota2 library from VDF"
+    try:
+        if (
+            steam_root
+            and steam_root != "."  # ?
+            and os.path.exists(reg_path := os.path.join(steam_root, "config", "libraryfolders.vdf"))
+        ):
+            with utils.open_utf8R(os.path.join(reg_path)) as dump:
+                vdf_data = vdf.load(dump)
+
+            paths = []
+            for folder_key in vdf_data.get("libraryfolders", {}):
+                folder = vdf_data["libraryfolders"][folder_key]
+                # brute
+                if "path" in folder:
+                    paths.append(folder["path"])
+
+            for path in paths:
+                if os.path.exists(os.path.join(path, base.DOTA_EXECUTABLE_PATH)) or os.path.exists(
+                    os.path.join(path, base.DOTA_EXECUTABLE_PATH_FALLBACK)
+                ):
+                    config.set("steam_library", path)
+                    return True
+        return False
+
+    except Exception:
+        log.write_warning("Error reading libraryfolders.vdf")
+        config.set("steam_library", "")
+        return False
+
+
+def get_steam_root_path():
+    """
+    Get steam root path via
+    Windows: registry, default
+    Linux: default(`.local/share/Steam` for most major distrubitions)
+    MacOS: default
+    """
+    steam_root = config.get("steam_root", "")
+
+    if steam_root and os.path.exists(steam_root):
+        return steam_root
+
+    found_path = ""
+    # registry
+    if base.is_win:
+        with utils.try_pass():
+            import winreg
+
+            hkey = winreg.OpenKey(winreg.HKEY_LOCAL_MACHINE, r"SOFTWARE\WOW6432Node\Valve\Steam")
+            steam_path = winreg.QueryValueEx(hkey, "InstallPath")[0]
+            if os.path.exists(steam_path):
+                found_path = steam_path
+
+    # defaults
+    if not found_path and os.path.exists(base.STEAM_DEFAULT_INSTALLATION_PATH):
+        found_path = base.STEAM_DEFAULT_INSTALLATION_PATH
+
+    if found_path:
+        config.set("steam_root", found_path)
+        config.set("steam_library", found_path)  # assume, will be checked anyway
+        return found_path
+
+    return ""
+
+
+def handle_non_default_path(steam_root):
+    """
+    Handles Dota2 finding
+    root = library: found
+    root != library: find from library VDF
+    if root is unknown: user is manually prompted to select root, library will be found via VDF
+    """
+    steam_library = config.get("steam_library", "")
+    if not os.path.exists(os.path.join(steam_library, base.DOTA_EXECUTABLE_PATH)):
+        find_library_from_vdf(steam_root)
+        steam_library = config.get("steam_library", "")
+
+    # last line of defense
+    while not steam_library or (
+        not os.path.exists(os.path.join(steam_library, base.DOTA_EXECUTABLE_PATH))
+        and not os.path.exists(os.path.join(steam_library, base.DOTA_EXECUTABLE_PATH_FALLBACK))
+    ):
+        try:
+            import tkinter as tk
+            from tkinter import filedialog, messagebox
+
+            root = tk.Tk()
+            root.withdraw()
+            root.wm_attributes("-topmost", 1)
+            choice = messagebox.askokcancel(
+                "Minify Install Path Handler",
+                "We couldn't find your Steam installation, please select your Steam installation directory",
+                parent=root,
+            )
+            root.lift()
+            root.focus_force()
+
+            if choice:
+                steam_root = os.path.normpath(filedialog.askdirectory())
+                config.set("steam_root", steam_root)
+                find_library_from_vdf(steam_root)
+                steam_library = config.get("steam_library")
+
+            else:
+                sys.exit()
+
+            root.destroy()
+
+        except Exception as e:
+            messagebox.showerror(
+                "Minify Install Path Handler",
+                f'An unexpected error happened. Set your Steam paths in \'config/minify_config.json > "steam_root", "steam_library"\' and restart Minify.\n\nError: {e}',
+                parent=root,
+            )
+            root.lift()
+            root.focus_force()
+            break
+    return steam_root
+
+
+BASE_STEAM_64 = (1 << 56) | (1 << 52) | (1 << 32)
+
+
+def steam64_to_account_id(steam64: int | str) -> str:
+    """Converts a 64-bit SteamID to a 32-bit AccountID string using bitwise masking."""
+    try:
+        return str(int(steam64) & 0xFFFFFFFF)
+    except (ValueError, TypeError):
+        return str(steam64)
+
+
+def account_id_to_steam64(account_id: int | str) -> int:
+    """Converts a 32-bit AccountID to a 64-bit SteamID using bitwise OR."""
+    try:
+        return int(account_id) | BASE_STEAM_64
+    except (ValueError, TypeError):
+        return 0
+
+
+def get_loginusers_data() -> dict:
+    "Parse loginusers.vdf to map 32-bit account_id -> login info dict"
+    user_map = {}
+    if not ROOT:
+        return user_map
+
+    loginusers_path = os.path.join(ROOT, "config", "loginusers.vdf")
+    if os.path.exists(loginusers_path):
+        try:
+            with utils.open_utf8R(loginusers_path) as f:
+                data = vdf.load(f)
+                users = data.get("users", {})
+                if isinstance(users, dict):
+                    for s64_str, udata in users.items():
+                        if not isinstance(udata, dict):
+                            continue
+                        acc_id = steam64_to_account_id(s64_str)
+                        ts_val = udata.get("Timestamp", 0)
+                        try:
+                            ts = int(ts_val)
+                        except (ValueError, TypeError):
+                            ts = 0
+
+                        user_map[acc_id] = {
+                            "steam64": s64_str,
+                            "persona_name": str(udata.get("PersonaName", "")),
+                            "account_name": str(udata.get("AccountName", "")),
+                            "timestamp": ts,
+                            "autologin": udata.get("AutoLogin") == "1",
+                        }
+        except Exception as e:
+            log.write_warning(f"Error reading loginusers.vdf: {e}")
+
+    return user_map
+
+
+def get_steam_accounts():
+    "Get all users that have Dota2 data, sorted by last active login timestamp descending"
+    accounts = []
+    if not ROOT or not os.path.exists(os.path.join(ROOT, "userdata")):
+        return accounts
+
+    try:
+        loginusers_map = get_loginusers_data()
+        user_ids = [
+            x
+            for x in os.listdir(os.path.join(ROOT, "userdata"))
+            if x.isdigit() and os.path.isdir(os.path.join(ROOT, "userdata", x))
+        ]
+        for user_id in user_ids:
+            if not os.path.exists(os.path.join(ROOT, "userdata", user_id, base.STEAM_DOTA_ID)):
+                continue
+
+            login_info = loginusers_map.get(user_id, {})
+            username = login_info.get("persona_name", "")
+            account_name = login_info.get("account_name", "")
+            timestamp = login_info.get("timestamp", 0)
+
+            if not username:
+                localconfig_path = os.path.join(ROOT, "userdata", user_id, "config", "localconfig.vdf")
+                if os.path.exists(localconfig_path):
+                    try:
+                        with utils.open_utf8R(localconfig_path) as f:
+                            data = vdf.load(f)
+                            friends = data.get("UserLocalConfigStore", {}).get("friends", {})
+                            username = friends.get("PersonaName", "?")
+                    except Exception:
+                        username = "?"
+                else:
+                    username = "?"
+
+            accounts.append(
+                {
+                    "id": user_id,
+                    "name": username,
+                    "account_name": account_name,
+                    "timestamp": timestamp,
+                }
+            )
+
+        accounts.sort(key=lambda acc: acc["timestamp"], reverse=True)
+    except Exception:
+        log.write_warning("Failed to fetch steam accounts")
+
+    return accounts
+
+
+ROOT = get_steam_root_path()
+ROOT = handle_non_default_path(ROOT)
+LIBRARY = config.get("steam_library")
+
+# Auto-determine a steam_id if not set
+current_steam_id = config.get("steam_id")
+if not current_steam_id and ROOT:
+    for account in get_steam_accounts():
+        config.set("steam_id", account["id"])
+        break
+
+# paths
+if base.is_win:
+    steam_executable_path = os.path.join(ROOT, "steam.exe")
+elif base.is_linux:
+    steam_executable_path = os.path.join(ROOT, "steam")
+elif base.is_mac:
+    steam_executable_path = os.path.join(ROOT, "steam")  # ?
