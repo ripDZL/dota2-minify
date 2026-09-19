@@ -118,7 +118,7 @@
     height: 38px;
     padding: 0 8px;
     border: 1px solid var(--border-color, #000);
-    background: var(--bg-primary, #fff);
+    background: var(--header-bg, var(--bg-primary, #fff));
     box-sizing: border-box;
   }
 
@@ -233,5 +233,25 @@
   .patch-btn:active {
     background: var(--btn-active-bg, #000);
     color: var(--btn-active-text, #fff);
+  }
+
+  @media (max-width: 1050px) {
+    .header-links {
+      display: none;
+    }
+
+    .nav-tabs {
+      min-width: 0;
+      overflow-x: auto;
+      scrollbar-width: none;
+    }
+
+    .nav-tabs::-webkit-scrollbar {
+      display: none;
+    }
+
+    .header-action {
+      flex-shrink: 0;
+    }
   }
 </style>

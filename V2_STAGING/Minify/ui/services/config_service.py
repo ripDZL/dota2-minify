@@ -91,7 +91,7 @@ class ConfigService:
     def get_theme_url(self, theme_name: str | None = None) -> str:
         try:
             if not theme_name:
-                theme_name = config.get("theme", "light") or "light"
+                theme_name = config.get("theme", "black-plum") or "black-plum"
 
             themes_dir = getattr(base, "themes_dir", os.path.join(base.base_dir, "themes"))
             clean_name = os.path.basename(str(theme_name))
@@ -100,7 +100,7 @@ class ConfigService:
 
             theme_path = os.path.join(themes_dir, clean_name)
             if not os.path.isfile(theme_path):
-                theme_path = os.path.join(themes_dir, "light.css")
+                theme_path = os.path.join(themes_dir, "black-plum.css")
             if os.path.isfile(theme_path):
                 return Path(os.path.abspath(theme_path)).as_uri()
             return ""

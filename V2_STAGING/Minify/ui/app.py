@@ -448,13 +448,13 @@ def launch() -> None:
     initial_width = window_size.get("width", 960)
     initial_height = window_size.get("height", 680)
 
-    if not isinstance(initial_width, int) or initial_width < 700:
+    if not isinstance(initial_width, int) or initial_width < 960:
         initial_width = 960
-    if not isinstance(initial_height, int) or initial_height < 500:
+    if not isinstance(initial_height, int) or initial_height < 680:
         initial_height = 680
 
     api = Api()
-    active_theme = config.get("theme", "light")
+    active_theme = config.get("theme", "black-plum")
     theme_css = api.get_theme_css(active_theme)
     bg_color = api.config_service.extract_bg_color(theme_css)
     window = webview.create_window(
@@ -463,7 +463,7 @@ def launch() -> None:
         js_api=api,
         width=initial_width,
         height=initial_height,
-        min_size=(700, 500),
+        min_size=(960, 680),
         resizable=True,
         background_color=bg_color,
     )
@@ -474,7 +474,7 @@ def launch() -> None:
             w, h = args[0], args[1]
         if w and h and isinstance(w, (int, float)) and isinstance(h, (int, float)):
             w_int, h_int = int(w), int(h)
-            if w_int >= 700 and h_int >= 500:
+            if w_int >= 960 and h_int >= 680:
                 utils.write_states("window_size", {"width": w_int, "height": h_int})
 
     window.events.resized += _save_window_size

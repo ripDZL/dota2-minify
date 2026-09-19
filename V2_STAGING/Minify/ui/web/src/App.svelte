@@ -72,11 +72,7 @@
       const api = window.pywebview?.api;
       const themeInit = await api?.get_state?.("system_theme_init");
       if (!themeInit) {
-        const prefersDark =
-          typeof window !== "undefined" &&
-          window.matchMedia &&
-          window.matchMedia("(prefers-color-scheme: dark)").matches;
-        const initialTheme = prefersDark ? "dark" : "light";
+        const initialTheme = "black-plum";
         if (api?.set_setting) {
           await api.set_setting("theme", initialTheme);
         }

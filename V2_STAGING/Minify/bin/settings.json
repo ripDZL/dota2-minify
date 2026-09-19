@@ -16,7 +16,7 @@
   {
     "key": "theme",
     "text": "&setting_theme",
-    "default": "light",
+    "default": "black-plum",
     "type": "combo",
     "items": []
   },
