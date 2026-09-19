@@ -14,6 +14,17 @@ def test_v2_stage1_staged_python_sources_compile():
         compile(path.read_text(encoding="utf-8"), str(path), "exec")
 
 
+def test_v2_config_json_reads_are_bounded_and_identity_checked():
+    source = _read("core/config.py")
+    for token in (
+        "JSON_MAX_FILE_BYTES",
+        "security.read_bounded_regular_file(path, max_bytes=JSON_MAX_FILE_BYTES)",
+        'raw.decode("utf-8-sig")',
+    ):
+        assert token in source
+    assert "utils.open_utf8R(path)" not in source
+
+
 def test_v2_d2pfx_data_uses_shared_bounded_network_and_cache_guards():
     source = _read("plugins/d2pfx/data.py")
     for token in (
@@ -71,8 +82,10 @@ def test_v2_remap_port_validates_rule_shape_and_confines_all_write_paths():
         "REMAP_MAX_REDIRECTS_PER_RULE",
         "security.safe_relative_path",
         "security.confined_destination",
+        "REMAP_MAX_CONFIG_BYTES",
         "REMAP_MAX_RESOURCE_BYTES",
         "REMAP_MAX_SOURCE_CHARS",
+        "security.read_bounded_regular_file(remap_file, max_bytes=REMAP_MAX_CONFIG_BYTES)",
     ):
         assert token in source
     assert '.lstrip("/")' not in source

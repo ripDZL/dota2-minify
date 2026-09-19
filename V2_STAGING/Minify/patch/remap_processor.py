@@ -11,6 +11,7 @@ REMAP_MAX_RULES = 1024
 REMAP_MAX_REDIRECTS_PER_RULE = 256
 REMAP_MAX_PATH_CHARS = 4096
 REMAP_MAX_REFERENCE_CHARS = 4096
+REMAP_MAX_CONFIG_BYTES = 16 * 1024 * 1024
 REMAP_MAX_RESOURCE_BYTES = 512 * 1024 * 1024
 REMAP_MAX_SOURCE_CHARS = 64 * 1024 * 1024
 
@@ -51,12 +52,11 @@ def _confined(root: str, relative: str) -> str:
 
 def process(remap_file: str, folder: str, dota_pak_contents) -> None:
     """Process validated remap rules without allowing build/output path escapes."""
-    if not os.path.exists(remap_file):
-        return
-
     try:
-        with utils.open_utf8(remap_file) as file:
-            rules = _validate_rules(json.load(file))
+        raw = security.read_bounded_regular_file(remap_file, max_bytes=REMAP_MAX_CONFIG_BYTES)
+        rules = _validate_rules(json.loads(raw.decode("utf-8-sig")))
+    except FileNotFoundError:
+        return
     except Exception as exc:
         log.write_warning(f"Failed to parse remap.json for {folder}: {exc}")
         return

@@ -4,20 +4,24 @@ JSON(C) config files
 Interactions with main config and mod configs
 """
 
+import io
 import os
 import tempfile
 from typing import Any, Optional
 
 import jsonc
 
-from core import base, utils
+from core import base, security, utils
+
+JSON_MAX_FILE_BYTES = 8 * 1024 * 1024
 
 
 def read_json_file(path: str) -> dict:
     try:
-        with utils.open_utf8R(path) as file:
+        raw = security.read_bounded_regular_file(path, max_bytes=JSON_MAX_FILE_BYTES)
+        with io.StringIO(raw.decode("utf-8-sig")) as file:
             return jsonc.load(file)
-    except (FileNotFoundError, jsonc.JSONDecodeError):
+    except (OSError, ValueError, UnicodeDecodeError, jsonc.JSONDecodeError):
         return {}
 
 
