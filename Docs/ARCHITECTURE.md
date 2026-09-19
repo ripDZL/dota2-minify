@@ -35,3 +35,6 @@
 
 - v2 D2PFX preview contract: catalogue `.webp` names are served from the D2PFX data-branch JPG mirror after `.webp -> .jpg` normalization; do not point normalized JPG names at main-branch `assets/previews` WebP files. Keep category URL first plus data-root fallback.
 - v2 D2PFX UI parity: desktop catalogue is capped at 4 columns with 3/2/1 responsive breakpoints; 960px stays one-column compact. Cards surface fork Updated-date metadata and visible preview-failure state. Async search is request-ordered, and install state is not persisted before publication succeeds.
+
+- v2 Mod Library has two presentation modes over the same filtered/sorted model: default compact `list` and existing `cards`. The selection is UI-only state persisted as `minify.mod-library.view-mode` in local storage; it does not alter mod configuration/state semantics.
+- List mode mirrors legacy ergonomics: collapsible source-type groups (Standard, Collections, D2PFX, VPK), compact rows, selected counts, optional 64x36 previews only when available, and the same favorite/details/toggle actions as Cards mode.

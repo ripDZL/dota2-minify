@@ -46,3 +46,8 @@
 - [x] CI #220 / `35466711651`: **374/374 PASS**, Ruff clean, both validation jobs and both Windows portable builds PASS.
 - [x] Current v2 portable SHA-256: `2f976b02ef49310f7f2c67a1f643e9bccbf47d98f1a6f3a6f184b563c7d3aee3`.
 - [ ] Next: user re-smoke corrected D2PFX Browser, then continue full Windows/Dota smoke; private foliage alias remains separate.
+
+- [x] Toggleable legacy-style v2 Mod Library list view added at `1354b8549f0e546faed062794ba7669d0f0a5ba0`: List is default, Cards retained, selection persists, grouped collapsible Standard/Collections/D2PFX/VPK sections, compact optional 64x36 thumbnails, row metadata/favorite/details/state controls.
+- [x] CI #221 / `35467625867`: **375/375 PASS**, Ruff clean, v2 validation/Svelte/plugin builds PASS, root + v2 Windows portable PASS.
+- [x] Current v2 portable SHA-256: `87a59e0959cd6f7a96971055b619c254aff1d1876ddbe68eae0dc27d811b261e`.
+- [ ] Next: user smoke of Mod Library List/Cards + D2PFX, then continue full Windows/Dota smoke; foliage alias remains separate.

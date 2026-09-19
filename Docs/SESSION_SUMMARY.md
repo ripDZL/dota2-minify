@@ -46,3 +46,9 @@
 - CI #220 / `35466711651`: **374/374 PASS**, Ruff clean, v2 validation/Svelte/plugin builds PASS, root + v2 Windows portable PASS.
 - Current v2 portable SHA-256: `2f976b02ef49310f7f2c67a1f643e9bccbf47d98f1a6f3a6f184b563c7d3aee3`; GitHub v2 artifact digest `sha256:281b088b67efed0502cc4b6ec859e0363c75a470b37aa788e919c72810d0135c`.
 - Next: D2PFX re-smoke, then full Windows/Dota smoke. Private foliage alias human smoke remains independent. Beta/main untouched.
+
+- User preferred the old list-style Mod Library and requested it as a toggleable alternative to cards.
+- Implemented at `1354b8549f0e546faed062794ba7669d0f0a5ba0`: List is the default; Cards remains available; preference persists across launches. List uses collapsible Standard/Collections/D2PFX/VPK sections, selected counts, compact metadata rows, and 64x36 thumbnails only for mods with previews.
+- CI #221 / `35467625867`: **375/375 PASS**, Ruff clean, v2 Svelte/plugin validation PASS, root + v2 Windows portable PASS.
+- Current v2 portable SHA-256: `87a59e0959cd6f7a96971055b619c254aff1d1876ddbe68eae0dc27d811b261e`; artifact digest `sha256:54acf4d448a0db4744fc10c3bde20f83c419bca538085c30f8c101bd0dbadb4e`.
+- Next: Mod Library/D2PFX smoke, then full Windows/Dota smoke. Beta/main untouched.

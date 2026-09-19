@@ -52,3 +52,8 @@
 - Follow-up `f6c7b63c0f42152f8ce20d891371434e0e5998ce` keeps installed D2PFX preview filenames/MIME aligned with downloaded image type.
 - CI #220 / `35466711651`: **374/374 PASS**, Ruff clean, v2 validation/Svelte/plugin builds PASS, root + v2 Windows portable PASS.
 - Current D2PFX-corrected v2 portable SHA-256: `2f976b02ef49310f7f2c67a1f643e9bccbf47d98f1a6f3a6f184b563c7d3aee3`.
+
+- User requested the old Mod Library list presentation back while keeping the v2 cards. Implemented at `1354b8549f0e546faed062794ba7669d0f0a5ba0`.
+- Mod Library now defaults to a compact legacy-style grouped List view with collapsible Standard/Collections/D2PFX/VPK sections, selected/total counts, checkbox/favorite/details controls, source/category metadata, and a 64x36 thumbnail only when a preview exists. Cards remains toggleable; choice persists in local storage.
+- CI #221 / `35467625867`: **375/375 PASS**, Ruff clean, v2 Svelte/plugin validation PASS, root + v2 Windows portable PASS.
+- Current list-view test ZIP SHA-256: `87a59e0959cd6f7a96971055b619c254aff1d1876ddbe68eae0dc27d811b261e`; GitHub v2 artifact digest `sha256:54acf4d448a0db4744fc10c3bde20f83c419bca538085c30f8c101bd0dbadb4e`.
