@@ -118,6 +118,18 @@ def test_v2_stage2_collection_symlinks_are_not_followed():
         assert env["_discover_directory_mod_entries"]() == [("Pack", str(collection))]
 
 
+def test_v2_stage2_mod_metadata_reads_are_bounded_and_identity_checked():
+    source = MODS_SHARED.read_text(encoding="utf-8")
+    for token in (
+        "D2PFX_METADATA_MAX_FILE_BYTES",
+        "security.read_bounded_regular_file(path, max_bytes=D2PFX_METADATA_MAX_FILE_BYTES)",
+        "data = config.read_json_file(path)",
+        "sidecar = config.read_json_file(sidecar_path)",
+    ):
+        assert token in source
+    assert 'with open(path, encoding="utf-8-sig", errors="replace")' not in source
+
+
 def test_v2_stage2_mod_model_keeps_custom_vpk_categories_and_no_blanket_terrain_conflict():
     source = MODS_SHARED.read_text(encoding="utf-8")
     for token in (

@@ -7,13 +7,14 @@ import tempfile
 import re
 import sys
 
-from core import base, config, constants, utils
+from core import base, config, constants, security, utils
 
 VPK_COLLECTION_DIR = "_VPK Mods"
 NESTED_VPK_PREFIX = "nested-vpk::"
 NESTED_DIR_PREFIX = "nested-mod::"
 D2PFX_MANIFEST_FILE = "d2pfx-manifest.json"
 D2PFX_MODS_LIST_FILE = "Mods.txt"
+D2PFX_METADATA_MAX_FILE_BYTES = 8 * 1024 * 1024
 VPK_IDENTITY_DB_FILE = "vpk-identities.json"
 VPK_HASH_CACHE_FILE = "vpk-hash-cache.json"
 
@@ -488,42 +489,42 @@ def _parse_mods_txt(path):
     mapping_pattern = re.compile(r"^\s*[•*\-]\s*(.+?)\s*(?:➜|->|=>)\s*(.+?)\s*$")
 
     try:
-        with open(path, encoding="utf-8-sig", errors="replace") as file:
-            for raw_line in file:
-                line = raw_line.strip()
-                if not line:
-                    continue
+        raw = security.read_bounded_regular_file(path, max_bytes=D2PFX_METADATA_MAX_FILE_BYTES)
+        for raw_line in raw.decode("utf-8-sig", errors="replace").splitlines():
+            line = raw_line.strip()
+            if not line:
+                continue
 
-                category_match = re.match(r"^(.+?):$", line)
-                if category_match:
-                    candidate = category_match.group(1).strip()
-                    if candidate.casefold() not in {"total mods", "generated"}:
-                        current_category = candidate
-                    continue
+            category_match = re.match(r"^(.+?):$", line)
+            if category_match:
+                candidate = category_match.group(1).strip()
+                if candidate.casefold() not in {"total mods", "generated"}:
+                    current_category = candidate
+                continue
 
-                match = mapping_pattern.match(raw_line)
-                if not match:
-                    continue
+            match = mapping_pattern.match(raw_line)
+            if not match:
+                continue
 
-                display_name = match.group(1).strip()
-                file_names = [
-                    os.path.basename(item.strip())
-                    for item in match.group(2).split(",")
-                    if item.strip().lower().endswith(".vpk")
-                ]
-                part_count = len(file_names)
+            display_name = match.group(1).strip()
+            file_names = [
+                os.path.basename(item.strip())
+                for item in match.group(2).split(",")
+                if item.strip().lower().endswith(".vpk")
+            ]
+            part_count = len(file_names)
 
-                for part_index, file_name in enumerate(file_names, start=1):
-                    metadata = {
-                        "display_name": display_name,
-                        "source": "Dota2PornFxWeb Mods.txt",
-                        "part_index": part_index,
-                        "part_count": part_count,
-                        "identified": True,
-                    }
-                    if current_category:
-                        metadata["category"] = current_category
-                    mappings[file_name.casefold()] = metadata
+            for part_index, file_name in enumerate(file_names, start=1):
+                metadata = {
+                    "display_name": display_name,
+                    "source": "Dota2PornFxWeb Mods.txt",
+                    "part_index": part_index,
+                    "part_count": part_count,
+                    "identified": True,
+                }
+                if current_category:
+                    metadata["category"] = current_category
+                mappings[file_name.casefold()] = metadata
     except Exception:
         return {}
 
@@ -547,12 +548,7 @@ def _add_manifest_file_mapping(mappings, file_name, value, defaults=None):
 
 def _parse_d2pfx_manifest(path):
     """Read a flexible d2pfx-manifest.json file."""
-    try:
-        with open(path, encoding="utf-8-sig") as file:
-            data = json.load(file)
-    except Exception:
-        return {}
-
+    data = config.read_json_file(path)
     if not isinstance(data, dict):
         return {}
 
@@ -846,14 +842,10 @@ def _load_vpk_metadata(vpk_path, pack_maps, identity_db):
     metadata = _find_pack_metadata(vpk_path, pack_maps)
     sidecar_path = f"{vpk_path}.minify.json"
 
-    try:
-        with open(sidecar_path, encoding="utf-8-sig") as file:
-            sidecar = json.load(file)
-            if isinstance(sidecar, dict):
-                metadata.update(sidecar)
-                metadata["identified"] = True
-    except Exception:
-        pass
+    sidecar = config.read_json_file(sidecar_path)
+    if isinstance(sidecar, dict) and sidecar:
+        metadata.update(sidecar)
+        metadata["identified"] = True
 
     metadata = _normalize_metadata(metadata)
     if metadata.get("display_name"):
