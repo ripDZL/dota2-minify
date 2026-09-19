@@ -56,7 +56,8 @@ def test_v2_never_auto_injects_prelaunch_into_steam_options():
     end = steam.index("\ndef fix_launch_options(", start)
     compatibility_shim = steam[start:end]
     assert "return False" in compatibility_shim
-    assert "LaunchOptions" not in compatibility_shim
+    assert '"UserLocalConfigStore"' not in compatibility_shim
+    assert "vdf.dump" not in compatibility_shim
     assert "add_prelaunch_to_launch_options(" not in patch
     assert all(item.get("key") != "patch_on_launch" for item in settings)
 
