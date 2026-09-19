@@ -444,4 +444,24 @@
     object-fit: contain;
     display: block;
   }
+
+  @media (max-width: 960px) {
+    .mods-grid-container {
+      padding: 6px;
+    }
+
+    .mods-grid {
+      grid-template-columns: minmax(0, 1fr);
+      gap: 6px;
+    }
+
+    .lightbox-backdrop {
+      padding: 8px;
+    }
+
+    .lightbox-card {
+      max-width: calc(100vw - 16px);
+      max-height: calc(100vh - 16px);
+    }
+  }
 </style>

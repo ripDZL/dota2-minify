@@ -114,4 +114,34 @@
     background: var(--btn-active-bg, #000);
     color: var(--btn-active-text, #fff);
   }
+
+  @media (max-width: 960px) {
+    .top-bar {
+      height: 34px;
+      padding: 0 6px;
+      gap: 6px;
+    }
+
+    .cat-info p {
+      display: none;
+    }
+
+    .cat-info h3 {
+      max-width: 180px;
+      overflow: hidden;
+      font-size: 13px;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .top-actions input {
+      width: 120px;
+      height: 22px;
+    }
+
+    .action-btn {
+      height: 22px;
+      padding: 0 6px;
+    }
+  }
 </style>

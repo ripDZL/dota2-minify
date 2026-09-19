@@ -96,4 +96,25 @@
     background: var(--accent, #17bebe);
     color: var(--accent-text, #000);
   }
+
+  @media (max-width: 960px) {
+    .sidebar {
+      width: 148px;
+    }
+
+    .sidebar-search {
+      height: 34px;
+      padding: 0 5px;
+    }
+
+    .sidebar-search input {
+      height: 22px;
+      font-size: 11px;
+    }
+
+    .category-item {
+      padding: 5px 6px;
+      font-size: 11px;
+    }
+  }
 </style>

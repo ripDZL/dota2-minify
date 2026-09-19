@@ -260,4 +260,39 @@
     opacity: 0.5;
     cursor: not-allowed;
   }
+
+  @media (max-width: 960px) {
+    .mod-card {
+      display: grid;
+      grid-template-columns: 112px minmax(0, 1fr) 120px;
+      align-items: center;
+      gap: 8px;
+      padding: 6px;
+    }
+
+    .preview-box {
+      width: 112px;
+      height: 66px;
+      margin: 0;
+    }
+
+    .card-details {
+      min-width: 0;
+      margin: 0;
+    }
+
+    .mod-title,
+    .mod-meta,
+    .mod-tags {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .card-actions {
+      margin: 0;
+      align-self: stretch;
+      align-items: center;
+    }
+  }
 </style>
