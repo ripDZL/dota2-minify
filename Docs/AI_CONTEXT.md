@@ -33,3 +33,7 @@
 - v2 fork behaviors preserved in staging: user-facing `v21.4-hardening` identity with internal `VERSION = "2rc4"`, manual prelaunch/no Steam auto-injection, Main Menu second `#FrontpageContents` rule.
 - CI #191 / `35438400128`: **327/327 PASS**, root Ruff/compile PASS, v2 Ruff/compile PASS, Svelte + D2PFX plugin builds PASS, rc7 Windows portable PASS, v2rc4 Windows portable PASS.
 - v2 artifact digest: `sha256:41e328b86a6f7448508c0dc040a94e562dfe97776f819d1ac7683b9a126da884`; rc7 artifact digest: `sha256:7f6b73eb1b4413916a30a7f99a3af302f0442c5ae8fd446cddea24b452270a5c`.
+
+- v2 launch regression fixed at `0cf84afbcc67a2097753ef8648a84bc2f6533512`: staged `core/base.py` had literal `\\n` escapes after a comment, so `VERSION/FORK_BUILD/DISPLAY_VERSION/TITLE` were commented out at runtime despite source/compile checks. Identity test now imports the staged module and asserts runtime attributes.
+- CI #192 / `35443577402`: **327/327 PASS**, root + v2 Ruff/compile PASS, Svelte/plugin builds PASS, rc7 + v2 Windows portable PASS.
+- Fixed v2 portable SHA-256: `77ac3af45ecd9e8eb1baff6bef4e1b6c8402b4374c1c766dda83c96af972ba00`.

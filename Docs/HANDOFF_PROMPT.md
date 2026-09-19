@@ -28,3 +28,6 @@
 - CI #191 / `35438400128`: **327/327 PASS**; root + v2 Ruff/compile PASS; Svelte/plugin builds PASS; rc7 + v2rc4 Windows portable PASS.
 - v2 artifact digest: `sha256:41e328b86a6f7448508c0dc040a94e562dfe97776f819d1ac7683b9a126da884`.
 - Next v2 stage: restore points/rollback, collision report/index, Dark Terrain resource-level yielding, then Black-Plum CSS/min-fit and Dota smoke.
+
+- v2 startup regression from the first test ZIP is fixed at `0cf84afbcc67a2097753ef8648a84bc2f6533512`: literal `\\n` escapes in staged `core/base.py` had commented out identity constants. Runtime import test now guards `TITLE`/version attributes.
+- CI #192 / `35443577402`: **327/327 PASS**, Svelte/plugin build PASS, rc7 + v2 Windows portable PASS. Replacement v2 portable SHA-256 `77ac3af45ecd9e8eb1baff6bef4e1b6c8402b4374c1c766dda83c96af972ba00`.

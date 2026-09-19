@@ -28,3 +28,5 @@
 - [ ] Rebuild Black-Plum as CSS theme and retain the same minimum-window fit invariant in v2.
 - [ ] Residual hostile-input/path-race review and Dota smoke.
 - [ ] Beta -> main only after validation and explicit approval.
+
+- [x] Fix v2 runtime startup `base.TITLE` regression caused by literal escaped newlines in staged base identity; CI #192 PASS and replacement v2 portable built.

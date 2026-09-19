@@ -27,3 +27,6 @@
 - [x] v2 identity/manual-prelaunch/Main Menu fork behaviors preserved.
 - [x] CI #191 / `35438400128`: **327/327 PASS**; root + v2 Ruff/compile PASS; Svelte/plugin build PASS; rc7 + v2rc4 Windows portable builds PASS.
 - [ ] Next v2 work: transactional restore/rollback + collision index/report + Dark Terrain resource-yield semantics, then Black-Plum CSS/min-fit polish and Dota smoke.
+
+- [x] v2 runtime startup fix `0cf84afbcc67a2097753ef8648a84bc2f6533512`: real newlines restored in staged `core/base.py`; runtime import regression test added.
+- [x] CI #192 / `35443577402`: **327/327 PASS**; both validation jobs and both Windows portable jobs PASS. Fixed v2 portable SHA-256 `77ac3af45ecd9e8eb1baff6bef4e1b6c8402b4374c1c766dda83c96af972ba00`.
