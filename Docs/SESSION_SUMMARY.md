@@ -39,3 +39,10 @@
 - CI #218 / `35464400624`: **369/369 PASS**, Ruff clean, both validation jobs PASS, root + v2 Windows portable builds PASS.
 - Current v2 portable SHA-256: `2acb39b7099b125a8583e727774cd112873c234ca9c22c36344671c3a25f5007`.
 - Remaining gates: full Windows/Dota smoke and private _09 foliage alias human smoke. Beta/main remain untouched.
+
+- User screenshot smoke exposed v2 D2PFX blank previews, over-dense grid, and missing Updated-date labels.
+- Fixed at `fced5d8c412b493bd1a7ca2dd19f82e02d182f91`: correct data-branch JPG preview source + root fallback, fork date labels/mixed-date sorting, 4/3/2/1 responsive grid, visible action status, request-ordered search, and post-success install state.
+- Installed preview extension/MIME fix `f6c7b63c0f42152f8ce20d891371434e0e5998ce` avoids saving downloaded JPG bytes as `preview.webp`.
+- CI #220 / `35466711651`: **374/374 PASS**, Ruff clean, v2 validation/Svelte/plugin builds PASS, root + v2 Windows portable PASS.
+- Current v2 portable SHA-256: `2f976b02ef49310f7f2c67a1f643e9bccbf47d98f1a6f3a6f184b563c7d3aee3`; GitHub v2 artifact digest `sha256:281b088b67efed0502cc4b6ec859e0363c75a470b37aa788e919c72810d0135c`.
+- Next: D2PFX re-smoke, then full Windows/Dota smoke. Private foliage alias human smoke remains independent. Beta/main untouched.

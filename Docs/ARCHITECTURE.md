@@ -32,3 +32,6 @@
 - v2 untrusted local-file reads use bounded regular-file opens with pre-open `stat`, no-follow where available, post-open `fstat`, and device/inode identity comparison; applied to profiles, D2PFX cache, JSON/JSONC mod config, remap rules, and mod metadata.
 - v2 portable path validation rejects traversal plus Windows ADS/device-name/control/trailing-dot-space aliases before normalization; remap glob characters remain supported.
 - D2PFX cursor publication revalidates source identity after open; recursive nested-mod discovery does not follow symlink directories.
+
+- v2 D2PFX preview contract: catalogue `.webp` names are served from the D2PFX data-branch JPG mirror after `.webp -> .jpg` normalization; do not point normalized JPG names at main-branch `assets/previews` WebP files. Keep category URL first plus data-root fallback.
+- v2 D2PFX UI parity: desktop catalogue is capped at 4 columns with 3/2/1 responsive breakpoints; 960px stays one-column compact. Cards surface fork Updated-date metadata and visible preview-failure state. Async search is request-ordered, and install state is not persisted before publication succeeds.

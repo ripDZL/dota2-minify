@@ -27,10 +27,11 @@
 - [x] Preserve manual `prelaunch`; disable automatic Steam launch-option injection.
 - [x] Rebuild Black-Plum as CSS theme and retain the same minimum-window fit invariant in v2.
 - [x] Residual hostile-input/path-race review; CI #218 **369/369 PASS**, both Windows portable builds PASS.
-- [ ] Full Windows/Dota smoke.
+- [x] Fix v2 D2PFX screenshot regression: working JPG previews/fallback, Updated-date parity, max-4 desktop grid, action feedback/search race/install-state fixes; CI #220 **374/374 PASS**, both Windows portable builds PASS.
+- [ ] Re-smoke corrected D2PFX Browser, then full Windows/Dota smoke.
 - [ ] Beta -> main only after validation and explicit approval.
 
 - [x] Fix v2 runtime startup `base.TITLE` regression caused by literal escaped newlines in staged base identity; CI #192 PASS and replacement v2 portable built.
 - [x] Diagnose/fix the v2 Windows PyInstaller dynamic-library stall; CI #214 PASS on `472bfe794d4e0deecfc1e5deb352943737e181e6`.
-- [x] Produce the current parity-complete v2 Windows portable from `541d8b4f20e48a1f62dc4052f6347fd450a5ba55`; SHA-256 `2acb39b7099b125a8583e727774cd112873c234ca9c22c36344671c3a25f5007`.
-- [ ] User Windows/Dota smoke of the current parity-complete v2 ZIP.
+- [x] Produce the current D2PFX-corrected parity-complete v2 Windows portable from `f6c7b63c0f42152f8ce20d891371434e0e5998ce`; SHA-256 `2f976b02ef49310f7f2c67a1f643e9bccbf47d98f1a6f3a6f184b563c7d3aee3`.
+- [ ] User D2PFX re-smoke + Windows/Dota smoke of the current parity-complete v2 ZIP.

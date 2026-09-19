@@ -46,3 +46,9 @@
 - Recursive nested-mod discovery already skips symlink directories; no scanner traversal change was needed.
 - CI #218 / `35464400624`: **369/369 PASS**, Ruff clean, v2 validation PASS, root Windows portable PASS, v2 Windows portable PASS.
 - Current parity-complete v2 portable SHA-256: `2acb39b7099b125a8583e727774cd112873c234ca9c22c36344671c3a25f5007`.
+
+- User D2PFX screenshot smoke found blank previews, over-dense desktop cards, and missing fork Updated-date labels in the v2 plugin.
+- Root cause: v2 changed catalogue `.webp` names to `.jpg` but used the main-branch `assets/previews` WebP tree. Fix `fced5d8c412b493bd1a7ca2dd19f82e02d182f91` restores the data-branch JPG preview tree + root fallback, Updated-date formatting, max-4 desktop layout, visible status, stale-search protection, and post-success install state.
+- Follow-up `f6c7b63c0f42152f8ce20d891371434e0e5998ce` keeps installed D2PFX preview filenames/MIME aligned with downloaded image type.
+- CI #220 / `35466711651`: **374/374 PASS**, Ruff clean, v2 validation/Svelte/plugin builds PASS, root + v2 Windows portable PASS.
+- Current D2PFX-corrected v2 portable SHA-256: `2f976b02ef49310f7f2c67a1f643e9bccbf47d98f1a6f3a6f184b563c7d3aee3`.

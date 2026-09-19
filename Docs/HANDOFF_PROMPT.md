@@ -4,7 +4,7 @@
 - Branches must remain exactly: `v21.4-hardening`, `beta`, `main`.
 - Work only on `v21.4-hardening` unless the user explicitly approves promotion.
 - Re-fetch all 3 branch heads before edits.
-- Latest validated code head before handoff docs: `541d8b4f20e48a1f62dc4052f6347fd450a5ba55`.
+- Latest validated code head before handoff docs: `f6c7b63c0f42152f8ce20d891371434e0e5998ce`.
 - Known untouched promotion heads at handoff:
   - `beta`: `442d36dcc902f6436c6404f2947091663c254cc5`
   - `main`: `a26bc88a0d412e357965f29488b83a7f9093e11f`
@@ -38,7 +38,7 @@
   - Collision indexing/report and patch preflight UI.
   - Dark Terrain resource-level yielding.
   - Black-Plum v2 theme and 960x680 minimum-fit behavior.
-  - Compact D2PFX 960px layout.
+  - D2PFX browser parity: max-4 desktop grid / compact 960px layout, working data-branch JPG previews + fallback, fork Updated-date labels, visible action status, stale-search protection, post-success install state, correct installed-preview MIME/extension.
   - Hardened Remove Foliage RERL behavior.
   - Local-only `_09` foliage alias smoke generator in Developer Tools.
   - Migration/workspace parity, state filters, sorting, selected counts.
@@ -67,6 +67,8 @@
   - `7129a85c2a8e354b8bf5329e9368eecd22157fc0` Developer Tools parity.
   - `e999af8443a498a65f529df104b0cf12f0645cdf` Home Control Panel.
   - `ebbca811b41ad334a1e1ac01824939c7d77914ff` restore safety with custom output paths.
+  - `fced5d8c412b493bd1a7ca2dd19f82e02d182f91` D2PFX preview/date/layout/state parity.
+  - `f6c7b63c0f42152f8ce20d891371434e0e5998ce` preserve installed D2PFX preview image type.
 
 ## Current CI / Windows build
 - PyInstaller hosted-Windows DLL import-probe stall remains fixed by `472bfe794d4e0deecfc1e5deb352943737e181e6`.
@@ -76,13 +78,16 @@
   - `94a166544ce8455441abc9457f6e04a8e1ea4644`: cursor source identity check.
   - `734f083d53b4cd15df37956b1bc6cd70a801440a`: bounded generic JSON/JSONC + remap reads.
   - `541d8b4f20e48a1f62dc4052f6347fd450a5ba55`: bounded D2PFX/sidecar mod metadata reads.
-- CI #218 / run `35464400624`: **SUCCESS**.
-  - root `validate`: SUCCESS, **369 tests passed**, Ruff clean.
-  - `validate-v2-staging`: SUCCESS.
+- CI #220 / run `35466711651`: **SUCCESS**.
+  - root `validate`: SUCCESS, **374 tests passed**, Ruff clean.
+  - `validate-v2-staging`: SUCCESS, including Svelte + D2PFX plugin builds.
   - root `build-windows-portable`: SUCCESS.
   - `build-v2-windows-portable`: SUCCESS.
-- Current v2 inner portable ZIP SHA-256: `2acb39b7099b125a8583e727774cd112873c234ca9c22c36344671c3a25f5007`.
-- GitHub v2 artifact digest: `sha256:cb5b99a3e5bcc06dcbce49eedb7c08e7480c0f6fbf82f8d74d921ffd134fd627`.
+- User screenshot exposed a v2 D2PFX regression: catalogue `.webp` names were converted to `.jpg` but pointed at the main-branch WebP directory, producing blank cards. v2 now uses the D2PFX data-branch JPG mirror and root fallback, matching the prior fork.
+- Fork Updated-date labels are restored in v2; mixed timestamp/ISO sort inputs are normalized.
+- D2PFX desktop cards are capped at 4 columns (3/2/1 at narrower breakpoints), failed previews show a fallback state, install/refresh feedback is visible, stale search responses are ignored, mod state is written only after successful install, and installed preview files keep their real image extension.
+- Current v2 inner portable ZIP SHA-256: `2f976b02ef49310f7f2c67a1f643e9bccbf47d98f1a6f3a6f184b563c7d3aee3`.
+- GitHub v2 artifact digest: `sha256:281b088b67efed0502cc4b6ec859e0363c75a470b37aa788e919c72810d0135c`.
 
 ## Test ZIP rule
 - User explicitly wants a v2 Windows ZIP **only when the parity work is done enough to test and the current build succeeds**.
@@ -106,8 +111,8 @@
 - Never claim foliage PASS without an actual Dota smoke test from the user.
 
 ## Next actions
-- Current parity-complete v2 Windows test ZIP is built from `541d8b4f20e48a1f62dc4052f6347fd450a5ba55`; CI #218 / `35464400624`.
-- Residual hostile-input/path-race review is complete; next gate is user Windows/Dota smoke of this ZIP.
+- Current parity-complete v2 Windows test ZIP is built from `f6c7b63c0f42152f8ce20d891371434e0e5998ce`; CI #220 / `35466711651`.
+- Next immediate gate: user re-smoke of the corrected D2PFX Browser (previews, Updated labels, layout, install/remove/toggle), then continue full Windows/Dota smoke.
 - Private foliage alias human smoke remains independent and must not be claimed PASS without actual Dota testing.
 - Fix smoke findings only on `v21.4-hardening`.
 - Keep `beta` and `main` untouched unless the user explicitly approves promotion.

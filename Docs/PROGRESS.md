@@ -40,3 +40,9 @@
 - [x] Final security stack validated at `541d8b4f20e48a1f62dc4052f6347fd450a5ba55`; CI #218 / `35464400624`: **369/369 PASS**, both validation jobs and both Windows portable builds PASS.
 - [x] Current parity-complete v2 portable SHA-256: `2acb39b7099b125a8583e727774cd112873c234ca9c22c36344671c3a25f5007`.
 - [ ] Next: full Windows/Dota smoke; private foliage alias smoke remains a separate human gate.
+
+- [x] D2PFX screenshot regression fixed at `fced5d8c412b493bd1a7ca2dd19f82e02d182f91`: preview URLs now use D2PFX data-branch JPG mirror/root fallback; fork Updated-date labels restored; desktop grid capped at 4 columns; visible action feedback + stale-search protection + post-success install state added.
+- [x] Installed D2PFX preview extension/MIME parity fixed at `f6c7b63c0f42152f8ce20d891371434e0e5998ce`.
+- [x] CI #220 / `35466711651`: **374/374 PASS**, Ruff clean, both validation jobs and both Windows portable builds PASS.
+- [x] Current v2 portable SHA-256: `2f976b02ef49310f7f2c67a1f643e9bccbf47d98f1a6f3a6f184b563c7d3aee3`.
+- [ ] Next: user re-smoke corrected D2PFX Browser, then continue full Windows/Dota smoke; private foliage alias remains separate.
