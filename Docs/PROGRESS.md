@@ -84,3 +84,7 @@
 - [x] D2PFX list organization: `257010615572a61e54ef4473f853d9636da2789b` creates one list section per stored D2PFX category with humanized labels and existing section controls.
 - [x] CI #230 / `35474054089`: **385/385 PASS**, Ruff clean, v2 validation/Svelte/plugin PASS, root + v2 Windows portable PASS.
 - [x] Current v2 portable SHA-256: `aa7fd595767ff61af453f75ad6212c5c354617425ecc55850cdadd59c91fda53`.
+
+- [x] `0db87a1bbe4b8e79bd3f49f4afa924fa6aea3e86`: D2PFX Mod Library now uses one collapsible `D2PFX Mods` parent and category-organized internal sections with counts/All/None.
+- [x] CI #231 / `35474663691`: **385/385 PASS**, Ruff clean, both validation jobs and both Windows portable builds PASS.
+- [x] Current v2 portable SHA-256: `95653076e5874def8cc2e4507e5917cf1e51f3e52d54c47f5da0bb233b3a2108`.

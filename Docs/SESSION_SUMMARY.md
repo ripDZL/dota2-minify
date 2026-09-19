@@ -93,3 +93,9 @@
 - CI #230 / `35474054089`: **385/385 PASS**, Ruff clean, v2 validation/Svelte/plugin PASS, both Windows portable builds PASS.
 - Current v2 portable SHA-256 `aa7fd595767ff61af453f75ad6212c5c354617425ecc55850cdadd59c91fda53`; v2 artifact digest `sha256:d8f75b4431e00dc2f75dda1139fd694ed194c27d7e742ec15e1b12c183057823`.
 - Next: user smoke of D2PFX category sections; continue PATCH/full Dota smoke. Beta/main untouched.
+
+- User clarified D2PFX layout should be one collapsible parent, not one top-level section per category.
+- `0db87a1bbe4b8e79bd3f49f4afa924fa6aea3e86` restores that hierarchy: one `D2PFX Mods` collapsible, category subheaders inside, per-category counts and All/None retained.
+- CI #231 / `35474663691`: **385/385 PASS**, Ruff clean, v2 validation/Svelte/plugin PASS, root + v2 Windows portable PASS.
+- Current v2 portable SHA-256: `95653076e5874def8cc2e4507e5917cf1e51f3e52d54c47f5da0bb233b3a2108`; artifact digest `sha256:a418597a9181c826595fdcb48e34d5e3a59bcf8b7599415395b08f23472770ff`.
+- Beta/main untouched. Next: user D2PFX nesting smoke, then PATCH/full Dota smoke.

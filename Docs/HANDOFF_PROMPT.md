@@ -4,7 +4,7 @@
 - Branches must remain exactly: `v21.4-hardening`, `beta`, `main`.
 - Work only on `v21.4-hardening` unless the user explicitly approves promotion.
 - Re-fetch all 3 branch heads before edits.
-- Latest validated code head before handoff docs: `257010615572a61e54ef4473f853d9636da2789b`.
+- Latest validated code head before handoff docs: `0db87a1bbe4b8e79bd3f49f4afa924fa6aea3e86`.
 - Known untouched promotion heads at handoff:
   - `beta`: `442d36dcc902f6436c6404f2947091663c254cc5`
   - `main`: `a26bc88a0d412e357965f29488b83a7f9093e11f`
@@ -168,3 +168,13 @@
 - Current v2 portable SHA-256: `aa7fd595767ff61af453f75ad6212c5c354617425ecc55850cdadd59c91fda53`.
 - Current GitHub v2 artifact digest: `sha256:d8f75b4431e00dc2f75dda1139fd694ed194c27d7e742ec15e1b12c183057823`.
 - Next immediate gate: user smoke of D2PFX category sections plus ongoing PATCH/full Dota smoke.
+
+
+- D2PFX Mod Library grouping correction: `0db87a1bbe4b8e79bd3f49f4afa924fa6aea3e86`.
+  - One top-level collapsible `D2PFX Mods` section.
+  - Installed D2PFX mods are organized inside it by stored category metadata.
+  - Category subheaders are not top-level collapsibles; each retains selected/total counts and All/None controls.
+- CI #231 / run `35474663691`: **SUCCESS**, **385/385 tests passed**, Ruff clean, v2 validation/Svelte/plugin PASS, both Windows portable builds PASS.
+- Current v2 portable SHA-256: `95653076e5874def8cc2e4507e5917cf1e51f3e52d54c47f5da0bb233b3a2108`.
+- Current GitHub v2 artifact digest: `sha256:a418597a9181c826595fdcb48e34d5e3a59bcf8b7599415395b08f23472770ff`.
+- Next immediate gate: user smoke of the corrected single D2PFX section/category layout, then continue PATCH/full Dota smoke.

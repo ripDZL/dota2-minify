@@ -88,3 +88,7 @@
 - D2PFX Mod Library category organization fixed at `257010615572a61e54ef4473f853d9636da2789b`: list mode now groups installed D2PFX mods by their stored category ID, with humanized per-category section labels and inherited All/None + selected/total controls.
 - CI #230 / `35474054089`: **385/385 PASS**, Ruff clean, v2 validation/Svelte/plugin PASS, both Windows portable builds PASS.
 - Current v2 portable SHA-256: `aa7fd595767ff61af453f75ad6212c5c354617425ecc55850cdadd59c91fda53`.
+
+- D2PFX Mod Library grouping corrected at `0db87a1bbe4b8e79bd3f49f4afa924fa6aea3e86`: one top-level collapsible `D2PFX Mods` section with non-collapsible category subheaders inside; per-category counts and All/None retained.
+- CI #231 / `35474663691`: **385/385 PASS**, Ruff clean, v2 validation/Svelte/plugin PASS, root + v2 Windows portable PASS.
+- Current v2 portable SHA-256: `95653076e5874def8cc2e4507e5917cf1e51f3e52d54c47f5da0bb233b3a2108`.

@@ -59,3 +59,6 @@
 - [x] Group installed D2PFX mods by D2PFX category in legacy list view instead of one name-sorted D2PFX bucket.
 - [x] Preserve per-D2PFX-category selected/total counts and All/None controls; CI #230 **385/385 PASS**, both Windows builds PASS.
 - [ ] User smoke D2PFX category organization; continue PATCH/full Dota smoke.
+
+- [x] Correct D2PFX list nesting: single top-level D2PFX collapsible with category subheaders + per-category All/None; CI #231 **385/385 PASS**.
+- [ ] User smoke corrected D2PFX category nesting, then continue full Windows/PATCH/Dota smoke.

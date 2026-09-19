@@ -54,3 +54,5 @@
 - Hero default/D2PFX selection contract: the Hero Mods helper must derive suppression from indexed virtual-resource overlap with currently enabled D2PFX mods. Do not infer replacement from hero-name strings or mere D2PFX installation. Disabled D2PFX mods must not suppress Hero defaults.
 
 - D2PFX Mod Library grouping contract: list-mode D2PFX grouping keys are `d2pfx::<category>`, sourced from the installed mod's normalized D2PFX category metadata. Do not collapse all D2PFX installs into one bucket or infer category from display names. Each category is an independent list section with complete-membership counts and All/None actions.
+
+- D2PFX list hierarchy: D2PFX is one top-level Mod Library section. Category metadata is rendered as internal non-collapsible subgroup headers, not separate top-level sections; category All/None acts on the complete category even when rows are filtered.
