@@ -7,8 +7,7 @@
 - Current heads:
   - `v21.4-hardening`: `c12197d660fdee3ddc4057ff30b5f8f2afe923cd`
   - `beta`: `442d36dcc902f6436c6404f2947091663c254cc5`
-  - `main`: `a26bc88a0d412e357965f2947091663c254cc5`
-- Correction: re-fetch `main` before doing anything; the line above is intentionally not authoritative if branch state changed.
+  - `main`: `a26bc88a0d412e357965f29488b83a7f9093e11f`
 - At session start read:
   - `Docs/AI_CONTEXT.md`
   - `Docs/TODO.md`
