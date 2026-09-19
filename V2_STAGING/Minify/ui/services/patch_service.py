@@ -5,7 +5,8 @@ import time
 from typing import Any, Dict, List
 
 import patch
-from core import output
+from core import backup_manager, mod_compat, mod_library, mods_shared, output
+from patch import manifest_utils
 
 
 class PatchService:
@@ -54,6 +55,63 @@ class PatchService:
                 self._window.evaluate_js(f"window.onLogReceived && window.onLogReceived({js_str});")
             except Exception:
                 pass
+
+    @staticmethod
+    def _selected_mods() -> List[str]:
+        mods_shared.scan_mods()
+        selected: List[str] = []
+        for mod in mods_shared.mods_with_order:
+            mod_path = mods_shared.get_mod_path(mod)
+            cfg = manifest_utils.get_mod(mod_path) if os.path.isdir(mod_path) else {}
+            if mods_shared.get_state(mod) or bool(cfg.get("always", False)):
+                selected.append(mod)
+        return selected
+
+    def get_patch_preview(self) -> Dict[str, Any]:
+        selected = self._selected_mods()
+        conflicts = mod_library.analyze_conflicts(selected)
+        return {
+            "selected_mods": [{"id": mod, "name": mod_library.display_name(mod)} for mod in selected],
+            "counts": mod_library.conflict_counts(conflicts),
+            "estimated_entries": mod_library.estimate_entry_count(selected),
+            "compatibility_rules": mod_compat.active_rules(selected),
+            "planned_resource_actions": mod_compat.planned_resource_actions(selected),
+            "conflicts": conflicts,
+        }
+
+    def get_restore_points(self) -> List[Dict[str, Any]]:
+        points = []
+        for item in backup_manager.list_restore_points():
+            selected_mods = item.get("selected_mods")
+            points.append(
+                {
+                    "id": item.get("id"),
+                    "created": item.get("created", ""),
+                    "completed": item.get("completed", ""),
+                    "status": item.get("status", ""),
+                    "reason": item.get("reason", ""),
+                    "selected_mod_count": len(selected_mods) if isinstance(selected_mods, list) else 0,
+                }
+            )
+        return points
+
+    def restore_point(self, snapshot_id: str) -> Dict[str, Any]:
+        if self._is_patching:
+            return {"success": False, "error": "Patch operation is running."}
+
+        snapshot_id = str(snapshot_id or "").strip()
+        point = next((item for item in backup_manager.list_restore_points() if item.get("id") == snapshot_id), None)
+        if not point:
+            return {"success": False, "error": "Restore point not found."}
+
+        try:
+            result = backup_manager.restore_restore_point(point["path"], restore_selection=True)
+            mods_shared.scan_mods()
+            output.add_text(f"Restored backup {snapshot_id}.", msg_type="success")
+            return {"success": True, **result}
+        except Exception as exc:
+            output.add_text(f"Restore failed: {exc}", msg_type="error")
+            return {"success": False, "error": str(exc)}
 
     def start_patch(self) -> Dict[str, Any]:
         if self._is_patching:
