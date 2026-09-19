@@ -75,3 +75,8 @@
 - [x] Full-section selection semantics verified by regression test; always/untickable states preserved.
 - [x] CI #226 / `35471631659`: **382/382 PASS**, Ruff clean, v2 validation/Svelte/plugin PASS, root + v2 Windows portable PASS.
 - [x] Current v2 portable SHA-256: `a6e3ba78514c992c32ae0b8b223aafc75c749c77054a6db75851af685b87cceb`.
+
+- [x] D2PFX-aware Hero defaults added at `811e971b7a3c2a12e0c396843adc19d26b5f6c1f`; validated/formatted head `3d4c355aed635661cf3a0fd3b89b7e9f48360de5`.
+- [x] Hero Mods `Defaults except D2PFX` uses actual virtual-resource overlap against enabled D2PFX mods; no filename/hero-name guesswork.
+- [x] CI #229 / `35473330452`: **384/384 PASS**, Ruff clean, v2 validation/Svelte/plugin PASS, root + v2 Windows portable PASS.
+- [x] Current v2 portable SHA-256: `8bec9db28cc641cfbc7a64aab32c3b37bf7835185e2983d32ad5ab87a70b6550`.

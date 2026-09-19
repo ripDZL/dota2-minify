@@ -51,3 +51,7 @@
 - [x] Section All/None acts on complete category/collection membership, not filtered rows; preserve always/untickable states.
 - [x] CI #226 / `35471631659`: **382/382 PASS**, both Windows portable builds PASS.
 - [ ] User smoke of per-section selection controls and continued PATCH/Dota behavior.
+
+- [x] Add Hero Mods `Defaults except D2PFX` bulk action using real indexed resource overlap with enabled D2PFX mods.
+- [x] CI #229 / `35473330452`: **384/384 PASS**, both Windows portable builds PASS.
+- [ ] User smoke of D2PFX-aware Hero default selection.

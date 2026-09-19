@@ -4,7 +4,7 @@
 - Branches must remain exactly: `v21.4-hardening`, `beta`, `main`.
 - Work only on `v21.4-hardening` unless the user explicitly approves promotion.
 - Re-fetch all 3 branch heads before edits.
-- Latest validated code head before handoff docs: `ca24d6a7a16add68333dced211fc6a1248fe3d7c`.
+- Latest validated code head before handoff docs: `3d4c355aed635661cf3a0fd3b89b7e9f48360de5`.
 - Known untouched promotion heads at handoff:
   - `beta`: `442d36dcc902f6436c6404f2947091663c254cc5`
   - `main`: `a26bc88a0d412e357965f29488b83a7f9093e11f`
@@ -149,3 +149,13 @@
 - Current v2 portable SHA-256: `a6e3ba78514c992c32ae0b8b223aafc75c749c77054a6db75851af685b87cceb`.
 - Current GitHub v2 artifact digest: `sha256:4cfb684d75e229b2c0e32a94956eec651d1f8d0c4a4ab7ae2f297fa0b56018b2`.
 - Next immediate gate: user smoke of per-section All/None plus ongoing Windows PATCH/Dota smoke.
+
+- Hero/D2PFX selection helper:
+  - `811e971b7a3c2a12e0c396843adc19d26b5f6c1f` adds `Defaults except D2PFX` inside the expanded `Hero Mods` section.
+  - The backend indexes real virtual resources for enabled D2PFX mods and Hero defaults; only Hero defaults with actual resource overlap are left disabled.
+  - Disabled/unselected D2PFX mods do not suppress defaults. No hero-name string guessing is used.
+  - `3d4c355aed635661cf3a0fd3b89b7e9f48360de5` is the formatted/validated code head.
+- CI #229 / `35473330452`: **SUCCESS**, **384/384 tests passed**, Ruff clean, v2 validation/Svelte/plugin PASS, both Windows portable builds PASS.
+- Current v2 portable SHA-256: `8bec9db28cc641cfbc7a64aab32c3b37bf7835185e2983d32ad5ab87a70b6550`.
+- Current GitHub v2 artifact digest: `sha256:9742a971fc1ed0994d65f5fcd15bda3c04d333084f59821651c10de13feb041b`.
+- Next immediate gate: user smoke of Hero Mods -> `Defaults except D2PFX`, then continue PATCH/full Dota smoke.

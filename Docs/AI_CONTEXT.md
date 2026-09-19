@@ -79,3 +79,8 @@
 - Legacy Mod Library per-section bulk controls restored at `ca24d6a7a16add68333dced211fc6a1248fe3d7c`: every expanded section has All/None, operating on the complete section regardless of active filters; always/untickable mods are preserved.
 - CI #226 / `35471631659`: **382/382 PASS**, Ruff clean, v2 validation/Svelte/plugin PASS, both Windows portable builds PASS.
 - Current v2 portable SHA-256: `a6e3ba78514c992c32ae0b8b223aafc75c749c77054a6db75851af685b87cceb`.
+
+- Hero Mods now has a D2PFX-aware bulk selector: `Defaults except D2PFX`.
+- Implementation `811e971b7a3c2a12e0c396843adc19d26b5f6c1f` / formatted head `3d4c355aed635661cf3a0fd3b89b7e9f48360de5`: enable all Hero defaults except those sharing actual indexed virtual resources with currently enabled D2PFX mods. Disabled D2PFX installs do not suppress defaults.
+- CI #229 / `35473330452`: **384/384 PASS**, Ruff clean, v2 validation/Svelte/plugin PASS, both Windows portable builds PASS.
+- Current v2 portable SHA-256: `8bec9db28cc641cfbc7a64aab32c3b37bf7835185e2983d32ad5ab87a70b6550`.

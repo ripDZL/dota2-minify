@@ -81,3 +81,9 @@
 - Implemented `ca24d6a7a16add68333dced211fc6a1248fe3d7c`: expanded sections show `Select in this section — All / None`; actions cover hidden/filtered members too and preserve always/untickable mods; section counts use complete membership.
 - CI #226 / `35471631659`: **382/382 PASS**, Ruff clean, v2 validation/Svelte/plugin PASS, both Windows portable builds PASS.
 - Current v2 ZIP SHA-256 `a6e3ba78514c992c32ae0b8b223aafc75c749c77054a6db75851af685b87cceb`; artifact digest `sha256:4cfb684d75e229b2c0e32a94956eec651d1f8d0c4a4ab7ae2f297fa0b56018b2`.
+
+- User requested a Hero Mods bulk action that keeps default heroes enabled unless an active D2PFX mod replaces them.
+- Added `Defaults except D2PFX` at `811e971b7a3c2a12e0c396843adc19d26b5f6c1f`; formatted/validated head `3d4c355aed635661cf3a0fd3b89b7e9f48360de5`.
+- Matching uses real content-index overlap between Hero defaults and enabled D2PFX mods; it does not guess from names and ignores disabled D2PFX mods.
+- CI #229 / `35473330452`: **384/384 PASS**, Ruff clean, v2 validation/Svelte/plugin PASS, both Windows portable builds PASS.
+- Current v2 portable SHA-256 `8bec9db28cc641cfbc7a64aab32c3b37bf7835185e2983d32ad5ab87a70b6550`; v2 artifact digest `sha256:9742a971fc1ed0994d65f5fcd15bda3c04d333084f59821651c10de13feb041b`.
