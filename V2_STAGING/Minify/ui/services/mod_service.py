@@ -117,16 +117,9 @@ class ModService:
                 if str(mods_shared.get_mod_group(mod) or "").strip().casefold() == "hero mods"
                 and not mod_library.is_d2pfx(mod)
             ]
-            selected_d2pfx = [
-                mod
-                for mod in visible
-                if mod_library.is_d2pfx(mod) and bool(mods_shared.get_state(mod))
-            ]
+            selected_d2pfx = [mod for mod in visible if mod_library.is_d2pfx(mod) and bool(mods_shared.get_state(mod))]
 
-            d2pfx_entries = {
-                mod: set(mod_library.index_contents(mod))
-                for mod in selected_d2pfx
-            }
+            d2pfx_entries = {mod: set(mod_library.index_contents(mod)) for mod in selected_d2pfx}
 
             desired: Dict[str, bool] = {}
             protected: Dict[str, List[str]] = {}
