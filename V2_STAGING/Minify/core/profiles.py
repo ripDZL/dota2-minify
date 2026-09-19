@@ -175,8 +175,7 @@ def normalize_import_bundle(data) -> tuple[dict[str, dict[str, bool]], dict]:
         return {}, {}
     try:
         if "format" in data and (
-            data.get("format") != PROFILE_EXPORT_FORMAT
-            or data.get("version") != PROFILE_EXPORT_VERSION
+            data.get("format") != PROFILE_EXPORT_FORMAT or data.get("version") != PROFILE_EXPORT_VERSION
         ):
             raise ValueError("Unsupported profile bundle format.")
         normalized = _normalize_profiles_mapping(data.get("profiles", data))

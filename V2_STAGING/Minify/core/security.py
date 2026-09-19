@@ -68,9 +68,7 @@ def verify_expected_download(path: str, source_url: str = "") -> str:
             os.remove(path)
         except OSError:
             pass
-        raise ValueError(
-            f"SHA-256 mismatch for dependency archive {basename!r}: expected {expected}, got {actual}."
-        )
+        raise ValueError(f"SHA-256 mismatch for dependency archive {basename!r}: expected {expected}, got {actual}.")
     return actual
 
 
@@ -354,9 +352,7 @@ import socket
 import urllib.parse
 
 WINDOWS_RESERVED_STEMS = (
-    {"con", "prn", "aux", "nul"}
-    | {f"com{i}" for i in range(1, 10)}
-    | {f"lpt{i}" for i in range(1, 10)}
+    {"con", "prn", "aux", "nul"} | {f"com{i}" for i in range(1, 10)} | {f"lpt{i}" for i in range(1, 10)}
 )
 
 
@@ -404,11 +400,7 @@ def validate_public_https_url(url: str, *, resolver=socket.getaddrinfo) -> None:
     except OSError as exc:
         raise ValueError("Download hostname could not be resolved safely.") from exc
 
-    addresses = {
-        str(answer[4][0]).split("%", 1)[0]
-        for answer in answers
-        if answer and len(answer) >= 5 and answer[4]
-    }
+    addresses = {str(answer[4][0]).split("%", 1)[0] for answer in answers if answer and len(answer) >= 5 and answer[4]}
     if not addresses:
         raise ValueError("Download hostname did not resolve to an address.")
     if any(not _public_ip(address) for address in addresses):

@@ -122,10 +122,7 @@ class ModService:
     def save_profile(self, name: str) -> Dict[str, Any]:
         try:
             mods_shared.scan_mods()
-            states = {
-                mod: bool(mods_shared.get_state(mod))
-                for mod in mods_shared.visually_available_mods
-            }
+            states = {mod: bool(mods_shared.get_state(mod)) for mod in mods_shared.visually_available_mods}
             saved = profiles.save_profile(name, states)
             return {"success": True, "name": str(name).strip(), "state_count": len(saved)}
         except Exception as exc:

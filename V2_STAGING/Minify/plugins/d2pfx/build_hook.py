@@ -343,4 +343,3 @@ def restore_d2pfx_cursors():
         fs.remove_path(cursor_bkup_dir)
     if restored > 0:
         output.add_text(f"Restored {restored} original cursor files.", msg_type="success", indent=True)
-

@@ -291,7 +291,11 @@ class Api:
                 name = str(asset.get("name") or "")
                 digest = str(asset.get("digest") or "")
                 url = asset.get("browser_download_url")
-                if name.casefold().endswith(".zip") and isinstance(url, str) and digest.casefold().startswith("sha256:"):
+                if (
+                    name.casefold().endswith(".zip")
+                    and isinstance(url, str)
+                    and digest.casefold().startswith("sha256:")
+                ):
                     chosen = asset
                     break
             if not chosen:
@@ -356,9 +360,7 @@ class Api:
             constants.recalc_rescomp_dirs()
             compiler_exists = os.path.isfile(constants.dota_resource_compiler_path)
             if not compiler_exists:
-                raise ValueError(
-                    f"resourcecompiler was not found at {constants.dota_resource_compiler_path}"
-                )
+                raise ValueError(f"resourcecompiler was not found at {constants.dota_resource_compiler_path}")
 
             if (base.is_linux or base.is_mac) and os.path.exists(constants.dota_resource_compiler_path):
                 import stat

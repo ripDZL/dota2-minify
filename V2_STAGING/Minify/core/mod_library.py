@@ -146,8 +146,7 @@ def _d2pfx_metadata(cfg: dict) -> dict:
             "label": cfg.get("label"),
         }
     if isinstance(browser, dict) and (
-        browser.get("browser") == "d2pfx"
-        or str(browser.get("name") or "").casefold().startswith("d2pfx")
+        browser.get("browser") == "d2pfx" or str(browser.get("name") or "").casefold().startswith("d2pfx")
     ):
         return {
             "name": browser.get("name"),

@@ -115,9 +115,7 @@ def patcher():
                 if conflict_mod in mod_list and mods_shared.get_state(conflict_mod):
                     active_conflicts = []
                     for conflicting_mod in conflicts:
-                        conflicting_id = mods_shared.resolve_mod_reference(
-                            conflicting_mod, relative_to=conflict_mod
-                        )
+                        conflicting_id = mods_shared.resolve_mod_reference(conflicting_mod, relative_to=conflict_mod)
                         if conflicting_id in mod_list and mods_shared.get_state(conflicting_id):
                             active_conflicts.append(conflicting_id)
                     if active_conflicts:
