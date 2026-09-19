@@ -131,15 +131,24 @@ def run_npm_build(no_plugins: bool) -> None:
 
 def run_pyinstaller() -> None:
     log("Running PyInstaller...")
-    executable = "uv" if shutil.which("uv") else "pyinstaller"
     dist_path = str(REPO_ROOT / "scripts" / "dist")
     work_path = str(REPO_ROOT / "scripts" / "build")
     spec_path = str(REPO_ROOT / "scripts" / "Minify.spec")
 
-    if executable == "uv":
-        cmd = ["uv", "run", "pyinstaller", "--noconfirm", "--distpath", dist_path, "--workpath", work_path, spec_path]
-    else:
-        cmd = ["pyinstaller", "--noconfirm", "--distpath", dist_path, "--workpath", work_path, spec_path]
+    # build.py already runs inside the project environment. Invoke PyInstaller
+    # through that exact interpreter instead of nesting another `uv run`
+    # process, which can stall on hosted Windows runners.
+    cmd = [
+        sys.executable,
+        "-m",
+        "PyInstaller",
+        "--noconfirm",
+        "--distpath",
+        dist_path,
+        "--workpath",
+        work_path,
+        spec_path,
+    ]
 
     result = subprocess.run(cmd, cwd=REPO_ROOT / "scripts")
     if result.returncode != 0:
