@@ -94,25 +94,23 @@
       .join(" ");
   }
 
+  function d2pfxCategoryKey(mod: any): string {
+    return String(mod?.category || "other").trim().toLowerCase() || "other";
+  }
+
   function listGroupKey(mod: any): string {
     const type = String(mod?.type || "standard").trim().toLowerCase();
     if (type === "collection") {
       const group = String(mod?.group || mod?.category || "Collections").trim() || "Collections";
       return `collection::${group}`;
     }
-    if (type === "d2pfx") {
-      const category = String(mod?.category || "other").trim().toLowerCase() || "other";
-      return `d2pfx::${category}`;
-    }
+    if (type === "d2pfx") return "d2pfx";
     return type || "standard";
   }
 
   function listGroupLabel(key: string): string {
     if (key === "standard") return "Standard Mods";
-    if (key.startsWith("d2pfx::")) {
-      const category = key.slice("d2pfx::".length);
-      return `D2PFX · ${d2pfxCategoryLabel(category)}`;
-    }
+    if (key === "d2pfx") return "D2PFX Mods";
     if (key === "vpk") return "VPK Mods";
     if (key.startsWith("collection::")) return key.slice("collection::".length) || "Collections";
     return key ? `${key.charAt(0).toUpperCase()}${key.slice(1)} Mods` : "Other Mods";
@@ -121,7 +119,7 @@
   function listGroupRank(key: string): number {
     if (key === "standard") return 0;
     if (key.startsWith("collection::")) return 1;
-    if (key.startsWith("d2pfx::")) return 2;
+    if (key === "d2pfx") return 2;
     if (key === "vpk") return 3;
     return 4;
   }
@@ -140,6 +138,26 @@
 
   function totalInListGroup(key: string): number {
     return allModsInListGroup(key).length;
+  }
+
+  function d2pfxCategoryKeys(items: typeof mods): string[] {
+    return Array.from(
+      new Set(items.filter((mod) => listGroupKey(mod) === "d2pfx").map(d2pfxCategoryKey)),
+    ).sort((a, b) => d2pfxCategoryLabel(a).localeCompare(d2pfxCategoryLabel(b)));
+  }
+
+  function allD2pfxModsInCategory(categoryKey: string) {
+    return mods.filter(
+      (mod) => listGroupKey(mod) === "d2pfx" && d2pfxCategoryKey(mod) === categoryKey,
+    );
+  }
+
+  function selectedInD2pfxCategory(categoryKey: string): number {
+    return allD2pfxModsInCategory(categoryKey).filter((mod) => mod.enabled).length;
+  }
+
+  function totalInD2pfxCategory(categoryKey: string): number {
+    return allD2pfxModsInCategory(categoryKey).length;
   }
 
   function toggleListGroup(key: string) {
@@ -243,6 +261,18 @@
   async function setListGroupSelectable(groupKey: string, value: boolean) {
     const updated = mods.map((mod) =>
       listGroupKey(mod) === groupKey && !mod.always && !mod.untickable
+        ? { ...mod, enabled: value }
+        : mod,
+    );
+    await persistModStates(updated);
+  }
+
+  async function setD2pfxCategorySelectable(categoryKey: string, value: boolean) {
+    const updated = mods.map((mod) =>
+      listGroupKey(mod) === "d2pfx" &&
+      d2pfxCategoryKey(mod) === categoryKey &&
+      !mod.always &&
+      !mod.untickable
         ? { ...mod, enabled: value }
         : mod,
     );
@@ -575,25 +605,64 @@
                 {/if}
               {/if}
             </div>
-            <div class="list-group-rows">
-              {#each groupMods as mod (mod.name)}
-                <ModListRow
-                  name={mod.name}
-                  displayName={mod.display_name}
-                  enabled={mod.enabled}
-                  always={mod.always}
-                  untickable={mod.untickable}
-                  preview={mod.preview}
-                  favorite={Boolean(mod.favorite)}
-                  category={mod.category || mod.group || ""}
-                  source={mod.source || ""}
-                  modType={mod.type || "standard"}
-                  ontoggle={(value) => toggleMod(mod.name, value)}
-                  onFavorite={toggleFavorite}
-                  onDetails={openDetails}
-                />
-              {/each}
-            </div>
+            {#if groupKey === "d2pfx"}
+              <div class="d2pfx-category-stack">
+                {#each d2pfxCategoryKeys(groupMods) as categoryKey}
+                  {@const categoryMods = groupMods.filter((mod) => d2pfxCategoryKey(mod) === categoryKey)}
+                  <div class="d2pfx-category-section">
+                    <div class="d2pfx-category-header">
+                      <span class="d2pfx-category-name">{d2pfxCategoryLabel(categoryKey)}</span>
+                      <span class="d2pfx-category-count">
+                        {selectedInD2pfxCategory(categoryKey)}/{totalInD2pfxCategory(categoryKey)} selected
+                      </span>
+                      <div class="d2pfx-category-actions" aria-label={`Selection controls for D2PFX ${d2pfxCategoryLabel(categoryKey)}`}>
+                        <button type="button" on:click={() => setD2pfxCategorySelectable(categoryKey, true)}>All</button>
+                        <button type="button" on:click={() => setD2pfxCategorySelectable(categoryKey, false)}>None</button>
+                      </div>
+                    </div>
+                    <div class="list-group-rows">
+                      {#each categoryMods as mod (mod.name)}
+                        <ModListRow
+                          name={mod.name}
+                          displayName={mod.display_name}
+                          enabled={mod.enabled}
+                          always={mod.always}
+                          untickable={mod.untickable}
+                          preview={mod.preview}
+                          favorite={Boolean(mod.favorite)}
+                          category={mod.category || mod.group || ""}
+                          source={mod.source || ""}
+                          modType={mod.type || "standard"}
+                          ontoggle={(value) => toggleMod(mod.name, value)}
+                          onFavorite={toggleFavorite}
+                          onDetails={openDetails}
+                        />
+                      {/each}
+                    </div>
+                  </div>
+                {/each}
+              </div>
+            {:else}
+              <div class="list-group-rows">
+                {#each groupMods as mod (mod.name)}
+                  <ModListRow
+                    name={mod.name}
+                    displayName={mod.display_name}
+                    enabled={mod.enabled}
+                    always={mod.always}
+                    untickable={mod.untickable}
+                    preview={mod.preview}
+                    favorite={Boolean(mod.favorite)}
+                    category={mod.category || mod.group || ""}
+                    source={mod.source || ""}
+                    modType={mod.type || "standard"}
+                    ontoggle={(value) => toggleMod(mod.name, value)}
+                    onFavorite={toggleFavorite}
+                    onDetails={openDetails}
+                  />
+                {/each}
+              </div>
+            {/if}
           {/if}
         </section>
       {/each}
@@ -902,6 +971,52 @@
     border-color: var(--accent, #17bebe);
   }
 
+  .d2pfx-category-stack {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .d2pfx-category-section + .d2pfx-category-section {
+    border-top: 1px solid var(--border-color, #000);
+  }
+
+  .d2pfx-category-header {
+    min-height: 30px;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto auto;
+    align-items: center;
+    gap: 7px;
+    padding: 3px 7px 3px 26px;
+    border-bottom: 1px solid var(--border-color, #000);
+    background: var(--bg-tertiary, var(--bg-secondary, #ececec));
+  }
+
+  .d2pfx-category-name {
+    min-width: 0;
+    overflow: hidden;
+    font-size: 11px;
+    font-weight: 700;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .d2pfx-category-count {
+    color: var(--text-muted, #777);
+    font-size: 10px;
+    white-space: nowrap;
+  }
+
+  .d2pfx-category-actions {
+    display: flex;
+    gap: 4px;
+  }
+
+  .d2pfx-category-actions button {
+    min-height: 22px;
+    padding: 0 7px;
+    font-size: 10px;
+  }
+
   .list-group-rows {
     display: flex;
     flex-direction: column;
@@ -956,6 +1071,19 @@
     }
 
     .list-group-actions button {
+      padding: 0 6px;
+    }
+
+    .d2pfx-category-header {
+      grid-template-columns: minmax(0, 1fr) auto;
+      padding-left: 18px;
+    }
+
+    .d2pfx-category-count {
+      display: none;
+    }
+
+    .d2pfx-category-actions button {
       padding: 0 6px;
     }
 
