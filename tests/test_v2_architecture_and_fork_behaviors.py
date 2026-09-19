@@ -64,7 +64,7 @@ def test_v2_never_auto_injects_prelaunch_into_steam_options():
     settings = json.loads((MINIFY / "bin" / "settings.json").read_text(encoding="utf-8"))
 
     start = steam.index("def add_prelaunch_to_launch_options(")
-    end = steam.index("\ndef fix_launch_options(", start)
+    end = steam.index("\ndef remove_minify_prelaunch_from_launch_options(", start)
     compatibility_shim = steam[start:end]
     assert "return False" in compatibility_shim
     assert '"UserLocalConfigStore"' not in compatibility_shim
