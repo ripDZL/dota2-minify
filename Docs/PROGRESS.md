@@ -66,3 +66,7 @@
 - [x] rc7 conflict-semantics parity: category/plugin overlaps no longer synthesize hard conflicts; explicit manifest conflicts still block.
 - [x] CI #224 / `35470208025`: **380/380 PASS**, Ruff clean, both validation jobs and both Windows portable builds PASS.
 - [x] Current v2 portable SHA-256: `f6ee41ed9f11c11ea24b3fdbf01a2b33c88118a6fa270b235ba6105a8af60190`.
+
+- [x] Patch activity visibility: global live PATCH/PREFLIGHT status + immediate PatchService start log + Home recent-terminal panel; `c7b319e46d06991d2d2bb69a3e31631caa869509`.
+- [x] CI #225 / `35470787033`: **381/381 PASS**, Ruff clean, both validation jobs and both Windows portable builds PASS.
+- [x] Current v2 portable SHA-256: `d6b45e3f7e77c68ff8919fae6d51761524c3d8d2f16c26f1467d342c038066af`.

@@ -4,7 +4,7 @@
 - Branches must remain exactly: `v21.4-hardening`, `beta`, `main`.
 - Work only on `v21.4-hardening` unless the user explicitly approves promotion.
 - Re-fetch all 3 branch heads before edits.
-- Latest validated code head before handoff docs: `99bf24ea8702a50b456d472189db5d7eb49fc967`.
+- Latest validated code head before handoff docs: `c7b319e46d06991d2d2bb69a3e31631caa869509`.
 - Known untouched promotion heads at handoff:
   - `beta`: `442d36dcc902f6436c6404f2947091663c254cc5`
   - `main`: `a26bc88a0d412e357965f29488b83a7f9093e11f`
@@ -129,3 +129,13 @@
 - Current v2 portable SHA-256: `f6ee41ed9f11c11ea24b3fdbf01a2b33c88118a6fa270b235ba6105a8af60190`.
 - Current GitHub v2 artifact digest: `sha256:9ee5af9352cc5a5831641f58f1bddf171d647cbe9d5cdc641f9f3ac7e4793328`.
 - Next immediate gate: retry PATCH with the same D2PFX overlap set; expected result is warning/report + continued patch unless an explicit manifest conflict exists.
+
+- Patch visibility/Home terminal follow-up: `c7b319e46d06991d2d2bb69a3e31631caa869509`.
+  - PATCH preflight has an immediate global live status bar.
+  - Confirmed patch no longer forces the UI away from the current tab.
+  - Home embeds the latest 120 terminal lines with an Open full terminal action.
+  - PatchService emits an immediate patch-start log before the worker thread.
+- CI #225 / `35470787033`: **SUCCESS**, **381 tests passed**, Ruff clean, v2 validation/Svelte/plugin PASS, both Windows portable builds PASS.
+- Current v2 portable SHA-256: `d6b45e3f7e77c68ff8919fae6d51761524c3d8d2f16c26f1467d342c038066af`.
+- Current GitHub v2 artifact digest: `sha256:1b72b6265599eaed4e3bbd4686d3e164297a974f2bf9a86b525c8c63d2e06cda`.
+- Next immediate gate: Windows PATCH smoke for live status/Home terminal plus actual patch completion with the same D2PFX overlap set.

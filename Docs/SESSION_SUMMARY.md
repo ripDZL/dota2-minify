@@ -71,3 +71,8 @@
 - Fixed at `99bf24ea8702a50b456d472189db5d7eb49fc967`: category/plugin overlaps are report-only; explicit manifest conflicts remain blocking; Dark Terrain compatibility remains independent.
 - CI #224 / `35470208025`: **380/380 PASS**, Ruff clean, v2 Svelte/plugin validation PASS, both Windows portable builds PASS.
 - Current ZIP SHA-256 `f6ee41ed9f11c11ea24b3fdbf01a2b33c88118a6fa270b235ba6105a8af60190`; v2 artifact digest `sha256:9ee5af9352cc5a5831641f58f1bddf171d647cbe9d5cdc641f9f3ac7e4793328`.
+
+- User requested visible PATCH progress and terminal output on Home.
+- Implemented `c7b319e46d06991d2d2bb69a3e31631caa869509`: immediate preflight/patch status bar, PatchService start log, Home live recent-terminal panel with full-terminal shortcut, and no automatic tab switch on patch start.
+- CI #225 / `35470787033`: **381/381 PASS**, Ruff clean, v2 validation/Svelte/plugin builds PASS, both Windows portable builds PASS.
+- Current v2 ZIP SHA-256 `d6b45e3f7e77c68ff8919fae6d51761524c3d8d2f16c26f1467d342c038066af`; v2 artifact digest `sha256:1b72b6265599eaed4e3bbd4686d3e164297a974f2bf9a86b525c8c63d2e06cda`.

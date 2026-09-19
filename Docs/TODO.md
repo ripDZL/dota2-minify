@@ -41,3 +41,8 @@
 
 - [x] Restore rc7 conflict semantics in v2: category/plugin overlaps are advisory/report-only; explicit manifest conflicts remain hard blockers. CI #224 **380/380 PASS**, both Windows builds PASS.
 - [ ] Retry PATCH with the same D2PFX overlap set; then continue full Windows/Dota smoke.
+
+- [x] Add immediate PATCH/preflight live status text and Home embedded terminal; code `c7b319e46d06991d2d2bb69a3e31631caa869509`.
+- [x] CI #225 / `35470787033`: **381/381 PASS**, Ruff clean, v2 validation/Svelte/plugin builds PASS, both Windows portable builds PASS.
+- [x] Current v2 portable SHA-256: `d6b45e3f7e77c68ff8919fae6d51761524c3d8d2f16c26f1467d342c038066af`.
+- [ ] Smoke live PATCH status/Home terminal while completing a real patch; continue Dota smoke.

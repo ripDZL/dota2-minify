@@ -71,3 +71,7 @@
 - Fix `99bf24ea8702a50b456d472189db5d7eb49fc967`: category/plugin overlaps remain visible in collision preflight/reporting but no longer populate hard `mod_conflicts_list`; explicit per-mod manifest `conflicts` still hard-stop like rc7. Dark Terrain resource yielding remains separate.
 - CI #224 / `35470208025`: **380/380 PASS**, Ruff clean, v2 Svelte/plugin validation PASS, root + v2 Windows portable PASS.
 - Current v2 ZIP SHA-256: `f6ee41ed9f11c11ea24b3fdbf01a2b33c88118a6fa270b235ba6105a8af60190`.
+
+- User requested visible patch progress and a terminal on Home. Implemented at `c7b319e46d06991d2d2bb69a3e31631caa869509`: global PATCH/PREFLIGHT live status, immediate patch-start log, Home recent-terminal panel (120 lines), full-terminal shortcut, and patch no longer auto-switches to Terminal.
+- CI #225 / `35470787033`: **381/381 PASS**, Ruff clean, v2 validation/Svelte/plugin builds PASS, root + v2 Windows portable PASS.
+- Current status/Home-terminal v2 ZIP SHA-256: `d6b45e3f7e77c68ff8919fae6d51761524c3d8d2f16c26f1467d342c038066af`.

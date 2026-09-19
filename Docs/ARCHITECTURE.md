@@ -46,3 +46,5 @@
 - v2 collision content index is a derived cache, not patch state. `config/mod-content-index.json` persistence must be best-effort: use an absolute destination and atomic temp file, retry Windows permission/sharing failures, repair read-only destination attributes where possible, retain the live index in memory, and never abort patch preflight solely because cache publication failed.
 
 - v2 conflict contract: indexed resource overlaps and plugin/category conflict metadata are advisory preflight information, not patch blockers. Preserve rc7 hard-stop behavior only for explicit per-mod manifest `conflicts`. Apply compatibility rules such as Dark Terrain yielding independently.
+
+- Patch progress contract: preflight and active patch state are globally visible from the shared App log/status stream. Home embeds a bounded recent terminal view (latest 120 entries) but the full Terminal tab remains available. Starting PATCH must emit visible status before worker-thread output and must not force a tab change.
