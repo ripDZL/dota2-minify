@@ -67,3 +67,23 @@ def test_v2_mod_library_restores_persistent_legacy_list_view_with_card_toggle():
     assert "metadata.join" in row
     assert 'class="favorite-btn"' in row
     assert 'class="details-btn"' in row
+
+
+def test_v2_mod_library_list_uses_legacy_collection_sections_and_bulk_controls():
+    grid = (WEB / "lib" / "components" / "ModGrid.svelte").read_text(encoding="utf-8")
+
+    for token in (
+        'return `collection::${group}`',
+        'key.startsWith("collection::")',
+        'return key.slice("collection::".length) || "Collections"',
+        ">Select all</button>",
+        ">Clear</button>",
+        "on:click={invertSelectable}>Invert</button>",
+        "on:click={expandAllGroups}>Expand all</button>",
+        "on:click={collapseAllGroups}>Collapse all</button>",
+        "mod.always || mod.untickable ? mod",
+    ):
+        assert token in grid
+
+    assert 'if (key === "d2pfx") return "D2PFX Mods";' in grid
+    assert 'if (key === "vpk") return "VPK Mods";' in grid

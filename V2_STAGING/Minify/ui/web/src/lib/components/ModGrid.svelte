@@ -14,7 +14,6 @@
   type ViewMode = "list" | "cards";
 
   const MOD_VIEW_KEY = "minify.mod-library.view-mode";
-  const LIST_GROUP_ORDER = ["standard", "collection", "d2pfx", "vpk"];
 
   let viewMode: ViewMode = "list";
   let collapsedGroups: Record<string, boolean> = {};
@@ -81,20 +80,27 @@
 
   function listGroupKey(mod: any): string {
     const type = String(mod?.type || "standard").trim().toLowerCase();
+    if (type === "collection") {
+      const group = String(mod?.group || mod?.category || "Collections").trim() || "Collections";
+      return `collection::${group}`;
+    }
     return type || "standard";
   }
 
   function listGroupLabel(key: string): string {
     if (key === "standard") return "Standard Mods";
-    if (key === "collection") return "Collections";
     if (key === "d2pfx") return "D2PFX Mods";
     if (key === "vpk") return "VPK Mods";
+    if (key.startsWith("collection::")) return key.slice("collection::".length) || "Collections";
     return key ? `${key.charAt(0).toUpperCase()}${key.slice(1)} Mods` : "Other Mods";
   }
 
   function listGroupRank(key: string): number {
-    const index = LIST_GROUP_ORDER.indexOf(key);
-    return index === -1 ? LIST_GROUP_ORDER.length : index;
+    if (key === "standard") return 0;
+    if (key.startsWith("collection::")) return 1;
+    if (key === "d2pfx") return 2;
+    if (key === "vpk") return 3;
+    return 4;
   }
 
   function modsInListGroup(key: string) {
@@ -169,10 +175,8 @@
     (a, b) => listGroupRank(a) - listGroupRank(b) || listGroupLabel(a).localeCompare(listGroupLabel(b)),
   );
 
-  async function toggleMod(modName: string, enabled: boolean) {
-    const updated = mods.map((m) => (m.name === modName ? { ...m, enabled } : m));
+  async function persistModStates(updated: typeof mods) {
     modsStore.set(updated);
-
     const payload: Record<string, boolean> = {};
     updated.forEach((m) => (payload[m.name] = m.enabled));
     if (onSaveMods) {
@@ -184,6 +188,33 @@
         console.error("Failed to save mods:", err);
       }
     }
+  }
+
+  async function toggleMod(modName: string, enabled: boolean) {
+    const updated = mods.map((m) => (m.name === modName ? { ...m, enabled } : m));
+    await persistModStates(updated);
+  }
+
+  async function setAllSelectable(value: boolean) {
+    const updated = mods.map((mod) =>
+      mod.always || mod.untickable ? mod : { ...mod, enabled: value },
+    );
+    await persistModStates(updated);
+  }
+
+  async function invertSelectable() {
+    const updated = mods.map((mod) =>
+      mod.always || mod.untickable ? mod : { ...mod, enabled: !mod.enabled },
+    );
+    await persistModStates(updated);
+  }
+
+  function expandAllGroups() {
+    collapsedGroups = Object.fromEntries(listGroupKeys.map((key) => [key, false]));
+  }
+
+  function collapseAllGroups() {
+    collapsedGroups = Object.fromEntries(listGroupKeys.map((key) => [key, true]));
   }
 
   async function toggleFavorite(modName: string, value: boolean) {
@@ -440,6 +471,16 @@
       {/if}
     </div>
   {:else}
+    <div class="selection-tools" aria-label="Mod selection controls">
+      <span class="selection-label">Selection</span>
+      <button type="button" on:click={() => setAllSelectable(true)}>Select all</button>
+      <button type="button" on:click={() => setAllSelectable(false)}>Clear</button>
+      <button type="button" on:click={invertSelectable}>Invert</button>
+      <span class="selection-separator"></span>
+      <button type="button" on:click={expandAllGroups}>Expand all</button>
+      <button type="button" on:click={collapseAllGroups}>Collapse all</button>
+    </div>
+
     <div class="mod-list">
       {#each listGroupKeys as groupKey}
         {@const groupMods = modsInListGroup(groupKey)}
@@ -666,6 +707,37 @@
     min-height: 0;
   }
 
+  .selection-tools {
+    min-height: 34px;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    padding: 4px 8px;
+    border-bottom: 1px solid var(--border-color, #000);
+    background: var(--bg-secondary, #f4f4f4);
+  }
+
+  .selection-label {
+    margin-right: 3px;
+    color: var(--text-muted, #777);
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+  }
+
+  .selection-tools button {
+    min-height: 24px;
+    padding: 0 8px;
+    font-size: 11px;
+  }
+
+  .selection-separator {
+    width: 1px;
+    height: 18px;
+    margin: 0 2px;
+    background: var(--border-color, #000);
+  }
+
   .mod-list {
     flex: 1;
     min-height: 0;
@@ -752,6 +824,19 @@
     .view-toggle button {
       min-width: 46px;
       padding: 0 5px;
+    }
+
+    .selection-tools {
+      flex-wrap: wrap;
+      padding: 4px 5px;
+    }
+
+    .selection-label {
+      display: none;
+    }
+
+    .selection-tools button {
+      padding: 0 6px;
     }
 
     .mod-list {

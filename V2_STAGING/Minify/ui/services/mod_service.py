@@ -17,7 +17,7 @@ class ModService:
         manifest_category = str(cfg.get("category") or browser.get("category") or "").strip()
         category = manifest_category or str(shared.get("category") or group or "").strip()
 
-        if browser.get("browser") == "d2pfx" or str(browser.get("name") or "").casefold().startswith("d2pfx"):
+        if mod_library.is_d2pfx(mod_name):
             source = "D2PFX"
             mod_type = "d2pfx"
         elif mod_name.casefold().endswith(".vpk"):

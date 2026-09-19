@@ -135,3 +135,13 @@ def test_v2_mod_service_exposes_favorites_and_profiles_without_ui_state_dependen
     assert "set_mod_favorite?:" in global_types
     assert "get_profiles?:" in global_types
     assert "apply_profile?:" in global_types
+
+
+def test_v2_mod_service_recognizes_string_schema_d2pfx_installs():
+    library = (STAGE / "core" / "mod_library.py").read_text(encoding="utf-8")
+    service = (STAGE / "ui" / "services" / "mod_service.py").read_text(encoding="utf-8")
+
+    assert "def is_d2pfx(mod: str) -> bool:" in library
+    assert "return bool(_d2pfx_metadata(_manifest_metadata(mod)))" in library
+    assert 'if browser == "d2pfx":' in library
+    assert "if mod_library.is_d2pfx(mod_name):" in service

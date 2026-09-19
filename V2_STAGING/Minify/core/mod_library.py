@@ -173,6 +173,11 @@ def _d2pfx_metadata(cfg: dict) -> dict:
     return {}
 
 
+def is_d2pfx(mod: str) -> bool:
+    """Return True for D2PFX-installed directory mods in either manifest schema."""
+    return bool(_d2pfx_metadata(_manifest_metadata(mod)))
+
+
 def display_name(mod: str) -> str:
     override = str(get_override(mod).get("display_name") or "").strip()
     if override:
