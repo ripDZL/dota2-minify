@@ -29,6 +29,8 @@
   let profileName = "";
   let profileBusy = false;
   let profileStatus = "";
+  let heroDefaultsBusy = false;
+  let heroDefaultsStatus = "";
 
   async function handleRefresh() {
     if (isRefreshing) return;
@@ -224,6 +226,25 @@
         : mod,
     );
     await persistModStates(updated);
+  }
+
+  async function applyHeroDefaultsWithoutD2pfx() {
+    if (heroDefaultsBusy) return;
+    heroDefaultsBusy = true;
+    heroDefaultsStatus = "Checking enabled D2PFX overrides…";
+    try {
+      const result = await window.pywebview?.api?.apply_hero_defaults_without_d2pfx?.();
+      if (result?.success) {
+        heroDefaultsStatus = `${result.enabled ?? 0} enabled · ${result.disabled ?? 0} left off for D2PFX`;
+        await refreshMods();
+      } else {
+        heroDefaultsStatus = result?.error || "Could not update Hero Mods.";
+      }
+    } catch (err) {
+      heroDefaultsStatus = `Hero default selection failed: ${err}`;
+    } finally {
+      heroDefaultsBusy = false;
+    }
   }
 
   function expandAllGroups() {
@@ -518,6 +539,20 @@
               <span>Select in this section</span>
               <button type="button" on:click={() => setListGroupSelectable(groupKey, true)}>All</button>
               <button type="button" on:click={() => setListGroupSelectable(groupKey, false)}>None</button>
+              {#if listGroupLabel(groupKey) === "Hero Mods"}
+                <button
+                  type="button"
+                  class="d2pfx-defaults-btn"
+                  disabled={heroDefaultsBusy}
+                  title="Enable Hero Mods defaults except heroes actually overridden by enabled D2PFX mods"
+                  on:click={applyHeroDefaultsWithoutD2pfx}
+                >
+                  {heroDefaultsBusy ? "Checking D2PFX…" : "Defaults except D2PFX"}
+                </button>
+                {#if heroDefaultsStatus}
+                  <span class="hero-default-status" title={heroDefaultsStatus}>{heroDefaultsStatus}</span>
+                {/if}
+              {/if}
             </div>
             <div class="list-group-rows">
               {#each groupMods as mod (mod.name)}
@@ -828,10 +863,22 @@
     font-size: 10px;
   }
 
+  .list-group-actions .hero-default-status {
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
   .list-group-actions button {
     min-height: 22px;
     padding: 0 7px;
     font-size: 10px;
+  }
+
+  .list-group-actions .d2pfx-defaults-btn {
+    margin-left: 3px;
+    border-color: var(--accent, #17bebe);
   }
 
   .list-group-rows {

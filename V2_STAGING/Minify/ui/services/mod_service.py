@@ -106,6 +106,72 @@ class ModService:
             output.add_text(f"get_mods error: {e}", msg_type="error")
             return []
 
+    def apply_hero_defaults_without_d2pfx(self) -> Dict[str, Any]:
+        """Enable Hero Mods defaults except those actually overridden by enabled D2PFX mods."""
+        try:
+            mods_shared.scan_mods()
+            visible = list(mods_shared.visually_available_mods)
+            hero_mods = [
+                mod
+                for mod in visible
+                if str(mods_shared.get_mod_group(mod) or "").strip().casefold() == "hero mods"
+                and not mod_library.is_d2pfx(mod)
+            ]
+            selected_d2pfx = [
+                mod
+                for mod in visible
+                if mod_library.is_d2pfx(mod) and bool(mods_shared.get_state(mod))
+            ]
+
+            d2pfx_entries = {
+                mod: set(mod_library.index_contents(mod))
+                for mod in selected_d2pfx
+            }
+
+            desired: Dict[str, bool] = {}
+            protected: Dict[str, List[str]] = {}
+            for hero_mod in hero_mods:
+                hero_entries = set(mod_library.index_contents(hero_mod))
+                blockers = [
+                    mod
+                    for mod, entries in d2pfx_entries.items()
+                    if hero_entries and entries and not hero_entries.isdisjoint(entries)
+                ]
+                desired[hero_mod] = not blockers
+                if blockers:
+                    protected[hero_mod] = blockers
+
+            if not self.set_mods(desired):
+                return {"success": False, "error": "Could not update Hero Mods selection."}
+
+            enabled = sum(1 for value in desired.values() if value)
+            disabled = len(desired) - enabled
+            protected_rows = [
+                {
+                    "hero": mod_library.display_name(hero_mod),
+                    "d2pfx": [mod_library.display_name(mod) for mod in blockers],
+                }
+                for hero_mod, blockers in sorted(
+                    protected.items(),
+                    key=lambda item: mod_library.display_name(item[0]).casefold(),
+                )
+            ]
+            output.add_text(
+                f"Hero defaults updated: {enabled} enabled, {disabled} left disabled for enabled D2PFX overrides.",
+                msg_type="success",
+            )
+            return {
+                "success": True,
+                "enabled": enabled,
+                "disabled": disabled,
+                "hero_count": len(hero_mods),
+                "selected_d2pfx": len(selected_d2pfx),
+                "protected": protected_rows,
+            }
+        except Exception as exc:
+            output.add_text(f"Hero default selection error: {exc}", msg_type="error")
+            return {"success": False, "error": str(exc)}
+
     def set_favorite(self, mod_name: str, value: bool) -> Dict[str, Any]:
         try:
             mods_shared.scan_mods()

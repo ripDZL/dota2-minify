@@ -145,3 +145,23 @@ def test_v2_mod_service_recognizes_string_schema_d2pfx_installs():
     assert "return bool(_d2pfx_metadata(_manifest_metadata(mod)))" in library
     assert 'if browser == "d2pfx":' in library
     assert "if mod_library.is_d2pfx(mod_name):" in service
+
+
+def test_v2_hero_default_selector_uses_real_resource_overlap_with_enabled_d2pfx():
+    service = (STAGE / "ui" / "services" / "mod_service.py").read_text(encoding="utf-8")
+    app = (STAGE / "ui" / "app.py").read_text(encoding="utf-8")
+
+    for token in (
+        "def apply_hero_defaults_without_d2pfx(self)",
+        'casefold() == "hero mods"',
+        "mod_library.is_d2pfx(mod)",
+        "bool(mods_shared.get_state(mod))",
+        "set(mod_library.index_contents(mod))",
+        "not hero_entries.isdisjoint(entries)",
+        "desired[hero_mod] = not blockers",
+        "self.set_mods(desired)",
+    ):
+        assert token in service
+
+    assert "def apply_hero_defaults_without_d2pfx(self)" in app
+    assert "return self.mod_service.apply_hero_defaults_without_d2pfx()" in app

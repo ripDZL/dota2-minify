@@ -119,6 +119,9 @@ class Api:
     def set_mod_favorite(self, mod_name: str, value: bool) -> Dict[str, Any]:
         return self.mod_service.set_favorite(mod_name, value)
 
+    def apply_hero_defaults_without_d2pfx(self) -> Dict[str, Any]:
+        return self.mod_service.apply_hero_defaults_without_d2pfx()
+
     def get_profiles(self) -> List[Dict[str, Any]]:
         return self.mod_service.get_profiles()
 

@@ -107,3 +107,20 @@ def test_v2_mod_library_list_has_rc7_all_none_controls_per_section():
 
     helper = grid[grid.index("async function setListGroupSelectable"):grid.index("function expandAllGroups")]
     assert "filteredMods" not in helper
+
+
+def test_v2_hero_section_exposes_d2pfx_aware_default_selector():
+    grid = (WEB / "lib" / "components" / "ModGrid.svelte").read_text(encoding="utf-8")
+    global_types = (WEB.parent / "global.d.ts").read_text(encoding="utf-8")
+
+    for token in (
+        "async function applyHeroDefaultsWithoutD2pfx()",
+        "api?.apply_hero_defaults_without_d2pfx?.()",
+        'listGroupLabel(groupKey) === "Hero Mods"',
+        "Defaults except D2PFX",
+        "Enable Hero Mods defaults except heroes actually overridden by enabled D2PFX mods",
+        "heroDefaultsStatus",
+    ):
+        assert token in grid
+
+    assert "apply_hero_defaults_without_d2pfx?:" in global_types
