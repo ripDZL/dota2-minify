@@ -67,64 +67,12 @@ def remove_specific_lang_arg(arg_string, lang_to_remove):
 
 
 def add_prelaunch_to_launch_options(check_only=False):
-    "If frozen and patch_on_launch is enabled, prepend prelaunch command before %command% in launch options"
+    """Compatibility shim: automatic Steam launch-option injection is disabled.
 
-    if not base.FROZEN:
-        return False
-
-    if not config.get("patch_on_launch"):
-        return False
-
-    steam_ids = []
-    accounts = get_steam_accounts()
-    if config.get("apply_for_all"):
-        for account in accounts:
-            steam_ids.append(account["id"])
-    else:
-        steam_ids.append(config.get("steam_id"))
-
-    changed = False
-    for steam_id in steam_ids:
-        vdf_path = os.path.join(config.get("steam_root"), "userdata", steam_id, "config", "localconfig.vdf")
-        if not os.path.exists(vdf_path):
-            continue
-
-        with utils.open_utf8R(vdf_path) as file:
-            data = vdf.load(file)
-
-        try:
-            launch_options = data["UserLocalConfigStore"]["Software"]["Valve"]["Steam"]["apps"][base.STEAM_DOTA_ID][
-                "LaunchOptions"
-            ]
-        except KeyError:
-            continue
-
-        tokens = launch_options.split()
-
-        if base.is_win:
-            prefix = f'"{sys.executable}" prelaunch'
-        else:
-            prefix = f'bash -c "{sys.executable} prelaunch" &&'
-
-        if launch_options.startswith(prefix):
-            continue
-
-        other_tokens = [t for t in tokens if t != "%command%"]
-        new_tokens = [prefix, "%command%"] + other_tokens
-        new_options = " ".join(new_tokens)
-
-        if new_options != launch_options:
-            if check_only:
-                return True
-            data["UserLocalConfigStore"]["Software"]["Valve"]["Steam"]["apps"][base.STEAM_DOTA_ID]["LaunchOptions"] = (
-                new_options
-            )
-            with utils.open_utf8R(vdf_path, "w") as file:
-                vdf.dump(data, file, pretty=True)
-            changed = True
-
-    return changed
-
+    The fork keeps the explicit `prelaunch` CLI command, but never rewrites
+    Steam LaunchOptions to insert it automatically.
+    """
+    return False
 
 def fix_launch_options(check_only=False):
     """

@@ -5,8 +5,7 @@ import os
 import platform
 import sys
 
-VERSION = "2rc4"
-TITLE = f"Minify {VERSION}"
+# VERSION remains tied to the exact upstream v2rc4 baseline for compatibility.\nVERSION = "2rc4"\nFORK_BUILD = "v21.4-hardening"\nDISPLAY_VERSION = FORK_BUILD\nTITLE = f"Minify {DISPLAY_VERSION}"
 
 OS = platform.system()
 MACHINE = platform.machine().lower()

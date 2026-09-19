@@ -27,12 +27,6 @@
     "type": "checkbox"
   },
   {
-    "key": "patch_on_launch",
-    "text": "&setting_patch_on_launch",
-    "default": false,
-    "type": "checkbox"
-  },
-  {
     "key": "fix_options",
     "text": "&setting_fix_options",
     "default": true,
