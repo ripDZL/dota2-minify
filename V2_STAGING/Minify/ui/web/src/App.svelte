@@ -27,6 +27,8 @@
   let downloads: DownloadItem[] = [];
   let logs: Array<{ text: string; type: string; timestamp?: string }> = [];
   let isPatching = false;
+  let patchPreflightBusy = false;
+  let patchStatusText = "Ready";
   let autoScroll = true;
   let showUninstallModal = false;
   let pendingAnnouncements: Announcement[] = [];
@@ -174,10 +176,16 @@
         console.log(formattedMsg);
       }
       logs = [...logs, logEntry];
+      if ((isPatching || patchPreflightBusy) && logEntry.type !== "separator" && logEntry.text?.trim()) {
+        patchStatusText = logEntry.text.trim();
+      }
     };
 
     window.onPatchStatusChange = (status: boolean) => {
       isPatching = status;
+      if (!status && !patchPreflightBusy) {
+        patchStatusText = "Ready";
+      }
     };
 
     window.onDownloadProgress = (data: DownloadItem) => {
@@ -214,12 +222,23 @@
   }
 
   async function openPatchReview() {
+    patchPreflightBusy = true;
+    patchStatusText = "Analyzing selected mods, compatibility rules, and resource overlaps…";
+    logs = [
+      ...logs,
+      {
+        text: patchStatusText,
+        type: "info",
+        timestamp: getCurrentTime(),
+      },
+    ];
     try {
       const result = await window.pywebview?.api?.get_patch_preview?.();
       if (!result) {
         throw new Error("Patch preview API is unavailable.");
       }
       patchPreview = result;
+      patchStatusText = "Patch review ready.";
       showPatchReviewModal = true;
     } catch (err) {
       logs = [
@@ -230,7 +249,10 @@
           timestamp: getCurrentTime(),
         },
       ];
+      patchStatusText = "Patch preflight failed.";
       activeTab = "terminal";
+    } finally {
+      patchPreflightBusy = false;
     }
   }
 
@@ -293,9 +315,20 @@
 
   async function triggerPatch() {
     isPatching = true;
-    activeTab = "terminal";
+    patchStatusText = "Starting patch…";
+    logs = [
+      ...logs,
+      {
+        text: patchStatusText,
+        type: "info",
+        timestamp: getCurrentTime(),
+      },
+    ];
     try {
-      await window.pywebview?.api?.start_patch();
+      const result = await window.pywebview?.api?.start_patch();
+      if (result?.status === "already_running") {
+        patchStatusText = "Patch is already running.";
+      }
     } catch (err) {
       logs = [
         ...logs,
@@ -305,6 +338,8 @@
           timestamp: getCurrentTime(),
         },
       ];
+      patchStatusText = `Error triggering patch: ${err}`;
+      isPatching = false;
     }
   }
 
@@ -570,13 +605,24 @@
     onSuccess={handleWorkshopDownloadSuccess}
   />
 
+  {#if isPatching || patchPreflightBusy}
+    <div class="operation-status" role="status" aria-live="polite">
+      <span class="operation-dot"></span>
+      <strong>{patchPreflightBusy ? "PATCH PREFLIGHT" : "PATCH"}</strong>
+      <span class="operation-copy">{patchStatusText}</span>
+    </div>
+  {/if}
+
   <main class="content-area">
     <div class="tab-pane" class:hidden={activeTab !== "home"}>
       <Home
         {isPatching}
+        {logs}
+        {patchStatusText}
         onPatch={handlePatch}
         onRestore={openRestoreManager}
         onRescan={handleRescanMods}
+        onOpenTerminal={() => (activeTab = "terminal")}
       />
     </div>
 
@@ -659,6 +705,34 @@
     background: var(--bg-primary, #fff);
     color: var(--text-primary, #000);
     position: relative;
+  }
+
+  .operation-status {
+    min-height: 28px;
+    display: grid;
+    grid-template-columns: 10px auto minmax(0, 1fr);
+    align-items: center;
+    gap: 7px;
+    padding: 4px 8px;
+    border: 1px solid var(--border-color, #000);
+    border-top: 0;
+    background: var(--bg-secondary, #f4f4f4);
+    color: var(--text-primary, #000);
+    font-size: 11px;
+  }
+
+  .operation-dot {
+    width: 8px;
+    height: 8px;
+    border: 1px solid var(--border-color, #000);
+    background: var(--accent-gold, #ffc30f);
+  }
+
+  .operation-copy {
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
   }
 
   .content-area {

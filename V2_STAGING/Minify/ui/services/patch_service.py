@@ -118,6 +118,7 @@ class PatchService:
             return {"status": "already_running"}
 
         self._is_patching = True
+        output.add_text("Patch started. Preparing selected mods and compatibility checks.")
         if self._window:
             try:
                 self._window.evaluate_js("window.onPatchStatusChange && window.onPatchStatusChange(true);")

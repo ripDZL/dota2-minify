@@ -1,19 +1,39 @@
 <script lang="ts">
-  import { onMount } from "svelte";
+  import { onMount, tick } from "svelte";
   import { modsStore } from "../stores/mods";
 
   export let isPatching = false;
+  export let logs: Array<{ text: string; type: string; timestamp?: string }> = [];
+  export let patchStatusText = "Ready";
   export let onPatch: () => void;
   export let onRestore: () => void;
   export let onRescan: () => void;
+  export let onOpenTerminal: () => void;
 
+  let activityElement: HTMLElement | null = null;
   let version = "v21.4-hardening";
   let restoreCount = 0;
   let latestRestore = "";
 
   $: selectedCount = $modsStore.filter((mod) => mod.enabled || mod.always).length;
   $: totalCount = $modsStore.length;
-  $: statusText = isPatching ? "Patching…" : "Ready";
+  $: statusText = isPatching ? patchStatusText || "Patching…" : "Ready";
+  $: recentLogs = logs.slice(-120);
+  $: if (recentLogs.length) {
+    scrollActivityToBottom();
+  }
+
+  async function scrollActivityToBottom() {
+    await tick();
+    if (activityElement) {
+      activityElement.scrollTop = activityElement.scrollHeight;
+    }
+  }
+
+  function cleanAnsi(text: string): string {
+    if (!text) return "";
+    return text.replace(/\x1b\[[0-9;]*m/g, "");
+  }
 
   async function refreshStatus() {
     try {
@@ -72,6 +92,32 @@
         <span class="metric-sub">transactional restore enabled</span>
       </div>
     </div>
+
+    <section class="activity-panel" aria-label="Live terminal activity">
+      <div class="activity-header">
+        <div>
+          <strong>Live terminal</strong>
+          <span>{isPatching ? "patch output" : "recent activity"}</span>
+        </div>
+        <button type="button" class="terminal-link" on:click={onOpenTerminal}>Open full terminal</button>
+      </div>
+      <div class="activity-body" bind:this={activityElement} aria-live="polite">
+        {#if recentLogs.length === 0}
+          <div class="activity-empty">No activity yet. Patch and maintenance output will appear here.</div>
+        {:else}
+          {#each recentLogs as log}
+            {#if log.type === "separator"}
+              <hr />
+            {:else}
+              <div class="activity-row {log.type || 'info'}">
+                {#if log.timestamp}<span class="activity-time">{log.timestamp}</span>{/if}
+                <span>{cleanAnsi(log.text)}</span>
+              </div>
+            {/if}
+          {/each}
+        {/if}
+      </div>
+    </section>
 
     <div class="action-panel">
       <div>
@@ -187,8 +233,95 @@
     white-space: nowrap;
   }
 
+  .activity-panel {
+    display: flex;
+    flex: 1;
+    min-height: 190px;
+    flex-direction: column;
+    border: 1px solid var(--border-color, #000);
+    background: var(--terminal-bg, #111);
+  }
+
+  .activity-header {
+    min-height: 34px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    padding: 5px 7px;
+    border-bottom: 1px solid var(--border-color, #000);
+    background: var(--bg-tertiary, var(--bg-primary, #fff));
+  }
+
+  .activity-header > div {
+    min-width: 0;
+    display: flex;
+    align-items: baseline;
+    gap: 7px;
+  }
+
+  .activity-header span {
+    color: var(--text-muted, #777);
+    font-size: 10px;
+  }
+
+  .terminal-link {
+    min-height: 24px;
+    flex-shrink: 0;
+    padding: 0 8px;
+    font-size: 11px;
+  }
+
+  .activity-body {
+    flex: 1;
+    min-height: 150px;
+    overflow-y: auto;
+    padding: 7px;
+    background: var(--terminal-bg, #111);
+    color: var(--terminal-text, #eee);
+    font-family: monospace;
+    font-size: 11px;
+    line-height: 1.35;
+    user-select: text;
+  }
+
+  .activity-row {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr);
+    gap: 7px;
+    white-space: pre-wrap;
+    overflow-wrap: anywhere;
+  }
+
+  .activity-row.error {
+    color: var(--log-error, #ff6b6b);
+    font-weight: 700;
+  }
+
+  .activity-row.warning {
+    color: var(--log-warning, #ffc30f);
+  }
+
+  .activity-row.success {
+    color: #7ac143;
+    font-weight: 700;
+  }
+
+  .activity-time {
+    color: var(--text-muted, #888);
+  }
+
+  .activity-empty {
+    color: var(--text-muted, #888);
+  }
+
+  .activity-body hr {
+    border: 0;
+    border-top: 1px solid var(--border-color, #555);
+    margin: 4px 0;
+  }
+
   .action-panel {
-    margin-top: auto;
     padding-top: 12px;
     border-top: 1px solid var(--border-color, #000);
   }
@@ -253,6 +386,14 @@
 
     .metric strong {
       font-size: 14px;
+    }
+
+    .activity-panel {
+      min-height: 150px;
+    }
+
+    .activity-body {
+      min-height: 110px;
     }
 
     .action-panel {
