@@ -134,6 +134,63 @@ class Api:
     def delete_profile(self, name: str) -> Dict[str, Any]:
         return self.mod_service.delete_profile(name)
 
+    def update_profile(self, name: str) -> Dict[str, Any]:
+        return self.mod_service.update_profile(name)
+
+    def export_profiles(self) -> Dict[str, Any]:
+        import json
+        import tempfile
+
+        path = self.dialog_service.pick_save_file("Export Profiles", "Minify-Profiles.json")
+        if not path:
+            return {"success": False, "cancelled": True}
+        path = os.path.abspath(str(path))
+        if not path.casefold().endswith(".json"):
+            path += ".json"
+        if os.path.lexists(path) and os.path.islink(path):
+            return {"success": False, "error": "Refusing to replace a symlink."}
+
+        parent = os.path.dirname(path) or os.getcwd()
+        os.makedirs(parent, exist_ok=True)
+        payload = self.mod_service.export_profile_bundle()
+        fd, temporary = tempfile.mkstemp(prefix=".minify-profile-export-", suffix=".json", dir=parent)
+        try:
+            with os.fdopen(fd, "w", encoding="utf-8", newline="\n") as file:
+                json.dump(payload, file, indent=2, ensure_ascii=False)
+            os.replace(temporary, path)
+        except Exception:
+            try:
+                os.remove(temporary)
+            except FileNotFoundError:
+                pass
+            raise
+        return {"success": True, "path": path, "count": len(payload.get("profiles", {}))}
+
+    def import_profiles(self) -> Dict[str, Any]:
+        import json
+        from core import profiles
+
+        path = self.dialog_service.pick_file("Import Profiles", ("JSON files (*.json)",))
+        if not path:
+            return {"success": False, "cancelled": True}
+
+        path = os.path.abspath(str(path))
+        if os.path.islink(path) or not os.path.isfile(path):
+            return {"success": False, "error": "Selected profile import is not a regular file."}
+        if os.path.getsize(path) > profiles.PROFILE_MAX_FILE_BYTES:
+            return {"success": False, "error": "Selected profile import exceeds the safety limit."}
+
+        try:
+            with open(path, encoding="utf-8-sig") as file:
+                data = json.load(file)
+        except Exception as exc:
+            return {"success": False, "error": f"Profile import is not valid JSON: {exc}"}
+
+        result = self.mod_service.import_profile_bundle(data)
+        if result.get("success"):
+            result["path"] = path
+        return result
+
     def generate_foliage_alias_smoke(self) -> Dict[str, Any]:
         try:
             from core import foliage_smoke, mods_shared

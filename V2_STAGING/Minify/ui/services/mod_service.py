@@ -1,4 +1,5 @@
 import base64
+import datetime as dt
 import os
 from typing import Any, Dict, List
 
@@ -183,6 +184,142 @@ class ModService:
             return {"success": profiles.delete_profile(name)}
         except Exception as exc:
             return {"success": False, "error": str(exc)}
+
+    def update_profile(self, name: str) -> Dict[str, Any]:
+        clean_name = str(name or "").strip()
+        if not profiles.get_profile(clean_name):
+            return {"success": False, "error": "Profile not found."}
+        return self.save_profile(clean_name)
+
+    def export_profile_bundle(self) -> Dict[str, Any]:
+        mods_shared.scan_mods()
+        saved = profiles.load_profiles()
+        referenced = {mod for states in saved.values() for mod in states}
+        available = set(mods_shared.visually_available_mods)
+        hints: Dict[str, Dict[str, str]] = {}
+
+        for mod in sorted(referenced, key=str.casefold):
+            hint = {"display_name": mod, "source": "", "stable_key": ""}
+            if mod in available:
+                try:
+                    hint["display_name"] = mod_library.display_name(mod)
+                    hint["source"] = mod_library.source(mod)
+                    hint["stable_key"] = mod_library.stable_key(mod, calculate_hash=False)
+                except Exception:
+                    pass
+            hints[mod] = hint
+
+        return {
+            "format": profiles.PROFILE_EXPORT_FORMAT,
+            "version": profiles.PROFILE_EXPORT_VERSION,
+            "exported_at": dt.datetime.now().astimezone().isoformat(timespec="seconds"),
+            "profiles": {
+                name: {"mods": dict(states)}
+                for name, states in sorted(saved.items(), key=lambda item: item[0].casefold())
+            },
+            "mod_hints": hints,
+        }
+
+    @staticmethod
+    def _profile_identity_indexes(mods: List[str]) -> tuple[Dict[str, List[str]], Dict[tuple[str, str], List[str]]]:
+        stable_index: Dict[str, List[str]] = {}
+        friendly_index: Dict[tuple[str, str], List[str]] = {}
+        for mod in mods:
+            try:
+                stable = str(mod_library.stable_key(mod, calculate_hash=False) or "")
+                if stable:
+                    stable_index.setdefault(stable, []).append(mod)
+                friendly = (
+                    str(mod_library.display_name(mod) or mod).strip().casefold(),
+                    str(mod_library.source(mod) or "").strip().casefold(),
+                )
+                friendly_index.setdefault(friendly, []).append(mod)
+            except Exception:
+                continue
+        return stable_index, friendly_index
+
+    @classmethod
+    def _remap_imported_states(
+        cls, states: Dict[str, bool], hints: Dict[str, Dict[str, str]], available: List[str]
+    ) -> tuple[Dict[str, bool], int]:
+        current = set(available)
+        stable_index, friendly_index = cls._profile_identity_indexes(available)
+        remapped: Dict[str, bool] = {}
+        remap_count = 0
+
+        for imported_mod, enabled in states.items():
+            target = imported_mod
+            if imported_mod not in current:
+                hint = hints.get(imported_mod, {}) if isinstance(hints, dict) else {}
+                stable = str(hint.get("stable_key", "") or "") if isinstance(hint, dict) else ""
+                stable_matches = stable_index.get(stable, []) if stable else []
+                if len(stable_matches) == 1:
+                    target = stable_matches[0]
+                else:
+                    friendly = (
+                        str(hint.get("display_name", imported_mod) or imported_mod).strip().casefold(),
+                        str(hint.get("source", "") or "").strip().casefold(),
+                    )
+                    friendly_matches = friendly_index.get(friendly, [])
+                    if len(friendly_matches) == 1:
+                        target = friendly_matches[0]
+            if target != imported_mod:
+                remap_count += 1
+            remapped[target] = bool(enabled)
+
+        return remapped, remap_count
+
+    def import_profile_bundle(self, data: Any) -> Dict[str, Any]:
+        imported, hints = profiles.normalize_import_bundle(data)
+        if not imported:
+            return {"success": False, "error": "No valid Minify profiles were found."}
+
+        mods_shared.scan_mods()
+        available = list(mods_shared.visually_available_mods)
+        existing = profiles.load_profiles()
+        added = 0
+        duplicates = 0
+        renamed = 0
+        remapped = 0
+        targets: List[str] = []
+
+        for name, states in imported.items():
+            mapped, mapped_count = self._remap_imported_states(states, hints, available)
+            remapped += mapped_count
+
+            if name in existing and existing[name] == mapped:
+                duplicates += 1
+                targets.append(name)
+                continue
+
+            target_name = name
+            if target_name in existing:
+                base_name = f"{name} (Imported)"
+                target_name = base_name
+                counter = 2
+                while target_name in existing:
+                    target_name = f"{base_name} {counter}"
+                    counter += 1
+                renamed += 1
+
+            profiles.save_profile(target_name, mapped)
+            existing[target_name] = mapped
+            targets.append(target_name)
+            added += 1
+
+        applied_name = targets[0] if targets else ""
+        apply_result = self.apply_profile(applied_name) if applied_name else {"success": True}
+        if applied_name and not apply_result.get("success"):
+            return {"success": False, "error": apply_result.get("error", "Imported profile could not be applied.")}
+
+        return {
+            "success": True,
+            "added": added,
+            "duplicates": duplicates,
+            "renamed": renamed,
+            "remapped": remapped,
+            "applied_name": applied_name,
+        }
 
     @staticmethod
     def _build_directory_tree(dir_path: str) -> Dict[str, Any]:

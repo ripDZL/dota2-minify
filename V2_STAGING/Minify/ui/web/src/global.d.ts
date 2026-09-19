@@ -66,6 +66,19 @@ declare global {
         apply_profile?: (name: string) => Promise<{ success: boolean; applied?: number; locked?: number; missing?: number; error?: string }>;
         duplicate_profile?: (name: string) => Promise<{ success: boolean; name?: string; error?: string }>;
         delete_profile?: (name: string) => Promise<{ success: boolean; error?: string }>;
+        update_profile?: (name: string) => Promise<{ success: boolean; name?: string; state_count?: number; error?: string }>;
+        export_profiles?: () => Promise<{ success: boolean; cancelled?: boolean; path?: string; count?: number; error?: string }>;
+        import_profiles?: () => Promise<{
+          success: boolean;
+          cancelled?: boolean;
+          path?: string;
+          added?: number;
+          duplicates?: number;
+          renamed?: number;
+          remapped?: number;
+          applied_name?: string;
+          error?: string;
+        }>;
         start_patch: () => Promise<{ status: string }>;
         get_patch_preview?: () => Promise<{
           selected_mods: Array<{ id: string; name: string }>;

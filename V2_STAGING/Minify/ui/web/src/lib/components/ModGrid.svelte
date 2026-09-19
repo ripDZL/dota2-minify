@@ -20,6 +20,7 @@
   let selectedProfile = "";
   let profileName = "";
   let profileBusy = false;
+  let profileStatus = "";
 
   async function handleRefresh() {
     if (isRefreshing) return;
@@ -135,6 +136,65 @@
     }
   }
 
+  async function updateSelectedProfile() {
+    if (!selectedProfile || profileBusy) return;
+    profileBusy = true;
+    profileStatus = "";
+    try {
+      const result = await window.pywebview?.api?.update_profile?.(selectedProfile);
+      if (result?.success) {
+        profileStatus = `Updated ${selectedProfile}.`;
+        await refreshProfiles();
+      } else {
+        profileStatus = result?.error || "Profile update failed.";
+      }
+    } finally {
+      profileBusy = false;
+    }
+  }
+
+  async function exportProfiles() {
+    if (profileBusy) return;
+    profileBusy = true;
+    profileStatus = "";
+    try {
+      const result = await window.pywebview?.api?.export_profiles?.();
+      if (result?.success) {
+        profileStatus = `Exported ${result.count ?? profiles.length} profile(s).`;
+      } else if (!result?.cancelled) {
+        profileStatus = result?.error || "Profile export failed.";
+      }
+    } finally {
+      profileBusy = false;
+    }
+  }
+
+  async function importProfiles() {
+    if (profileBusy) return;
+    profileBusy = true;
+    profileStatus = "";
+    try {
+      const result = await window.pywebview?.api?.import_profiles?.();
+      if (result?.success) {
+        selectedProfile = result.applied_name || "";
+        const detail = [
+          `${result.added ?? 0} imported`,
+          result.duplicates ? `${result.duplicates} duplicate(s)` : "",
+          result.renamed ? `${result.renamed} renamed` : "",
+          result.remapped ? `${result.remapped} mod ID(s) remapped` : "",
+        ]
+          .filter(Boolean)
+          .join(", ");
+        profileStatus = detail;
+        await Promise.all([refreshProfiles(), refreshMods()]);
+      } else if (!result?.cancelled) {
+        profileStatus = result?.error || "Profile import failed.";
+      }
+    } finally {
+      profileBusy = false;
+    }
+  }
+
   async function duplicateSelectedProfile() {
     if (!selectedProfile || profileBusy) return;
     profileBusy = true;
@@ -219,10 +279,16 @@
         {/each}
       </select>
       <button type="button" disabled={!selectedProfile || profileBusy} on:click={applySelectedProfile}>Apply</button>
+      <button type="button" disabled={!selectedProfile || profileBusy} on:click={updateSelectedProfile}>Update</button>
       <button type="button" disabled={!selectedProfile || profileBusy} on:click={duplicateSelectedProfile}>Copy</button>
       <button type="button" disabled={!selectedProfile || profileBusy} on:click={deleteSelectedProfile}>Delete</button>
+      <button type="button" disabled={profileBusy} on:click={importProfiles}>Import</button>
+      <button type="button" disabled={profileBusy} on:click={exportProfiles}>Export</button>
       <input bind:value={profileName} maxlength="128" placeholder="Save current as…" aria-label="New profile name" />
       <button type="button" disabled={!profileName.trim() || profileBusy} on:click={saveCurrentProfile}>Save</button>
+      {#if profileStatus}
+        <span class="profile-status" title={profileStatus}>{profileStatus}</span>
+      {/if}
     </div>
   </div>
 
@@ -311,6 +377,15 @@
     flex: 1;
     justify-content: flex-end;
     flex-wrap: wrap;
+  }
+
+  .profile-status {
+    max-width: 220px;
+    overflow: hidden;
+    color: var(--text-muted, #777);
+    font-size: 10px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
   }
 
   button,
