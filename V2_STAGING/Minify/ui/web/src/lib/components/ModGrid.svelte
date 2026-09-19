@@ -5,12 +5,19 @@
   import { t } from "../i18n";
   import { refreshMods } from "../api";
   import ModCard from "./ModCard.svelte";
+  import ModListRow from "./ModListRow.svelte";
   import ModDetailsModal from "./ModDetailsModal.svelte";
 
   export let onSaveMods: ((data: Record<string, boolean>) => void) | undefined = undefined;
 
   type ProfileItem = { name: string; state_count: number };
+  type ViewMode = "list" | "cards";
 
+  const MOD_VIEW_KEY = "minify.mod-library.view-mode";
+  const LIST_GROUP_ORDER = ["standard", "collection", "d2pfx", "vpk"];
+
+  let viewMode: ViewMode = "list";
+  let collapsedGroups: Record<string, boolean> = {};
   let searchQuery = "";
   let typeFilter = "all";
   let categoryFilter = "all";
@@ -52,8 +59,55 @@
   }
 
   onMount(() => {
+    try {
+      const saved = window.localStorage.getItem(MOD_VIEW_KEY);
+      if (saved === "list" || saved === "cards") {
+        viewMode = saved;
+      }
+    } catch (err) {
+      console.debug("Mod Library view preference is unavailable:", err);
+    }
     refreshProfiles();
   });
+
+  function setViewMode(mode: ViewMode) {
+    viewMode = mode;
+    try {
+      window.localStorage.setItem(MOD_VIEW_KEY, mode);
+    } catch (err) {
+      console.debug("Could not persist Mod Library view preference:", err);
+    }
+  }
+
+  function listGroupKey(mod: any): string {
+    const type = String(mod?.type || "standard").trim().toLowerCase();
+    return type || "standard";
+  }
+
+  function listGroupLabel(key: string): string {
+    if (key === "standard") return "Standard Mods";
+    if (key === "collection") return "Collections";
+    if (key === "d2pfx") return "D2PFX Mods";
+    if (key === "vpk") return "VPK Mods";
+    return key ? `${key.charAt(0).toUpperCase()}${key.slice(1)} Mods` : "Other Mods";
+  }
+
+  function listGroupRank(key: string): number {
+    const index = LIST_GROUP_ORDER.indexOf(key);
+    return index === -1 ? LIST_GROUP_ORDER.length : index;
+  }
+
+  function modsInListGroup(key: string) {
+    return filteredMods.filter((mod) => listGroupKey(mod) === key);
+  }
+
+  function selectedInListGroup(key: string): number {
+    return modsInListGroup(key).filter((mod) => mod.enabled).length;
+  }
+
+  function toggleListGroup(key: string) {
+    collapsedGroups = { ...collapsedGroups, [key]: !collapsedGroups[key] };
+  }
 
   $: mods = $modsStore;
   $: categories = Array.from(
@@ -111,6 +165,9 @@
     }),
   );
   $: selectedCount = mods.filter((mod) => mod.enabled).length;
+  $: listGroupKeys = Array.from(new Set(filteredMods.map(listGroupKey))).sort(
+    (a, b) => listGroupRank(a) - listGroupRank(b) || listGroupLabel(a).localeCompare(listGroupLabel(b)),
+  );
 
   async function toggleMod(modName: string, enabled: boolean) {
     const updated = mods.map((m) => (m.name === modName ? { ...m, enabled } : m));
@@ -273,6 +330,26 @@
       <span class="result-count">{selectedCount} selected · {filteredMods.length}/{mods.length} shown</span>
     </div>
     <div class="toolbar-controls">
+      <div class="view-toggle" role="group" aria-label="Mod Library view">
+        <button
+          type="button"
+          class:active={viewMode === "list"}
+          aria-pressed={viewMode === "list"}
+          on:click={() => setViewMode("list")}
+          title="Compact legacy-style list view"
+        >
+          List
+        </button>
+        <button
+          type="button"
+          class:active={viewMode === "cards"}
+          aria-pressed={viewMode === "cards"}
+          on:click={() => setViewMode("cards")}
+          title="Preview card view"
+        >
+          Cards
+        </button>
+      </div>
       <button class="refresh-btn" class:refreshing={isRefreshing} on:click={handleRefresh} title={$t("button_refresh")}>
         <span class="refresh-icon" class:spin={isRefreshing}>↻</span>
         {$t("button_refresh")}
@@ -342,25 +419,71 @@
     </div>
   </div>
 
-  <div class="mod-grid">
-    {#each filteredMods as mod (mod.name)}
-      <ModCard
-        name={mod.name}
-        displayName={mod.display_name}
-        enabled={mod.enabled}
-        always={mod.always}
-        untickable={mod.untickable}
-        preview={mod.preview}
-        favorite={Boolean(mod.favorite)}
-        ontoggle={(value) => toggleMod(mod.name, value)}
-        onFavorite={toggleFavorite}
-        onDetails={openDetails}
-      />
-    {/each}
-    {#if filteredMods.length === 0}
-      <div class="empty-state">No mods match the current filters.</div>
-    {/if}
-  </div>
+  {#if viewMode === "cards"}
+    <div class="mod-grid">
+      {#each filteredMods as mod (mod.name)}
+        <ModCard
+          name={mod.name}
+          displayName={mod.display_name}
+          enabled={mod.enabled}
+          always={mod.always}
+          untickable={mod.untickable}
+          preview={mod.preview}
+          favorite={Boolean(mod.favorite)}
+          ontoggle={(value) => toggleMod(mod.name, value)}
+          onFavorite={toggleFavorite}
+          onDetails={openDetails}
+        />
+      {/each}
+      {#if filteredMods.length === 0}
+        <div class="empty-state">No mods match the current filters.</div>
+      {/if}
+    </div>
+  {:else}
+    <div class="mod-list">
+      {#each listGroupKeys as groupKey}
+        {@const groupMods = modsInListGroup(groupKey)}
+        <section class="list-group">
+          <button
+            type="button"
+            class="list-group-header"
+            aria-expanded={!collapsedGroups[groupKey]}
+            on:click={() => toggleListGroup(groupKey)}
+          >
+            <span class="group-disclosure">{collapsedGroups[groupKey] ? "▶" : "▼"}</span>
+            <span class="group-name">{listGroupLabel(groupKey)}</span>
+            <span class="group-count">{selectedInListGroup(groupKey)}/{groupMods.length} selected</span>
+          </button>
+
+          {#if !collapsedGroups[groupKey]}
+            <div class="list-group-rows">
+              {#each groupMods as mod (mod.name)}
+                <ModListRow
+                  name={mod.name}
+                  displayName={mod.display_name}
+                  enabled={mod.enabled}
+                  always={mod.always}
+                  untickable={mod.untickable}
+                  preview={mod.preview}
+                  favorite={Boolean(mod.favorite)}
+                  category={mod.category || mod.group || ""}
+                  source={mod.source || ""}
+                  modType={mod.type || "standard"}
+                  ontoggle={(value) => toggleMod(mod.name, value)}
+                  onFavorite={toggleFavorite}
+                  onDetails={openDetails}
+                />
+              {/each}
+            </div>
+          {/if}
+        </section>
+      {/each}
+
+      {#if filteredMods.length === 0}
+        <div class="empty-state">No mods match the current filters.</div>
+      {/if}
+    </div>
+  {/if}
 
   <ModDetailsModal modName={selectedModForDetails} onClose={closeDetails} />
 </div>
@@ -416,11 +539,31 @@
 
   .toolbar-controls,
   .search-box,
-  .profile-tools {
+  .profile-tools,
+  .view-toggle {
     display: flex;
     gap: 6px;
     align-items: center;
     min-width: 0;
+  }
+
+  .view-toggle {
+    gap: 0;
+  }
+
+  .view-toggle button {
+    min-width: 52px;
+    border-right-width: 0;
+  }
+
+  .view-toggle button:last-child {
+    border-right-width: 1px;
+  }
+
+  .view-toggle button.active {
+    background: var(--accent, #17bebe);
+    border-color: var(--accent, #17bebe);
+    color: var(--accent-text, #000);
   }
 
   .profile-tools {
@@ -523,6 +666,64 @@
     min-height: 0;
   }
 
+  .mod-list {
+    flex: 1;
+    min-height: 0;
+    overflow-y: auto;
+    padding: 6px 8px 10px;
+  }
+
+  .list-group {
+    margin-bottom: 6px;
+    border: 1px solid var(--border-color, #000);
+    background: var(--card-bg, var(--bg-primary, #fff));
+  }
+
+  .list-group-header {
+    width: 100%;
+    min-height: 28px;
+    display: grid;
+    grid-template-columns: 18px minmax(0, 1fr) auto;
+    align-items: center;
+    gap: 5px;
+    padding: 3px 7px;
+    border: 0;
+    border-bottom: 1px solid var(--border-color, #000);
+    background: var(--bg-tertiary, var(--bg-secondary, #ececec));
+    color: var(--text-primary, #000);
+    text-align: left;
+  }
+
+  .list-group-header[aria-expanded="false"] {
+    border-bottom: 0;
+  }
+
+  .group-disclosure {
+    font-size: 10px;
+    color: var(--accent, #17bebe);
+    text-align: center;
+  }
+
+  .group-name {
+    min-width: 0;
+    overflow: hidden;
+    font-size: 12px;
+    font-weight: 700;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .group-count {
+    color: var(--text-muted, #777);
+    font-size: 10px;
+    white-space: nowrap;
+  }
+
+  .list-group-rows {
+    display: flex;
+    flex-direction: column;
+  }
+
   .empty-state {
     grid-column: 1 / -1;
     padding: 24px 12px;
@@ -542,6 +743,19 @@
 
     .profile-tools input {
       flex: 1;
+    }
+
+    .toolbar-controls {
+      gap: 4px;
+    }
+
+    .view-toggle button {
+      min-width: 46px;
+      padding: 0 5px;
+    }
+
+    .mod-list {
+      padding: 5px;
     }
   }
 </style>
