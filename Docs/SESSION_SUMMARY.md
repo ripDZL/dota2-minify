@@ -87,3 +87,9 @@
 - Matching uses real content-index overlap between Hero defaults and enabled D2PFX mods; it does not guess from names and ignores disabled D2PFX mods.
 - CI #229 / `35473330452`: **384/384 PASS**, Ruff clean, v2 validation/Svelte/plugin PASS, both Windows portable builds PASS.
 - Current v2 portable SHA-256 `8bec9db28cc641cfbc7a64aab32c3b37bf7835185e2983d32ad5ab87a70b6550`; v2 artifact digest `sha256:9742a971fc1ed0994d65f5fcd15bda3c04d333084f59821651c10de13feb041b`.
+
+- User noticed installed D2PFX mods were shown in one name-sorted section rather than organized by category.
+- Fixed at `257010615572a61e54ef4473f853d9636da2789b`: D2PFX list grouping now uses stored category metadata and produces separate humanized D2PFX category sections, retaining per-section counts and All/None.
+- CI #230 / `35474054089`: **385/385 PASS**, Ruff clean, v2 validation/Svelte/plugin PASS, both Windows portable builds PASS.
+- Current v2 portable SHA-256 `aa7fd595767ff61af453f75ad6212c5c354617425ecc55850cdadd59c91fda53`; v2 artifact digest `sha256:d8f75b4431e00dc2f75dda1139fd694ed194c27d7e742ec15e1b12c183057823`.
+- Next: user smoke of D2PFX category sections; continue PATCH/full Dota smoke. Beta/main untouched.

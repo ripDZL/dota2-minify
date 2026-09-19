@@ -4,7 +4,7 @@
 - Branches must remain exactly: `v21.4-hardening`, `beta`, `main`.
 - Work only on `v21.4-hardening` unless the user explicitly approves promotion.
 - Re-fetch all 3 branch heads before edits.
-- Latest validated code head before handoff docs: `3d4c355aed635661cf3a0fd3b89b7e9f48360de5`.
+- Latest validated code head before handoff docs: `257010615572a61e54ef4473f853d9636da2789b`.
 - Known untouched promotion heads at handoff:
   - `beta`: `442d36dcc902f6436c6404f2947091663c254cc5`
   - `main`: `a26bc88a0d412e357965f29488b83a7f9093e11f`
@@ -159,3 +159,12 @@
 - Current v2 portable SHA-256: `8bec9db28cc641cfbc7a64aab32c3b37bf7835185e2983d32ad5ab87a70b6550`.
 - Current GitHub v2 artifact digest: `sha256:9742a971fc1ed0994d65f5fcd15bda3c04d333084f59821651c10de13feb041b`.
 - Next immediate gate: user smoke of Hero Mods -> `Defaults except D2PFX`, then continue PATCH/full Dota smoke.
+
+- D2PFX Mod Library organization follow-up:
+  - `257010615572a61e54ef4473f853d9636da2789b` groups installed D2PFX mods into separate list sections by stored D2PFX category instead of one name-sorted D2PFX bucket.
+  - Section labels use humanized category IDs (for example `D2PFX · Heroes`, `D2PFX · Item Effects`, `D2PFX · Creep Deny`).
+  - Each D2PFX category keeps its own selected/total count and All/None controls.
+- CI #230 / `35474054089`: **SUCCESS**, **385/385 tests passed**, Ruff clean, v2 validation/Svelte/plugin PASS, both Windows portable builds PASS.
+- Current v2 portable SHA-256: `aa7fd595767ff61af453f75ad6212c5c354617425ecc55850cdadd59c91fda53`.
+- Current GitHub v2 artifact digest: `sha256:d8f75b4431e00dc2f75dda1139fd694ed194c27d7e742ec15e1b12c183057823`.
+- Next immediate gate: user smoke of D2PFX category sections plus ongoing PATCH/full Dota smoke.

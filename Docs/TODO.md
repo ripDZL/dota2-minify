@@ -55,3 +55,7 @@
 - [x] Add Hero Mods `Defaults except D2PFX` bulk action using real indexed resource overlap with enabled D2PFX mods.
 - [x] CI #229 / `35473330452`: **384/384 PASS**, both Windows portable builds PASS.
 - [ ] User smoke of D2PFX-aware Hero default selection.
+
+- [x] Group installed D2PFX mods by D2PFX category in legacy list view instead of one name-sorted D2PFX bucket.
+- [x] Preserve per-D2PFX-category selected/total counts and All/None controls; CI #230 **385/385 PASS**, both Windows builds PASS.
+- [ ] User smoke D2PFX category organization; continue PATCH/full Dota smoke.

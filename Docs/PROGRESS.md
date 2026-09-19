@@ -80,3 +80,7 @@
 - [x] Hero Mods `Defaults except D2PFX` uses actual virtual-resource overlap against enabled D2PFX mods; no filename/hero-name guesswork.
 - [x] CI #229 / `35473330452`: **384/384 PASS**, Ruff clean, v2 validation/Svelte/plugin PASS, root + v2 Windows portable PASS.
 - [x] Current v2 portable SHA-256: `8bec9db28cc641cfbc7a64aab32c3b37bf7835185e2983d32ad5ab87a70b6550`.
+
+- [x] D2PFX list organization: `257010615572a61e54ef4473f853d9636da2789b` creates one list section per stored D2PFX category with humanized labels and existing section controls.
+- [x] CI #230 / `35474054089`: **385/385 PASS**, Ruff clean, v2 validation/Svelte/plugin PASS, root + v2 Windows portable PASS.
+- [x] Current v2 portable SHA-256: `aa7fd595767ff61af453f75ad6212c5c354617425ecc55850cdadd59c91fda53`.

@@ -84,3 +84,7 @@
 - Implementation `811e971b7a3c2a12e0c396843adc19d26b5f6c1f` / formatted head `3d4c355aed635661cf3a0fd3b89b7e9f48360de5`: enable all Hero defaults except those sharing actual indexed virtual resources with currently enabled D2PFX mods. Disabled D2PFX installs do not suppress defaults.
 - CI #229 / `35473330452`: **384/384 PASS**, Ruff clean, v2 validation/Svelte/plugin PASS, both Windows portable builds PASS.
 - Current v2 portable SHA-256: `8bec9db28cc641cfbc7a64aab32c3b37bf7835185e2983d32ad5ab87a70b6550`.
+
+- D2PFX Mod Library category organization fixed at `257010615572a61e54ef4473f853d9636da2789b`: list mode now groups installed D2PFX mods by their stored category ID, with humanized per-category section labels and inherited All/None + selected/total controls.
+- CI #230 / `35474054089`: **385/385 PASS**, Ruff clean, v2 validation/Svelte/plugin PASS, both Windows portable builds PASS.
+- Current v2 portable SHA-256: `aa7fd595767ff61af453f75ad6212c5c354617425ecc55850cdadd59c91fda53`.
