@@ -22,3 +22,8 @@
 - Upstream v2 Remove Foliage remap is eligible for isolated validation; never reintroduce a full-map Remove Foliage layer.
 - Main Menu Background must retain both collapse rules.
 - Rebuild the minimum-fit invariant in responsive Svelte/CSS/container rules during v2 migration.
+
+- `V2_STAGING/` now contains the full exact v2rc4 architecture, not a partial source slice. Fork security and logical mod-library semantics override selected upstream files.
+- v2 display identity mirrors the fork split: internal `VERSION = "2rc4"`; user-facing `DISPLAY_VERSION = FORK_BUILD = "v21.4-hardening"`.
+- v2 automatic Steam prelaunch injection is disabled by compatibility shim and removed from settings/pipeline; explicit CLI `prelaunch` remains.
+- v2 Mod Library services use stable logical IDs for nested/Collection/D2PFX mods; profiles are complete snapshots and favorites use stable keys.

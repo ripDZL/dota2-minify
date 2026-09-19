@@ -18,3 +18,9 @@
 - CI #176 / `35405707258`: **309/309 PASS**, Ruff/compile PASS, Windows portable PASS; artifact digest `sha256:d8e5e9da96eacc949f46af14944246ce4b124c33b7918e40833852ec9f857771`.
 - Pending: private foliage alias human smoke; integrate Stage 1 into the complete v2rc4 tree; then Stage 2 mod model/services and residual security/Dota smoke.
 - Do not promote beta -> main without validation and explicit approval.
+
+- Current hardening head validated: `59746db919e567245371609257cb7ab13a7e518b`.
+- Exact v2rc4 tree is now fully present under `V2_STAGING/`; Stage 1 security + Stage 2 recursive mod model, favorites/profiles, D2PFX logical IDs, and Mod Library UI are integrated.
+- CI #191 / `35438400128`: **327/327 PASS**, both validation jobs PASS, Svelte + plugin builds PASS, both Windows portable jobs PASS.
+- v2 portable artifact digest: `sha256:41e328b86a6f7448508c0dc040a94e562dfe97776f819d1ac7683b9a126da884`.
+- Branches remain exactly three; beta/main unchanged.

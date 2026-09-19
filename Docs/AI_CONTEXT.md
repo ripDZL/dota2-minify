@@ -27,3 +27,9 @@
 - Staged Stage 1: shared path/archive/decompression/hash/public-HTTPS primitives; bounded atomic v2 downloads/extraction; digest-verified app updates; digest-verified transactional Workshop Tools install/rollback; hardened D2PFX catalogue/install/cursor flows; confined remap processing; updater digest propagation.
 - CI #176 / `35405707258`: **309/309 PASS**, Ruff/compile PASS, Windows portable PASS. Artifact digest `sha256:d8e5e9da96eacc949f46af14944246ce4b124c33b7918e40833852ec9f857771`.
 - `V2_STAGING` is intentionally non-production and is not packaged as the v2 app yet; next migration stage is the v2 mod model/services around the security substrate.
+
+- Validated v2 architecture tip: `59746db919e567245371609257cb7ab13a7e518b`; exact v2rc4 tree now materialized under `V2_STAGING/` with fork security/mod-library semantics layered on top.
+- v2 Stage 2 ports: recursive/nested mods, Collections/custom VPK metadata, logical mod IDs, favorites, profiles, D2PFX logical-ID handling, Svelte Mod Library filters/profile controls.
+- v2 fork behaviors preserved in staging: user-facing `v21.4-hardening` identity with internal `VERSION = "2rc4"`, manual prelaunch/no Steam auto-injection, Main Menu second `#FrontpageContents` rule.
+- CI #191 / `35438400128`: **327/327 PASS**, root Ruff/compile PASS, v2 Ruff/compile PASS, Svelte + D2PFX plugin builds PASS, rc7 Windows portable PASS, v2rc4 Windows portable PASS.
+- v2 artifact digest: `sha256:41e328b86a6f7448508c0dc040a94e562dfe97776f819d1ac7683b9a126da884`; rc7 artifact digest: `sha256:7f6b73eb1b4413916a30a7f99a3af302f0442c5ae8fd446cddea24b452270a5c`.

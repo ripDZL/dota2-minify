@@ -16,15 +16,15 @@
 - [x] Build explicit v2 compatibility matrix before replacing product architecture (`Docs/V2_COMPATIBILITY_MATRIX.md`).
 - [x] Map staged v2 security/product ports to exact upstream caller files (`Docs/V2_PORT_PLAN.md`).
 - [x] Stage v2 Stage 1 security substrate and high-risk callers under `V2_STAGING/`; CI #176 **309/309 PASS**, Windows portable PASS.
-- [ ] Port `core/security.py` protections into v2 downloads/extraction/update/D2PFX/cursor paths.
-- [ ] Integrate the staged Stage 1 files into the complete v2rc4 architecture before producing any v2 user build.
-- [ ] Port recursive/nested discovery, Collections, custom VPK categories into v2 `mods_shared` + ModService/UI.
-- [ ] Port profiles/favorites/mod-library metadata/collision report into v2 services/UI.
+- [x] Port `core/security.py` protections into v2 downloads/extraction/update/D2PFX/cursor paths.
+- [x] Integrate staged Stage 1 into the complete exact v2rc4 architecture under `V2_STAGING/`; CI #191 validated both v2 frontend and Windows portable.
+- [x] Port recursive/nested discovery, Collections, custom VPK categories into v2 `mods_shared` + ModService/UI.
+- [ ] Port collision report into v2 services/UI. Profiles/favorites/mod-library metadata are staged and validated.
 - [ ] Port transactional restore points/rollback + compatibility validation into v2 PatchService/pipeline.
 - [ ] Port Dark Terrain collision-aware yielding; do not replace it with blanket category conflict.
-- [ ] Preserve Main Menu second `#FrontpageContents` collapse rule.
+- [x] Preserve Main Menu second `#FrontpageContents` collapse rule.
 - [ ] Evaluate upstream v2 Remove Foliage `remap.json` against private-alias findings in isolated Dota smoke.
-- [ ] Preserve manual `prelaunch`; disable automatic Steam launch-option injection.
+- [x] Preserve manual `prelaunch`; disable automatic Steam launch-option injection.
 - [ ] Rebuild Black-Plum as CSS theme and retain the same minimum-window fit invariant in v2.
 - [ ] Residual hostile-input/path-race review and Dota smoke.
 - [ ] Beta -> main only after validation and explicit approval.

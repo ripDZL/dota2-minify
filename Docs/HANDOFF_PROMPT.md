@@ -22,3 +22,9 @@
 - Next technical order: (1) human foliage alias smoke remains manual/independent, (2) production alias only if PASS, (3) integrate staged Stage 1 into full v2rc4 + Stage 2 recursive mod model/services, (4) full Windows/Dota smoke.
 - Do not promote beta -> main without validation and explicit user approval.
 - User-visible project updates include America/Detroit date + timestamp.
+
+- Current validated hardening head: `59746db919e567245371609257cb7ab13a7e518b`.
+- Full exact v2rc4 architecture is materialized under `V2_STAGING/`; Stage 1 security and Stage 2 recursive logical mod model/favorites/profiles/D2PFX/UI are integrated.
+- CI #191 / `35438400128`: **327/327 PASS**; root + v2 Ruff/compile PASS; Svelte/plugin builds PASS; rc7 + v2rc4 Windows portable PASS.
+- v2 artifact digest: `sha256:41e328b86a6f7448508c0dc040a94e562dfe97776f819d1ac7683b9a126da884`.
+- Next v2 stage: restore points/rollback, collision report/index, Dark Terrain resource-level yielding, then Black-Plum CSS/min-fit and Dota smoke.

@@ -21,3 +21,9 @@
 - [x] Production rc7-derived app remains unchanged by `V2_STAGING`; validated product tip remains `8f29962bb056a9f95ab224f135bf795ecbda2b93`.
 - [ ] Next: human foliage alias smoke remains an independent manual gate. For v2, integrate the staged Stage 1 substrate into the full v2rc4 tree, then begin Stage 2 recursive mod model/services; no raw merge/rebase.
 - [ ] Human foliage alias smoke + general Windows/Dota smoke remain.
+
+- [x] Full exact v2rc4 architecture tree materialized under `V2_STAGING/`; fork Stage 1 security and Stage 2 logical mod-library semantics integrated.
+- [x] v2 Mod Library now exposes type/category filters, favorites, and profile save/apply/copy/delete controls; nested/D2PFX paths use logical IDs.
+- [x] v2 identity/manual-prelaunch/Main Menu fork behaviors preserved.
+- [x] CI #191 / `35438400128`: **327/327 PASS**; root + v2 Ruff/compile PASS; Svelte/plugin build PASS; rc7 + v2rc4 Windows portable builds PASS.
+- [ ] Next v2 work: transactional restore/rollback + collision index/report + Dark Terrain resource-yield semantics, then Black-Plum CSS/min-fit polish and Dota smoke.
