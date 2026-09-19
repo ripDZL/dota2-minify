@@ -90,3 +90,97 @@ jobs:
           path: Minify-v21.4-hardening-*-windows.zip
           if-no-files-found: error
           retention-days: 14
+
+  validate-v2-staging:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v5
+        with:
+          enable-cache: true
+          python-version: "3.13"
+
+      - name: Install Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+          cache-dependency-path: V2_STAGING/Minify/ui/web/package-lock.json
+
+      - name: Install v2 Python dependencies
+        working-directory: V2_STAGING
+        run: uv sync --group dev
+
+      - name: Compile v2 Python sources
+        working-directory: V2_STAGING
+        run: uv run python -m compileall -q Minify
+
+      - name: Ruff v2 staging
+        working-directory: V2_STAGING
+        run: |
+          uv run ruff format --check Minify
+          uv run ruff check Minify
+
+      - name: Install v2 web dependencies
+        working-directory: V2_STAGING/Minify/ui/web
+        run: npm ci
+
+      - name: Build v2 Svelte frontend and plugins
+        working-directory: V2_STAGING/Minify/ui/web
+        run: npm run build
+
+  build-v2-windows-portable:
+    needs: validate-v2-staging
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v5
+        with:
+          enable-cache: true
+          python-version: "3.13"
+
+      - name: Install Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+          cache-dependency-path: V2_STAGING/Minify/ui/web/package-lock.json
+
+      - name: Install v2 Python dependencies
+        shell: pwsh
+        run: |
+          Set-Location V2_STAGING
+          uv sync --group dev
+
+      - name: Build v2 Svelte frontend and plugins
+        shell: pwsh
+        run: |
+          Set-Location V2_STAGING\Minify\ui\web
+          npm ci
+          npm run build
+
+      - name: Build v2 executable and runtime package
+        shell: pwsh
+        run: |
+          Set-Location V2_STAGING
+          uv run python scripts\build.py --skip-npm --clean
+
+      - name: Bundle v2 portable test build
+        shell: pwsh
+        run: |
+          $zip = "Minify-v21.4-hardening-v2rc4-${{ github.sha }}-windows.zip"
+          Set-Location V2_STAGING\scripts\dist\Minify
+          7z a -tzip -mx=9 "..\..\..\..\$zip" .\*
+
+      - name: Upload v2 portable test build
+        uses: actions/upload-artifact@v4
+        with:
+          name: Minify-v21.4-hardening-v2rc4-windows
+          path: Minify-v21.4-hardening-v2rc4-*-windows.zip
+          if-no-files-found: error
+          retention-days: 14
+
