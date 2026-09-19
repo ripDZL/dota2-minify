@@ -62,7 +62,7 @@ class ConfigService:
     def set_game_language(self, lang: str) -> bool:
         try:
             config.set("output_locale", lang)
-            helper.sync_output_path()
+            helper.sync_output_path(force_locale=True)
             mods_shared.enforce_locale_mod_states()
             return True
         except Exception:
@@ -367,6 +367,9 @@ class ConfigService:
                     self.set_locale(value)
                 elif key == "output_locale":
                     self.set_game_language(value)
+                elif key == "output_path":
+                    config.set(key, value)
+                    helper.sync_output_path()
                 else:
                     config.set(key, value)
             return True

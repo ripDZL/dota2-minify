@@ -16,12 +16,19 @@ compiler_filepicker_path = ""
 output_path = config.get("output_path", constants.minify_default_dota_pak_output_path)
 
 
-def sync_output_path():
+def sync_output_path(force_locale=False):
     global output_path
+
+    configured = config.get("output_path", "")
+    if not force_locale and isinstance(configured, str) and configured.strip():
+        output_path = os.path.abspath(os.path.expanduser(configured.strip()))
+        return output_path
+
     locale = config.get_locale()
     matching = [lang for lang in constants.minify_dota_possible_language_output_paths if locale in lang]
     output_path = matching[0] if matching else constants.minify_default_dota_pak_output_path
     config.set("output_path", output_path)
+    return output_path
 
 
 sync_output_path()

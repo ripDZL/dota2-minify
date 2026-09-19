@@ -240,12 +240,12 @@ def patcher():
             try:
                 if always or mods_shared.get_state(folder):
                     blacklist_txt = os.path.join(mod_path, "blacklist.txt")
+                    rerl_file = os.path.join(mod_path, "rerl.json")
                     if conditions.workshop_installed:
                         styling_css = os.path.join(mod_path, "styling.css")
                         xml_file = os.path.join(mod_path, "xml.json")
                         files_uncompiled_dir = os.path.join(mod_path, "files_uncompiled")
                         remap_file = os.path.join(mod_path, "remap.json")
-                        rerl_file = os.path.join(mod_path, "rerl.json")
                     script_file = os.path.join(mod_path, "script.py")
                     replacer_file = os.path.join(mod_path, "replacer.json")
                     files_dir = os.path.join(mod_path, "files")
