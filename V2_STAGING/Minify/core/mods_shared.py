@@ -971,7 +971,6 @@ def scan_mods():
         order = cfg.get("order", 1)
         dependencies = cfg.get("dependencies", None)
         conflicts = cfg.get("conflicts", None)
-        category = cfg.get("category", None)
         visual = cfg.get("visual", True)
         _available.append(mod) if visual else _unavailable.append(mod)
         if dependencies is not None:
