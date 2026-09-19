@@ -4,10 +4,11 @@
 - Branches must remain exactly: `v21.4-hardening`, `beta`, `main`.
 - Work only on `v21.4-hardening` unless the user explicitly approves promotion.
 - Re-fetch all 3 branch heads before edits.
-- Current heads:
-  - `v21.4-hardening`: `c12197d660fdee3ddc4057ff30b5f8f2afe923cd`
+- Latest code head before handoff docs: `c12197d660fdee3ddc4057ff30b5f8f2afe923cd`.
+- Known untouched promotion heads at handoff:
   - `beta`: `442d36dcc902f6436c6404f2947091663c254cc5`
   - `main`: `a26bc88a0d412e357965f29488b83a7f9093e11f`
+- Re-fetch the live `v21.4-hardening` head because this handoff document itself is committed after the code head.
 - At session start read:
   - `Docs/AI_CONTEXT.md`
   - `Docs/TODO.md`
