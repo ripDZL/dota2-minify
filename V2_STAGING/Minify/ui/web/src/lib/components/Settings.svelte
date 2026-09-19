@@ -255,7 +255,7 @@
                   class="btn-action"
                   type="button"
                   disabled={!selectedPresets[items[0].mod]}
-                  on:click={() => applyPreset(items[0].mod!)}
+                  on:click={() => applyPreset(items[0].mod || "")}
                 >
                   Apply preset
                 </button>

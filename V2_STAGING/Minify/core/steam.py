@@ -9,6 +9,7 @@ import sys
 import vdf
 
 from core import base, config, log, output, utils
+from core.prelaunch_policy import strip_minify_prelaunch_prefix
 
 
 def remove_lang_args(arg_string):
@@ -73,6 +74,46 @@ def add_prelaunch_to_launch_options(check_only=False):
     Steam LaunchOptions to insert it automatically.
     """
     return False
+
+
+def remove_minify_prelaunch_from_launch_options(check_only=False):
+    """Remove only Minify-generated prelaunch command fragments from Steam options."""
+    steam_ids = []
+    accounts = get_steam_accounts()
+    if config.get("apply_for_all", True):
+        steam_ids.extend(account["id"] for account in accounts)
+    else:
+        steam_id = config.get("steam_id")
+        if steam_id:
+            steam_ids.append(steam_id)
+
+    changed = False
+    for steam_id in steam_ids:
+        vdf_path = os.path.join(config.get("steam_root"), "userdata", steam_id, "config", "localconfig.vdf")
+        if not os.path.exists(vdf_path):
+            continue
+
+        with utils.open_utf8R(vdf_path) as file:
+            data = vdf.load(file)
+
+        try:
+            app = data["UserLocalConfigStore"]["Software"]["Valve"]["Steam"]["apps"][base.STEAM_DOTA_ID]
+            launch_options = app.get("LaunchOptions", "")
+        except KeyError:
+            continue
+
+        cleaned, removed = strip_minify_prelaunch_prefix(launch_options)
+        if not removed:
+            continue
+        if check_only:
+            return True
+
+        app["LaunchOptions"] = cleaned
+        with utils.open_utf8R(vdf_path, "w") as file:
+            vdf.dump(data, file, pretty=True)
+        changed = True
+
+    return changed
 
 
 def fix_launch_options(check_only=False):
