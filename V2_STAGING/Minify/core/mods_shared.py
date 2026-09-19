@@ -912,6 +912,7 @@ def set_state(mod, value):
         return _set_state_callback(mod, value)
     config.update_json_file(base.mods_config_dir, mod, bool(value))
 
+
 def enforce_locale_mod_states():
     locale = config.get("output_locale", "english")
     all_locale_mods = set()
@@ -920,6 +921,7 @@ def enforce_locale_mod_states():
     required = set(constants.LOCALE_MOD_REQUIREMENTS.get(locale, []))
     for mod in all_locale_mods:
         set_state(mod, mod in required)
+
 
 def scan_mods():
     from patch import manifest_utils

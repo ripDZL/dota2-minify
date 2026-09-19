@@ -289,6 +289,7 @@ def extract_archive(archive_path: str, extract_dir: str = ".", target_file: Opti
         output.add_text(f"Extraction failed: {exc}", msg_type="error")
         return False
 
+
 def get_file_type(path: str) -> Optional[str]:
     """
     Identifies the file type. It first checks magic bytes (e.g., '.png', '.jpg', '.webm'),

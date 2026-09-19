@@ -74,6 +74,7 @@ def add_prelaunch_to_launch_options(check_only=False):
     """
     return False
 
+
 def fix_launch_options(check_only=False):
     """
     Fixes user(s) launch options with the language argument that has the current output path.
