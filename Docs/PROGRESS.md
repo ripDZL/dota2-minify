@@ -56,3 +56,9 @@
 - [x] CI #222 / `35468658278`: **377/377 PASS**, Ruff clean, v2 validation/Svelte/plugin builds PASS, root + v2 Windows portable PASS.
 - [x] Current v2 portable SHA-256: `3312efd9cbdfc84ffb87805504205fafc1af376d7e5b2b72007fdf835a7a90de`.
 - [ ] Next: user smoke of section placement/bulk controls + D2PFX, then continue full Windows/Dota smoke; private foliage alias remains separate.
+
+- [x] Windows smoke exposed patch preflight aborting on `PermissionError: [WinError 5]` while replacing derived `config/mod-content-index.json`.
+- [x] Fixed at `c8dd5d6167279ea98bfcddadbeea7e4910084831`: absolute cache path, bounded retry for Windows permission/sharing failures, writable-bit repair, process-local in-memory fallback, and non-fatal disk-cache disable after persistent failure.
+- [x] CI #223 / `35469297934`: **379/379 PASS**, Ruff clean, v2 validation/Svelte/plugin builds PASS, root + v2 Windows portable PASS.
+- [x] Current v2 portable SHA-256: `4413087967b6170c70a9fa9c568002b0d8806b73498d20973c916337b5845516`.
+- [ ] Next: user PATCH/preflight retry on Windows; then continue UI/D2PFX/full Dota smoke. Foliage alias remains separate.

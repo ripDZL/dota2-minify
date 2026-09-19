@@ -4,7 +4,7 @@
 - Branches must remain exactly: `v21.4-hardening`, `beta`, `main`.
 - Work only on `v21.4-hardening` unless the user explicitly approves promotion.
 - Re-fetch all 3 branch heads before edits.
-- Latest validated code head before handoff docs: `1c17df75253aa9b5c3924497e78587ad51ff9e81`.
+- Latest validated code head before handoff docs: `c8dd5d6167279ea98bfcddadbeea7e4910084831`.
 - Known untouched promotion heads at handoff:
   - `beta`: `442d36dcc902f6436c6404f2947091663c254cc5`
   - `main`: `a26bc88a0d412e357965f29488b83a7f9093e11f`
@@ -72,6 +72,7 @@
   - `f6c7b63c0f42152f8ce20d891371434e0e5998ce` preserve installed D2PFX preview image type.
   - `1354b8549f0e546faed062794ba7669d0f0a5ba0` restore persistent toggleable legacy-style Mod Library list view.
   - `1c17df75253aa9b5c3924497e78587ad51ff9e81` restore legacy collection section labels + bulk controls and fix string-schema D2PFX classification.
+  - `c8dd5d6167279ea98bfcddadbeea7e4910084831` make derived content-index cache publication best-effort so Windows cache locks cannot abort patch preflight.
 
 ## Current CI / Windows build
 - PyInstaller hosted-Windows DLL import-probe stall remains fixed by `472bfe794d4e0deecfc1e5deb352943737e181e6`.
@@ -81,17 +82,16 @@
   - `94a166544ce8455441abc9457f6e04a8e1ea4644`: cursor source identity check.
   - `734f083d53b4cd15df37956b1bc6cd70a801440a`: bounded generic JSON/JSONC + remap reads.
   - `541d8b4f20e48a1f62dc4052f6347fd450a5ba55`: bounded D2PFX/sidecar mod metadata reads.
-- CI #222 / run `35468658278`: **SUCCESS**.
-  - root `validate`: SUCCESS, **377 tests passed**, Ruff clean.
+- CI #223 / run `35469297934`: **SUCCESS**.
+  - root `validate`: SUCCESS, **379 tests passed**, Ruff clean.
   - `validate-v2-staging`: SUCCESS, including Svelte + D2PFX plugin builds.
   - root `build-windows-portable`: SUCCESS.
   - `build-v2-windows-portable`: SUCCESS.
-- Mod Library legacy list now restores actual collection section names rather than one generic Collections section. Example: nested Single Hero mods under `Hero Mods` render under `Hero Mods`.
-- D2PFX classification now accepts the current v2 install schema `"browser": "d2pfx"` as well as dictionary-form browser metadata, so D2PFX installs no longer fall into Standard.
-- List mode restores Select all / Clear / Invert / Expand all / Collapse all. Bulk selection preserves always-on and untickable mods.
-- D2PFX preview/date/layout fixes from #220 remain included.
-- Current v2 inner portable ZIP SHA-256: `3312efd9cbdfc84ffb87805504205fafc1af376d7e5b2b72007fdf835a7a90de`.
-- GitHub v2 artifact digest: `sha256:7acb394329eaf3ae6ccdde6c7e14ff2f9370de37225078428e0cbf2452dd87b8`.
+- Runtime smoke found patch preflight blocked by Windows `WinError 5` while atomically replacing `config/mod-content-index.json`.
+- `mod-content-index.json` is derived/disposable. v2 now uses an absolute cache destination, retries Windows permission/sharing failures, repairs a read-only destination when possible, keeps the live index in memory, and disables disk cache persistence for the process if publication still fails. Patch preflight continues.
+- Mod Library legacy-section and D2PFX fixes from #222 remain included.
+- Current v2 inner portable ZIP SHA-256: `4413087967b6170c70a9fa9c568002b0d8806b73498d20973c916337b5845516`.
+- GitHub v2 artifact digest: `sha256:f5ce5d38a127577d73b1ace29575cd17f65a6f1eab583dbae91d566837cc1c74`.
 
 ## Test ZIP rule
 - User explicitly wants a v2 Windows ZIP **only when the parity work is done enough to test and the current build succeeds**.
@@ -115,8 +115,8 @@
 - Never claim foliage PASS without an actual Dota smoke test from the user.
 
 ## Next actions
-- Current parity-complete v2 Windows test ZIP is built from `1c17df75253aa9b5c3924497e78587ad51ff9e81`; CI #222 / `35468658278`.
-- Next immediate gate: user smoke of restored legacy section names/bulk controls plus corrected D2PFX grouping/browser, then continue full Windows/Dota smoke.
+- Current parity-complete v2 Windows test ZIP is built from `c8dd5d6167279ea98bfcddadbeea7e4910084831`; CI #223 / `35469297934`.
+- Next immediate gate: user retry of patch preflight/PATCH on Windows, then continue Mod Library/D2PFX/full Windows/Dota smoke.
 - Private foliage alias human smoke remains independent and must not be claimed PASS without actual Dota testing.
 - Fix smoke findings only on `v21.4-hardening`.
 - Keep `beta` and `main` untouched unless the user explicitly approves promotion.

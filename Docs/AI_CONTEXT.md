@@ -62,3 +62,7 @@
 - Fix `1c17df75253aa9b5c3924497e78587ad51ff9e81`: public v2 `mod_library.is_d2pfx` recognizes both manifest schemas; ModService uses it; list collection keys preserve the real parent group name; Select all/Clear/Invert/Expand all/Collapse all restored. Bulk selection leaves always/untickable states unchanged.
 - CI #222 / `35468658278`: **377/377 PASS**, Ruff clean, v2 validation/Svelte/plugin builds PASS, root + v2 Windows portable PASS.
 - Current legacy-section-corrected v2 portable SHA-256: `3312efd9cbdfc84ffb87805504205fafc1af376d7e5b2b72007fdf835a7a90de`.
+
+- Windows runtime smoke found PATCH/preflight blocked by `PermissionError [WinError 5]` when `mod_library._save_content_index` replaced `config/mod-content-index.json`.
+- Fix `c8dd5d6167279ea98bfcddadbeea7e4910084831`: content-index persistence is explicitly best-effort because it is derived; absolute destination, four Windows permission/sharing retries, writable-bit repair, in-memory cache retention, and process-level disk-write disable after persistent failure. Patch preflight no longer propagates cache publication failure.
+- CI #223 / `35469297934`: **379/379 PASS**, Ruff clean, both validation jobs and both Windows portable builds PASS. Current v2 ZIP SHA-256 `4413087967b6170c70a9fa9c568002b0d8806b73498d20973c916337b5845516`.

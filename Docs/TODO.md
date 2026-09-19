@@ -30,10 +30,11 @@
 - [x] Fix v2 D2PFX screenshot regression: working JPG previews/fallback, Updated-date parity, max-4 desktop grid, action feedback/search race/install-state fixes; CI #220 **374/374 PASS**, both Windows portable builds PASS.
 - [x] Restore toggleable legacy-style Mod Library list view with collapsible type groups, optional compact previews, and persistent List/Cards choice; CI #221 **375/375 PASS**, both Windows portable builds PASS.
 - [x] Restore legacy section naming + bulk controls and fix D2PFX classification: actual collection labels such as Hero Mods, Select all/Clear/Invert/Expand all/Collapse all, current string-schema D2PFX manifests; CI #222 **377/377 PASS**, both Windows portable builds PASS.
-- [ ] Smoke new Mod Library List/Cards view + corrected D2PFX Browser, then full Windows/Dota smoke.
+- [x] Fix Windows patch-preflight `WinError 5` on `mod-content-index.json`: derived cache is best-effort/in-memory on publish failure; CI #223 **379/379 PASS**, both Windows portable builds PASS.
+- [ ] Retry patch preflight/PATCH on Windows, then smoke Mod Library List/Cards + corrected D2PFX Browser and continue full Windows/Dota smoke.
 - [ ] Beta -> main only after validation and explicit approval.
 
 - [x] Fix v2 runtime startup `base.TITLE` regression caused by literal escaped newlines in staged base identity; CI #192 PASS and replacement v2 portable built.
 - [x] Diagnose/fix the v2 Windows PyInstaller dynamic-library stall; CI #214 PASS on `472bfe794d4e0deecfc1e5deb352943737e181e6`.
-- [x] Produce the current legacy-section + D2PFX-corrected parity-complete v2 Windows portable from `1c17df75253aa9b5c3924497e78587ad51ff9e81`; SHA-256 `3312efd9cbdfc84ffb87805504205fafc1af376d7e5b2b72007fdf835a7a90de`.
-- [ ] User Mod Library/D2PFX re-smoke + Windows/Dota smoke of the current parity-complete v2 ZIP.
+- [x] Produce the current patch-preflight + legacy-section + D2PFX-corrected v2 Windows portable from `c8dd5d6167279ea98bfcddadbeea7e4910084831`; SHA-256 `4413087967b6170c70a9fa9c568002b0d8806b73498d20973c916337b5845516`.
+- [ ] User PATCH/preflight retry + Mod Library/D2PFX re-smoke + Windows/Dota smoke of the current v2 ZIP.

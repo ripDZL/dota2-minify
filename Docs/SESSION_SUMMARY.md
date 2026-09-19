@@ -59,3 +59,9 @@
 - CI #222 / `35468658278`: **377/377 PASS**, Ruff clean, v2 Svelte/plugin validation PASS, root + v2 Windows portable PASS.
 - Current v2 portable SHA-256: `3312efd9cbdfc84ffb87805504205fafc1af376d7e5b2b72007fdf835a7a90de`; artifact digest `sha256:7acb394329eaf3ae6ccdde6c7e14ff2f9370de37225078428e0cbf2452dd87b8`.
 - Next: section/bulk-control/D2PFX smoke, then full Windows/Dota smoke. Beta/main untouched.
+
+- User PATCH smoke on #222 failed in preflight with Windows `WinError 5` replacing `config/mod-content-index.json`.
+- Root issue was treating a disposable collision-index cache write as mandatory. Fix `c8dd5d6167279ea98bfcddadbeea7e4910084831` makes cache persistence resilient/non-fatal while retaining the computed index in memory.
+- CI #223 / `35469297934`: **379/379 PASS**, Ruff clean, v2 validation/Svelte/plugin builds PASS, root + v2 Windows portable PASS.
+- Current v2 portable SHA-256: `4413087967b6170c70a9fa9c568002b0d8806b73498d20973c916337b5845516`; artifact digest `sha256:f5ce5d38a127577d73b1ace29575cd17f65a6f1eab583dbae91d566837cc1c74`.
+- Next: user retry PATCH/preflight. Beta/main untouched.

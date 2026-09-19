@@ -42,3 +42,5 @@
 - v2 Mod Library list sections must mirror legacy organization: Standard first; each discovered collection uses its real group label (for example `Hero Mods`) rather than a generic Collections header; D2PFX and VPK remain dedicated sections. The Collections filter still selects nested collection-backed mods without changing their displayed section label.
 - v2 D2PFX identity must accept both browser manifest schemas: string `"browser": "d2pfx"` (current v2 installer) and legacy/dictionary browser metadata. UI grouping must use normalized backend identity, not infer from path alone.
 - Legacy list bulk controls operate on the complete mod set like the old UI; always-on and untickable mods are never mutated. Expand/Collapse affects current list sections only.
+
+- v2 collision content index is a derived cache, not patch state. `config/mod-content-index.json` persistence must be best-effort: use an absolute destination and atomic temp file, retry Windows permission/sharing failures, repair read-only destination attributes where possible, retain the live index in memory, and never abort patch preflight solely because cache publication failed.
