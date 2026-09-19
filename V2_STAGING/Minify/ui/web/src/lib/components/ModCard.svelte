@@ -6,7 +6,9 @@
   export let always: boolean = false;
   export let untickable: boolean = false;
   export let preview: string | null | undefined = undefined;
+  export let favorite: boolean = false;
   export let ontoggle: (value: boolean) => void;
+  export let onFavorite: ((name: string, value: boolean) => void) | undefined = undefined;
   export let onDetails: ((name: string) => void) | undefined = undefined;
 
   $: effectiveName = displayName || name;
@@ -29,9 +31,12 @@
 
   function handleDetails(e: MouseEvent) {
     e.stopPropagation();
-    if (onDetails) {
-      onDetails(name);
-    }
+    if (onDetails) onDetails(name);
+  }
+
+  function handleFavorite(e: MouseEvent) {
+    e.stopPropagation();
+    if (onFavorite) onFavorite(name, !favorite);
   }
 </script>
 
@@ -50,6 +55,18 @@
       <div class="preview-placeholder">
         <span class="placeholder-letter">{initialLetter}</span>
       </div>
+    {/if}
+    {#if onFavorite}
+      <button
+        class="favorite-btn"
+        class:favorite
+        type="button"
+        title={favorite ? "Remove from favorites" : "Add to favorites"}
+        aria-label={favorite ? "Remove from favorites" : "Add to favorites"}
+        on:click={handleFavorite}
+      >
+        {favorite ? "★" : "☆"}
+      </button>
     {/if}
   </div>
 
@@ -77,7 +94,7 @@
   .mod-card {
     display: flex;
     flex-direction: column;
-    height: 100px;
+    height: 104px;
     border: 1px solid var(--card-border, #000);
     cursor: pointer;
     background: var(--card-bg, #fff);
@@ -114,7 +131,8 @@
   }
 
   .preview-container {
-    height: 60px;
+    position: relative;
+    height: 64px;
     width: 100%;
     overflow: hidden;
     border-bottom: 1px solid var(--card-border, #000);
@@ -145,6 +163,25 @@
     color: var(--text-muted, #888888);
     line-height: 1;
     text-transform: uppercase;
+  }
+
+  .favorite-btn {
+    position: absolute;
+    top: 4px;
+    right: 4px;
+    width: 25px;
+    height: 25px;
+    padding: 0;
+    border: 1px solid var(--btn-border, #000);
+    background: var(--card-footer-bg, #fff);
+    color: var(--text-muted, #777);
+    font-size: 17px;
+    line-height: 21px;
+    cursor: pointer;
+  }
+
+  .favorite-btn.favorite {
+    color: var(--accent, #17bebe);
   }
 
   .card-footer {
@@ -183,12 +220,14 @@
     cursor: pointer;
   }
 
-  .details-btn:hover {
+  .details-btn:hover,
+  .favorite-btn:hover {
     background: var(--btn-hover-bg, #f0f0f0);
     border-color: var(--btn-hover-border, var(--border-color, #000));
   }
 
-  .details-btn:active {
+  .details-btn:active,
+  .favorite-btn:active {
     background: var(--btn-active-bg, #000);
     color: var(--btn-active-text, #fff);
   }
