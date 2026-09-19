@@ -11,6 +11,19 @@
   export let onToggleEnabled: ((mod: D2Mod, enabled: boolean) => void) | undefined = undefined;
   export let onPreview: ((url: string, title: string) => void) | undefined = undefined;
 
+  let previewSrc: string | null = null;
+  let lastPrimaryPreview: string | null = null;
+  let fallbackAttempted = false;
+
+  $: {
+    const primary = mod.preview_url || null;
+    if (primary !== lastPrimaryPreview) {
+      lastPrimaryPreview = primary;
+      previewSrc = primary;
+      fallbackAttempted = false;
+    }
+  }
+
   function formatAuthors(author: any, sender: any): string {
     const parts: string[] = [];
     if (author) {
@@ -34,29 +47,31 @@
     return String(tags);
   }
 
-  function handleImageError(event: Event) {
-    const target = event.currentTarget as HTMLElement;
-    if (target) {
-      target.style.display = "none";
+  function handleImageError() {
+    if (!fallbackAttempted && mod.preview_fallback_url && mod.preview_fallback_url !== previewSrc) {
+      fallbackAttempted = true;
+      previewSrc = mod.preview_fallback_url;
+      return;
     }
+    previewSrc = null;
   }
 </script>
 
 <div class="mod-card" class:active={installed && enabled}>
   <div class="preview-box">
-    {#if mod.preview_url}
+    {#if previewSrc}
       <button
         type="button"
         class="preview-img-btn"
         on:click|stopPropagation={() =>
           onPreview &&
-          mod.preview_url &&
-          onPreview(mod.preview_url, `${mod.name}${mod.label ? ` (${mod.label})` : ""}`)}
+          previewSrc &&
+          onPreview(previewSrc, `${mod.name}${mod.label ? ` (${mod.label})` : ""}`)}
         title={$t("title_click_to_preview")}
         aria-label={`Preview image for ${mod.name}`}
       >
         <img
-          src={mod.preview_url}
+          src={previewSrc}
           alt={mod.name}
           loading="lazy"
           decoding="async"
@@ -77,6 +92,12 @@
     {#if formatAuthors(mod.author, mod.sender)}
       <div class="mod-meta">
         {formatAuthors(mod.author, mod.sender)}
+      </div>
+    {/if}
+
+    {#if mod.updated_label}
+      <div class="mod-updated">
+        {mod.updated_label}
       </div>
     {/if}
 
@@ -137,7 +158,9 @@
 
   .preview-box {
     width: 100%;
-    height: 100px;
+    aspect-ratio: 3 / 2;
+    min-height: 110px;
+    max-height: 180px;
     border: 1px solid var(--card-border, #000);
     background: var(--card-preview-bg, #f8f8f8);
     display: flex;
@@ -193,10 +216,16 @@
     margin-bottom: 2px;
   }
 
+  .mod-updated {
+    font-size: 10px;
+    color: #c6975c;
+    margin-bottom: 2px;
+  }
+
   .mod-tags {
     font-size: 9px;
     color: var(--accent, #0055bb);
-    word-break: break-all;
+    word-break: break-word;
   }
 
   .card-actions {
@@ -273,6 +302,9 @@
     .preview-box {
       width: 112px;
       height: 66px;
+      min-height: 66px;
+      max-height: 66px;
+      aspect-ratio: auto;
       margin: 0;
     }
 

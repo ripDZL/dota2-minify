@@ -11,6 +11,8 @@ export interface D2Mod {
   sender?: string | string[];
   tags?: string[] | Record<string, boolean>;
   preview_url?: string | null;
+  preview_fallback_url?: string | null;
+  updated_label?: string | null;
   file?: string;
   links?: any[];
   [key: string]: any;

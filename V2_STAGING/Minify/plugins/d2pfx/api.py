@@ -1,3 +1,4 @@
+import datetime as dt
 import os
 import re
 import tempfile
@@ -10,6 +11,68 @@ from . import __main__ as plugin_main
 from .data import DataManager
 
 router = PluginRouter()
+
+
+def _d2pfx_date_value(mod: Dict[str, Any]) -> dt.datetime | None:
+    if not isinstance(mod, dict):
+        return None
+    meta = mod.get("meta", {})
+    if not isinstance(meta, dict):
+        return None
+    raw = meta.get("date")
+    if raw is None or raw == "" or raw is False:
+        return None
+
+    try:
+        numeric = float(raw)
+    except (TypeError, ValueError):
+        numeric = None
+
+    if numeric is not None:
+        if numeric == 0:
+            return None
+        if abs(numeric) >= 100_000_000_000:
+            numeric /= 1000.0
+        try:
+            return dt.datetime.fromtimestamp(numeric, tz=dt.timezone.utc)
+        except (OverflowError, OSError, ValueError):
+            return None
+
+    text = str(raw).strip()
+    if not text:
+        return None
+    try:
+        parsed = dt.datetime.fromisoformat(text.replace("Z", "+00:00"))
+    except ValueError:
+        try:
+            parsed_date = dt.date.fromisoformat(text)
+        except ValueError:
+            return None
+        parsed = dt.datetime.combine(parsed_date, dt.time.min, tzinfo=dt.timezone.utc)
+
+    if parsed.tzinfo is None:
+        parsed = parsed.replace(tzinfo=dt.timezone.utc)
+    return parsed
+
+
+def _format_d2pfx_updated_date(mod: Dict[str, Any]) -> str | None:
+    parsed = _d2pfx_date_value(mod)
+    if parsed is not None:
+        value = parsed.astimezone(dt.timezone.utc).date()
+        return f"Updated {value.strftime('%b')} {value.day}, {value.year}"
+
+    meta = mod.get("meta", {}) if isinstance(mod, dict) else {}
+    raw = meta.get("date") if isinstance(meta, dict) else None
+    if isinstance(raw, str):
+        text = raw.strip()
+        if text and len(text) <= 32:
+            return f"Updated {text}"
+    return None
+
+
+def _d2pfx_date_sort_key(mod: Dict[str, Any]) -> float:
+    parsed = _d2pfx_date_value(mod)
+    return parsed.timestamp() if parsed is not None else 0.0
 
 
 @router.route
@@ -112,18 +175,23 @@ def get_mods(params: Dict[str, Any] = None) -> List[Dict[str, Any]]:
         elif sort_mode == "z-a":
             filtered.sort(key=lambda m: m.get("name", "").lower(), reverse=True)
         elif sort_mode == "new":
-            filtered.sort(key=lambda m: m.get("meta", {}).get("date", 0), reverse=True)
+            filtered.sort(key=_d2pfx_date_sort_key, reverse=True)
         elif sort_mode == "old":
-            filtered.sort(key=lambda m: m.get("meta", {}).get("date", 0))
+            filtered.sort(key=_d2pfx_date_sort_key)
 
     for m in filtered:
+        m["updated_label"] = _format_d2pfx_updated_date(m)
         prev = m.get("preview")
-        if prev and not prev.startswith("http"):
-            m["preview_url"] = dm.get_preview_url(cat_id, prev)
-        elif prev:
-            m["preview_url"] = prev
+        if isinstance(prev, str) and prev:
+            if prev.casefold().startswith(("http://", "https://")):
+                m["preview_url"] = prev
+                m["preview_fallback_url"] = None
+            else:
+                m["preview_url"] = dm.get_preview_url(cat_id, prev)
+                m["preview_fallback_url"] = dm.get_preview_fallback_url(prev)
         else:
             m["preview_url"] = None
+            m["preview_fallback_url"] = None
 
     return filtered
 

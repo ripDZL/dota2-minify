@@ -13,7 +13,7 @@ BASE_URL = "https://raw.githubusercontent.com/h6rd/Dota2PornFxWeb/data/"
 ASSETS_URL = "https://raw.githubusercontent.com/h6rd/Dota2PornFxWeb/main/assets/files/"
 CACHE_DIR = os.path.join(base.cache_dir, "plugins", "d2pfx")
 PREVIEWS_CACHE_DIR = os.path.join(CACHE_DIR, "previews")
-PREVIEWS_URL = "https://raw.githubusercontent.com/h6rd/Dota2PornFxWeb/main/assets/previews/"
+PREVIEWS_URL = f"{BASE_URL}previews/"
 BLACKLIST = [
     "guides",
     "item-sounds",
@@ -326,6 +326,14 @@ class DataManager:
         if filename.casefold().endswith(".webp"):
             filename = filename[:-5] + ".jpg"
         return _quoted_asset_url(PREVIEWS_URL, cat_id, filename)
+
+    def get_preview_fallback_url(self, filename):
+        filename = urllib.parse.unquote(str(filename or ""))
+        if filename.casefold().endswith(".webp"):
+            filename = filename[:-5] + ".jpg"
+        safe_filename = _safe_asset_path(filename)
+        encoded_filename = "/".join(urllib.parse.quote(part, safe="") for part in safe_filename.split("/"))
+        return f"{PREVIEWS_URL}{encoded_filename}"
 
     def get_file_url(self, cat_id, filename):
         return _quoted_asset_url(ASSETS_URL, cat_id, filename)

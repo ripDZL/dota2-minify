@@ -21,6 +21,7 @@
   let installingMap: Record<string, boolean> = {};
   let enabledMap: Record<string, boolean> = {};
   let actionMessage = "";
+  let modRequestId = 0;
   let previewModal: { url: string; title: string } | null = null;
 
   function openPreview(url: string, title: string) {
@@ -75,18 +76,25 @@
 
   async function fetchMods() {
     if (!selectedCategory) return;
+    const requestId = ++modRequestId;
     isLoadingMods = true;
     try {
       const res = await callApi("get_mods", {
         cat_id: selectedCategory,
         search: modSearchQuery,
       });
-      mods = Array.isArray(res) ? res : [];
+      if (requestId === modRequestId) {
+        mods = Array.isArray(res) ? res : [];
+      }
     } catch (err) {
       console.error("Error fetching D2PFX mods:", err);
-      mods = [];
+      if (requestId === modRequestId) {
+        mods = [];
+      }
     } finally {
-      isLoadingMods = false;
+      if (requestId === modRequestId) {
+        isLoadingMods = false;
+      }
     }
   }
 
@@ -98,15 +106,7 @@
   async function handleInstall(m: D2Mod) {
     const key = getModKey(m, selectedCategory);
     installingMap = { ...installingMap, [key]: true };
-    enabledMap = { ...enabledMap, [key]: true };
     actionMessage = `Installing ${m.name}...`;
-
-    try {
-      await setModState(m.name, selectedCategory, m.label, true);
-      notifyParentModsRefreshed();
-    } catch (err) {
-      console.error("Error setting mod initial state in mods.json:", err);
-    }
 
     try {
       const res = await callApi("install_mod", {
@@ -114,13 +114,21 @@
         cat_id: selectedCategory,
       });
       if (res?.success) {
+        await setModState(m.name, selectedCategory, m.label, true);
+        enabledMap = { ...enabledMap, [key]: true };
         await refreshInstalledMods();
         notifyParentModsRefreshed();
         actionMessage = `Successfully installed ${m.name}`;
       } else {
+        const copyEnabled = { ...enabledMap };
+        delete copyEnabled[key];
+        enabledMap = copyEnabled;
         actionMessage = `Failed: ${res?.error || "Unknown error"}`;
       }
     } catch (err) {
+      const copyEnabled = { ...enabledMap };
+      delete copyEnabled[key];
+      enabledMap = copyEnabled;
       actionMessage = `Install error: ${err}`;
     } finally {
       const copy = { ...installingMap };
@@ -255,6 +263,10 @@
       onRefreshData={handlePruneMetadata}
     />
 
+    {#if actionMessage}
+      <div class="action-message" role="status" aria-live="polite">{actionMessage}</div>
+    {/if}
+
     <div class="mods-grid-container">
       {#if isLoadingMods}
         <div class="loading-grid">{$t("label_loading_mods")}</div>
@@ -364,8 +376,30 @@
 
   .mods-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(170px, 1fr));
+    grid-template-columns: repeat(4, minmax(0, 1fr));
     gap: 10px;
+  }
+
+  .action-message {
+    min-height: 28px;
+    padding: 6px 10px;
+    border-bottom: 1px solid var(--border-color, #000);
+    background: var(--bg-secondary, var(--bg-primary, #fff));
+    color: var(--text-primary, #000);
+    font-size: 12px;
+    line-height: 16px;
+  }
+
+  @media (max-width: 1280px) {
+    .mods-grid {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+  }
+
+  @media (max-width: 1080px) {
+    .mods-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
   }
 
   .lightbox-backdrop {
