@@ -191,6 +191,103 @@ class Api:
             result["path"] = path
         return result
 
+    def run_developer_action(self, action: str) -> Dict[str, Any]:
+        """Run a named local maintenance action from the v2 Developer Tools surface."""
+        import threading
+        import webbrowser
+
+        import helper
+        import patch
+        from core import fs, log, mods_shared, steam
+
+        action = str(action or "").strip().casefold()
+        try:
+            open_targets = {
+                "open_output": helper.output_path,
+                "open_output_vpk": os.path.join(helper.output_path, "pak66_dir.vpk"),
+                "open_root": base.base_dir,
+                "open_logs": base.logs_dir,
+                "open_config": base.config_dir,
+                "open_mods": base.mods_dir,
+                "open_dota": os.path.join(steam.LIBRARY, "steamapps", "common", "dota 2 beta"),
+                "open_dota_pak": constants.dota_game_pak_path,
+                "open_core_pak": constants.dota_core_pak_path,
+            }
+            if action in open_targets:
+                fs.open_thing(open_targets[action])
+                return {"success": True, "message": f"Opened {action.replace('_', ' ')}."}
+
+            if action == "launch_dota_tools":
+                fs.open_thing(
+                    constants.dota2_tools_executable,
+                    f"-addon a -language {config.get('output_locale')} -novid -console",
+                )
+                return {"success": True, "message": "Launched Dota 2 Tools."}
+
+            if action == "launch_dota":
+                fs.open_thing(
+                    constants.dota2_executable,
+                    f"-language {config.get('output_locale')} -novid -console",
+                )
+                return {"success": True, "message": "Launched Dota 2."}
+
+            if action == "create_debug_zip":
+                log.create_debug_zip()
+                return {"success": True, "message": "Created debug ZIP."}
+
+            if action in {"tick_all", "untick_all"}:
+                enable = action == "tick_all"
+                changed = 0
+                for item in self.mod_service.get_mods():
+                    if item.get("always") or item.get("untickable"):
+                        continue
+                    mods_shared.set_state(str(item["name"]), enable)
+                    changed += 1
+                return {
+                    "success": True,
+                    "message": f"{'Selected' if enable else 'Cleared'} {changed} mod(s).",
+                    "refresh_mods": True,
+                }
+
+            if action == "compile_folder":
+                folder = self.dialog_service.pick_folder("Select path to compile")
+                if not folder:
+                    return {"success": False, "cancelled": True}
+                threading.Thread(
+                    target=helper.compile_assets,
+                    kwargs={"input_path": folder},
+                    daemon=True,
+                ).start()
+                return {"success": True, "message": f"Compilation started for {folder}."}
+
+            if action == "wipe_language_paths":
+                threading.Thread(target=patch.unins.wipe, daemon=True).start()
+                return {"success": True, "message": "Language-path cleanup started."}
+
+            if action == "extract_workshop_tools":
+                ok = bool(helper.extract_workshop_tools())
+                return {
+                    "success": ok,
+                    "message": "Workshop Tools extracted." if ok else "Workshop Tools extraction failed.",
+                }
+
+            if action == "launch_steam":
+                fs.open_thing(steam.steam_executable_path, "-silent")
+                return {"success": True, "message": "Launched Steam."}
+
+            if action == "kill_steam":
+                fs.open_thing(steam.steam_executable_path, "-exitsteam")
+                return {"success": True, "message": "Requested Steam shutdown."}
+
+            if action == "validate_dota":
+                webbrowser.open(f"steam://validate/{base.STEAM_DOTA_ID}")
+                return {"success": True, "message": "Opened Dota 2 validation in Steam."}
+
+            return {"success": False, "error": "Unknown developer action."}
+        except Exception as exc:
+            output.add_text(f"Developer action {action!r} failed: {exc}", msg_type="error")
+            return {"success": False, "error": str(exc)}
+
     def generate_foliage_alias_smoke(self) -> Dict[str, Any]:
         try:
             from core import foliage_smoke, mods_shared

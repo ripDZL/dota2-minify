@@ -1,6 +1,7 @@
 <script lang="ts">
   import { onMount } from "svelte";
   import { t } from "../i18n";
+  import { refreshMods } from "../api";
 
   export let active: boolean = false;
   export let onSettingChange: ((key: string, value: any) => void) | undefined = undefined;
@@ -30,6 +31,32 @@
 
   let foliageSmokeBusy = false;
   let foliageSmokeStatus = "";
+
+  let developerBusy = false;
+  let developerStatus = "";
+
+  async function runDeveloperAction(action: string, label: string) {
+    if (developerBusy) return;
+    developerBusy = true;
+    developerStatus = `${label}…`;
+    try {
+      const result = await window.pywebview?.api?.run_developer_action?.(action);
+      if (result?.success) {
+        developerStatus = result.message || `${label} completed.`;
+        if (result.refresh_mods) {
+          await refreshMods();
+        }
+      } else if (!result?.cancelled) {
+        developerStatus = result?.error || `${label} failed.`;
+      } else {
+        developerStatus = "";
+      }
+    } catch (err) {
+      developerStatus = `${label} failed: ${err}`;
+    } finally {
+      developerBusy = false;
+    }
+  }
 
   async function generateFoliageSmoke() {
     if (foliageSmokeBusy) return;
@@ -215,16 +242,57 @@
       <div class="section-header">
         <h4 class="section-title">Developer Tools</h4>
       </div>
-      <div class="section-content">
-        <div class="setting-item-row">
-          <div class="developer-copy">
-            <span class="setting-label">Remove Foliage private alias smoke</span>
-            <span class="developer-note">Generates the local-only _09 test mod from your installed Dota files. No Valve stock asset is bundled or uploaded.</span>
+      <div class="section-content developer-content">
+        <div class="developer-group">
+          <strong>Paths & files</strong>
+          <div class="developer-actions">
+            <button type="button" disabled={developerBusy} on:click={() => runDeveloperAction("open_output", "Open compile output")}>Compile output</button>
+            <button type="button" disabled={developerBusy} on:click={() => runDeveloperAction("open_output_vpk", "Open compiled VPK")}>Compiled pak66</button>
+            <button type="button" disabled={developerBusy} on:click={() => runDeveloperAction("open_root", "Open Minify root")}>Minify root</button>
+            <button type="button" disabled={developerBusy} on:click={() => runDeveloperAction("open_logs", "Open logs")}>Logs</button>
+            <button type="button" disabled={developerBusy} on:click={() => runDeveloperAction("open_config", "Open config")}>Config</button>
+            <button type="button" disabled={developerBusy} on:click={() => runDeveloperAction("open_mods", "Open mods")}>Mods</button>
+            <button type="button" disabled={developerBusy} on:click={() => runDeveloperAction("open_dota", "Open Dota folder")}>Dota folder</button>
+            <button type="button" disabled={developerBusy} on:click={() => runDeveloperAction("open_dota_pak", "Open Dota pak01")}>Dota pak01</button>
+            <button type="button" disabled={developerBusy} on:click={() => runDeveloperAction("open_core_pak", "Open Dota core pak01")}>Core pak01</button>
+            <button type="button" disabled={developerBusy} on:click={() => runDeveloperAction("create_debug_zip", "Create debug ZIP")}>Create debug ZIP</button>
           </div>
-          <button class="btn-action" on:click={generateFoliageSmoke} disabled={foliageSmokeBusy}>
-            {foliageSmokeBusy ? "Generating…" : "Generate _09 foliage smoke mod"}
-          </button>
         </div>
+
+        <div class="developer-group">
+          <strong>Mod tools</strong>
+          <div class="developer-actions">
+            <button type="button" disabled={developerBusy} on:click={() => runDeveloperAction("compile_folder", "Compile selected folder")}>Compile folder…</button>
+            <button type="button" disabled={developerBusy} on:click={() => runDeveloperAction("untick_all", "Untick all mods")}>Untick all mods</button>
+            <button type="button" disabled={developerBusy} on:click={() => runDeveloperAction("tick_all", "Tick all mods")}>Tick all mods</button>
+          </div>
+          <div class="setting-item-row">
+            <div class="developer-copy">
+              <span class="setting-label">Remove Foliage private alias smoke</span>
+              <span class="developer-note">Generates the local-only _09 test mod from your installed Dota files. No Valve stock asset is bundled or uploaded.</span>
+            </div>
+            <button class="btn-action" on:click={generateFoliageSmoke} disabled={foliageSmokeBusy || developerBusy}>
+              {foliageSmokeBusy ? "Generating…" : "Generate _09 foliage smoke mod"}
+            </button>
+          </div>
+        </div>
+
+        <div class="developer-group">
+          <strong>Maintenance & launch</strong>
+          <div class="developer-actions">
+            <button type="button" disabled={developerBusy} on:click={() => runDeveloperAction("wipe_language_paths", "Wipe language paths")}>Wipe language paths</button>
+            <button type="button" disabled={developerBusy} on:click={() => runDeveloperAction("extract_workshop_tools", "Extract Workshop Tools")}>Extract Workshop Tools</button>
+            <button type="button" disabled={developerBusy} on:click={() => runDeveloperAction("launch_dota_tools", "Launch Dota 2 Tools")}>Launch Dota 2 Tools</button>
+            <button type="button" disabled={developerBusy} on:click={() => runDeveloperAction("launch_dota", "Launch Dota 2")}>Launch Dota 2</button>
+            <button type="button" disabled={developerBusy} on:click={() => runDeveloperAction("launch_steam", "Launch Steam")}>Launch Steam</button>
+            <button type="button" disabled={developerBusy} on:click={() => runDeveloperAction("kill_steam", "Kill Steam")}>Kill Steam</button>
+            <button type="button" disabled={developerBusy} on:click={() => runDeveloperAction("validate_dota", "Validate Dota 2")}>Validate Dota 2</button>
+          </div>
+        </div>
+
+        {#if developerStatus}
+          <div class="developer-status">{developerStatus}</div>
+        {/if}
         {#if foliageSmokeStatus}
           <div class="developer-status">{foliageSmokeStatus}</div>
         {/if}
@@ -573,6 +641,29 @@
 
   .setting-label {
     font-size: 13px;
+  }
+
+  .developer-content {
+    gap: 10px;
+  }
+
+  .developer-group {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    padding-bottom: 9px;
+    border-bottom: 1px solid var(--border-color, #000);
+  }
+
+  .developer-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+
+  .developer-actions button {
+    min-height: 27px;
+    padding: 0 9px;
   }
 
   .developer-copy {

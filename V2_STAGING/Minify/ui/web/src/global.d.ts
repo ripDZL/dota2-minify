@@ -9,6 +9,13 @@ declare global {
         get_current_locale: () => Promise<string>;
         get_current_game_language: () => Promise<string>;
         get_available_languages: () => Promise<string[]>;
+        run_developer_action?: (action: string) => Promise<{
+          success: boolean;
+          cancelled?: boolean;
+          message?: string;
+          error?: string;
+          refresh_mods?: boolean;
+        }>;
         generate_foliage_alias_smoke?: () => Promise<{
           success: boolean;
           output_dir?: string;
