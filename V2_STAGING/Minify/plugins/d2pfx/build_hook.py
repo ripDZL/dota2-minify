@@ -66,6 +66,8 @@ def _atomic_copy_regular_file(
         opened = os.fstat(source_fd)
         if not stat.S_ISREG(opened.st_mode) or opened.st_size > max_bytes:
             raise ValueError(f"Cursor source changed during validation: {source}")
+        if (source_info.st_dev, source_info.st_ino) != (opened.st_dev, opened.st_ino):
+            raise ValueError(f"Cursor source changed while it was being opened: {source}")
 
         temporary_fd, temporary = tempfile.mkstemp(prefix=".minify-cursor-", dir=parent)
         written = 0

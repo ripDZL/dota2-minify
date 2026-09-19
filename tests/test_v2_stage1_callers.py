@@ -57,6 +57,7 @@ def test_v2_d2pfx_cursor_port_rejects_symlinks_and_uses_atomic_regular_file_copy
         "security.confined_destination",
         "tempfile.mkstemp",
         "os.replace(temporary, destination)",
+        "(source_info.st_dev, source_info.st_ino) != (opened.st_dev, opened.st_ino)",
     ):
         assert token in source
     assert "shutil.copy2" not in source
