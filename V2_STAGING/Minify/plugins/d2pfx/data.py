@@ -6,7 +6,7 @@ import tempfile
 import time
 import urllib.parse
 
-from core import base, config, fs, security
+from core import base, config, fs, security, utils
 
 # D2PFX Browser Constants
 BASE_URL = "https://raw.githubusercontent.com/h6rd/Dota2PornFxWeb/data/"
