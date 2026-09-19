@@ -23,6 +23,8 @@
 
   let schema: SettingItem[] = [];
   let values: Record<string, any> = {};
+  let presets: Record<string, Array<{ name: string; values: Record<string, any> }>> = {};
+  let selectedPresets: Record<string, string> = {};
 
   let newListItemInputs: Record<string, string> = {};
 
@@ -57,6 +59,7 @@
         if (data.values) {
           values = { ...values, ...data.values };
         }
+        presets = data.presets || {};
       }
     } catch (err) {
       console.error("Failed to load settings:", err);
@@ -90,6 +93,13 @@
         onSettingChange(item.key, newValue);
       }
     }
+  }
+
+  async function applyPreset(modName: string) {
+    const presetName = selectedPresets[modName] || "";
+    if (!presetName || !window.pywebview?.api?.apply_mod_preset) return;
+    const ok = await window.pywebview.api.apply_mod_preset(modName, presetName);
+    if (ok) await loadSettings();
   }
 
   async function runModFunction(item: SettingItem) {
@@ -231,6 +241,27 @@
           </button>
         </div>
         <div class="section-content">
+          {#if items[0]?.mod && presets[items[0].mod]?.length}
+            <div class="preset-row">
+              <span class="setting-label">Preset</span>
+              <div class="preset-controls">
+                <select class="setting-select" bind:value={selectedPresets[items[0].mod]}>
+                  <option value="">Choose preset…</option>
+                  {#each presets[items[0].mod] as preset}
+                    <option value={preset.name}>{preset.name}</option>
+                  {/each}
+                </select>
+                <button
+                  class="btn-action"
+                  type="button"
+                  disabled={!selectedPresets[items[0].mod]}
+                  on:click={() => applyPreset(items[0].mod!)}
+                >
+                  Apply preset
+                </button>
+              </div>
+            </div>
+          {/if}
           {#each items as item (item.key)}
             {#if item.type === "checkbox"}
               <label class="setting-item-checkbox">
@@ -516,6 +547,21 @@
     justify-content: space-between;
     gap: 12px;
     font-size: 13px;
+  }
+
+  .preset-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--border-color, #000);
+  }
+
+  .preset-controls {
+    display: flex;
+    align-items: center;
+    gap: 6px;
   }
 
   .setting-item-col {

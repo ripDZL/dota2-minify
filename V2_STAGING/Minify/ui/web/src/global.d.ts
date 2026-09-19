@@ -148,8 +148,10 @@ declare global {
             max?: number;
           }>;
           values: Record<string, any>;
+          presets?: Record<string, Array<{ name: string; values: Record<string, any> }>>;
         }>;
         set_setting: (key: string, value: any, mod_name?: string) => Promise<boolean>;
+        apply_mod_preset?: (mod_name: string, preset_name: string) => Promise<boolean>;
         run_mod_function: (mod_name: string, function_name: string) => Promise<boolean>;
         reset_native_settings: () => Promise<boolean>;
         reset_mod_settings: (mod_name: string) => Promise<boolean>;

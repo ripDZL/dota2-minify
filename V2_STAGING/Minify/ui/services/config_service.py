@@ -111,7 +111,7 @@ class ConfigService:
     def get_theme_css(self, theme_name: str | None = None) -> str:
         try:
             if not theme_name:
-                theme_name = config.get("theme", "light") or "light"
+                theme_name = config.get("theme", "black-plum") or "black-plum"
 
             themes_dir = getattr(base, "themes_dir", os.path.join(base.base_dir, "themes"))
             clean_name = os.path.basename(str(theme_name))
@@ -120,7 +120,7 @@ class ConfigService:
 
             theme_path = os.path.join(themes_dir, clean_name)
             if not os.path.isfile(theme_path):
-                theme_path = os.path.join(themes_dir, "light.css")
+                theme_path = os.path.join(themes_dir, "black-plum.css")
             if os.path.isfile(theme_path):
                 with open(theme_path, "r", encoding="utf-8") as f:
                     return f.read()
@@ -252,6 +252,7 @@ class ConfigService:
 
             settings_schema = []
             values = {}
+            presets = {}
 
             for item in native_schema:
                 parsed = self.parse_setting_item(item)
@@ -314,6 +315,19 @@ class ConfigService:
                         continue
 
                     cfg = manifest_utils.get_mod(mod_path)
+                    raw_presets = cfg.get("presets", []) if isinstance(cfg, dict) else []
+                    if isinstance(raw_presets, list):
+                        clean_presets = []
+                        for preset in raw_presets[:64]:
+                            if not isinstance(preset, dict):
+                                continue
+                            name = str(preset.get("name") or "").strip()
+                            values_map = preset.get("values")
+                            if name and isinstance(values_map, dict):
+                                clean_presets.append({"name": name, "values": dict(values_map)})
+                        if clean_presets:
+                            presets[mod_id] = clean_presets
+
                     mod_settings_list = cfg.get("settings")
                     if not isinstance(mod_settings_list, list):
                         continue
@@ -337,10 +351,10 @@ class ConfigService:
                             values[parsed["key"]] = cur_val
                             settings_schema.append(parsed)
 
-            return {"schema": settings_schema, "values": values}
+            return {"schema": settings_schema, "values": values, "presets": presets}
         except Exception as e:
             output.add_text(f"get_settings error: {e}", msg_type="error")
-            return {"schema": [], "values": {}}
+            return {"schema": [], "values": {}, "presets": {}}
 
     def set_setting(self, key: str, value: Any, mod_name: str | None = None) -> bool:
         try:
@@ -358,6 +372,39 @@ class ConfigService:
             return True
         except Exception as e:
             output.add_text(f"set_setting error for {key}: {e}", msg_type="error")
+            return False
+
+    def apply_mod_preset(self, mod_name: str, preset_name: str) -> bool:
+        try:
+            from patch import manifest_utils
+
+            mods_shared.scan_mods()
+            mod_path = mods_shared.get_mod_path(mod_name)
+            if not os.path.isdir(mod_path):
+                return False
+
+            cfg = manifest_utils.get_mod(mod_path)
+            raw_presets = cfg.get("presets", []) if isinstance(cfg, dict) else []
+            preset = next(
+                (
+                    item
+                    for item in raw_presets
+                    if isinstance(item, dict) and str(item.get("name") or "").strip() == str(preset_name or "").strip()
+                ),
+                None,
+            )
+            values_map = preset.get("values") if isinstance(preset, dict) else None
+            if not isinstance(values_map, dict):
+                return False
+
+            modconf = config.get_mod(mod_name, {})
+            for key, value in values_map.items():
+                if isinstance(key, str) and key:
+                    modconf[key] = value
+            config.set_mod(mod_name, modconf)
+            return True
+        except Exception as e:
+            output.add_text(f"apply_mod_preset error for {mod_name}: {e}", msg_type="error")
             return False
 
     def run_mod_function(self, mod_name: str, function_name: str) -> bool:

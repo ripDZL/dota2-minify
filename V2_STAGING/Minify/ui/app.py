@@ -314,6 +314,9 @@ class Api:
     def set_setting(self, key: str, value: Any, mod_name: str | None = None) -> bool:
         return self.config_service.set_setting(key, value, mod_name)
 
+    def apply_mod_preset(self, mod_name: str, preset_name: str) -> bool:
+        return self.config_service.apply_mod_preset(mod_name, preset_name)
+
     def run_mod_function(self, mod_name: str, function_name: str) -> bool:
         return self.config_service.run_mod_function(mod_name, function_name)
 
