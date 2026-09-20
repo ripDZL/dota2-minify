@@ -138,9 +138,7 @@ def active_simple_dark_river_rule(selected_mods) -> dict | None:
     if not owners_by_path:
         return None
 
-    competitors = list(
-        dict.fromkeys(owner for owners in owners_by_path.values() for owner in owners)
-    )
+    competitors = list(dict.fromkeys(owner for owners in owners_by_path.values() for owner in owners))
     return {
         "id": "simple-dark-terrain-river-compat",
         "title": "Simple Dark Terrain river compatibility",
@@ -148,10 +146,7 @@ def active_simple_dark_river_rule(selected_mods) -> dict | None:
         "competitors": competitors,
         "exclude_from_simple": sorted(owners_by_path),
         "owners_by_path": {path: list(owners) for path, owners in sorted(owners_by_path.items())},
-        "summary": (
-            "Simple Dark Terrain yields only overlapping river/water resources "
-            f"to: {', '.join(competitors)}."
-        ),
+        "summary": (f"Simple Dark Terrain yields only overlapping river/water resources to: {', '.join(competitors)}."),
     }
 
 
