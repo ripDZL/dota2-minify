@@ -94,3 +94,7 @@
 - [x] Legacy DearPyGui runtime is packaged for dynamic scripts; startup initial-script failure cannot crash Minify.
 - [x] CI #234 / `35480754644`: **388/388 PASS**, Ruff clean, both validation jobs and both Windows portable builds PASS.
 - [x] Current v2 portable SHA-256: `3ba0ba120550c343660051427fbc916e0658d27496ef1a0f3e6fa69ada8760fe`.
+
+- [x] Simple Dark Terrain river compatibility added at `7d165b52bbfbf5cedaaf51475f1ffcad022559e5`: indexed overlap identifies shared river/water resources and excludes only those paths from Simple Dark Terrain.
+- [x] CI #237 / `35485223052`: **392/392 PASS**, Ruff clean, both validation jobs and both Windows portable builds PASS.
+- [x] Current v2 portable SHA-256: `6add0bfc7ac16309bee064ecb6831c891da6fe091e96f0aa0896a3d0a752fdbc`.

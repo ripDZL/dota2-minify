@@ -107,3 +107,9 @@
 - Validated code head `c4c3e44c5adb59ca9819d5f36dcec4f1a5cf68cc`; CI #234 / `35480754644`: **388/388 PASS**, both Windows builds PASS.
 - Current v2 portable SHA-256 `3ba0ba120550c343660051427fbc916e0658d27496ef1a0f3e6fa69ada8760fe`; artifact digest `sha256:1f28594f6bc2a87a477c48fed3ddfed74238078b7848f62a960658a5a3d2549c`.
 - Next: restart/Settings/PATCH/Dota smoke with exact custom Transparent HUD. Beta/main untouched.
+
+- User requested Simple Dark Terrain compatibility with a river mod.
+- Implemented generic indexed river/water overlap yielding at `7d165b52bbfbf5cedaaf51475f1ffcad022559e5`; no mod-name allowlist and no source-mod rewrite.
+- CI #237 / `35485223052`: **392/392 PASS**, Ruff clean, v2 validation/Svelte/plugin PASS, root + v2 Windows portable PASS.
+- Current v2 portable SHA-256 `6add0bfc7ac16309bee064ecb6831c891da6fe091e96f0aa0896a3d0a752fdbc`; artifact digest `sha256:b8cb7af58fdde1fe9962d6a2961274d812f681b62034ef2a049a99e7dddf9a29`.
+- Next: Dota smoke the intended Simple Dark Terrain + river combination.

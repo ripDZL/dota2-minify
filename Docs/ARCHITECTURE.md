@@ -60,3 +60,5 @@
 
 - Legacy lifecycle compatibility: v2 may execute dynamically discovered rc7 mod scripts, so the portable retains DearPyGui runtime compatibility. A `script_initial.py` that both imports DearPyGui/`ui.details` and has manifest `settings` is treated as an obsolete rc7 Details-window hook and skipped; v2 Settings renders the manifest controls instead. Do not skip the mod's other lifecycle scripts.
 - Startup resilience: an exception from an `initial` lifecycle script is logged and must not abort Minify startup; failures in non-initial lifecycle stages retain normal propagation.
+
+- Terrain/river compatibility is resource-scoped: Simple Dark Terrain may yield only virtual paths that both it and a selected competitor actually own and that classify as river/water resources. Never blanket-disable terrain, and do not identify river mods by display-name allowlists. A shared deferred-post-process path is yielded only when that competitor already proves a real river/water overlap.

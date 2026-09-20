@@ -99,3 +99,7 @@
 - The uploaded mod already declares 17 manifest controls; v2 Settings uses those values, so no archive rewrite is required.
 - CI #234 / `35480754644`: **388/388 PASS**, Ruff clean, v2 Svelte/plugin validation PASS, both Windows portable builds PASS.
 - Current v2 portable SHA-256: `3ba0ba120550c343660051427fbc916e0658d27496ef1a0f3e6fa69ada8760fe`; artifact digest `sha256:1f28594f6bc2a87a477c48fed3ddfed74238078b7848f62a960658a5a3d2549c`.
+
+
+- Simple Dark Terrain/river compatibility contract: detect real indexed virtual-resource overlap, not mod names. Simple Dark Terrain yields only overlapping river/water paths to selected competitors; unrelated terrain stays intact. If the same proven river competitor also owns the shared deferred post-process material, it may own that overlap too.
+- Validated at `7d165b52bbfbf5cedaaf51475f1ffcad022559e5`; CI #237 / `35485223052`: **392/392 PASS**, both Windows portable builds PASS. v2 ZIP SHA-256 `6add0bfc7ac16309bee064ecb6831c891da6fe091e96f0aa0896a3d0a752fdbc`.

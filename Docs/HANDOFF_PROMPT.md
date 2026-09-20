@@ -4,7 +4,7 @@
 - Branches must remain exactly: `v21.4-hardening`, `beta`, `main`.
 - Work only on `v21.4-hardening` unless the user explicitly approves promotion.
 - Re-fetch all 3 branch heads before edits.
-- Latest validated code head before handoff docs: `c4c3e44c5adb59ca9819d5f36dcec4f1a5cf68cc`.
+- Latest validated code head before handoff docs: `7d165b52bbfbf5cedaaf51475f1ffcad022559e5`.
 - Known untouched promotion heads at handoff:
   - `beta`: `442d36dcc902f6436c6404f2947091663c254cc5`
   - `main`: `a26bc88a0d412e357965f29488b83a7f9093e11f`
@@ -189,3 +189,14 @@
 - Current v2 portable SHA-256: `3ba0ba120550c343660051427fbc916e0658d27496ef1a0f3e6fa69ada8760fe`.
 - Current GitHub v2 artifact digest: `sha256:1f28594f6bc2a87a477c48fed3ddfed74238078b7848f62a960658a5a3d2549c`.
 - Next immediate gate: restart with the exact custom Transparent HUD installed, verify startup + Settings controls, then PATCH/Dota smoke.
+
+
+- Simple Dark Terrain + river compatibility:
+  - `7d165b52bbfbf5cedaaf51475f1ffcad022559e5` adds dynamic resource-level yielding.
+  - When selected alongside another mod with real overlapping river/water virtual resources, Simple Dark Terrain yields only those overlapping paths; unrelated terrain resources remain.
+  - A river competitor that also owns `materials/dev/deferred_post_process.vmat_c` receives that shared resource only after proving river/water overlap.
+  - Works through the existing folder/VPK compatibility-exclusion path; no river-mod name allowlist.
+- CI #237 / `35485223052`: **SUCCESS**, **392/392 tests passed**, Ruff clean, v2 validation/Svelte/plugin PASS, both Windows portable builds PASS.
+- Current v2 portable SHA-256: `6add0bfc7ac16309bee064ecb6831c891da6fe091e96f0aa0896a3d0a752fdbc`.
+- Current GitHub v2 artifact digest: `sha256:b8cb7af58fdde1fe9962d6a2961274d812f681b62034ef2a049a99e7dddf9a29`.
+- Next immediate gate: user Dota smoke with Simple Dark Terrain + intended river mod; confirm terrain remains dark and river visuals win.

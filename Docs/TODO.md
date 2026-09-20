@@ -67,3 +67,6 @@
 - [x] Make custom rc7 Transparent HUD v1.4 startup-compatible with v2 without modifying the user's ZIP.
 - [x] Bundle legacy DearPyGui runtime and skip only manifest-backed rc7 DearPyGui `ui.details` initial hooks; CI #234 **388/388 PASS**, both Windows builds PASS.
 - [ ] User smoke: restart with exact Transparent HUD archive, verify its 17 Settings controls, PATCH, and in-game HUD behavior.
+
+- [x] Add resource-level Simple Dark Terrain + river compatibility without a river-mod name allowlist; CI #237 **392/392 PASS**, both Windows builds PASS.
+- [ ] User smoke Simple Dark Terrain + target river mod in Dota; verify river wins only overlapping water/river assets and the rest of terrain stays dark.
