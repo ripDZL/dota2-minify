@@ -236,8 +236,7 @@ def bulk_exec_script(order_name, terminal_output=True):
 
         if order_name == "initial" and _is_legacy_dearpygui_details_hook(script_path, cfg):
             log.write_warning(
-                f"Skipping rc7 DearPyGui Details hook for {mod_name}; "
-                "v2 uses the mod manifest settings instead."
+                f"Skipping rc7 DearPyGui Details hook for {mod_name}; v2 uses the mod manifest settings instead."
             )
             continue
 
