@@ -4,7 +4,7 @@
 - Branches must remain exactly: `v21.4-hardening`, `beta`, `main`.
 - Work only on `v21.4-hardening` unless the user explicitly approves promotion.
 - Re-fetch all 3 branch heads before edits.
-- Latest validated code head before handoff docs: `0db87a1bbe4b8e79bd3f49f4afa924fa6aea3e86`.
+- Latest validated code head before handoff docs: `c4c3e44c5adb59ca9819d5f36dcec4f1a5cf68cc`.
 - Known untouched promotion heads at handoff:
   - `beta`: `442d36dcc902f6436c6404f2947091663c254cc5`
   - `main`: `a26bc88a0d412e357965f29488b83a7f9093e11f`
@@ -178,3 +178,14 @@
 - Current v2 portable SHA-256: `95653076e5874def8cc2e4507e5917cf1e51f3e52d54c47f5da0bb233b3a2108`.
 - Current GitHub v2 artifact digest: `sha256:a418597a9181c826595fdcb48e34d5e3a59bcf8b7599415395b08f23472770ff`.
 - Next immediate gate: user smoke of the corrected single D2PFX section/category layout, then continue PATCH/full Dota smoke.
+
+
+- Custom Transparent HUD v1.4 compatibility:
+  - User-provided mod has 17 manifest settings and rc7-only `script_initial.py` that imports DearPyGui + `ui.details`.
+  - v2 keeps DearPyGui bundled for legacy lifecycle compatibility, but detects rc7 DearPyGui Details hooks with manifest settings and skips only that obsolete initial UI hook.
+  - Remaining patch/decompile/after-patch scripts still execute normally; v2 Settings owns manifest controls.
+  - Initial-script exceptions are non-fatal to application startup; later lifecycle failures still propagate.
+- CI #234 / `35480754644`: **SUCCESS**, **388/388 tests passed**, Ruff clean, v2 validation/Svelte/plugin PASS, both Windows portable builds PASS.
+- Current v2 portable SHA-256: `3ba0ba120550c343660051427fbc916e0658d27496ef1a0f3e6fa69ada8760fe`.
+- Current GitHub v2 artifact digest: `sha256:1f28594f6bc2a87a477c48fed3ddfed74238078b7848f62a960658a5a3d2549c`.
+- Next immediate gate: restart with the exact custom Transparent HUD installed, verify startup + Settings controls, then PATCH/Dota smoke.

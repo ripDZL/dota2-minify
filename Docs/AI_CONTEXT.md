@@ -92,3 +92,10 @@
 - D2PFX Mod Library grouping corrected at `0db87a1bbe4b8e79bd3f49f4afa924fa6aea3e86`: one top-level collapsible `D2PFX Mods` section with non-collapsible category subheaders inside; per-category counts and All/None retained.
 - CI #231 / `35474663691`: **385/385 PASS**, Ruff clean, v2 validation/Svelte/plugin PASS, root + v2 Windows portable PASS.
 - Current v2 portable SHA-256: `95653076e5874def8cc2e4507e5917cf1e51f3e52d54c47f5da0bb233b3a2108`.
+
+
+- Custom Transparent HUD v1.4 smoke exposed an rc7-only startup hook: `script_initial.py` imports DearPyGui and `ui.details`, which the v2 PyWebView/Svelte shell does not provide.
+- Compatibility fix stack: `eef4124a9ea01c736d4462a7a5742092ee02b55c` bundles DearPyGui for legacy dynamic scripts and makes initial-script crashes non-fatal; `c4c3e44c5adb59ca9819d5f36dcec4f1a5cf68cc` detects manifest-backed rc7 DearPyGui Details hooks and skips that obsolete UI hook while preserving all other lifecycle scripts.
+- The uploaded mod already declares 17 manifest controls; v2 Settings uses those values, so no archive rewrite is required.
+- CI #234 / `35480754644`: **388/388 PASS**, Ruff clean, v2 Svelte/plugin validation PASS, both Windows portable builds PASS.
+- Current v2 portable SHA-256: `3ba0ba120550c343660051427fbc916e0658d27496ef1a0f3e6fa69ada8760fe`; artifact digest `sha256:1f28594f6bc2a87a477c48fed3ddfed74238078b7848f62a960658a5a3d2549c`.

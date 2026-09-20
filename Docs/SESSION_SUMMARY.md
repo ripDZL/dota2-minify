@@ -99,3 +99,11 @@
 - CI #231 / `35474663691`: **385/385 PASS**, Ruff clean, v2 validation/Svelte/plugin PASS, root + v2 Windows portable PASS.
 - Current v2 portable SHA-256: `95653076e5874def8cc2e4507e5917cf1e51f3e52d54c47f5da0bb233b3a2108`; artifact digest `sha256:a418597a9181c826595fdcb48e34d5e3a59bcf8b7599415395b08f23472770ff`.
 - Beta/main untouched. Next: user D2PFX nesting smoke, then PATCH/full Dota smoke.
+
+
+- User supplied custom Transparent HUD v1.4 after restart crash: `ModuleNotFoundError: dearpygui` from its rc7-only `script_initial.py`.
+- Archive inspection: 17 manifest settings; initial hook patches DearPyGui `ui.details`; remaining `script.py`, after-decompile, and after-patch logic uses v2-compatible core APIs.
+- Fix: DearPyGui legacy runtime bundled; manifest-backed rc7 DearPyGui Details hooks skipped on v2; initial lifecycle exceptions no longer crash startup. Exact user archive needs no rewrite.
+- Validated code head `c4c3e44c5adb59ca9819d5f36dcec4f1a5cf68cc`; CI #234 / `35480754644`: **388/388 PASS**, both Windows builds PASS.
+- Current v2 portable SHA-256 `3ba0ba120550c343660051427fbc916e0658d27496ef1a0f3e6fa69ada8760fe`; artifact digest `sha256:1f28594f6bc2a87a477c48fed3ddfed74238078b7848f62a960658a5a3d2549c`.
+- Next: restart/Settings/PATCH/Dota smoke with exact custom Transparent HUD. Beta/main untouched.

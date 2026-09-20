@@ -62,3 +62,8 @@
 
 - [x] Correct D2PFX list nesting: single top-level D2PFX collapsible with category subheaders + per-category All/None; CI #231 **385/385 PASS**.
 - [ ] User smoke corrected D2PFX category nesting, then continue full Windows/PATCH/Dota smoke.
+
+
+- [x] Make custom rc7 Transparent HUD v1.4 startup-compatible with v2 without modifying the user's ZIP.
+- [x] Bundle legacy DearPyGui runtime and skip only manifest-backed rc7 DearPyGui `ui.details` initial hooks; CI #234 **388/388 PASS**, both Windows builds PASS.
+- [ ] User smoke: restart with exact Transparent HUD archive, verify its 17 Settings controls, PATCH, and in-game HUD behavior.

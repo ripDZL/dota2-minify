@@ -56,3 +56,7 @@
 - D2PFX Mod Library grouping contract: list-mode D2PFX grouping keys are `d2pfx::<category>`, sourced from the installed mod's normalized D2PFX category metadata. Do not collapse all D2PFX installs into one bucket or infer category from display names. Each category is an independent list section with complete-membership counts and All/None actions.
 
 - D2PFX list hierarchy: D2PFX is one top-level Mod Library section. Category metadata is rendered as internal non-collapsible subgroup headers, not separate top-level sections; category All/None acts on the complete category even when rows are filtered.
+
+
+- Legacy lifecycle compatibility: v2 may execute dynamically discovered rc7 mod scripts, so the portable retains DearPyGui runtime compatibility. A `script_initial.py` that both imports DearPyGui/`ui.details` and has manifest `settings` is treated as an obsolete rc7 Details-window hook and skipped; v2 Settings renders the manifest controls instead. Do not skip the mod's other lifecycle scripts.
+- Startup resilience: an exception from an `initial` lifecycle script is logged and must not abort Minify startup; failures in non-initial lifecycle stages retain normal propagation.
