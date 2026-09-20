@@ -201,6 +201,23 @@ def exec_script(script_path, mod_name, order_name, _terminal_output=True):
     return None
 
 
+def _is_legacy_dearpygui_details_hook(script_path, cfg):
+    """Detect rc7-only Details-window hooks that v2 replaces with manifest settings."""
+    if not isinstance(cfg, dict) or not isinstance(cfg.get("settings"), list):
+        return False
+
+    try:
+        if os.path.getsize(script_path) > 262144:
+            return False
+        with open(script_path, encoding="utf-8", errors="replace") as file:
+            source = file.read()
+    except OSError:
+        return False
+
+    folded = source.casefold()
+    return "dearpygui" in folded and ("from ui import details" in folded or "ui.details" in folded)
+
+
 def bulk_exec_script(order_name, terminal_output=True):
     """Run lifecycle scripts through discovered logical mod IDs."""
     bulk_name = f"script_{order_name}.py"
@@ -215,6 +232,13 @@ def bulk_exec_script(order_name, terminal_output=True):
 
         cfg = manifest_utils.get_mod(mod_path)
         if "browser" in cfg:
+            continue
+
+        if order_name == "initial" and _is_legacy_dearpygui_details_hook(script_path, cfg):
+            log.write_warning(
+                f"Skipping rc7 DearPyGui Details hook for {mod_name}; "
+                "v2 uses the mod manifest settings instead."
+            )
             continue
 
         always = cfg.get("always", False)
