@@ -224,9 +224,7 @@ def bulk_exec_script(order_name, terminal_output=True):
             except Exception:
                 if order_name != "initial":
                     raise
-                log.write_warning(
-                    f"Startup lifecycle script failed for {mod_name}; continuing Minify startup."
-                )
+                log.write_warning(f"Startup lifecycle script failed for {mod_name}; continuing Minify startup.")
                 continue
             if result:
                 any_ran = True
