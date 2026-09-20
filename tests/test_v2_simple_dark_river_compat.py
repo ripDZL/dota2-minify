@@ -45,6 +45,9 @@ def load_compat(entries):
         module = importlib.util.module_from_spec(spec)
         assert spec and spec.loader
         spec.loader.exec_module(module)
+        module._indexed_entries = lambda mod: {
+            module.normalize_virtual_path(path) for path in entries.get(mod, set())
+        }
         return module
     finally:
         if previous_core is None:
