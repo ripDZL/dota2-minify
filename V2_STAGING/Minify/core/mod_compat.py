@@ -23,6 +23,7 @@ DARK_TERRAIN_FOG = "materials/dev/deferred_post_process_vmat_g_tfog_9ea98ee9.vte
 DARK_TERRAIN_EXCLUSIONS = frozenset({DARK_TERRAIN_DEFERRED, DARK_TERRAIN_FOG})
 
 INTENTIONAL_DARK_SIMPLE_BLEND_PREFIX = "materials/blends/"
+RIVER_RESOURCE_TOKEN = re.compile(r"(^|[/_.-])(river|riverbed|water)(?=($|[/_.-]))")
 
 
 def normalize_virtual_path(path: str) -> str:
@@ -65,6 +66,20 @@ def _find_first(mods, predicate):
     return None
 
 
+def _indexed_entries(mod: str) -> set[str]:
+    try:
+        from core import mod_library
+
+        return {normalize_virtual_path(path) for path in mod_library.index_contents(mod)}
+    except Exception:
+        return set()
+
+
+def _is_river_resource(path: str) -> bool:
+    normalized = normalize_virtual_path(path)
+    return bool(RIVER_RESOURCE_TOKEN.search(normalized))
+
+
 def _fingerprint_entry(mod: str, virtual_path: str) -> dict:
     try:
         from core import mod_library
@@ -94,6 +109,52 @@ def _deferred_competitors(selected_mods, dark: str) -> list[str]:
     return competitors
 
 
+def active_simple_dark_river_rule(selected_mods) -> dict | None:
+    selected = list(dict.fromkeys(selected_mods or []))
+    simple = _find_first(selected, is_simple_dark_terrain)
+    if not simple:
+        return None
+
+    simple_entries = _indexed_entries(simple)
+    if not simple_entries:
+        return None
+
+    owners_by_path: dict[str, list[str]] = {}
+    for mod in selected:
+        if mod == simple or is_dark_terrain(mod):
+            continue
+        shared = simple_entries.intersection(_indexed_entries(mod))
+        river_shared = {path for path in shared if _is_river_resource(path)}
+        if not river_shared:
+            continue
+        # Some river mods also ship the shared post-process material. If they
+        # demonstrably own river resources, let them own that overlapping
+        # deferred resource too rather than letting Simple Dark Terrain mask it.
+        if DARK_TERRAIN_DEFERRED in shared:
+            river_shared.add(DARK_TERRAIN_DEFERRED)
+        for path in river_shared:
+            owners_by_path.setdefault(path, []).append(mod)
+
+    if not owners_by_path:
+        return None
+
+    competitors = list(
+        dict.fromkeys(owner for owners in owners_by_path.values() for owner in owners)
+    )
+    return {
+        "id": "simple-dark-terrain-river-compat",
+        "title": "Simple Dark Terrain river compatibility",
+        "simple": simple,
+        "competitors": competitors,
+        "exclude_from_simple": sorted(owners_by_path),
+        "owners_by_path": {path: list(owners) for path, owners in sorted(owners_by_path.items())},
+        "summary": (
+            "Simple Dark Terrain yields only overlapping river/water resources "
+            f"to: {', '.join(competitors)}."
+        ),
+    }
+
+
 def active_dark_terrain_rule(selected_mods) -> dict | None:
     selected = list(dict.fromkeys(selected_mods or []))
     dark = _find_first(selected, is_dark_terrain)
@@ -120,26 +181,41 @@ def active_dark_terrain_rule(selected_mods) -> dict | None:
 
 
 def active_rules(selected_mods) -> list[dict]:
-    rule = active_dark_terrain_rule(selected_mods)
-    return [rule] if rule else []
+    rules = []
+    dark_rule = active_dark_terrain_rule(selected_mods)
+    if dark_rule:
+        rules.append(dark_rule)
+    river_rule = active_simple_dark_river_rule(selected_mods)
+    if river_rule:
+        rules.append(river_rule)
+    return rules
 
 
 def exclusions_for_mod(mod: str, selected_mods) -> set[str]:
-    rule = active_dark_terrain_rule(selected_mods)
-    if rule and mod == rule["dark"]:
-        return set(DARK_TERRAIN_EXCLUSIONS)
-    return set()
+    excluded = set()
+    dark_rule = active_dark_terrain_rule(selected_mods)
+    if dark_rule and mod == dark_rule["dark"]:
+        excluded.update(DARK_TERRAIN_EXCLUSIONS)
+    river_rule = active_simple_dark_river_rule(selected_mods)
+    if river_rule and mod == river_rule["simple"]:
+        excluded.update(river_rule["exclude_from_simple"])
+    return excluded
 
 
 def exclusion_reason(mod: str, virtual_path: str, selected_mods) -> str | None:
     path = normalize_virtual_path(virtual_path)
-    rule = active_dark_terrain_rule(selected_mods)
-    if not rule or mod != rule["dark"] or path not in DARK_TERRAIN_EXCLUSIONS:
-        return None
-    if path == DARK_TERRAIN_DEFERRED:
-        competitors = ", ".join(rule.get("competitors", [])) or "another selected mod"
-        return f"Dark Terrain yields the shared deferred post-process material to {competitors}."
-    return "Dark Terrain fog texture is unused after its deferred material is excluded for a real shader collision."
+    dark_rule = active_dark_terrain_rule(selected_mods)
+    if dark_rule and mod == dark_rule["dark"] and path in DARK_TERRAIN_EXCLUSIONS:
+        if path == DARK_TERRAIN_DEFERRED:
+            competitors = ", ".join(dark_rule.get("competitors", [])) or "another selected mod"
+            return f"Dark Terrain yields the shared deferred post-process material to {competitors}."
+        return "Dark Terrain fog texture is unused after its deferred material is excluded for a real shader collision."
+
+    river_rule = active_simple_dark_river_rule(selected_mods)
+    if river_rule and mod == river_rule["simple"] and path in set(river_rule["exclude_from_simple"]):
+        owners = ", ".join(river_rule.get("owners_by_path", {}).get(path, [])) or "the selected river mod"
+        return f"Simple Dark Terrain yields this overlapping river/water resource to {owners}."
+    return None
 
 
 def copy_standard_files(mod: str, source_dir: str, destination_dir: str, selected_mods) -> list[str]:
@@ -171,6 +247,20 @@ def classify_collision(path: str, owners, fingerprints=None) -> dict:
     dark = _find_first(owners, is_dark_terrain)
     simple = _find_first(owners, is_simple_dark_terrain)
     other_owner = next((owner for owner in owners if owner != dark), None) if dark else None
+
+    if simple and _is_river_resource(normalized):
+        river_owner = next(
+            (owner for owner in owners if owner != simple and not is_dark_terrain(owner)),
+            None,
+        )
+        if river_owner:
+            return {
+                "classification": "true conflict",
+                "winner": river_owner,
+                "recommended_action": "Let the selected river mod own this overlapping river/water resource.",
+                "auto_fix": True,
+                "rule_id": "simple-dark-terrain-river-compat",
+            }
 
     if normalized == DARK_TERRAIN_DEFERRED and dark and other_owner:
         return {
@@ -212,26 +302,43 @@ def classify_collision(path: str, owners, fingerprints=None) -> dict:
 
 
 def planned_resource_actions(selected_mods) -> list[dict]:
-    rule = active_dark_terrain_rule(selected_mods)
-    if not rule:
-        return []
-    competitors = ", ".join(rule.get("competitors", [])) or "the competing shader"
-    return [
-        {
-            "path": DARK_TERRAIN_DEFERRED,
-            "mod": rule["dark"],
-            "classification": "compatibility exclusion",
-            "recommended_action": f"Exclude Dark Terrain's shared deferred material; let {competitors} own it.",
-            "rule_id": rule["id"],
-        },
-        {
-            "path": DARK_TERRAIN_FOG,
-            "mod": rule["dark"],
-            "classification": "safe-to-remove resource",
-            "recommended_action": "Exclude because Dark Terrain's deferred material is being yielded for this collision.",
-            "rule_id": rule["id"],
-        },
-    ]
+    actions = []
+    dark_rule = active_dark_terrain_rule(selected_mods)
+    if dark_rule:
+        competitors = ", ".join(dark_rule.get("competitors", [])) or "the competing shader"
+        actions.extend(
+            [
+                {
+                    "path": DARK_TERRAIN_DEFERRED,
+                    "mod": dark_rule["dark"],
+                    "classification": "compatibility exclusion",
+                    "recommended_action": f"Exclude Dark Terrain's shared deferred material; let {competitors} own it.",
+                    "rule_id": dark_rule["id"],
+                },
+                {
+                    "path": DARK_TERRAIN_FOG,
+                    "mod": dark_rule["dark"],
+                    "classification": "safe-to-remove resource",
+                    "recommended_action": "Exclude because Dark Terrain's deferred material is being yielded for this collision.",
+                    "rule_id": dark_rule["id"],
+                },
+            ]
+        )
+
+    river_rule = active_simple_dark_river_rule(selected_mods)
+    if river_rule:
+        for path in river_rule["exclude_from_simple"]:
+            owners = ", ".join(river_rule["owners_by_path"].get(path, [])) or "the selected river mod"
+            actions.append(
+                {
+                    "path": path,
+                    "mod": river_rule["simple"],
+                    "classification": "compatibility exclusion",
+                    "recommended_action": f"Let {owners} own this overlapping river/water resource.",
+                    "rule_id": river_rule["id"],
+                }
+            )
+    return actions
 
 
 def _sha256_bytes(data: bytes) -> str:
