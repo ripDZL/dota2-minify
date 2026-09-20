@@ -219,7 +219,15 @@ def bulk_exec_script(order_name, terminal_output=True):
 
         always = cfg.get("always", False)
         if always or order_name in ["initial", "uninstall"] or mods_shared.get_state(mod_name):
-            result = exec_script(script_path, mod_name, order_name, _terminal_output=terminal_output)
+            try:
+                result = exec_script(script_path, mod_name, order_name, _terminal_output=terminal_output)
+            except Exception:
+                if order_name != "initial":
+                    raise
+                log.write_warning(
+                    f"Startup lifecycle script failed for {mod_name}; continuing Minify startup."
+                )
+                continue
             if result:
                 any_ran = True
 

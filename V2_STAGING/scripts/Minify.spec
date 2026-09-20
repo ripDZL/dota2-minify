@@ -5,6 +5,8 @@ import platform
 import sys
 import sysconfig
 
+from PyInstaller.utils.hooks import collect_submodules
+
 
 # Import version utility to generate metadata files
 sys.path.append(os.path.abspath(SPECPATH))
@@ -31,6 +33,15 @@ try:
 except Exception as e:
     print(f"Warning: PyInstaller CI guard could not be installed: {e}")
 
+# v2 loads mod lifecycle scripts dynamically at runtime. Those scripts are not
+# visible to PyInstaller's normal import graph, so keep the rc7 DearPyGui
+# runtime available for legacy/user mods such as Transparent HUD.
+legacy_script_hiddenimports = ["dearpygui.dearpygui"]
+try:
+    legacy_script_hiddenimports.extend(collect_submodules("dearpygui"))
+except Exception as e:
+    print(f"Warning: DearPyGui legacy-script imports could not be collected: {e}")
+
 binaries = []
 if platform.system() != "Windows":
     lib_dir = sysconfig.get_config_var("LIBDIR")
@@ -51,8 +62,13 @@ a = Analysis(
     binaries=binaries,
     datas=datas,
     excludes=["plugins"],
-    hiddenimports=["tkinter", "core.plugin_sdk"],
+    hiddenimports=["tkinter", "core.plugin_sdk", *legacy_script_hiddenimports],
 )
+
+if not any(str(entry[0]).startswith("dearpygui") for entry in a.pure):
+    raise RuntimeError("DearPyGui legacy-script compatibility modules were not bundled")
+if not any("_dearpygui" in str(entry[0]).casefold() for entry in a.binaries):
+    raise RuntimeError("DearPyGui native extension was not bundled")
 
 pyz = PYZ(a.pure)
 

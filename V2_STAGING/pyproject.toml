@@ -14,6 +14,9 @@ readme = "README.md"
 requires-python = ">=3.13"
 license = "GPL-3.0-or-later"
 dependencies = [
+    # Keep rc7 lifecycle-script compatibility. User/legacy mods may import
+    # DearPyGui even though the v2 application shell itself uses PyWebView.
+    "dearpygui>=2.1.1",
     "defusedxml>=0.7.1",
     "json-with-comments>=1.2.10",
     "playsound3>=3.3.0",
