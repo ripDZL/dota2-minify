@@ -70,3 +70,6 @@
 
 - [x] Add resource-level Simple Dark Terrain + river compatibility without a river-mod name allowlist; CI #237 **392/392 PASS**, both Windows builds PASS.
 - [ ] User smoke Simple Dark Terrain + target river mod in Dota; verify river wins only overlapping water/river assets and the rest of terrain stays dark.
+
+- [x] Fix Simple Dark Terrain + river Showcase View black-box regression: river wins only real river/water overlaps; Simple Dark Terrain keeps shared `deferred_post_process*` resources coherent; CI #238 **394/394 PASS**, both Windows portable builds PASS.
+- [ ] Human Dota smoke: Simple Dark Terrain + intended river mod, including Showcase View (`I`); confirm river visuals still win and black rectangles are gone.

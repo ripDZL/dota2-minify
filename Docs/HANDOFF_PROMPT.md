@@ -200,3 +200,11 @@
 - Current v2 portable SHA-256: `6add0bfc7ac16309bee064ecb6831c891da6fe091e96f0aa0896a3d0a752fdbc`.
 - Current GitHub v2 artifact digest: `sha256:b8cb7af58fdde1fe9962d6a2961274d812f681b62034ef2a049a99e7dddf9a29`.
 - Next immediate gate: user Dota smoke with Simple Dark Terrain + intended river mod; confirm terrain remains dark and river visuals win.
+
+- Latest Showcase regression fix: `7c25fe7dccc71247ea746e14476718d7e24df752`.
+  - Simple Dark Terrain yields real overlapping river/water resources.
+  - River competitor yields any shared `materials/dev/deferred_post_process*` resources back to Simple Dark Terrain; do not split the deferred chain.
+  - Trigger was black screen-aligned rectangles in Dota Showcase View after the first river compatibility pass.
+- CI #238 / `35608475147`: **394/394 PASS**, both validation jobs + both Windows portable builds PASS.
+- Current v2 test ZIP SHA-256: `d1b9bab0b8c37e02538ae0fec745c5fc6fbb0c59e256ccdce2216e368b6052ec`.
+- Immediate next gate: user smoke same Simple Dark Terrain + river selection; verify normal camera and Showcase View (`I`) are both clean.

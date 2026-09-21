@@ -62,3 +62,9 @@
 - Startup resilience: an exception from an `initial` lifecycle script is logged and must not abort Minify startup; failures in non-initial lifecycle stages retain normal propagation.
 
 - Terrain/river compatibility is resource-scoped: Simple Dark Terrain may yield only virtual paths that both it and a selected competitor actually own and that classify as river/water resources. Never blanket-disable terrain, and do not identify river mods by display-name allowlists. A shared deferred-post-process path is yielded only when that competitor already proves a real river/water overlap.
+
+- Simple Dark Terrain river compatibility ownership:
+  - detect competitors from actual indexed river/water overlap.
+  - river competitor owns only overlapping river/water virtual resources.
+  - Simple Dark Terrain owns any shared `materials/dev/deferred_post_process*` family resources to prevent mixed screen-space post-process payloads.
+  - compatibility filtering applies to folder and VPK mods through existing per-mod exclusions.

@@ -98,3 +98,10 @@
 - [x] Simple Dark Terrain river compatibility added at `7d165b52bbfbf5cedaaf51475f1ffcad022559e5`: indexed overlap identifies shared river/water resources and excludes only those paths from Simple Dark Terrain.
 - [x] CI #237 / `35485223052`: **392/392 PASS**, Ruff clean, both validation jobs and both Windows portable builds PASS.
 - [x] Current v2 portable SHA-256: `6add0bfc7ac16309bee064ecb6831c891da6fe091e96f0aa0896a3d0a752fdbc`.
+
+- Showcase View river follow-up: `7c25fe7dccc71247ea746e14476718d7e24df752`.
+  - First river compatibility pass could hand a river competitor the main deferred material while companion deferred resources stayed with Simple Dark Terrain.
+  - Revised rule: Simple Dark Terrain yields only overlapping river/water resources; any overlapping `materials/dev/deferred_post_process*` resources are excluded from the river competitor so the deferred chain remains coherent.
+  - Added copy/exclusion + Showcase regression coverage.
+- CI #238 / `35608475147`: **SUCCESS**, **394/394 tests passed**, Ruff clean, v2 validation/Svelte/plugin PASS, both Windows portable builds PASS.
+- v2 inner ZIP SHA-256: `d1b9bab0b8c37e02538ae0fec745c5fc6fbb0c59e256ccdce2216e368b6052ec`.

@@ -113,3 +113,9 @@
 - CI #237 / `35485223052`: **392/392 PASS**, Ruff clean, v2 validation/Svelte/plugin PASS, root + v2 Windows portable PASS.
 - Current v2 portable SHA-256 `6add0bfc7ac16309bee064ecb6831c891da6fe091e96f0aa0896a3d0a752fdbc`; artifact digest `sha256:b8cb7af58fdde1fe9962d6a2961274d812f681b62034ef2a049a99e7dddf9a29`.
 - Next: Dota smoke the intended Simple Dark Terrain + river combination.
+
+- User Dota smoke found black screen-aligned rectangles only in Showcase View (`I`) after Simple Dark Terrain + river compatibility.
+- Corrected river compatibility at `7c25fe7dccc71247ea746e14476718d7e24df752`: river mod keeps actual river/water overlaps; Simple Dark Terrain keeps shared deferred-post-process family resources coherent.
+- CI #238 / `35608475147`: 394/394 PASS; root + v2 Windows portable PASS.
+- Test ZIP SHA-256: `d1b9bab0b8c37e02538ae0fec745c5fc6fbb0c59e256ccdce2216e368b6052ec`.
+- Next gate: human Dota smoke with same Simple Dark Terrain + river selection, normal camera + Showcase View.

@@ -103,3 +103,8 @@
 
 - Simple Dark Terrain/river compatibility contract: detect real indexed virtual-resource overlap, not mod names. Simple Dark Terrain yields only overlapping river/water paths to selected competitors; unrelated terrain stays intact. If the same proven river competitor also owns the shared deferred post-process material, it may own that overlap too.
 - Validated at `7d165b52bbfbf5cedaaf51475f1ffcad022559e5`; CI #237 / `35485223052`: **392/392 PASS**, both Windows portable builds PASS. v2 ZIP SHA-256 `6add0bfc7ac16309bee064ecb6831c891da6fe091e96f0aa0896a3d0a752fdbc`.
+
+- Showcase View smoke after Simple Dark Terrain + river compatibility exposed black screen-aligned rectangles. Root cause candidate was the first river rule handing the river competitor `materials/dev/deferred_post_process.vmat_c` while leaving related deferred resources split across mods.
+- Fix `7c25fe7dccc71247ea746e14476718d7e24df752`: river competitors still win real overlapping river/water resources, but Simple Dark Terrain now keeps the entire overlapping `materials/dev/deferred_post_process*` family coherent; those shared deferred resources are excluded from the river competitor instead.
+- CI #238 / `35608475147`: **394/394 PASS**, Ruff clean, v2 validation PASS, root + v2 Windows portable PASS.
+- Current Showcase-regression test ZIP SHA-256: `d1b9bab0b8c37e02538ae0fec745c5fc6fbb0c59e256ccdce2216e368b6052ec`; GitHub v2 artifact digest `sha256:4377cf24fb10fff8382a9bd552d56e0a6269bbb9fe570e16738a550d1db607f5`.
