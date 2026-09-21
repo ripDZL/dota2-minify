@@ -14,6 +14,7 @@ RIVER_WATER = "materials/water/water_generic_000.vmat_c"
 RIVERBED = "materials/blends/mod_radiant_riverbed_path_000.vmat_c"
 GROUND = "materials/blends/mod_radiant_000.vmat_c"
 DEFERRED = "materials/dev/deferred_post_process.vmat_c"
+DEFERRED_FOG = "materials/dev/deferred_post_process_vmat_g_tfog_9ea98ee9.vtex_c"
 
 
 def load_compat(entries):
@@ -65,8 +66,8 @@ def test_simple_dark_terrain_yields_only_real_overlapping_river_resources():
     river = "Clean River Mod"
     compat = load_compat(
         {
-            simple: {RIVER_WATER, RIVERBED, GROUND, DEFERRED},
-            river: {RIVER_WATER, RIVERBED, DEFERRED},
+            simple: {RIVER_WATER, RIVERBED, GROUND, DEFERRED, DEFERRED_FOG},
+            river: {RIVER_WATER, RIVERBED, DEFERRED, DEFERRED_FOG},
         }
     )
 
@@ -74,8 +75,11 @@ def test_simple_dark_terrain_yields_only_real_overlapping_river_resources():
     assert rule is not None
     assert rule["simple"] == simple
     assert rule["competitors"] == [river]
-    assert set(rule["exclude_from_simple"]) == {RIVER_WATER, RIVERBED, DEFERRED}
+    assert set(rule["exclude_from_simple"]) == {RIVER_WATER, RIVERBED}
+    assert set(rule["exclude_from_competitors"][river]) == {DEFERRED, DEFERRED_FOG}
     assert GROUND not in compat.exclusions_for_mod(simple, [simple, river])
+    assert DEFERRED not in compat.exclusions_for_mod(simple, [simple, river])
+    assert compat.exclusions_for_mod(river, [simple, river]) == {DEFERRED, DEFERRED_FOG}
 
 
 def test_non_overlapping_river_mod_does_not_change_simple_dark_terrain():
@@ -121,3 +125,51 @@ def test_river_collision_is_reported_as_automatic_compatibility_fix():
     assert result["auto_fix"] is True
     assert result["winner"] == river
     assert result["rule_id"] == "simple-dark-terrain-river-compat"
+
+
+def test_river_mod_keeps_water_but_yields_shared_deferred_family():
+    simple = "Simple Dark Terrain"
+    river = "River Mod"
+    compat = load_compat(
+        {
+            simple: {RIVER_WATER, DEFERRED, DEFERRED_FOG},
+            river: {RIVER_WATER, DEFERRED, DEFERRED_FOG},
+        }
+    )
+
+    with tempfile.TemporaryDirectory() as tmp:
+        src = Path(tmp) / "river"
+        dst = Path(tmp) / "dst"
+        for virtual_path, payload in (
+            (RIVER_WATER, b"river-water"),
+            (DEFERRED, b"river-deferred"),
+            (DEFERRED_FOG, b"river-fog"),
+        ):
+            target = src / virtual_path
+            target.parent.mkdir(parents=True, exist_ok=True)
+            target.write_bytes(payload)
+
+        excluded = compat.copy_standard_files(river, str(src), str(dst), [simple, river])
+
+        assert set(excluded) == {DEFERRED, DEFERRED_FOG}
+        assert (dst / RIVER_WATER).read_bytes() == b"river-water"
+        assert not (dst / DEFERRED).exists()
+        assert not (dst / DEFERRED_FOG).exists()
+
+
+def test_showcase_regression_protects_simple_dark_deferred_resources():
+    simple = "Simple Dark Terrain"
+    river = "River Mod"
+    compat = load_compat(
+        {
+            simple: {RIVERBED, DEFERRED, DEFERRED_FOG},
+            river: {RIVERBED, DEFERRED, DEFERRED_FOG},
+        }
+    )
+
+    rule = compat.active_simple_dark_river_rule([simple, river])
+    assert rule is not None
+    assert DEFERRED not in rule["exclude_from_simple"]
+    assert DEFERRED_FOG not in rule["exclude_from_simple"]
+    assert set(rule["exclude_from_competitors"][river]) == {DEFERRED, DEFERRED_FOG}
+    assert "Showcase View render artifacts" in compat.exclusion_reason(river, DEFERRED, [simple, river])

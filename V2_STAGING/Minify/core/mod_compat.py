@@ -23,6 +23,7 @@ DARK_TERRAIN_FOG = "materials/dev/deferred_post_process_vmat_g_tfog_9ea98ee9.vte
 DARK_TERRAIN_EXCLUSIONS = frozenset({DARK_TERRAIN_DEFERRED, DARK_TERRAIN_FOG})
 
 INTENTIONAL_DARK_SIMPLE_BLEND_PREFIX = "materials/blends/"
+DEFERRED_POST_PROCESS_PREFIX = "materials/dev/deferred_post_process"
 RIVER_RESOURCE_TOKEN = re.compile(r"(^|[/_.-])(river|riverbed|water)(?=($|[/_.-]))")
 
 
@@ -120,6 +121,7 @@ def active_simple_dark_river_rule(selected_mods) -> dict | None:
         return None
 
     owners_by_path: dict[str, list[str]] = {}
+    protected_by_mod: dict[str, list[str]] = {}
     for mod in selected:
         if mod == simple or is_dark_terrain(mod):
             continue
@@ -127,11 +129,16 @@ def active_simple_dark_river_rule(selected_mods) -> dict | None:
         river_shared = {path for path in shared if _is_river_resource(path)}
         if not river_shared:
             continue
-        # Some river mods also ship the shared post-process material. If they
-        # demonstrably own river resources, let them own that overlapping
-        # deferred resource too rather than letting Simple Dark Terrain mask it.
-        if DARK_TERRAIN_DEFERRED in shared:
-            river_shared.add(DARK_TERRAIN_DEFERRED)
+
+        # A river mod may also package screen-space deferred resources. Do not
+        # mix those with Simple Dark Terrain's deferred material/companions:
+        # mismatched post-process resources can render black screen-aligned
+        # rectangles in Showcase View. River resources yield; the deferred
+        # family stays coherent under Simple Dark Terrain.
+        protected = sorted(path for path in shared if path.startswith(DEFERRED_POST_PROCESS_PREFIX))
+        if protected:
+            protected_by_mod[mod] = protected
+
         for path in river_shared:
             owners_by_path.setdefault(path, []).append(mod)
 
@@ -145,8 +152,12 @@ def active_simple_dark_river_rule(selected_mods) -> dict | None:
         "simple": simple,
         "competitors": competitors,
         "exclude_from_simple": sorted(owners_by_path),
+        "exclude_from_competitors": protected_by_mod,
         "owners_by_path": {path: list(owners) for path, owners in sorted(owners_by_path.items())},
-        "summary": (f"Simple Dark Terrain yields only overlapping river/water resources to: {', '.join(competitors)}."),
+        "summary": (
+            "Simple Dark Terrain yields overlapping river/water resources while "
+            f"keeping its deferred post-process family intact: {', '.join(competitors)}."
+        ),
     }
 
 
@@ -192,8 +203,10 @@ def exclusions_for_mod(mod: str, selected_mods) -> set[str]:
     if dark_rule and mod == dark_rule["dark"]:
         excluded.update(DARK_TERRAIN_EXCLUSIONS)
     river_rule = active_simple_dark_river_rule(selected_mods)
-    if river_rule and mod == river_rule["simple"]:
-        excluded.update(river_rule["exclude_from_simple"])
+    if river_rule:
+        if mod == river_rule["simple"]:
+            excluded.update(river_rule["exclude_from_simple"])
+        excluded.update(river_rule.get("exclude_from_competitors", {}).get(mod, []))
     return excluded
 
 
@@ -207,9 +220,17 @@ def exclusion_reason(mod: str, virtual_path: str, selected_mods) -> str | None:
         return "Dark Terrain fog texture is unused after its deferred material is excluded for a real shader collision."
 
     river_rule = active_simple_dark_river_rule(selected_mods)
-    if river_rule and mod == river_rule["simple"] and path in set(river_rule["exclude_from_simple"]):
-        owners = ", ".join(river_rule.get("owners_by_path", {}).get(path, [])) or "the selected river mod"
-        return f"Simple Dark Terrain yields this overlapping river/water resource to {owners}."
+    if river_rule:
+        if mod == river_rule["simple"] and path in set(river_rule["exclude_from_simple"]):
+            owners = ", ".join(river_rule.get("owners_by_path", {}).get(path, [])) or "the selected river mod"
+            return f"Simple Dark Terrain yields this overlapping river/water resource to {owners}."
+
+        protected = set(river_rule.get("exclude_from_competitors", {}).get(mod, []))
+        if path in protected:
+            return (
+                "River compatibility keeps Simple Dark Terrain's deferred post-process "
+                "material family together to avoid Showcase View render artifacts."
+            )
     return None
 
 
@@ -333,6 +354,21 @@ def planned_resource_actions(selected_mods) -> list[dict]:
                     "rule_id": river_rule["id"],
                 }
             )
+
+        for competitor, paths in river_rule.get("exclude_from_competitors", {}).items():
+            for path in paths:
+                actions.append(
+                    {
+                        "path": path,
+                        "mod": competitor,
+                        "classification": "compatibility exclusion",
+                        "recommended_action": (
+                            "Keep Simple Dark Terrain's deferred post-process family intact "
+                            "to avoid Showcase View render artifacts."
+                        ),
+                        "rule_id": river_rule["id"],
+                    }
+                )
     return actions
 
 
