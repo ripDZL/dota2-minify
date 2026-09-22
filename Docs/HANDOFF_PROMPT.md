@@ -216,3 +216,10 @@
   - CI #241 / `35735125205`: **396/396 PASS**, Ruff clean, v2 Svelte/plugin PASS, both Windows portable builds PASS.
   - v2 test ZIP SHA-256: `d8567683f9bc401e229a180d64e68cb0db55631a4c61b78434e2e5e51ef548cc`.
   - next immediate gate: human Dota smoke Remove Weather Effects in normal camera and Showcase View / `I`; confirm black panel gone and weather removal still acceptable.
+
+- D2PFX freshness follow-up:
+  - first attempt `715cad3a3c7c01230d1bab08d36904d198c2bff1` added a synthetic Recently Added startup view; human smoke showed the D2PFX Browser could render empty. Do not restore that approach.
+  - corrected code head `fa51843107e5e07599e342fd86f518a01f0ba3f6`: direct category startup restored, categories newest-first by default, auto-refresh 5m, manual refresh preserves last-good cache, bad preview metadata is isolated per card, and stale mixed-category routing/undefined install `category` variable removed.
+  - CI #260 / `35769010931`: **399/399 PASS**, Ruff clean, v2 Svelte/D2PFX validation PASS, root + v2 Windows portable PASS.
+  - v2 test ZIP SHA-256: `4c15bf4618883f0d19015739a227e55443e5e4ba7255dff2e5238ca95b043673`; artifact digest `sha256:842b0a829e2db7f748bfce7f0acbdaa1c2e60586b5f47ecc9d7bd357eac451e9`.
+  - next gate: human smoke D2PFX categories/cards render, newest entries first within category, Refresh Data works, install works.
