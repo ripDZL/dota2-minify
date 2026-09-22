@@ -130,3 +130,10 @@
 - Added `docs/assets/fork-vs-upstream.svg`; README table lists intentional fork differences with ✅ automated, 🧪 human-smoke, and ⚠ experimental status.
 - Added explicit README permission for Egezenn to reuse/port fork ideas, fixes, UI concepts, tests, compatibility rules, and code into upstream subject to GPL-3.0.
 - Release promotion remains blocked on the existing human Dota smoke gates; `beta` and `main` untouched.
+
+- D2PFX Browser freshness fixed at `715cad3a3c7c01230d1bab08d36904d198c2bff1`.
+  - Live h6rd catalogue was current; Minify was stale/surfacing incorrectly.
+  - Added Recently Added from publisher `recentlyAddedMods`, preserved real source category routing, defaulted normal categories newest-first, reduced auto-refresh to 5m, and made manual refresh keep last-good cache on failure.
+  - CI #253 / `35766619028`: **399/399 PASS**, Ruff clean, v2 Svelte/D2PFX PASS, both Windows portable builds PASS.
+  - v2 test ZIP SHA-256: `bc626ab6994e9a7cb8ec79badc5086704e5ca597f71a3bd568f76b8e2a92c3db`.
+- Next gate: D2PFX human smoke of Recently Added / Refresh Data / install-from-recent category routing. Existing Dota smoke gates remain before beta/main promotion.
