@@ -73,6 +73,7 @@
 
 - D2PFX catalogue freshness contract:
   - generated catalogue source remains the h6rd `data` branch; do not invent a mirror when the live publisher is current.
-  - expose publisher `recentlyAddedMods` as a first-class Recently Added view and preserve each entry's real source category for preview/install/state/uninstall.
+  - keep browser startup on direct categories; do not synchronously resolve a cross-category recent feed before the category UI can render.
   - normal category results default newest-first; auto-refresh window is 5 minutes.
   - forced/manual refresh must keep the last-known-good cache until replacement data downloads and validates successfully; transient network failure must not empty the browser.
+  - malformed/unsafe preview metadata must degrade that card's preview only, never abort the whole category response.
