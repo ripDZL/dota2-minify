@@ -73,3 +73,6 @@
 
 - [x] Fix Simple Dark Terrain + river Showcase View black-box regression: river wins only real river/water overlaps; Simple Dark Terrain keeps shared `deferred_post_process*` resources coherent; CI #238 **394/394 PASS**, both Windows portable builds PASS.
 - [ ] Human Dota smoke: Simple Dark Terrain + intended river mod, including Showcase View (`I`); confirm river visuals still win and black rectangles are gone.
+
+- [x] Fix Remove Weather Effects black-panel regression: stop blanking `materials/skybox/sky_dota_*.vmat_c`; retain rain particle + thunder suppression. Code `3a8823b1de0294715609c015ba1a95b00c46fbbb`; CI #241 / `35735125205`: **396/396 PASS**, both Windows portable builds PASS.
+- [ ] Human Dota smoke Remove Weather Effects: confirm black rectangle is gone in normal/Showcase views and rain/weather suppression remains acceptable.
