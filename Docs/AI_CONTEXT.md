@@ -123,7 +123,8 @@
 - Added `docs/assets/fork-vs-upstream.svg` and a detailed product/behavior delta table with ✅ automated / 🧪 human-smoke / ⚠ experimental status markers.
 - README explicitly states Egezenn may reuse, port, adapt, or merge fork ideas/fixes/UI/tests/compatibility rules/code into upstream without separate permission, subject to GPL-3.0.
 
-- D2PFX freshness investigation 2026-09-22: live h6rd `data` branch was publishing new mods correctly; stale/surfacing behavior was local to Minify. The fork cached catalogue metadata for up to 24h, ignored top-level `recentlyAddedMods`, and did not default category results newest-first.
-- Fix code head `715cad3a3c7c01230d1bab08d36904d198c2bff1`: **Recently Added** pseudo-category backed by publisher feed; per-card real `category_id` preserved for preview/install/state/uninstall; normal categories default `sort:new`; auto-refresh 5m; manual refresh preserves last-good cache and reports network failure.
+- D2PFX freshness investigation 2026-09-22: live h6rd `data` branch was publishing new mods correctly; stale/surfacing behavior was local to Minify. The fork cached catalogue metadata for up to 24h and did not default category results newest-first.
+- First freshness attempt `715cad3a3c7c01230d1bab08d36904d198c2bff1` added a synthetic cross-category Recently Added startup view; human smoke showed the D2PFX Browser rendered empty. That approach is rejected.
+- Corrected code head `fa51843107e5e07599e342fd86f518a01f0ba3f6`: direct category startup restored; normal categories default newest-first; auto-refresh 5m; manual refresh preserves last-good cache; bad preview paths are isolated per card; failed mixed-category routing removed; leftover undefined install `category` variable fixed.
 - Live publisher examples during investigation included Pudge Abberant Observer, Mega Greevil Courier, and Razor Voidstorm Asylum.
-- CI #253 / `35766619028`: **399/399 PASS**, Ruff clean, v2 Svelte/D2PFX validation PASS, root + v2 Windows portable PASS. v2 ZIP SHA-256 `bc626ab6994e9a7cb8ec79badc5086704e5ca597f71a3bd568f76b8e2a92c3db`.
+- CI #260 / `35769010931`: **399/399 PASS**, Ruff clean, v2 Svelte/D2PFX validation PASS, root + v2 Windows portable PASS. v2 ZIP SHA-256 `4c15bf4618883f0d19015739a227e55443e5e4ba7255dff2e5238ca95b043673`.
