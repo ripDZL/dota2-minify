@@ -116,7 +116,7 @@
     try {
       const res = await callApi("install_mod", {
         mod: m,
-        cat_id: selectedCategory,
+        cat_id: category,
       });
       if (res?.success) {
         await setModState(m.name, category, m.label, true);
