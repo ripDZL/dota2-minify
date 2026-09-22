@@ -112,3 +112,9 @@
   - CI #241 / `35735125205`: **396/396 PASS**, Ruff clean, v2 Svelte/plugin PASS, root + v2 Windows portable PASS.
   - v2 portable SHA-256: `d8567683f9bc401e229a180d64e68cb0db55631a4c61b78434e2e5e51ef548cc`.
 - Next gate: human Dota smoke of Remove Weather Effects, especially Showcase View / `I`; confirm no black panel and acceptable weather removal.
+
+- README fork comparison milestone:
+  - Added top-of-README current-upstream comparison against Egezenn `main` `bd86c7cb619896e7200b7269c1b23245d3037120`; upstream code remains v2rc4 baseline plus docs-only symbol update.
+  - Added `docs/assets/fork-vs-upstream.svg` visual summary.
+  - Difference table covers intentional product/behavior deltas and marks automated, human-smoke-pending, and experimental items separately.
+  - Added explicit permission for Egezenn to reuse/port fork ideas, fixes, UI concepts, tests, compatibility rules, and code subject to GPL-3.0.
