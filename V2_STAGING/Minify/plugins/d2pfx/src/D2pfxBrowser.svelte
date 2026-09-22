@@ -39,6 +39,8 @@
       categories = Array.isArray(res) ? res : [];
       if (categories.length > 0 && !selectedCategory) {
         await selectCategory(categories[0]);
+      } else if (categories.length === 0) {
+        actionMessage = "No D2PFX catalogue data is available. Try Refresh Data.";
       }
     } catch (err) {
       console.error("Error loading D2PFX categories:", err);
@@ -111,7 +113,7 @@
     try {
       const res = await callApi("install_mod", {
         mod: m,
-        cat_id: category,
+        cat_id: selectedCategory,
       });
       if (res?.success) {
         await setModState(m.name, selectedCategory, m.label, true);
