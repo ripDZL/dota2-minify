@@ -189,7 +189,10 @@
   async function handlePruneMetadata() {
     actionMessage = "Refreshing metadata cache...";
     try {
-      await callApi("prune_metadata_cache");
+      const res = await callApi("prune_metadata_cache");
+      if (!res?.success) {
+        throw new Error("Unable to download the latest D2PFX catalogue; keeping cached data.");
+      }
       await loadCategories();
       if (selectedCategory) await fetchMods();
       actionMessage = "Metadata cache refreshed.";
