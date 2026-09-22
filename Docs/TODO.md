@@ -76,3 +76,6 @@
 
 - [x] Fix Remove Weather Effects black-panel regression: stop blanking `materials/skybox/sky_dota_*.vmat_c`; retain rain particle + thunder suppression. Code `3a8823b1de0294715609c015ba1a95b00c46fbbb`; CI #241 / `35735125205`: **396/396 PASS**, both Windows portable builds PASS.
 - [ ] Human Dota smoke Remove Weather Effects: confirm black rectangle is gone in normal/Showcase views and rain/weather suppression remains acceptable.
+
+- [ ] Release sequence approved in principle: finish hardening human smoke/CI first, then promote the validated fork through `v21.4-hardening -> beta -> main`; do not promote while current smoke gates remain open.
+- [ ] After the fork is stable, create the upstream Remove Weather Effects PR from a fresh branch based on current `Egezenn/dota2-minify:main`, carrying only the minimal weather blacklist fix. Do not PR the full fork/main history upstream.
