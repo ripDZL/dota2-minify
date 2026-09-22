@@ -108,3 +108,9 @@
 - Fix `7c25fe7dccc71247ea746e14476718d7e24df752`: river competitors still win real overlapping river/water resources, but Simple Dark Terrain now keeps the entire overlapping `materials/dev/deferred_post_process*` family coherent; those shared deferred resources are excluded from the river competitor instead.
 - CI #238 / `35608475147`: **394/394 PASS**, Ruff clean, v2 validation PASS, root + v2 Windows portable PASS.
 - Current Showcase-regression test ZIP SHA-256: `d1b9bab0b8c37e02538ae0fec745c5fc6fbb0c59e256ccdce2216e368b6052ec`; GitHub v2 artifact digest `sha256:4377cf24fb10fff8382a9bd552d56e0a6269bbb9fe570e16738a550d1db607f5`.
+
+- Remove Weather Effects screenshot smoke exposed a centered black render panel. Cause traced to the mod blacklist replacing Dota `materials/skybox/sky_dota_*.vmat_c` resources with generic `blank.vmat_c`.
+- Narrow fix at `3a8823b1de0294715609c015ba1a95b00c46fbbb`: remove skybox VMAT blacklist entries from both root and `V2_STAGING`; retain `>>particles/rain_fx` plus rain-thunder sound suppression.
+- CI #241 / `35735125205`: **396/396 PASS**, Ruff clean, v2 Svelte/plugin validation PASS, both Windows portable builds PASS.
+- Current v2 portable SHA-256: `d8567683f9bc401e229a180d64e68cb0db55631a4c61b78434e2e5e51ef548cc`; artifact digest `sha256:cded73ed662d4f1fd7371df1aaa1b9a1af26c2ed208a7a6ed8dc9e6c8b51a8b8`.
+- Next gate: human Dota smoke Remove Weather Effects in normal camera and Showcase View; verify the black panel is gone and weather suppression is still acceptable.
