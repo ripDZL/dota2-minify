@@ -119,11 +119,12 @@
   - Difference table covers intentional product/behavior deltas and marks automated, human-smoke-pending, and experimental items separately.
   - Added explicit permission for Egezenn to reuse/port fork ideas, fixes, UI concepts, tests, compatibility rules, and code subject to GPL-3.0.
 
-- D2PFX freshness fix validated at `715cad3a3c7c01230d1bab08d36904d198c2bff1`.
-  - Live source was current; browser freshness was the problem.
-  - Added publisher `recentlyAddedMods` as first **Recently Added** view; entries retain real source category for install/uninstall/state/preview routing.
-  - Normal categories default newest-first; automatic catalogue refresh reduced from 24h to 5m.
-  - Manual Refresh Data no longer deletes the last-good cache before network success and now reports refresh failure.
-  - CI #253 / `35766619028`: **399/399 PASS**, Ruff clean, v2 Svelte/D2PFX build PASS, root + v2 Windows portable PASS.
-  - v2 test ZIP SHA-256: `bc626ab6994e9a7cb8ec79badc5086704e5ca597f71a3bd568f76b8e2a92c3db`; artifact digest `sha256:b2a8f35181052a549b6c1cd0f64a49a4fee80b660d43b86a181173e8f05adae9`.
-- Next gate: user D2PFX Browser smoke of Recently Added / Refresh Data / install-from-recent category routing.
+- D2PFX freshness follow-up validated at `fa51843107e5e07599e342fd86f518a01f0ba3f6`.
+  - Live h6rd catalogue was current; Minify freshness/surfacing was the original issue.
+  - The first fix's synthetic cross-category **Recently Added** startup view failed human smoke by leaving the browser empty and was removed.
+  - Restored direct category startup; normal categories still default newest-first and auto-refresh remains 5 minutes.
+  - Manual Refresh Data preserves the last-good cache until a new catalogue validates; bad preview paths are isolated per card instead of emptying a category.
+  - Removed mixed-category routing added by the failed recent view; fixed a leftover undefined `category` install variable.
+  - CI #260 / `35769010931`: **399/399 PASS**, Ruff clean, v2 Svelte/D2PFX build PASS, root + v2 Windows portable PASS.
+  - v2 test ZIP SHA-256: `4c15bf4618883f0d19015739a227e55443e5e4ba7255dff2e5238ca95b043673`; artifact digest `sha256:842b0a829e2db7f748bfce7f0acbdaa1c2e60586b5f47ecc9d7bd357eac451e9`.
+- Next gate: user D2PFX Browser smoke: categories/cards render, newest entries appear first within their category, Refresh Data works, and install still works.
