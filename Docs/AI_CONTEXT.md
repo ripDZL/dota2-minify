@@ -122,3 +122,8 @@
 - README now begins with a current-upstream fork comparison. Baseline checked 2026-09-22 against Egezenn `main` `bd86c7cb619896e7200b7269c1b23245d3037120`; code remains v2rc4-equivalent aside from a docs-only symbols commit.
 - Added `docs/assets/fork-vs-upstream.svg` and a detailed product/behavior delta table with ✅ automated / 🧪 human-smoke / ⚠ experimental status markers.
 - README explicitly states Egezenn may reuse, port, adapt, or merge fork ideas/fixes/UI/tests/compatibility rules/code into upstream without separate permission, subject to GPL-3.0.
+
+- D2PFX freshness investigation 2026-09-22: live h6rd `data` branch was publishing new mods correctly; stale/surfacing behavior was local to Minify. The fork cached catalogue metadata for up to 24h, ignored top-level `recentlyAddedMods`, and did not default category results newest-first.
+- Fix code head `715cad3a3c7c01230d1bab08d36904d198c2bff1`: **Recently Added** pseudo-category backed by publisher feed; per-card real `category_id` preserved for preview/install/state/uninstall; normal categories default `sort:new`; auto-refresh 5m; manual refresh preserves last-good cache and reports network failure.
+- Live publisher examples during investigation included Pudge Abberant Observer, Mega Greevil Courier, and Razor Voidstorm Asylum.
+- CI #253 / `35766619028`: **399/399 PASS**, Ruff clean, v2 Svelte/D2PFX validation PASS, root + v2 Windows portable PASS. v2 ZIP SHA-256 `bc626ab6994e9a7cb8ec79badc5086704e5ca597f71a3bd568f76b8e2a92c3db`.
