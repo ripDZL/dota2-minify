@@ -208,3 +208,11 @@
 - CI #238 / `35608475147`: **394/394 PASS**, both validation jobs + both Windows portable builds PASS.
 - Current v2 test ZIP SHA-256: `d1b9bab0b8c37e02538ae0fec745c5fc6fbb0c59e256ccdce2216e368b6052ec`.
 - Immediate next gate: user smoke same Simple Dark Terrain + river selection; verify normal camera and Showcase View (`I`) are both clean.
+
+- Remove Weather Effects black-panel fix:
+  - validated code head `3a8823b1de0294715609c015ba1a95b00c46fbbb`.
+  - root cause: skybox VMAT blacklist entries caused generic `blank.vmat_c` to replace Dota skybox render materials.
+  - both root and v2 staged Remove Weather definitions now preserve `materials/skybox/sky_dota_*`; rain particles + rain-thunder sounds remain suppressed.
+  - CI #241 / `35735125205`: **396/396 PASS**, Ruff clean, v2 Svelte/plugin PASS, both Windows portable builds PASS.
+  - v2 test ZIP SHA-256: `d8567683f9bc401e229a180d64e68cb0db55631a4c61b78434e2e5e51ef548cc`.
+  - next immediate gate: human Dota smoke Remove Weather Effects in normal camera and Showcase View / `I`; confirm black panel gone and weather removal still acceptable.
