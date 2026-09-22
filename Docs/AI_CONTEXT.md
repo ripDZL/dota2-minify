@@ -118,3 +118,7 @@
 - Release/PR plan: keep all active work on `v21.4-hardening` until human smoke gates are closed. Once stable, promote the validated fork through `hardening -> beta -> main`. For Egezenn upstream, open a separate minimal PR from a fresh branch based on current upstream `main`, containing only the Remove Weather Effects blacklist fix; never send the full fork delta upstream.
 
 - Promotion audit 2026-09-22: `beta` is an ancestor of hardening and can fast-forward after smoke approval. `main` is divergent by two commits: `58ae416b0237d51dc1e3535cdce316e1779e979b` (Tutorial/announcement update) and `a26bc88a0d412e357965f29488b83a7f9093e11f` (`patch_on_launch` default false). Preserve both; never force-update `main`. After human smoke passes, reconcile those two main-only changes into the release candidate, rerun CI, then promote.
+
+- README now begins with a current-upstream fork comparison. Baseline checked 2026-09-22 against Egezenn `main` `bd86c7cb619896e7200b7269c1b23245d3037120`; code remains v2rc4-equivalent aside from a docs-only symbols commit.
+- Added `docs/assets/fork-vs-upstream.svg` and a detailed product/behavior delta table with ✅ automated / 🧪 human-smoke / ⚠ experimental status markers.
+- README explicitly states Egezenn may reuse, port, adapt, or merge fork ideas/fixes/UI/tests/compatibility rules/code into upstream without separate permission, subject to GPL-3.0.
