@@ -118,3 +118,12 @@
   - Added `docs/assets/fork-vs-upstream.svg` visual summary.
   - Difference table covers intentional product/behavior deltas and marks automated, human-smoke-pending, and experimental items separately.
   - Added explicit permission for Egezenn to reuse/port fork ideas, fixes, UI concepts, tests, compatibility rules, and code subject to GPL-3.0.
+
+- D2PFX freshness fix validated at `715cad3a3c7c01230d1bab08d36904d198c2bff1`.
+  - Live source was current; browser freshness was the problem.
+  - Added publisher `recentlyAddedMods` as first **Recently Added** view; entries retain real source category for install/uninstall/state/preview routing.
+  - Normal categories default newest-first; automatic catalogue refresh reduced from 24h to 5m.
+  - Manual Refresh Data no longer deletes the last-good cache before network success and now reports refresh failure.
+  - CI #253 / `35766619028`: **399/399 PASS**, Ruff clean, v2 Svelte/D2PFX build PASS, root + v2 Windows portable PASS.
+  - v2 test ZIP SHA-256: `bc626ab6994e9a7cb8ec79badc5086704e5ca597f71a3bd568f76b8e2a92c3db`; artifact digest `sha256:b2a8f35181052a549b6c1cd0f64a49a4fee80b660d43b86a181173e8f05adae9`.
+- Next gate: user D2PFX Browser smoke of Recently Added / Refresh Data / install-from-recent category routing.
