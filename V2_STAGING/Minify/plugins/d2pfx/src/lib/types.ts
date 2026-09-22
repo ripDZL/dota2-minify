@@ -7,6 +7,7 @@ export interface Category {
 export interface D2Mod {
   name: string;
   label?: string;
+  category_id?: string;
   author?: string | string[];
   sender?: string | string[];
   tags?: string[] | Record<string, boolean>;
