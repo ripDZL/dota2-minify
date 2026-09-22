@@ -1,3 +1,59 @@
+# ripDZL Dota 2 Minify — Hardening Fork
+
+> [!IMPORTANT]
+> This is a compatibility, reliability, security, and UX hardening fork of [Egezenn/dota2-minify](https://github.com/Egezenn/dota2-minify).  
+> Comparison checked against current upstream `main` at `bd86c7cb619896e7200b7269c1b23245d3037120` on 2026-09-22. Upstream code is still the v2rc4 code baseline; its only commit after `e444454684c2d7f809e7eef20a1b72d4422c50d7` is symbol-documentation only.
+>
+> Active v2 hardening work currently lives under `V2_STAGING/` until the remaining human Dota smoke gates are complete. Promotion to this fork's `beta` and `main` is intentionally held until that validation is finished.
+
+> [!NOTE]
+> **Upstream permission:** [Egezenn](https://github.com/Egezenn) is explicitly welcome to reuse, port, adapt, or merge any ideas, fixes, UI concepts, compatibility rules, tests, or code from this fork into [Egezenn/dota2-minify](https://github.com/Egezenn/dota2-minify). No separate permission from me is needed; normal GPL-3.0/license obligations still apply.
+
+![Fork vs upstream feature summary](docs/assets/fork-vs-upstream.svg)
+
+## What is different from upstream?
+
+Status: **✅ automated validation complete** · **🧪 human Windows/Dota smoke still pending** · **⚠ experimental/manual-only**
+
+| Area | ripDZL hardening fork | Current upstream `main` | Status |
+| --- | --- | --- | --- |
+| v2 architecture | Keeps upstream PyWebView + Svelte + plugin architecture, then ports the fork's hardening and product behavior into it under `V2_STAGING/`. | v2rc4 architecture baseline. | ✅ |
+| Security substrate | Central path confinement, bounded downloads, redirect/host validation, archive traversal/symlink defenses, atomic/staged writes, bounded metadata, cursor confinement, and backup validation. | No equivalent centralized hardening layer. | ✅ |
+| Mod discovery | Recursive/nested mods, stable logical IDs, Collections, and custom VPK categories. | Direct-child mod discovery and top-level VPK handling. | ✅ |
+| Profiles | Save/apply/update/duplicate/import/export profile behavior preserved in the v2 service model. | No equivalent profile subsystem in the current v2 baseline. | ✅ |
+| Favorites | Persisted favorites and filtering. | No equivalent favorites subsystem in the current v2 baseline. | ✅ |
+| Collision analysis | File/resource-level ownership index, overlap report, and compatibility classification. | Primarily manifest/category conflict handling. | ✅ |
+| Patch preflight | Review selected mods, collision counts, estimated resources, compatibility rules, and planned exclusions before patching. | Patch flow does not expose the same resource-level review layer. | 🧪 |
+| Restore / rollback | Transactional restore points with validated rollback and selection restoration. | No equivalent restore-point manager. | ✅ |
+| Conflict semantics | Category/plugin overlap is advisory; only explicit manifest `conflicts` blocks. | v2 baseline can treat broader category/plugin overlap as conflict input. | ✅ |
+| Mod Library layout | Legacy-style **List** is default with optional **Cards**, persistent view choice, filters, collapsible sections, previews, metadata, favorites, details, and state controls. | Card-oriented v2 library baseline. | 🧪 |
+| Section controls | Global Select/Clear/Invert plus per-section **All / None** operating on complete section membership. | Does not include the fork's restored legacy section-control behavior. | 🧪 |
+| Library organization | Standard Mods, named Collections such as Hero Mods, one collapsible D2PFX parent with internal categories, and VPK sections. | Different baseline grouping/classification behavior. | 🧪 |
+| D2PFX category organization | Installed D2PFX mods grouped by stored D2PFX category with category counts and All/None controls. | Flatter baseline organization. | 🧪 |
+| D2PFX browser | Hardened preview fallback/MIME handling, Updated-date parity, max-4 desktop grid, visible action feedback, stale-search protection, and post-install state refresh. | Upstream v2 D2PFX plugin/browser baseline. | 🧪 |
+| D2PFX security | Hardened metadata, preview, archive, install, extraction, and cursor paths with size/count/path limits. | Upstream v2 download/install behavior without the fork's full security substrate. | ✅ |
+| Hero defaults | **Defaults except D2PFX** uses actual indexed virtual-resource overlap against enabled D2PFX mods rather than name guesses. | No equivalent overlap-aware Hero default action. | 🧪 |
+| Patch visibility | Immediate PREPATCH/PATCH status plus a bounded live terminal on Home. | No equivalent always-visible fork terminal/status behavior. | 🧪 |
+| Cache resilience | Derived mod-content index writes are best-effort; Windows sharing/permission failures retry and fall back to in-memory operation instead of aborting PATCH. | Disk-cache replacement failure can be fatal in the baseline path. | 🧪 |
+| Dark Terrain | Kept independent from Remove Foliage; deferred resources are yielded only for proven real resource collisions. | Broader terrain-category conflict behavior. | 🧪 |
+| Simple Dark Terrain + river mods | River mod owns only proven overlapping river/water resources; Simple Dark Terrain keeps the overlapping `deferred_post_process*` family coherent to prevent Showcase black rectangles. | No equivalent resource-level river ownership rule. | 🧪 |
+| Remove Weather Effects | Preserves Dota's `materials/skybox/sky_dota_*.vmat_c` resources while still suppressing rain particles and thunder sounds, avoiding the Showcase/Detail black panel. | Current upstream blacklist still blanks those skybox VMAT resources. | 🧪 |
+| Transparent HUD / legacy custom mods | Bundled legacy DearPyGui runtime; manifest-backed obsolete rc7 `ui.details` initial hooks are skipped while other lifecycle scripts remain active; initial-script failure is non-fatal. | v2 baseline does not provide this exact rc7 legacy-HUD compatibility path. | 🧪 |
+| Main Menu background | Preserves the extra `#FrontpageContents` collapse rule in addition to the normal dashboard rule. | Only the baseline dashboard-background rule. | ✅ |
+| Prelaunch policy | Manual prelaunch behavior; no automatic Steam launch-option injection. | v2 baseline can automatically add prelaunch launch options when enabled. | ✅ |
+| Theme / minimum-size UX | Black-Plum carried into the v2 CSS theme system with responsive 960×680 fit rules, compact dialogs, and scroll-safe screens. | Upstream v2 theme/layout baseline. | ✅ |
+| Startup flow | Serialized Tutorial/Language Setup modal behavior prevents overlapping startup dialogs; fork identity/version is shown correctly. | Baseline startup behavior. | ✅ |
+| Windows build reliability | CI-specific PyInstaller dynamic-library guard fixes the Windows portable-build stall without disabling normal dependency analysis outside CI. | Baseline PyInstaller path. | ✅ |
+| RERL tooling | Hardened Source 2 RERL parsing/redirect logic plus reproducible local smoke tooling. Target-name ID rewriting was explicitly rejected after testing. | Newer upstream RERL/remap work exists, but not with the fork's tested constraints. | ✅ |
+| Remove Foliage research | Private current-stock alias smoke candidate and local generator; Valve stock binaries are never committed. Dynamic aliasing is intentionally blocked on human Dota validation. | Uses upstream remap behavior. | ⚠ |
+| Validation | Latest weather-fix code: **396/396 tests PASS**, Ruff clean, v2 Svelte/plugin validation PASS, root Windows portable PASS, and v2 Windows portable PASS. | Separate upstream validation/release pipeline. | ✅ |
+
+Low-level refactors, generated build files, documentation-only edits, and changes that do not alter behavior are intentionally omitted from this product-level comparison. See [Docs/V2_COMPATIBILITY_MATRIX.md](Docs/V2_COMPATIBILITY_MATRIX.md), [Docs/PROGRESS.md](Docs/PROGRESS.md), and [Docs/TODO.md](Docs/TODO.md) for implementation details and remaining smoke gates.
+
+---
+
+## Original upstream project information and credits
+
 <div align="center">
 
 # [Dota2 Minify](https://egezenn.github.io/dota2-minify)
