@@ -119,3 +119,9 @@
 - CI #238 / `35608475147`: 394/394 PASS; root + v2 Windows portable PASS.
 - Test ZIP SHA-256: `d1b9bab0b8c37e02538ae0fec745c5fc6fbb0c59e256ccdce2216e368b6052ec`.
 - Next gate: human Dota smoke with same Simple Dark Terrain + river selection, normal camera + Showcase View.
+
+- Remove Weather Effects black-panel smoke traced to its skybox blacklist entries: Minify was copying generic `blank.vmat_c` over Dota `materials/skybox/sky_dota_*.vmat_c` render materials.
+- Fixed at `3a8823b1de0294715609c015ba1a95b00c46fbbb`: skybox VMAT entries removed from both root and v2 staged Remove Weather definitions; rain particle directory and rain-thunder sounds remain suppressed.
+- CI #241 / `35735125205`: **396/396 PASS**, Ruff clean, v2 validation/Svelte/plugin PASS, root + v2 Windows portable PASS.
+- v2 test ZIP SHA-256: `d8567683f9bc401e229a180d64e68cb0db55631a4c61b78434e2e5e51ef548cc`.
+- Next gate: human Dota smoke Remove Weather Effects, normal camera + Showcase View / `I`; verify black panel is gone and weather suppression remains acceptable.
