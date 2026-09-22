@@ -114,3 +114,5 @@
 - CI #241 / `35735125205`: **396/396 PASS**, Ruff clean, v2 Svelte/plugin validation PASS, both Windows portable builds PASS.
 - Current v2 portable SHA-256: `d8567683f9bc401e229a180d64e68cb0db55631a4c61b78434e2e5e51ef548cc`; artifact digest `sha256:cded73ed662d4f1fd7371df1aaa1b9a1af26c2ed208a7a6ed8dc9e6c8b51a8b8`.
 - Next gate: human Dota smoke Remove Weather Effects in normal camera and Showcase View; verify the black panel is gone and weather suppression is still acceptable.
+
+- Release/PR plan: keep all active work on `v21.4-hardening` until human smoke gates are closed. Once stable, promote the validated fork through `hardening -> beta -> main`. For Egezenn upstream, open a separate minimal PR from a fresh branch based on current upstream `main`, containing only the Remove Weather Effects blacklist fix; never send the full fork delta upstream.
