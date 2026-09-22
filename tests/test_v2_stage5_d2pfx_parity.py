@@ -138,3 +138,16 @@ def test_v2_d2pfx_recent_feed_and_freshness_are_exposed_to_browser():
     assert 'cat_id: category' in browser
     assert "isInstalled(m, category, installedMods)" in browser
 
+def test_v2_d2pfx_manual_refresh_preserves_last_good_cache_and_reports_failure():
+    api_source = API.read_text(encoding="utf-8")
+    browser = (STAGE / "plugins" / "d2pfx" / "src" / "D2pfxBrowser.svelte").read_text(encoding="utf-8")
+
+    prune_start = api_source.index("def prune_metadata_cache")
+    prune_block = api_source[prune_start : api_source.index("\n\ndef handle_api", prune_start)]
+    assert "fs.remove_path" not in prune_block
+    assert "success = dm.refresh()" in prune_block
+    assert 'return {"success": success}' in prune_block
+
+    assert 'if (!res?.success)' in browser
+    assert "keeping cached data" in browser
+
