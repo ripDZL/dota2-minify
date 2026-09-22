@@ -80,7 +80,7 @@
     isLoadingMods = true;
     try {
       const res = await callApi("get_mods", {
-        cat_id: selectedCategory,
+        cat_id: category,
         search: modSearchQuery,
       });
       if (requestId === modRequestId) {
@@ -103,8 +103,13 @@
     fetchMods();
   }
 
+  function categoryForMod(m: D2Mod): string {
+    return m.category_id || selectedCategory;
+  }
+
   async function handleInstall(m: D2Mod) {
-    const key = getModKey(m, selectedCategory);
+    const category = categoryForMod(m);
+    const key = getModKey(m, category);
     installingMap = { ...installingMap, [key]: true };
     actionMessage = `Installing ${m.name}...`;
 
@@ -114,7 +119,7 @@
         cat_id: selectedCategory,
       });
       if (res?.success) {
-        await setModState(m.name, selectedCategory, m.label, true);
+        await setModState(m.name, category, m.label, true);
         enabledMap = { ...enabledMap, [key]: true };
         await refreshInstalledMods();
         notifyParentModsRefreshed();
@@ -139,10 +144,11 @@
   }
 
   async function handleToggleEnabled(m: D2Mod, nextEnabled: boolean) {
-    const key = getModKey(m, selectedCategory);
+    const category = categoryForMod(m);
+    const key = getModKey(m, category);
     enabledMap = { ...enabledMap, [key]: nextEnabled };
     try {
-      await setModState(m.name, selectedCategory, m.label, nextEnabled);
+      await setModState(m.name, category, m.label, nextEnabled);
       notifyParentModsRefreshed();
     } catch (err) {
       console.error("Error toggling mod state in mods.json:", err);
@@ -150,13 +156,14 @@
   }
 
   async function handleUninstall(m: D2Mod) {
-    const key = getModKey(m, selectedCategory);
+    const category = categoryForMod(m);
+    const key = getModKey(m, category);
     installingMap = { ...installingMap, [key]: true };
     actionMessage = `Removing ${m.name}...`;
     try {
       const res = await callApi("uninstall_mod", {
         mod_name: m.name,
-        cat_id: selectedCategory,
+        cat_id: category,
         label: m.label,
       });
       if (res?.success) {
@@ -275,10 +282,11 @@
       {:else}
         <div class="mods-grid">
           {#each mods as m}
-            {@const key = getModKey(m, selectedCategory)}
+            {@const category = categoryForMod(m)}
+            {@const key = getModKey(m, category)}
             <ModCard
               mod={m}
-              installed={isInstalled(m, selectedCategory, installedMods)}
+              installed={isInstalled(m, category, installedMods)}
               inProgress={Boolean(installingMap[key])}
               enabled={Boolean(enabledMap[key])}
               onInstall={handleInstall}
