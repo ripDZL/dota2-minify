@@ -8,7 +8,7 @@ from core import base, config, fs, mods_shared, output, security, utils
 from core.plugin_sdk import PluginRouter
 
 from . import __main__ as plugin_main
-from .data import DataManager
+from .data import RECENT_CATEGORY_ID, DataManager
 
 router = PluginRouter()
 
@@ -81,6 +81,14 @@ def get_categories(params: Dict[str, Any] = None) -> List[Dict[str, Any]]:
     if dm.load():
         categories = dm.get_categories()
         res = []
+        if dm.get_recent_mods():
+            res.append(
+                {
+                    "id": RECENT_CATEGORY_ID,
+                    "name": "Recently Added",
+                    "description": "Newest mods from the live D2PFX catalogue.",
+                }
+            )
         for cat_id in categories:
             res.append(
                 {
@@ -104,7 +112,8 @@ def get_mods(params: Dict[str, Any] = None) -> List[Dict[str, Any]]:
     if not dm.load():
         return []
 
-    raw_mods = dm.get_mods(cat_id)
+    is_recent = cat_id == RECENT_CATEGORY_ID
+    raw_mods = dm.get_recent_mods() if is_recent else dm.get_mods(cat_id)
 
     expanded_mods = []
     for m in raw_mods:
@@ -169,6 +178,9 @@ def get_mods(params: Dict[str, Any] = None) -> List[Dict[str, Any]]:
                     m for m in filtered if token in m.get("name", "").lower() or token in m.get("label", "").lower()
                 ]
 
+    if not sort_mode and not is_recent:
+        sort_mode = "new"
+
     if sort_mode:
         if sort_mode == "a-z":
             filtered.sort(key=lambda m: m.get("name", "").lower())
@@ -180,6 +192,8 @@ def get_mods(params: Dict[str, Any] = None) -> List[Dict[str, Any]]:
             filtered.sort(key=_d2pfx_date_sort_key)
 
     for m in filtered:
+        actual_category = str(m.get("category_id") or cat_id)
+        m["category_id"] = actual_category
         m["updated_label"] = _format_d2pfx_updated_date(m)
         prev = m.get("preview")
         if isinstance(prev, str) and prev:
@@ -187,7 +201,7 @@ def get_mods(params: Dict[str, Any] = None) -> List[Dict[str, Any]]:
                 m["preview_url"] = prev
                 m["preview_fallback_url"] = None
             else:
-                m["preview_url"] = dm.get_preview_url(cat_id, prev)
+                m["preview_url"] = dm.get_preview_url(actual_category, prev)
                 m["preview_fallback_url"] = dm.get_preview_fallback_url(prev)
         else:
             m["preview_url"] = None
