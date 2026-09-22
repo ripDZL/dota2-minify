@@ -70,3 +70,9 @@
   - compatibility filtering applies to folder and VPK mods through existing per-mod exclusions.
 
 - Remove Weather Effects safety contract: do not blacklist/blank Dota skybox VMAT resources with generic `blank.vmat_c`. Weather suppression currently targets rain particle resources plus rain/thunder sounds. Any future sky/weather-material suppression needs a render-safe replacement proven by Dota smoke, not a generic blank material.
+
+- D2PFX catalogue freshness contract:
+  - generated catalogue source remains the h6rd `data` branch; do not invent a mirror when the live publisher is current.
+  - expose publisher `recentlyAddedMods` as a first-class Recently Added view and preserve each entry's real source category for preview/install/state/uninstall.
+  - normal category results default newest-first; auto-refresh window is 5 minutes.
+  - forced/manual refresh must keep the last-known-good cache until replacement data downloads and validates successfully; transient network failure must not empty the browser.
