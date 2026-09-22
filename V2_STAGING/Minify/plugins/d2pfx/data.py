@@ -262,7 +262,9 @@ class DataManager:
             if category.casefold() in BLACKLIST:
                 continue
 
-            category_mods = category_cache.setdefault(category, self.get_mods(category))
+            if category not in category_cache:
+                category_cache[category] = self.get_mods(category)
+            category_mods = category_cache[category]
             match = next((mod for mod in category_mods if mod.get("name") == name), None)
             if match is None:
                 continue
