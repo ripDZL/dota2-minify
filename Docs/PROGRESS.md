@@ -105,3 +105,10 @@
   - Added copy/exclusion + Showcase regression coverage.
 - CI #238 / `35608475147`: **SUCCESS**, **394/394 tests passed**, Ruff clean, v2 validation/Svelte/plugin PASS, both Windows portable builds PASS.
 - v2 inner ZIP SHA-256: `d1b9bab0b8c37e02538ae0fec745c5fc6fbb0c59e256ccdce2216e368b6052ec`.
+
+- Remove Weather Effects black-panel fix validated at `3a8823b1de0294715609c015ba1a95b00c46fbbb`.
+  - Root cause: blacklist VMAT entries copied generic `blank.vmat_c` over Dota skybox render materials.
+  - Fix removes `materials/skybox/sky_dota_*` from both rc7-derived and v2 staged Remove Weather blacklists; rain particles + thunder sounds remain suppressed.
+  - CI #241 / `35735125205`: **396/396 PASS**, Ruff clean, v2 Svelte/plugin PASS, root + v2 Windows portable PASS.
+  - v2 portable SHA-256: `d8567683f9bc401e229a180d64e68cb0db55631a4c61b78434e2e5e51ef548cc`.
+- Next gate: human Dota smoke of Remove Weather Effects, especially Showcase View / `I`; confirm no black panel and acceptable weather removal.
