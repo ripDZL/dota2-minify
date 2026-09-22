@@ -79,3 +79,5 @@
 
 - [ ] Release sequence approved in principle: finish hardening human smoke/CI first, then promote the validated fork through `v21.4-hardening -> beta -> main`; do not promote while current smoke gates remain open.
 - [ ] After the fork is stable, create the upstream Remove Weather Effects PR from a fresh branch based on current `Egezenn/dota2-minify:main`, carrying only the minimal weather blacklist fix. Do not PR the full fork/main history upstream.
+
+- [x] Put a current-upstream comparison at the top of `README.md`: full intentional fork-difference table, validation status markers, visual summary, and explicit permission for Egezenn to reuse/port fork ideas/code under GPL-3.0. Compared against upstream `main` `bd86c7cb619896e7200b7269c1b23245d3037120`.
