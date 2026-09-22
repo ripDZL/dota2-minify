@@ -82,5 +82,5 @@
 
 - [x] Put a current-upstream comparison at the top of `README.md`: full intentional fork-difference table, validation status markers, visual summary, and explicit permission for Egezenn to reuse/port fork ideas/code under GPL-3.0. Compared against upstream `main` `bd86c7cb619896e7200b7269c1b23245d3037120`.
 
-- [x] Fix D2PFX freshness: consume live `recentlyAddedMods`, show **Recently Added** first, default normal categories newest-first, reduce auto-refresh from 24h to 5m, preserve last-good cache on failed manual refresh, and route recent installs to their real source category. Code `715cad3a3c7c01230d1bab08d36904d198c2bff1`; CI #253 / `35766619028`: **399/399 PASS**, both Windows portable builds PASS.
-- [ ] User smoke D2PFX Browser: verify Recently Added shows current publisher entries, Refresh Data updates cleanly, and a mod installed from Recently Added lands in the correct category.
+- [x] Fix D2PFX freshness without blocking startup: keep direct category loading, default category results newest-first, reduce auto-refresh from 24h to 5m, preserve last-good cache on failed manual refresh, and isolate invalid preview paths. Experimental cross-category Recently Added startup view was removed after human smoke showed an empty browser. Code `fa51843107e5e07599e342fd86f518a01f0ba3f6`; CI #260 / `35769010931`: **399/399 PASS**, both Windows portable builds PASS.
+- [ ] User smoke D2PFX Browser: verify categories/mod cards render, newest entries are at the top of their category, Refresh Data updates cleanly, and installs still work.
