@@ -81,3 +81,6 @@
 - [ ] After the fork is stable, create the upstream Remove Weather Effects PR from a fresh branch based on current `Egezenn/dota2-minify:main`, carrying only the minimal weather blacklist fix. Do not PR the full fork/main history upstream.
 
 - [x] Put a current-upstream comparison at the top of `README.md`: full intentional fork-difference table, validation status markers, visual summary, and explicit permission for Egezenn to reuse/port fork ideas/code under GPL-3.0. Compared against upstream `main` `bd86c7cb619896e7200b7269c1b23245d3037120`.
+
+- [x] Fix D2PFX freshness: consume live `recentlyAddedMods`, show **Recently Added** first, default normal categories newest-first, reduce auto-refresh from 24h to 5m, preserve last-good cache on failed manual refresh, and route recent installs to their real source category. Code `715cad3a3c7c01230d1bab08d36904d198c2bff1`; CI #253 / `35766619028`: **399/399 PASS**, both Windows portable builds PASS.
+- [ ] User smoke D2PFX Browser: verify Recently Added shows current publisher entries, Refresh Data updates cleanly, and a mod installed from Recently Added lands in the correct category.
