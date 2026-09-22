@@ -68,3 +68,5 @@
   - river competitor owns only overlapping river/water virtual resources.
   - Simple Dark Terrain owns any shared `materials/dev/deferred_post_process*` family resources to prevent mixed screen-space post-process payloads.
   - compatibility filtering applies to folder and VPK mods through existing per-mod exclusions.
+
+- Remove Weather Effects safety contract: do not blacklist/blank Dota skybox VMAT resources with generic `blank.vmat_c`. Weather suppression currently targets rain particle resources plus rain/thunder sounds. Any future sky/weather-material suppression needs a render-safe replacement proven by Dota smoke, not a generic blank material.
