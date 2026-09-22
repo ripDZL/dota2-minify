@@ -25,6 +25,9 @@ BLACKLIST = [
     "fonts",
 ]
 CATALOGUE_FILES = {"mods.json.gz", "constants.json.gz"}
+RECENT_CATEGORY_ID = "__recent__"
+AUTO_REFRESH_SECONDS = 5 * 60
+MAX_RECENT_MODS = 256
 MAX_CATEGORIES = 256
 MAX_CATEGORY_ID_CHARS = 128
 MAX_CATEGORY_TEXT_CHARS = 4096
@@ -206,7 +209,7 @@ class DataManager:
         if not config.get("d2pfx_auto_refresh_catalogue", True):
             return False
         last_refresh = utils.get_state("d2pfx", "last_refresh", 0)
-        return (time.time() - last_refresh) > 86400
+        return (time.time() - last_refresh) > AUTO_REFRESH_SECONDS
 
     def load(self):
         if self._needs_refresh():
@@ -235,6 +238,38 @@ class DataManager:
             if len(categories) >= MAX_CATEGORIES:
                 break
         return sorted(categories, key=str.casefold)
+
+    def get_recent_mods(self):
+        if not isinstance(self.metadata, dict):
+            return []
+        recent = self.metadata.get("recentlyAddedMods", [])
+        if not isinstance(recent, list):
+            return []
+
+        resolved = []
+        category_cache = {}
+        for item in recent[:MAX_RECENT_MODS]:
+            if not isinstance(item, dict):
+                continue
+            name = item.get("name")
+            category = item.get("category")
+            if not isinstance(name, str) or not name.strip() or not isinstance(category, str):
+                continue
+            try:
+                category = _safe_category_id(category)
+            except ValueError:
+                continue
+            if category.casefold() in BLACKLIST:
+                continue
+
+            category_mods = category_cache.setdefault(category, self.get_mods(category))
+            match = next((mod for mod in category_mods if mod.get("name") == name), None)
+            if match is None:
+                continue
+            normalized = dict(match)
+            normalized["category_id"] = category
+            resolved.append(normalized)
+        return resolved
 
     def get_category_name(self, cat_id):
         try:
