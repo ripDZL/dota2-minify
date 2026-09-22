@@ -125,3 +125,8 @@
 - CI #241 / `35735125205`: **396/396 PASS**, Ruff clean, v2 validation/Svelte/plugin PASS, root + v2 Windows portable PASS.
 - v2 test ZIP SHA-256: `d8567683f9bc401e229a180d64e68cb0db55631a4c61b78434e2e5e51ef548cc`.
 - Next gate: human Dota smoke Remove Weather Effects, normal camera + Showcase View / `I`; verify black panel is gone and weather suppression remains acceptable.
+
+- README now opens with a current-upstream comparison against Egezenn `main` `bd86c7cb619896e7200b7269c1b23245d3037120`.
+- Added `docs/assets/fork-vs-upstream.svg`; README table lists intentional fork differences with ✅ automated, 🧪 human-smoke, and ⚠ experimental status.
+- Added explicit README permission for Egezenn to reuse/port fork ideas, fixes, UI concepts, tests, compatibility rules, and code into upstream subject to GPL-3.0.
+- Release promotion remains blocked on the existing human Dota smoke gates; `beta` and `main` untouched.
