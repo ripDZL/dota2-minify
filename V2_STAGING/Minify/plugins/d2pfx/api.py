@@ -502,12 +502,10 @@ def uninstall_mod(params: Dict[str, Any] = None) -> Dict[str, Any]:
 
 @router.route
 def prune_metadata_cache(params: Dict[str, Any] = None) -> Dict[str, Any]:
+    # Keep the last known-good cache until a fresh catalogue has been
+    # downloaded and atomically published. A transient network failure should
+    # never turn the D2PFX browser into an empty catalogue.
     dm = DataManager()
-    metadata_file = os.path.join(dm.cache_dir, "mods.json")
-    constants_file = os.path.join(dm.cache_dir, "constants.json")
-    fs.remove_path(metadata_file, constants_file)
-    dm.metadata = {}
-    dm.constants = {}
     success = dm.refresh()
     return {"success": success}
 
